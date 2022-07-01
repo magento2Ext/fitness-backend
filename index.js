@@ -23,7 +23,7 @@ const corsOptions = {
 app.use(cors(corsOptions)) 
 
  const url = process.env.MONGO_URI;
-mongoose.connect(url)
+mongoose.connect()
 /* const con = mongoose.connection
 
 con.on('open', () => {
