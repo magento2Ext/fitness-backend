@@ -22,13 +22,13 @@ const corsOptions = {
 }
 app.use(cors(corsOptions)) 
 
-/* const url = process.env.MONGO_URI;
+ const url = process.env.MONGO_URI;
 mongoose.connect(url, {useNewUrlParser:true})
 const con = mongoose.connection
 
 con.on('open', () => {
     console.log('connected...')
-}) */
+}) 
 
  app.use(express.json())
 
@@ -46,7 +46,7 @@ app.post("/welcome", auth, (req, res) => {
 }); 
 
 app.get('/', (req,res) => {
-  res.send("welcome to the home page man"+process.env.MONGO_URI)
+  res.send("welcome to the home page man")
 });
 
 const nport = process.env.port || 3001
