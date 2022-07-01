@@ -46,7 +46,7 @@ app.post("/welcome", auth, (req, res) => {
 }); 
 
 app.get('/', (req,res) => {
-  res.send("welcome to the home page man"+process.env.REACT_APP_URL)
+  res.send("welcome to the home page")
 });
 
 const nport = process.env.port || 3001
