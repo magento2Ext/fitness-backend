@@ -46,7 +46,7 @@ app.post("/welcome", auth, (req, res) => {
 }); 
 
 app.get('/', (req,res) => {
-  res.send("welcome to the home page man")
+  res.send("welcome to the home page man"+process.env.MONGO_URI)
 });
 
 const nport = process.env.port || 3001
