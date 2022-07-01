@@ -22,13 +22,13 @@ const corsOptions = {
 }
 app.use(cors(corsOptions)) */
 
-const url = process.env.MONGO_URI;
+/* const url = process.env.MONGO_URI;
 mongoose.connect(url, {useNewUrlParser:true})
 const con = mongoose.connection
 
 con.on('open', () => {
     console.log('connected...')
-})
+}) */
 
 /* app.use(express.json())
 
