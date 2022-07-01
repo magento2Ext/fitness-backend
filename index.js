@@ -49,8 +49,6 @@ app.get('/', (req,res) => {
   res.send("welcome to the home page")
 });
 
-const nport = process.env.port || 3001
-
-app.listen(nport, () => {
+app.listen(port, () => {
     console.log('Server started')
 })
