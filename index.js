@@ -6,7 +6,7 @@ require("dotenv").config();
 const port = process.env.PORT || 3000
 const auth = require("./middleware/auth");
 app.use(express.json())
-const API_PORT = process.env.API_PORT
+/* const API_PORT = process.env.API_PORT
 
 
 const whitelist = ["http://localhost:3000"]
@@ -20,7 +20,7 @@ const corsOptions = {
   },
   credentials: true,
 }
-app.use(cors(corsOptions))
+app.use(cors(corsOptions)) */
 
 const url = process.env.MONGO_URI;
 mongoose.connect(url, {useNewUrlParser:true})
@@ -30,7 +30,7 @@ con.on('open', () => {
     console.log('connected...')
 })
 
-app.use(express.json())
+/* app.use(express.json())
 
 const organizationRouter = require('./routes/organization')
 app.use('/organization',organizationRouter)
@@ -43,7 +43,7 @@ app.use('/admin',adminRouter)
 
 app.post("/welcome", auth, (req, res) => {
   res.status(200).send("Welcome 🙌 ");
-});
+}); */
 
 app.get('/', (req,res) => {
   res.send("welcome to the home page")
