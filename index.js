@@ -30,7 +30,7 @@ con.on('open', () => {
     console.log('connected...')
 }) */
 
-/* app.use(express.json())
+ app.use(express.json())
 
 const organizationRouter = require('./routes/organization')
 app.use('/organization',organizationRouter)
@@ -43,7 +43,7 @@ app.use('/admin',adminRouter)
 
 app.post("/welcome", auth, (req, res) => {
   res.status(200).send("Welcome 🙌 ");
-}); */
+}); 
 
 app.get('/', (req,res) => {
   res.send("welcome to the home page")
