@@ -9,7 +9,7 @@ app.use(express.json())
 const API_PORT = process.env.API_PORT
 
 
-const whitelist = ["http://localhost:3000"]
+/* const whitelist = ["http://localhost:3000"]
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || whitelist.indexOf(origin) !== -1) {
@@ -20,7 +20,7 @@ const corsOptions = {
   },
   credentials: true,
 }
-app.use(cors(corsOptions))
+app.use(cors(corsOptions)) */
 
 const url = process.env.MONGO_URI;
 mongoose.connect(url, {useNewUrlParser:true})
