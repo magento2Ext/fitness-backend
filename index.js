@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const app = express();
 const cors = require("cors")
 require("dotenv").config();
-const port = process.env.PORT || 3001
+const port = process.env.PORT || 3000
 const auth = require("./middleware/auth");
 app.use(express.json())
 const API_PORT = process.env.API_PORT
@@ -49,6 +49,8 @@ app.get('/', (req,res) => {
   res.send("welcome to the home page")
 });
 
-app.listen(port, () => {
+const nport = process.env.port || 3001
+
+app.listen(nport, () => {
     console.log('Server started')
 })
