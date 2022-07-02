@@ -27,7 +27,6 @@ require('../functions')
         password: req.body.password,
         zipCode: req.body.zipCode,
         referCode: req.body.referCode,
-        zipCode: req.body.zipCode,
         employeeType: req.body.employeeType
     })
 	
@@ -53,7 +52,7 @@ require('../functions')
 			employee.otp = otp;
 		}
 		
-		/*if(!req.body.referCode) {
+		if(!req.body.referCode) {
 			response = webResponse(200, false, 'Refercode required')  
 			res.send(response)
 		} else {
@@ -64,19 +63,19 @@ require('../functions')
 				response = webResponse(200, false, 'Invalid refer code')  
 				res.send(response)
 			}
-		}*/
+		}
 		
 		const a1 =  await employee.save() 
 		
 		response = webResponse(201, true, a1)  
 		
 		if(!req.body.otp) {
-			let emailContent = "OTP is "+otp;
+			let emailContent = "OTP is "+a1.otp;
 			let subject = 'Register OTP '
 			sendEmail(req.body.email, subject, emailContent)
 			
 			const result = {};
-			result.otp = otp
+			result.otp = a1.otp
 		    result.message = "OTP sent"
 		  
 		    response = webResponse(202, true, result)  
@@ -84,7 +83,7 @@ require('../functions')
 		}
 		
 		res.send(response)		
-    }catch(err){ 
+    }catch(err){  console.log(err)
 		response = webResponse(403, false, err)  
 	    res.send(response)
     }
