@@ -46,7 +46,8 @@ require('../functions')
 			employee.password = await bcrypt.hashSync(req.body.password, 12)
 		}
 		if(!req.body.otp) {
-			let otp = (Math.random() + 1).toString(36).substring(6).toUpperCase();
+			//let otp = (Math.random() + 1).toString(36).substring(6).toUpperCase();
+			let otp = Math.floor(1000 + Math.random() * 9000);
 			employee.otp = otp;
 		}
 		
@@ -82,6 +83,7 @@ require('../functions')
 		//res.send('Error ' + err)
 		response = webResponse(403, false, err)  
 	    res.send(response)
+		
     }
 })
 
