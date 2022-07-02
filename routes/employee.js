@@ -106,25 +106,31 @@ router.post('/reset/password', async(req,res) => {
 			}
 		}
 		
-		const a1 =  await employee.save() 
 		
 		
 		if(!req.body.otp) {
-			let emailContent = "OTP is "+a1.otp;
+			let otp = Math.floor(1000 + Math.random() * 9000);
+			employee.otp = otp;
+			let emailContent = "OTP is "+otp;
 			let subject = 'Register OTP '
 			sendEmail(req.body.email, subject, emailContent)
 			
 			const result = {};
-			result.otp = a1.otp
-			result.employee = a1
+			result.otp = otp
+			result.employee = employee
 		    result.message = "OTP sent"
-		  
-		    response = webResponse(202, true, result)  
+		    
+			response = webResponse(202, true, result)  
 	        res.send(response)
+			return;
+		}  else {
+			employee.otp = req.body.otp;
+			const a1 =  await employee.save() 
+			response = webResponse(202, true, a1)  
+			res.send(response)		
+			return;
 		}
-		response = webResponse(201, true, a1)  
-		res.send(response)		
-		return;
+		
     }catch(err){  console.log(err)
 		//res.send('Error ' + err)
 		response = webResponse(403, false, err)  
