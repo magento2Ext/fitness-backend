@@ -17,89 +17,26 @@ require('../functions')
     }
 })
  
- router.post('/save', async(req,res) => {
-	try{ 
-		const employee = new Employee({
-			firstName: req.body.firstName,
-			lastName: req.body.lastName,
-			email: req.body.email,
-			userName: req.body.userName,
-			password: req.body.password,
-			zipCode: req.body.zipCode,
-			referCode: req.body.referCode,
-			employeeType: req.body.employeeType
-		})
-	
-		const employeeEmailExist = await Employee.findOne({ email: req.body.email });
-		if (employeeEmailExist && employeeEmailExist != null) {  
-			response = webResponse(200, false, 'Email already exist')  
-			res.send(response)
-		}
-		
-		const employeeUsernameExist = await Employee.findOne({ userName: req.body.userName }); console.log(employeeUsernameExist)
-		if (employeeUsernameExist && employeeUsernameExist != null) {  
-			response1 = webResponse(200, false, 'Username already exist')  
-			res.send(response1)
-		}
-		
-		if(req.body.password) {
-			employee.password = await bcrypt.hashSync(req.body.password, 12)
-		}
-		if(!req.body.otp) {
-			//let otp = (Math.random() + 1).toString(36).substring(6).toUpperCase();
-			let otp = Math.floor(1000 + Math.random() * 9000);
-			employee.otp = otp;
-		}
-		
-		if(req.body.referCode) {
-			
-			const orgDetails = await Organization.findOne({ referCode: req.body.referCode });
-			if (orgDetails) {  
-				employee.organizationId = orgDetails.id
-			} else{
-				response = webResponse(200, false, 'Invalid refer code')  
-				res.send(response)
-			}
-		}
-		
-		const a1 =  await employee.save() 
-		
-		
-		if(!req.body.otp) {
-			let emailContent = "OTP is "+a1.otp;
-			let subject = 'Register OTP '
-			sendEmail(req.body.email, subject, emailContent)
-			
-			const result = {};
-			result.otp = a1.otp
-		    result.message = "OTP sent"
-		  
-		    response = webResponse(202, true, result)  
-	        res.send(response)
-		}
-		response = webResponse(201, true, a1)  
-		res.send(response)		
-    }catch(err){  //console.log(err)
-		//res.send('Error ' + err)
-		response = webResponse(403, false, err)  
-	    res.send(response)
-		
-    }
-})
-
+ 
 router.post('/forget/password', async(req,res) => {
     try{
         const employeeExist = await Employee.findOne({ email: req.body.email });
+		if(employeeExist) {
+			let otp = Math.floor(1000 + Math.random() * 9000);
+			let emailContent = "OTP is "+otp;
+			let subject = 'Forgot password OTP '
+			sendEmail(req.body.email, subject, emailContent)
+				
+			const result = {};
+			result.otp = otp
+			result.message = "OTP sent"
+			response = webResponse(202, true, result)  
+			res.send(response)
+		} else {
+			response = webResponse(200, false, "Email not found")  
+			res.send(response)
+		}
 		
-		let emailContent = "OTP is "+otp;
-		let subject = 'Forgot password OTP '
-		sendEmail(req.body.email, subject, emailContent)
-			
-		const result = {};
-		result.otp = otp
-		result.message = "OTP sent"
-        response = webResponse(202, true, result)  
-	    res.send(response)
     }catch(err){
         res.send('Error ' + err)
     }
@@ -118,6 +55,84 @@ router.post('/reset/password', async(req,res) => {
         res.send('Error ' + err)
     }
 })
+ 
+ router.post('/save', async(req,res) => {
+	try{ 
+		const employee = new Employee({
+			firstName: req.body.firstName,
+			lastName: req.body.lastName,
+			email: req.body.email,
+			userName: req.body.userName,
+			password: req.body.password,
+			zipCode: req.body.zipCode,
+			referCode: req.body.referCode,
+			employeeType: req.body.employeeType
+		})
+	
+		const employeeEmailExist = await Employee.findOne({ email: req.body.email });
+		if (employeeEmailExist && employeeEmailExist != null) {  
+			response = webResponse(200, false, 'Email already exist')  
+			res.send(response)
+			return;
+		}
+		
+		const employeeUsernameExist = await Employee.findOne({ userName: req.body.userName });
+		if (employeeUsernameExist && employeeUsernameExist != null) {  
+			response = webResponse(200, false, 'Username already exist');
+			res.json(response)
+			return;
+		}
+		
+		if(req.body.password) {
+			employee.password = await bcrypt.hashSync(req.body.password, 12)
+		}
+		if(!req.body.otp) {
+			let otp = Math.floor(1000 + Math.random() * 9000);
+			employee.otp = otp;
+		}
+		
+		if(req.body.is_exclusive) {
+			employee.is_exclusive = req.body.is_exclusive
+		}
+		if(req.body.referCode) {
+			
+			const orgDetails = await Organization.findOne({ referCode: req.body.referCode });
+			if (orgDetails) {  
+				employee.organizationId = orgDetails.id
+			} else{
+				response = webResponse(200, false, 'Invalid refer code')  
+				res.send(response)
+				return;
+			}
+		}
+		
+		const a1 =  await employee.save() 
+		
+		
+		if(!req.body.otp) {
+			let emailContent = "OTP is "+a1.otp;
+			let subject = 'Register OTP '
+			sendEmail(req.body.email, subject, emailContent)
+			
+			const result = {};
+			result.otp = a1.otp
+			result.employee = a1
+		    result.message = "OTP sent"
+		  
+		    response = webResponse(202, true, result)  
+	        res.send(response)
+		}
+		response = webResponse(201, true, a1)  
+		res.send(response)		
+		return;
+    }catch(err){  console.log(err)
+		//res.send('Error ' + err)
+		response = webResponse(403, false, err)  
+	    res.send(response)
+		return;
+    }
+})
+
  
 router.get('/detail/:id', async(req,res) => {
     try{
