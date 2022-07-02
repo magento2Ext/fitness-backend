@@ -8,8 +8,8 @@ require('../functions')
  
  router.get('/list', async(req,res) => {
     try{
-           const aliens = await Employee.find()
-           res.json(aliens)
+		const aliens = await Employee.find()
+        res.json(aliens)
     }catch(err){
         res.send('Error ' + err)
     }
@@ -137,13 +137,31 @@ router.post('/profile', async(req,res) => {
 })
 
 router.post('/login', async(req,res) => {
-	try {
+	try { 
+	 //res.json(req)
 		const email = req.body.email
 		const password = req.body.password
 		
 		// Validate user input
-		if (!(email && password)) {
-		  res.status(400).send("All input is required");
+		if (!(email && password)) { 
+			jsonObj = []
+			if(!(email)) {
+				var item = {
+					'key' : 'email',
+					'value' : 'required' 
+				}
+			   jsonObj.push(item);
+			}
+			if(!(password)) {
+				var item = {
+					'key' : 'password',
+					'value' : 'required' 
+				}
+			   jsonObj.push(item);
+			}
+			
+		  response = webResponse(406, false, jsonObj) 
+		  res.send(response)
 		}
 	   const employee = await Employee.findOne({ email });
 
@@ -160,13 +178,14 @@ router.post('/login', async(req,res) => {
 		  // save user token
 		  employee.token = token; 
 		  const result = {};
-          result.access_token = 'Bearer '+token
+          result.access_token = token
 		  result.employee = employee
 		  
 		  response = webResponse(202, true, result)  
 	      res.send(response)
 		} 
-		res.status(400).send("Invalid Credentials");
+		response = webResponse(200, false, "Invalid credentials")  
+	      res.send(response)
 	} catch (err) {
     console.log(err);
   }
