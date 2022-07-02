@@ -1,9 +1,11 @@
  const express = require("express");
  const router = express.Router()
  const Employee = require('../models/employee')
+ const Organization = require('../models/organization')
  const md5 = require('md5');
  const bcrypt = require('bcryptjs');
  const jwt = require('jsonwebtoken');
+ 
 require('../functions')
  
  router.get('/list', async(req,res) => {
@@ -35,18 +37,12 @@ require('../functions')
 	    res.send(response)
     }
 	
-	const employeeUsernamelExist = await Employee.findOne({ username: req.body.username });
+	const employeeUsernamelExist = await Employee.findOne({ userName: req.body.userName });
     if (employeeUsernamelExist) {  
 		response = webResponse(200, false, 'Username already exist')  
 	    res.send(response)
     }
-	/*if(!req.body.referCode) {
-		response = webResponse(200, false, 'Refercde required')  
-	    res.send(response)
-	} else{
-		response = webResponse(200, false, 'Already exist')  
-	    res.send(response)
-	}*/
+	
 	
     try{
 		if(req.body.password) {
@@ -56,6 +52,20 @@ require('../functions')
 			let otp = (Math.random() + 1).toString(36).substring(6).toUpperCase();
 			employee.otp = otp;
 		}
+		
+		/*if(!req.body.referCode) {
+			response = webResponse(200, false, 'Refercode required')  
+			res.send(response)
+		} else {
+			const orgDetails = await Organization.findOne({ referCode: req.body.referCode });
+			if (orgDetails) {  
+				employee.organizationId = orgDetails.id
+			} else{
+				response = webResponse(200, false, 'Invalid refer code')  
+				res.send(response)
+			}
+		}*/
+		
 		const a1 =  await employee.save() 
 		
 		response = webResponse(201, true, a1)  
