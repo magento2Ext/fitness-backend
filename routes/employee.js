@@ -18,32 +18,30 @@ require('../functions')
 })
  
  router.post('/save', async(req,res) => {
+	try{ 
+		const employee = new Employee({
+			firstName: req.body.firstName,
+			lastName: req.body.lastName,
+			email: req.body.email,
+			userName: req.body.userName,
+			password: req.body.password,
+			zipCode: req.body.zipCode,
+			referCode: req.body.referCode,
+			employeeType: req.body.employeeType
+		})
 	
-	const employee = new Employee({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        userName: req.body.userName,
-        password: req.body.password,
-        zipCode: req.body.zipCode,
-        referCode: req.body.referCode,
-        employeeType: req.body.employeeType
-    })
-	
-	const employeeEmailExist = await Employee.findOne({ email: req.body.email });
-    if (employeeEmailExist) {  
-		response = webResponse(200, false, 'Email already exist')  
-	    res.send(response)
-    }
-	
-	const employeeUsernamelExist = await Employee.findOne({ userName: req.body.userName });
-    if (employeeUsernamelExist) {  
-		response = webResponse(200, false, 'Username already exist')  
-	    res.send(response)
-    }
-	
-	
-    try{
+		const employeeEmailExist = await Employee.findOne({ email: req.body.email });
+		if (employeeEmailExist && employeeEmailExist != null) {  
+			response = webResponse(200, false, 'Email already exist')  
+			res.send(response)
+		}
+		
+		const employeeUsernameExist = await Employee.findOne({ userName: req.body.userName }); console.log(employeeUsernameExist)
+		if (employeeUsernameExist && employeeUsernameExist != null) {  
+			response1 = webResponse(200, false, 'Username already exist')  
+			res.send(response1)
+		}
+		
 		if(req.body.password) {
 			employee.password = await bcrypt.hashSync(req.body.password, 12)
 		}
@@ -52,10 +50,8 @@ require('../functions')
 			employee.otp = otp;
 		}
 		
-		if(!req.body.referCode) {
-			response = webResponse(200, false, 'Refercode required')  
-			res.send(response)
-		} else {
+		if(req.body.referCode) {
+			
 			const orgDetails = await Organization.findOne({ referCode: req.body.referCode });
 			if (orgDetails) {  
 				employee.organizationId = orgDetails.id
@@ -67,7 +63,6 @@ require('../functions')
 		
 		const a1 =  await employee.save() 
 		
-		response = webResponse(201, true, a1)  
 		
 		if(!req.body.otp) {
 			let emailContent = "OTP is "+a1.otp;
@@ -81,9 +76,10 @@ require('../functions')
 		    response = webResponse(202, true, result)  
 	        res.send(response)
 		}
-		
+		response = webResponse(201, true, a1)  
 		res.send(response)		
-    }catch(err){  console.log(err)
+    }catch(err){  //console.log(err)
+		//res.send('Error ' + err)
 		response = webResponse(403, false, err)  
 	    res.send(response)
     }

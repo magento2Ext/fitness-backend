@@ -49,6 +49,7 @@ const employeeSchema = new mongoose.Schema({
     },
     referCode: {
         type: String,
+		required: true,
         default: false
     },
     organizationId: {
