@@ -3,7 +3,7 @@ require("dotenv").config();
 const config = process.env;
 
 const verifyToken = (req, res, next) => {
-  const token = req.body.token || req.query.token || req.headers["Authorization"];
+  const token = req.body.token || req.query.token || req.headers["authorization"];
   if (!token) {
 	response = webResponse(401, false, "A token is required for authentication")  
 	res.send(response)
