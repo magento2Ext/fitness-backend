@@ -19,7 +19,7 @@ require('../functions')
  
  
 router.post('/forget/password', async(req,res) => {
-    try{
+    try{ 
         const employeeExist = await Employee.findOne({ email: req.body.email });
 		if(employeeExist) {
 			let otp = Math.floor(1000 + Math.random() * 9000);
@@ -29,6 +29,7 @@ router.post('/forget/password', async(req,res) => {
 				
 			const result = {};
 			result.otp = otp
+			result.employee = employeeExist
 			result.message = "OTP sent"
 			response = webResponse(202, true, result)  
 			res.send(response)
@@ -105,8 +106,6 @@ router.post('/reset/password', async(req,res) => {
 				return;
 			}
 		}
-		
-		
 		
 		if(!req.body.otp) {
 			let otp = Math.floor(1000 + Math.random() * 9000);
@@ -202,18 +201,21 @@ router.post('/login', async(req,res) => {
 			  expiresIn: "9999 years",
 			}
 		  );
-
+         const organization = await Organization.findById(employee.organizationId)
 		  // save user token
 		  employee.token = token; 
 		  const result = {};
           result.access_token = token
 		  result.employee = employee
+		  result.organization = organization
 		  
 		  response = webResponse(202, true, result)  
 	      res.send(response)
+		  return;
 		} 
 		response = webResponse(200, false, "Invalid credentials")  
 	      res.send(response)
+		  return;
 	} catch (err) {
     console.log(err);
   }
