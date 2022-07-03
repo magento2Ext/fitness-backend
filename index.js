@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const app = express();
 const cors = require("cors")
 require("dotenv").config();
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 3001
 const auth = require("./middleware/auth");
 app.use(express.json())
 const API_PORT = process.env.API_PORT
