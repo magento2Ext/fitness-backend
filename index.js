@@ -8,7 +8,7 @@ const auth = require("./middleware/auth");
 app.use(express.json())
 const API_PORT = process.env.API_PORT
 const Weight = require('./models/weight')
-
+ 
 const whitelist = [process.env.REACT_APP_URL]
 const corsOptions = {
   origin: function (origin, callback) {
