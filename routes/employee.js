@@ -69,6 +69,71 @@ router.post('/reset/password', async(req,res) => {
 			referCode: req.body.referCode,
 			employeeType: req.body.employeeType
 		})
+		
+		if (!(employee.firstName && employee.lastName && employee.email && employee.userName && employee.zipCode && employee.referCode && employee.employeeType && employee.password)) { 
+			jsonObj = []
+			if(!(employee.firstName)) {
+				var item = {
+					'key' : 'Firstname',
+					'value' : 'required' 
+				}
+			   jsonObj.push(item);
+			}
+			if(!(employee.lastName)) {
+				var item = {
+					'key' : 'Lastname',
+					'value' : 'required' 
+				}
+			   jsonObj.push(item);
+			}
+			if(!(employee.email)) {
+				var item = {
+					'key' : 'email',
+					'value' : 'required' 
+				}
+			   jsonObj.push(item);
+			}
+			if(!(employee.password)) {
+				var item = {
+					'key' : 'password',
+					'value' : 'required' 
+				}
+			   jsonObj.push(item);
+			}
+			if(!(employee.userName)) {
+				var item = {
+					'key' : 'Username',
+					'value' : 'required' 
+				}
+			   jsonObj.push(item);
+			}
+			if(!(employee.zipCode)) {
+				var item = {
+					'key' : 'Zipcode',
+					'value' : 'required' 
+				}
+			   jsonObj.push(item);
+			}
+			if(!(employee.referCode)) {
+				var item = {
+					'key' : 'Refercode',
+					'value' : 'required' 
+				}
+			   jsonObj.push(item);
+			}
+			
+			if(!(employee.employeeType)) {
+				var item = {
+					'key' : 'EmployeeType',
+					'value' : 'required' 
+				}
+			   jsonObj.push(item);
+			}
+			
+		  response = webResponse(406, false, jsonObj) 
+		  res.send(response)
+		  return;
+		}
 	
 		const employeeEmailExist = await Employee.findOne({ email: req.body.email });
 		if (employeeEmailExist && employeeEmailExist != null) {  
