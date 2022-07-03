@@ -260,12 +260,14 @@ router.post('/login', async(req,res) => {
 			
 		  response = webResponse(406, false, jsonObj) 
 		  res.send(response)
+		  return;
 		}
 	   const employee = await Employee.findOne({ email });
 
 
 		if (employee && (await bcrypt.compare(password, employee.password))) {
-			if(employee.isVerfied && employee.isVerfied == "false") {
+			 
+			if(employee.isVerified == false ) {
 				response = webResponse(200, false, "User not verified")  
 				res.send(response)
 				return;
