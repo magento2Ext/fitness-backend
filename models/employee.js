@@ -55,6 +55,10 @@ const employeeSchema = new mongoose.Schema({
     organizationId: {
         type: String,
         default: false
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
     }
 
 })

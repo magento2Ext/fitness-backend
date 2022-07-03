@@ -149,6 +149,12 @@ router.post('/reset/password', async(req,res) => {
 			return;
 		}
 		
+		if(req.body.employeeType && (req.body.employeeType == "Coorporate" || req.body.employeeType == "coorporate" )) { 
+			employee.isVerified = "false"
+		} else {
+			employee.isVerified = "true"
+		}
+		
 		if(req.body.password) {
 			employee.password = await bcrypt.hashSync(req.body.password, 12)
 		}
@@ -259,6 +265,12 @@ router.post('/login', async(req,res) => {
 
 
 		if (employee && (await bcrypt.compare(password, employee.password))) {
+			if(employee.isVerfied && employee.isVerfied == "false") {
+				response = webResponse(200, false, "User not verified")  
+				res.send(response)
+				return;
+			}
+			
 		  // Create token
 		  const token = jwt.sign(
 			{ user_id: employee._id, email },
