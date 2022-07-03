@@ -257,6 +257,7 @@ router.post('/login', async(req,res) => {
 		}
 	   const employee = await Employee.findOne({ email });
 
+
 		if (employee && (await bcrypt.compare(password, employee.password))) {
 		  // Create token
 		  const token = jwt.sign(
@@ -266,13 +267,19 @@ router.post('/login', async(req,res) => {
 			  expiresIn: "9999 years",
 			}
 		  );
-         const organization = await Organization.findById(employee.organizationId)
+		  
+		 
 		  // save user token
 		  employee.token = token; 
 		  const result = {};
           result.access_token = token
 		  result.employee = employee
-		  result.organization = organization
+		   if(employee.organizationId && employee.organizationId != 'false') {
+			  const organization = await Organization.findById(employee.organizationId)
+			  result.organization = organization
+		  }
+         
+		  
 		  
 		  response = webResponse(202, true, result)  
 	      res.send(response)
