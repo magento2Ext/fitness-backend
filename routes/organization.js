@@ -127,7 +127,7 @@ router.post('/login', async(req,res) => {
 		  // save user token
 		  organization.token = token; 
 		  const result = {};
-          result.access_token = 'Bearer '+token
+          result.access_token = token
 		  result.organization = organization
 		  
 		  response = webResponse(202, true, result)  
