@@ -4,6 +4,8 @@
  const md5 = require('md5');
  const nodemailer = require('nodemailer');
  const size = process.env.RECORD_LIMIT
+ const bcrypt = require('bcryptjs');
+ const jwt = require('jsonwebtoken');
 require('../functions')
  
  router.get('/list', async(req,res) => {
