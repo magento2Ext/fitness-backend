@@ -52,9 +52,7 @@ require('../functions')
         email: req.body.email,
        // password: md5(req.body.password),
         zipCode: req.body.zipCode,
-        primaryColor: req.body.primaryColor,
-        secondaryColor: req.body.secondaryColor,
-        textColor: req.body.textColor,
+		themecolor: req.body.themecolor,
         referCode: referCode,
         modules: req.body.modules
     })
@@ -202,10 +200,8 @@ router.put('/update/:id',async(req,res)=> {
         organization.email = req.body.email,
         organization.password = req.body.password,
         organization.zipCode = req.body.zipCode,
-        organization.primaryColor= req.body.primaryColor,
-        organization.secondaryColor= req.body.secondaryColor,
-        organization.textColor= req.body.textColor,
-        organization.modules = req.body.modules
+		organization.themecolor= req.body.themecolor,
+		organization.modules = req.body.modules
         const a1 = await organization.save()
         response = webResponse(202, true, a1)  
 	    res.send(response)

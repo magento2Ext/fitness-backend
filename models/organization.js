@@ -13,15 +13,7 @@ const organizationSchema = new mongoose.Schema({
         required: true,
 		default: null
     },*/
-    primaryColor: {
-        type: String,
-        required: true,
-        default: null
-    },secondaryColor: {
-        type: String,
-        required: true,
-        default: null
-    },textColor: {
+    themecolor: {
         type: String,
         required: true,
         default: null

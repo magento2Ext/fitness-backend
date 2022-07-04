@@ -16,7 +16,15 @@ require('../functions')
         res.send('Error ' + err)
     }
 })
- 
+
+router.get('/list/:id', async(req,res) => {
+    try{
+           const employeedd = await Employee.find({organizationId:req.params.id})
+		   res.json(employeedd)
+    }catch(err){
+        res.send('Error ' + err)
+    }
+})
  
 router.post('/forget/password', async(req,res) => {
     try{ 
