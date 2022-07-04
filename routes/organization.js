@@ -50,7 +50,7 @@ require('../functions')
        // logo: req.file.name,
        // hexCode: req.body.hexCode,
         email: req.body.email,
-        password: md5(req.body.password),
+       // password: md5(req.body.password),
         zipCode: req.body.zipCode,
         primaryColor: req.body.primaryColor,
         secondaryColor: req.body.secondaryColor,
@@ -60,6 +60,9 @@ require('../functions')
     })
 
     try{
+		if(req.body.password) {
+			organization.password = await bcrypt.hashSync(req.body.password, 12)
+		}
         const a1 =  await organization.save() 
 		
 		let emailContent = "Organization Code is "+referCode;
