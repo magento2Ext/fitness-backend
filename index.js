@@ -86,6 +86,9 @@ app.post("/weight/list", auth, async(req, res) => {
   
 }); 
 
+const otherApiRouter = require('./routes/otherapi')
+app.use('/',otherApiRouter) 
+
 app.get('/', (req,res) => {
   res.send("welcome to the home page")
 });

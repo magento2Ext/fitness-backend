@@ -41,9 +41,11 @@ router.post('/forget/password', async(req,res) => {
 			result.message = "OTP sent"
 			response = webResponse(202, true, result)  
 			res.send(response)
+			return "";
 		} else {
 			response = webResponse(200, false, "Email not found")  
 			res.send(response)
+			return "";
 		}
 		
     }catch(err){
