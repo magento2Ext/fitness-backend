@@ -93,14 +93,37 @@ app.post("/weight", auth, async(req, res) => {
 
 		var oneWeekAgo = new Date();
 		oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+		
+		var oneMonthAgo = new Date();
+		oneMonthAgo.setDate(oneMonthAgo.getDate() - 7);
+		
 		var date = new Date();
 		
 		const recentWeight = await Weight.findOne({ employeeId: req.user.user_id}).sort({date:-1});
 		
+		const weightLastDay = await Weight.findOne({ employeeId: req.user.user_id,
+			date: {
+				$lt: dateLib.format(date,'YYYY-MM-DD')
+			}
+		}).sort({date:-1});
+		
+		const weightLastWeek = await Weight.findOne({ employeeId: req.user.user_id,
+			date: {
+				$lt: dateLib.format(oneWeekAgo,'YYYY-MM-DD')
+			}
+		}).sort({date:-1});
+		
+		const weightLastMonth = await Weight.findOne({ employeeId: req.user.user_id,
+			date: {
+				$lte: dateLib.format(oneMonthAgo,'YYYY-MM-DD')
+			}
+		}).sort({date:-1});
+		
+		
 		const weightList = await Weight.find({  employeeId: req.user.user_id,
 			date: {
 				$gte: dateLib.format(oneWeekAgo,'YYYY-MM-DD'),
-				$lt: dateLib.format(date,'YYYY-MM-DD'),
+				$lte: dateLib.format(date,'YYYY-MM-DD')
 			}
 		}).sort({date:1})
 		
@@ -138,6 +161,9 @@ app.post("/weight", auth, async(req, res) => {
 		var data = {};
 		data.weight_diff = weightArray
 		data.recentWeight = recentWeight
+		data.weightLastDay = weightLastDay
+		data.weightLastWeek = weightLastWeek
+		data.weightLastMonth = weightLastMonth
 		
 		response = webResponse(202, true, data)  
 		res.send(response);
