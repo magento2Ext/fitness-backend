@@ -2,6 +2,7 @@
  const router = express.Router()
  const Employee = require('../models/employee')
  const Organization = require('../models/organization')
+ const Theme = require('../models/theme_setting')
  const md5 = require('md5');
  const bcrypt = require('bcryptjs');
  const jwt = require('jsonwebtoken');
@@ -295,16 +296,22 @@ router.post('/login', async(req,res) => {
 		  
 		 
 		  // save user token
-		  employee.token = token; 
-		  const result = {};
-          result.access_token = token
-		  result.employee = employee
-		   if(employee.organizationId && employee.organizationId != 'false') {
-			  const organization = await Organization.findById(employee.organizationId)
-			  result.organization = organization
-		  }
-         
-		  
+		    employee.token = token; 
+			const result = {};
+            result.access_token = token
+			result.employee = employee
+			var appData = null;
+			if(employee.organizationId && employee.organizationId != 'false') {
+			    const organization = await Organization.findById(employee.organizationId)
+			    result.organization = organization
+			    if(organization != null && organization.themeId != null) {
+				   appData = await Theme.findById(organization.themeId)
+			    }
+			}
+			if(appData == null) {
+				appData = await Theme.findOne()
+			}
+		  result.appData = appData
 		  
 		  response = webResponse(202, true, result)  
 	      res.send(response)
@@ -314,8 +321,8 @@ router.post('/login', async(req,res) => {
 	      res.send(response)
 		  return;
 	} catch (err) {
-    console.log(err);
-  }
+		console.log(err);
+    }
 })
 
 router.post('/verify',async(req,res)=> {

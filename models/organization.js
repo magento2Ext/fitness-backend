@@ -38,6 +38,11 @@ const organizationSchema = new mongoose.Schema({
         required: true,
         default: null
     },
+    themeId: {
+        type: String,
+        required: true,
+        default: null
+    },
     modules: {
         type: String,
         required: true,
