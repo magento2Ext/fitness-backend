@@ -92,10 +92,10 @@ app.post("/weight", auth, async(req, res) => {
 		var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
 		var oneWeekAgo = new Date();
-		oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+		oneWeekAgo.setDate(oneWeekAgo.getDate() - 6);
 		
 		var oneMonthAgo = new Date();
-		oneMonthAgo.setDate(oneMonthAgo.getDate() - 7);
+		oneMonthAgo.setDate(oneMonthAgo.getDate() - 30);
 		
 		var date = new Date();
 		
@@ -127,13 +127,15 @@ app.post("/weight", auth, async(req, res) => {
 			}
 		}).sort({date:1})
 		
-		weightArray = [];
+		var weightArray = [];
+		
+	
 		var i=0;
 		weightList.forEach(function(col) {
 			// Do something with each collection.				  
 			if(i == 0) {
-				var weight = {
-					'date' : col.date,
+				weight = {
+					'date' : dateLib.format(col.date,'YYYY-MM-DD'),
 					'weight' : col.weight,
 					'day' :  days[col.date.getDay()],
 					'difference':0,
@@ -147,8 +149,8 @@ app.post("/weight", auth, async(req, res) => {
 				} else {
 					var line = difference+" kilogram under weight."
 				}
-				var weight = {
-					'date' : col.date,
+			    weight = {
+					'date' :  dateLib.format(col.date,'YYYY-MM-DD'),
 					'weight' : col.weight,
 					'day' :  days[col.date.getDay()],
 					'difference': difference,
@@ -158,8 +160,37 @@ app.post("/weight", auth, async(req, res) => {
 			weightArray.push(weight);
 			i++;		
 		});
-		var data = {};
-		data.weight_diff = weightArray
+		var weightFinalArray = [];
+			
+		for(i=oneWeekAgo; i<=date;  i.setDate(i.getDate() + 1)) { console.log(i)
+			var found = 0; 
+			for( var j = 0, len = weightArray.length; j < len; j++ ) { 
+				var weightData = '';
+			    if( weightArray[j]['day'] == days[i.getDay()]) {
+					found = 1;
+					weightData = weightArray[j];
+					break;
+				} 
+			}
+			if(found == 0) {
+				weight = {
+					'date' : dateLib.format(i,'YYYY-MM-DD'),
+					'weight' : 0,
+					'day' : days[i.getDay()],
+					'difference':0,
+					'weightLine':''
+				}
+				weightFinalArray.push(weight);
+			}   else{
+				weightFinalArray.push(weightData);
+			}
+		}
+		
+		
+		//console.log(weightArray);
+		var data = {}; 
+		data.weight_diff = weightFinalArray
+		data.lastOneWeekWeight = weightArray
 		data.recentWeight = 0
 		data.weightLastDay = 0
 		data.weightLastWeek = 0
@@ -185,7 +216,7 @@ app.post("/weight", auth, async(req, res) => {
 		response = webResponse(202, true, data)  
 		res.send(response);
 		return;
-	} catch(err){   console.log(err)
+	} catch(err){   
 		response = webResponse(403, false, err)  
 	    res.send(response)
 		return;
