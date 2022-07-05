@@ -170,6 +170,16 @@ router.post('/reset/password', async(req,res) => {
     }
 })
 
+router.post('/profile/update', async(req,res) => {
+    try{
+        
+        res.send(req.body)
+    }catch(err){
+        res.send('Error ' + err)
+    }
+})
+
+
 router.delete('/delete/(:id)', function(req, res, next) {
     Organization.findByIdAndRemove(req.params.id, (err, doc) => {
         if (!err) {
@@ -195,6 +205,25 @@ router.delete('/delete/(:id)', function(req, res, next) {
 })*/
 
 router.put('/update/:id',async(req,res)=> {
+	 try{ 
+        const organization = await Organization.findById(req.params.id) 	 
+		organization.organizationName = req.body.organizationName
+        organization.email = req.body.email,
+        organization.password = req.body.password,
+        organization.zipCode = req.body.zipCode,
+		organization.themecolor= req.body.themecolor,
+		organization.modules = req.body.modules
+        const a1 = await organization.save()
+        response = webResponse(202, true, a1)  
+	    res.send(response)
+    }catch(err){ console.log(err)
+        res.send('err')
+        //res.json(err)
+    }
+
+})
+
+router.put('/update/theme',async(req,res)=> {
 	 try{ 
         const organization = await Organization.findById(req.params.id) 	 
 		organization.organizationName = req.body.organizationName
