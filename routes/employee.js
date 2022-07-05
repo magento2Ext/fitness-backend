@@ -12,6 +12,7 @@ require('../functions')
     try{
 		const aliens = await Employee.find()
         res.json(aliens)
+		return '';
     }catch(err){
         res.send('Error ' + err)
     }
@@ -315,6 +316,38 @@ router.post('/login', async(req,res) => {
 	} catch (err) {
     console.log(err);
   }
+})
+
+router.post('/verify',async(req,res)=> {
+	 try{
+		const id = req.body.id
+		console.log(id)
+		// Validate user input
+		if (!(id )) { 
+			jsonObj = []
+			var item = {
+				'key' : 'id',
+				'value' : 'required' 
+			}
+			jsonObj.push(item);
+			
+			response = webResponse(406, false, jsonObj) 
+			res.send(response)
+			return;
+		}
+		
+        const employee = await Employee.findById(req.body.id) 	 
+		console.log(employee)	
+		employee.isVerified = true
+        const a1 = await employee.save()
+        response = webResponse(200, true, "Employee verified")  
+	    res.send(response)
+		return;  
+    }catch(err){
+        console.log(err)
+        res.send('Error')
+    }
+
 })
 
 router.patch('/update/:id',async(req,res)=> {

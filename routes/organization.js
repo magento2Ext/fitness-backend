@@ -204,6 +204,8 @@ router.delete('/delete/(:id)', function(req, res, next) {
     }) 
 })*/
 
+
+
 router.put('/update/:id',async(req,res)=> {
 	 try{ 
         const organization = await Organization.findById(req.params.id) 	 

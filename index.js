@@ -175,7 +175,7 @@ app.post("/weight", auth, async(req, res) => {
 			if(found == 0) {
 				weight = {
 					'date' : dateLib.format(i,'YYYY-MM-DD'),
-					'weight' : 0,
+					'weight' : "0",
 					'day' : days[i.getDay()],
 					'difference':0,
 					'weightLine':''
