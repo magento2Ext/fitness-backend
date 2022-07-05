@@ -17,7 +17,7 @@ require('../functions')
     }
 })
 
-router.get('/list/:id', async(req,res) => {
+router.get('/list/:id', async(req,res) => { 
     try{
            const employeedd = await Employee.find({organizationId:req.params.id})
 		   res.json(employeedd)
