@@ -312,6 +312,7 @@ router.post('/login', async(req,res) => {
 				appData = await Theme.findOne()
 			}
 		  result.appData = appData
+		  result.logo = "https://seller2seller.com/aplicar/soul.png"
 		  
 		  response = webResponse(202, true, result)  
 	      res.send(response)
