@@ -160,10 +160,27 @@ app.post("/weight", auth, async(req, res) => {
 		});
 		var data = {};
 		data.weight_diff = weightArray
-		data.recentWeight = recentWeight
-		data.weightLastDay = weightLastDay
-		data.weightLastWeek = weightLastWeek
-		data.weightLastMonth = weightLastMonth
+		data.recentWeight = 0
+		data.weightLastDay = 0
+		data.weightLastWeek = 0
+		data.weightLastMonth = 0
+		
+		if(recentWeight != null) {
+			data.recentWeight = recentWeight.weight
+		} 
+		
+		if(weightLastDay != null) {
+			data.weightLastDay = weightLastDay.weight
+		} 
+		
+		if(weightLastWeek != null) {
+			data.weightLastWeek = weightLastWeek.weight
+		} 
+		
+		if(weightLastMonth != null) {
+			data.weightLastMonth = weightLastMonth.weight
+		} 
+		
 		
 		response = webResponse(202, true, data)  
 		res.send(response);
