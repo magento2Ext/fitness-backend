@@ -304,7 +304,9 @@ router.post('/login', async(req,res) => {
 			if(employee.organizationId && employee.organizationId != 'false') {
 			    const organization = await Organization.findById(employee.organizationId)
 			    result.organization = organization
-			    if(organization != null && organization.themeId != null) {
+				var themecode = organization.themecode
+				var logo = organization.logo
+			    if(organization != null && organization.themecode != null) {
 				   appData = await Theme.findById(organization.themecode)
 			    }
 			}
@@ -313,7 +315,7 @@ router.post('/login', async(req,res) => {
 			}
 			
 			result.appData = appData
-		    result.logo = organization.logo
+		    result.logo = logo
 		  
 		    response = webResponse(202, true, result)  
 	        res.send(response)
