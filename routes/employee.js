@@ -330,7 +330,6 @@ router.post('/login', async(req,res) => {
 router.post('/verify',async(req,res)=> {
 	 try{
 		const id = req.body.id
-		console.log(id)
 		// Validate user input
 		if (!(id )) { 
 			jsonObj = []
@@ -346,9 +345,9 @@ router.post('/verify',async(req,res)=> {
 		}
 		
         const employee = await Employee.findById(req.body.id) 	 
-		if(employee){
-			 res.json(employee)
+		res.json(employee)
 			 return; 
+		if(employee){
 			employee.isVerified = true
 			const a1 = await employee.save()
 			response = webResponse(200, true, "Employee verified")  
