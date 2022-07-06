@@ -345,8 +345,7 @@ router.post('/verify',async(req,res)=> {
 		}
 		
         const employee = await Employee.findById(req.body.id) 	 
-		res.json(employee)
-			 return; 
+		
 		if(employee){
 			employee.isVerified = true
 			const a1 = await employee.save()
@@ -360,8 +359,9 @@ router.post('/verify',async(req,res)=> {
 		}
 		
     }catch(err){
-        //console.log(err)
-        res.json(err)
+       	response = webResponse(200, false, "Something went wrong")  
+			  res.send(response)
+			  return;
     }
 
 })
