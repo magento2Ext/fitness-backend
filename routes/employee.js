@@ -306,12 +306,16 @@ router.post('/login', async(req,res) => {
 			    result.organization = organization
 				var themecode = organization.themecode
 				var logo = organization.logo
-			    if(organization != null && organization.themecode != null) {
+				if(organization != null && organization.themecode != null) {
 				   appData = await Theme.findById(organization.themecode)
 			    }
 			}
 			if(appData == null) {
 				appData = await Theme.findOne()
+			}
+			if(logo == null)
+			{
+				var logo = process.env.ORGLOGO
 			}
 			
 			result.appData = appData
