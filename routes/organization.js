@@ -81,7 +81,7 @@ require('../functions')
     }catch(err){
         res.send('Error ' + err)
     }
-})
+}) 
 
 
 router.post('/login', async(req,res) => {
