@@ -52,7 +52,6 @@ require('../functions')
         email: req.body.email,
        // password: md5(req.body.password),
         zipCode: req.body.zipCode,
-		themecolor: req.body.themecolor,
         referCode: referCode,
         modules: req.body.modules
     })

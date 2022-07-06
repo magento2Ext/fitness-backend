@@ -13,11 +13,6 @@ const organizationSchema = new mongoose.Schema({
         required: true,
 		default: null
     },*/
-    themecolor: {
-        type: String,
-        required: true,
-        default: null
-    },
     email: {
         type: String,
         required: true,
@@ -34,11 +29,6 @@ const organizationSchema = new mongoose.Schema({
         default: null
     },
     referCode: {
-        type: String,
-        required: true,
-        default: null
-    },
-    themeId: {
         type: String,
         required: true,
         default: null
