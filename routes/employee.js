@@ -305,7 +305,7 @@ router.post('/login', async(req,res) => {
 			    const organization = await Organization.findById(employee.organizationId)
 			    result.organization = organization
 			    if(organization != null && organization.themeId != null) {
-				   appData = await Theme.findById(organization.themecode)
+				   appData = await Theme.findById(organization.themeId)
 			    }
 			}
 			if(appData == null) {
@@ -313,7 +313,7 @@ router.post('/login', async(req,res) => {
 			}
 			
 			result.appData = appData
-		    result.logo = organization.logo
+		    result.logo = "https://seller2seller.com/aplicar/soul.png"
 		  
 		    response = webResponse(202, true, result)  
 	        res.send(response)

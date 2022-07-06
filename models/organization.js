@@ -13,6 +13,11 @@ const organizationSchema = new mongoose.Schema({
         required: true,
 		default: null
     },*/
+    themecolor: {
+        type: String,
+        required: true,
+        default: null
+    },
     email: {
         type: String,
         required: true,
@@ -33,12 +38,9 @@ const organizationSchema = new mongoose.Schema({
         required: true,
         default: null
     },
-	logo: {
+    themeId: {
         type: String,
-        default: null
-    },
-	themecode: {
-        type: String,
+        required: true,
         default: null
     },
     modules: {
@@ -48,5 +50,5 @@ const organizationSchema = new mongoose.Schema({
     }
 
 })
-  
+
 module.exports = mongoose.model('Organization',organizationSchema)
