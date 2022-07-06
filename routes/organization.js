@@ -52,9 +52,10 @@ require('../functions')
         email: req.body.email,
        // password: md5(req.body.password),
         zipCode: req.body.zipCode,
-		themecolor: req.body.themecolor,
         referCode: referCode,
-        modules: req.body.modules
+        modules: req.body.modules,
+		logo: process.env.ORGLOGO,
+		themecode: '62c3de94a4db9348c847b5e1'
     })
 
     try{
@@ -73,7 +74,7 @@ require('../functions')
 		response = webResponse(403, false, err)  
 	    res.send(response)
     }
-})
+}) 
  
  router.get('/detail/:id', async(req,res) => {
     try{
@@ -82,7 +83,7 @@ require('../functions')
     }catch(err){
         res.send('Error ' + err)
     }
-})
+}) 
 
 
 router.post('/login', async(req,res) => {
@@ -170,12 +171,17 @@ router.post('/reset/password', async(req,res) => {
     }
 })
 
-router.post('/profile/update', async(req,res) => {
-    try{
-        
-        res.send(req.body)
-    }catch(err){
-        res.send('Error ' + err)
+router.put('/profile/update/:id', async(req,res) => {
+    try{ 
+        const organization = await Organization.findById(req.params.id) 	 
+		organization.logo = req.body.logo
+        organization.themecode = req.body.themecode
+        const a1 = await organization.save()
+        response = webResponse(202, true, a1)  
+	    res.send(response)
+    }catch(err){ console.log(err)
+        res.send(err)
+        //res.json(err)
     }
 })
 
