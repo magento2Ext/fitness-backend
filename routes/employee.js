@@ -372,11 +372,11 @@ router.post('/verify',async(req,res)=> {
 
 })
 
-router.patch('/update/:id',async(req,res)=> {
+/* router.patch('/update/:id',async(req,res)=> {
 	 try{
         const employee = await Employee.findById(req.params.id) 
 		
-		employee.employeeName = req.body.employeeName,
+		employee.employeeName = req.body.firstName,
         employee.logo = req.body.logo,
         employee.hexCode = req.body.hexCode,
         employee.email = req.body.email,
@@ -386,6 +386,26 @@ router.patch('/update/:id',async(req,res)=> {
         employee.modules = req.body.modules
         const a1 = await employee.save()
         res.json(a1)   
+    }catch(err){
+       // res.send(err)
+        res.send('Error')
+    }
+
+}) */
+
+router.put('/update/:id',async(req,res)=> {
+	 try{
+        const employee = await Employee.findById(req.params.id) 
+		
+		employee.firstName = req.body.firstName,
+        employee.lastName = req.body.lastName,
+        employee.email = req.body.email,
+        employee.zipCode = req.body.zipCode,
+        employee.is_exclusive = req.body.is_exclusive,
+        employee.isVerified = req.body.isVerified
+        const a1 = await employee.save()
+        response = webResponse(202, true, a1)  
+	    res.send(response)   
     }catch(err){
        // res.send(err)
         res.send('Error')
