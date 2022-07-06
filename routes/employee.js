@@ -353,8 +353,8 @@ router.post('/verify',async(req,res)=> {
 	    res.send(response)
 		return;  
     }catch(err){
-        console.log(err)
-        res.send('Error')
+        //console.log(err)
+        res.send(err)
     }
 
 })
