@@ -311,12 +311,13 @@ router.post('/login', async(req,res) => {
 			if(appData == null) {
 				appData = await Theme.findOne()
 			}
-		  result.appData = appData
-		  result.logo = "https://seller2seller.com/aplicar/soul.png"
+			
+			result.appData = appData
+		    result.logo = "https://seller2seller.com/aplicar/soul.png"
 		  
-		  response = webResponse(202, true, result)  
-	      res.send(response)
-		  return;
+		    response = webResponse(202, true, result)  
+	        res.send(response)
+		    return;
 		} 
 		response = webResponse(200, false, "Invalid credentials")  
 	      res.send(response)
