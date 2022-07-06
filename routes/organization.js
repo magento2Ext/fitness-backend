@@ -72,7 +72,7 @@ require('../functions')
 		response = webResponse(403, false, err)  
 	    res.send(response)
     }
-})
+}) 
  
  router.get('/detail/:id', async(req,res) => {
     try{
