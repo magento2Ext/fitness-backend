@@ -53,7 +53,9 @@ require('../functions')
        // password: md5(req.body.password),
         zipCode: req.body.zipCode,
         referCode: referCode,
-        modules: req.body.modules
+        modules: req.body.modules,
+		logo: process.env.ORGLOGO,
+		themecode: '62c3de94a4db9348c847b5e1'
     })
 
     try{
@@ -170,11 +172,16 @@ router.post('/reset/password', async(req,res) => {
 })
 
 router.post('/profile/update', async(req,res) => {
-    try{
-        
-        res.send(req.body)
-    }catch(err){
-        res.send('Error ' + err)
+    try{ 
+        const organization = await Organization.findById(req.params.id) 	 
+		organization.logo = req.body.logo
+        organization.themecode = req.body.themecode,
+        const a1 = await organization.save()
+        response = webResponse(202, true, a1)  
+	    res.send(response)
+    }catch(err){ console.log(err)
+        res.send('err')
+        //res.json(err)
     }
 })
 

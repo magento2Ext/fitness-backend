@@ -33,6 +33,14 @@ const organizationSchema = new mongoose.Schema({
         required: true,
         default: null
     },
+	logo: {
+        type: String,
+        default: null
+    },
+	themecode: {
+        type: String,
+        default: null
+    },
     modules: {
         type: String,
         required: true,
