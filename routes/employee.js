@@ -346,15 +346,23 @@ router.post('/verify',async(req,res)=> {
 		}
 		
         const employee = await Employee.findById(req.body.id) 	 
-		console.log(employee)	
-		employee.isVerified = true
-        const a1 = await employee.save()
-        response = webResponse(200, true, "Employee verified")  
-	    res.send(response)
-		return;  
+		if(employee){
+			 res.json(employee)
+			 return; 
+			employee.isVerified = true
+			const a1 = await employee.save()
+			response = webResponse(200, true, "Employee verified")  
+			res.send(response)
+			return;  
+		} else {
+			response = webResponse(200, false, "Employee not found")  
+			  res.send(response)
+			  return;
+		}
+		
     }catch(err){
         //console.log(err)
-        res.send(err)
+        res.json(err)
     }
 
 })
