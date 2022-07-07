@@ -109,7 +109,7 @@ router.post('/save/theme', async(req,res) => {
 		}
 		
 		if(req.body.id) {
-			const themeDetails = await Theme.findById(req.params.id) 	
+			const themeDetails = await Theme.findById(req.body.id) 	
 			themeDetails.themeColor= req.body.themecolor,
 			themeDetails.primaryColor= req.body.primaryColor,
 			themeDetails.secondaryColor= req.body.secondaryColor,

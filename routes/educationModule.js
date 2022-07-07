@@ -32,6 +32,20 @@ require('../functions')
 			module_id: req.body.module_id
 		})
 		
+		if(req.body.id) {
+			const educationDetail = await EducationModule.findById(req.body.id) 	
+			educationDetail.title= req.body.title,
+			educationDetail.description= req.body.description,
+			educationDetail.placeholder_image= req.body.placeholder_image,
+			educationDetail.video_link= req.body.video_link,
+			educationDetail.module_id= req.body.module_id,
+			await educationDetail.save()
+			response = webResponse(200, true, "Education Module Updated")  
+			res.send(response)
+			return "";
+		}
+		
+		
 		const educationDetail =  await education.save()  
 		response = webResponse(200, true, "Education Module Saved.")  
 		res.send(response)		
