@@ -2,11 +2,13 @@
  const router = express.Router()
  const Organization = require('../models/organization')
  const Employee = require('../models/employee')
+ const Module = require('../models/module')
  const md5 = require('md5');
  const nodemailer = require('nodemailer');
  const size = process.env.RECORD_LIMIT
  const bcrypt = require('bcryptjs');
  const jwt = require('jsonwebtoken');
+ const auth = require("../middleware/auth");
 require('../functions')
  
  router.get('/list', async(req,res) => {
@@ -43,6 +45,39 @@ require('../functions')
         res.send('Error ' + err)
     }
 })
+
+router.post("/module/list", auth, async(req, res) => { 
+  try{ 
+		var empId = req.user.user_id;
+		const employee = await Employee.findById(empId)
+		if(employee.employeeType == "Coorporate") {
+			const org = await Organization.findById(employee.organizationId)
+			if(org) {
+				var modules = org.modules; 
+				var ids = modules.split(",")
+				var ModuleList = await Module.find({ _id : { $in : ids } })
+			   // var ModuleList = await Module.find({ _id : { $in : ['62c697e764a3d1c9be8c7f15','62c6980964a3d1c9be8c7f18'] } })
+				response = webResponse(201, true, ModuleList)  
+				res.send(response)		
+				return;
+			} else{
+				response = webResponse(404, false, "Organization not found")  
+				res.send(response)
+				return;
+			}
+		} else{
+			const modulesAvailable = await Module.find()
+			response = webResponse(201, true, modulesAvailable)  
+			res.send(response)		
+			return;
+		}
+	} catch(err){   console.log(err)
+		response = webResponse(403, false, err)  
+	    res.send(response)
+		return;
+    }
+  
+});
  
  router.post('/save', async(req,res) => {
 	let referCode = (Math.random() + 1).toString(36).substring(6);
