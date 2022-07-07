@@ -34,6 +34,11 @@ require('../functions')
 		
 		if(req.body.id) {
 			const educationDetail = await EducationModule.findById(req.body.id) 	
+			if(!educationDetail){
+				response = webResponse(404, false, "Education Module not found")  
+				res.send(response)
+				return "";
+			}
 			educationDetail.title= req.body.title,
 			educationDetail.description= req.body.description,
 			educationDetail.placeholder_image= req.body.placeholder_image,
