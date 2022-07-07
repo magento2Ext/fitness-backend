@@ -31,7 +31,18 @@ const educationSchema = new mongoose.Schema({
         type: String,
         required: true,
         default: null
-    }
+    },
+	
+    is_picture: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+	created_at:{
+		type: String,
+		default:null
+	}
+
    
 })
 

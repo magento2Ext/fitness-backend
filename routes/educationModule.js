@@ -1,7 +1,7 @@
  const express = require("express");
  const router = express.Router()
  const EducationModule = require('../models/education')
-
+const dateLib = require('date-and-time')
 require('../functions')
  
  router.post('/list', async(req,res) => {
@@ -12,7 +12,25 @@ require('../functions')
 			var education = await EducationModule.find()
 		}
 		
-        response = webResponse(201, true, education)  
+		var educationArray = [];
+		education.forEach(function(col) {
+			newEdu = {
+				'id' :  col._id,
+				"title": col.title,
+				"description": col.description,
+				"placeholder_image": col.placeholder_image,
+				"video_link": col.video_link,
+				"module_id": col.module_id,
+				"is_picture": col.is_picture,
+				"created_at": col.created_at,
+				"timeSinc":timeAgo(col.created_at) + "ago"
+			}
+			
+			
+			educationArray.push(newEdu);
+		})
+		
+        response = webResponse(201, true, educationArray)  
 		res.send(response)
 		return "";
     }catch(err){ console.log(err)
@@ -29,7 +47,8 @@ require('../functions')
 			description: req.body.description,
 			placeholder_image: req.body.placeholder_image,
 			video_link: req.body.video_link,
-			module_id: req.body.module_id
+			module_id: req.body.module_id,
+			is_picture: req.body.is_picture
 		})
 		
 		if(req.body.id) {
@@ -44,12 +63,13 @@ require('../functions')
 			educationDetail.placeholder_image= req.body.placeholder_image,
 			educationDetail.video_link= req.body.video_link,
 			educationDetail.module_id= req.body.module_id,
+			educationDetail.is_picture= req.body.is_picture,
 			await educationDetail.save()
 			response = webResponse(200, true, "Education Module Updated")  
 			res.send(response)
 			return "";
 		}
-		
+		education.created_at = new Date()
 		
 		const educationDetail =  await education.save()  
 		response = webResponse(200, true, "Education Module Saved.")  
