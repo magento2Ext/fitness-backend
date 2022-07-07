@@ -231,6 +231,39 @@ router.get('/detail/:id', async(req,res) => {
     }
 })
 
+router.delete('/delete', async(req,res) => {
+    try{
+        const id = req.body.id
+		// Validate user input
+		if(!(id)) {
+			jsonObj = []
+			var item = {
+				'key' : 'Employee id',
+				'value' : 'required' 
+			}
+			jsonObj.push(item);
+			response = webResponse(406, false, jsonObj) 
+			res.send(response)
+			return "";
+		}
+		
+		
+		const employee = await Employee.findById(req.body.id)
+		if(!employee) {
+			response = webResponse(404, false, "Employee not found") 
+			res.send(response)
+			return "";
+		}
+		  
+		employee.deleteOne(req.params.id)
+		response = webResponse(200, true, "Employee deleted") 
+		res.send(response)
+		return "";
+	}catch(err){
+        res.send('Error ' + err)
+    }
+})
+
 router.post('/profile', async(req,res) => {
     try{
         const token = req.get('Authorization');
@@ -372,26 +405,6 @@ router.post('/verify',async(req,res)=> {
 
 })
 
-/* router.patch('/update/:id',async(req,res)=> {
-	 try{
-        const employee = await Employee.findById(req.params.id) 
-		
-		employee.employeeName = req.body.firstName,
-        employee.logo = req.body.logo,
-        employee.hexCode = req.body.hexCode,
-        employee.email = req.body.email,
-        employee.password = req.body.password,
-        employee.zipCode = req.body.zipCode,
-        employee.referCode = req.body.referCode,
-        employee.modules = req.body.modules
-        const a1 = await employee.save()
-        res.json(a1)   
-    }catch(err){
-       // res.send(err)
-        res.send('Error')
-    }
-
-}) */
 
 router.put('/update/:id',async(req,res)=> {
 	 try{
