@@ -4,7 +4,18 @@
 
 require('../functions')
  
-
+ router.post('/list', async(req,res) => {
+    try{
+		const videos = await MotivationalVideo.find()
+        response = webResponse(201, true, videos)  
+		res.send(response)		
+		return;;
+    }catch(err){
+        response = webResponse(200, false, "Something went wrong, please try again")  
+	    res.send(response)
+		return;
+    }
+})
  
  router.post('/save', async(req,res) => {
 	try{ 
@@ -18,12 +29,10 @@ require('../functions')
 		})
 		
 		const videoDetail =  await video.save()  
-		console.log(videoDetail)
-			response = webResponse(202, true, videoDetail)  
-			res.send(response)		
-			return;
-		
-    }catch(err){ 
+		response = webResponse(202, true, videoDetail)  
+		res.send(response)		
+		return;
+	}catch(err){ 
 		response = webResponse(403, false, err)  
 	    res.send(response)
 		return;
