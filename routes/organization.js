@@ -50,6 +50,11 @@ router.post("/module/list", auth, async(req, res) => {
   try{ 
 		var empId = req.user.user_id;
 		const employee = await Employee.findById(empId)
+		if(!employee){
+			response = webResponse(404, false, "Employee not found.")  
+			res.send(response)
+			return;
+		}
 		if(employee.employeeType == "Coorporate") {
 			const org = await Organization.findById(employee.organizationId)
 			if(org) {
