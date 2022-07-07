@@ -63,4 +63,39 @@ require('../functions')
     }
 })
 
+router.delete('/delete', async(req,res) => {
+    try{
+        const id = req.body.id
+		// Validate user input
+		if(!(id)) {
+			jsonObj = []
+			var item = {
+				'key' : 'Education module id',
+				'value' : 'required' 
+			}
+			jsonObj.push(item);
+			response = webResponse(406, false, jsonObj) 
+			res.send(response)
+			return "";
+		}
+		
+		
+		const educationDetail = await EducationModule.findById(req.body.id)
+		if(!educationDetail) {
+			response = webResponse(404, false, "Education Module not found") 
+			res.send(response)
+			return "";
+		}
+		  
+		educationDetail.deleteOne(req.params.id)
+		response = webResponse(200, true, "Education Module deleted") 
+		res.send(response)
+		return "";
+	}catch(err){
+        response = webResponse(200, false, "Something went wrong, please try again.")  
+	    res.send(response)
+		return;
+    }
+})
+
  module.exports = router
