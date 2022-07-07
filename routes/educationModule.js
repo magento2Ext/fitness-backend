@@ -4,13 +4,21 @@
 
 require('../functions')
  
- router.get('/list', async(req,res) => {
+ router.post('/list', async(req,res) => {
     try{
-		const aliens = await Employee.find()
-        res.json(aliens)
-		return '';
-    }catch(err){
-        res.send('Error ' + err)
+		if(req.body.module_id) {
+			var education = await EducationModule.find({ module_id: req.body.module_id });
+		} else {
+			var education = await EducationModule.find()
+		}
+		
+        response = webResponse(201, true, education)  
+		res.send(response)
+		return "";
+    }catch(err){ console.log(err)
+        response = webResponse(200, false, "Something went wrong, please try again.")  
+	    res.send(response)
+		return;
     }
 })
  
@@ -25,7 +33,7 @@ require('../functions')
 		})
 		
 		const educationDetail =  await education.save()  
-		response = webResponse(202, true, videoDetail)  
+		response = webResponse(200, true, "Education Module Saved.")  
 		res.send(response)		
 		return;
 		

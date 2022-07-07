@@ -47,6 +47,9 @@ app.use('/admin',adminRouter)
 const videoRouter = require('./routes/motivationalVideo')
 app.use('/mvideos',videoRouter)
 
+const educationRouter = require('./routes/educationModule')
+app.use('/education/module',educationRouter)
+
 
 app.post("/weight/save", auth, async(req, res) => { 
   try{ 

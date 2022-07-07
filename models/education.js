@@ -27,7 +27,7 @@ const educationSchema = new mongoose.Schema({
         default: null
     },
 	
-    moduleId: {
+    module_id: {
         type: String,
         required: true,
         default: null
