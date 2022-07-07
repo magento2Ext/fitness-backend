@@ -44,6 +44,9 @@ app.use('/employee',employeeRouter)
 const adminRouter = require('./routes/admin')
 app.use('/admin',adminRouter)
 
+const videoRouter = require('./routes/motivationalVideo')
+app.use('/mvideos',videoRouter)
+
 app.post("/weight/save", auth, async(req, res) => { 
   try{ 
 		const weight = new Weight({
