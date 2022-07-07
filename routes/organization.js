@@ -1,6 +1,7 @@
  const express = require("express");
  const router = express.Router()
  const Organization = require('../models/organization')
+ const Employee = require('../models/employee')
  const md5 = require('md5');
  const nodemailer = require('nodemailer');
  const size = process.env.RECORD_LIMIT
@@ -158,6 +159,41 @@ router.post('/forget/password', async(req,res) => {
     }
 })
 
+router.delete('/delete', async(req,res) => {
+    try{
+        const id = req.body.id
+		// Validate user input
+		if(!(id)) {
+			jsonObj = []
+			var item = {
+				'key' : 'Organization id',
+				'value' : 'required' 
+			}
+			jsonObj.push(item);
+			response = webResponse(406, false, jsonObj) 
+			res.send(response)
+			return "";
+		}
+		
+		
+		const organization = await Organization.findById(req.body.id)
+		if(!organization) {
+			response = webResponse(404, false, "Organization not found") 
+			res.send(response)
+			return "";
+		}
+		
+		const employees = await Employee.deleteMany({'organizationId':req.body.id})
+		
+		organization.deleteOne(req.body.id)
+		response = webResponse(200, true, "Organization deleted") 
+		res.send(response)
+		return "";
+	}catch(err){
+        res.send('Error ' + err)
+    }
+})
+
 
 router.post('/reset/password', async(req,res) => {
     try{
@@ -186,17 +222,6 @@ router.put('/profile/update/:id', async(req,res) => {
 })
 
 
-router.delete('/delete/(:id)', function(req, res, next) {
-    Organization.findByIdAndRemove(req.params.id, (err, doc) => {
-        if (!err) {
-            response = webResponse(200, true, "Org deleted")  
-	        res.send(response)
-        } else {
-			response = webResponse(200, false, err)  
-	        res.send(response)
-        }
-    });
-})
 
 /*router.delete('/delete', async(req,res) => {
 	Organization.findByIdAndDelete(req.body.id).then((organization) => {
