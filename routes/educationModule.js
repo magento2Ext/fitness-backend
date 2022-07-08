@@ -22,13 +22,14 @@ require('../functions')
 		}
 			
 		var educationArray = [];
+		console.log(education)
 		education.forEach( function(col){
-			const _id = new ObjectID(col.module_id);
+			//const _id = new ObjectID(col.module_id);
 			var moduleName = "Mind";
-			const module =  ModuleAdded.findById(_id)	
+			/*const module =  ModuleAdded.findById(_id)	
 			if(module.name) {
 				var moduleName = module.name;
-			}
+			}*/
 			
 			
 			newEdu = {

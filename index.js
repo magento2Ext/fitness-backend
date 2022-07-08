@@ -50,6 +50,9 @@ app.use('/mvideos',videoRouter)
 const educationRouter = require('./routes/educationModule')
 app.use('/education/module',educationRouter)
 
+const stepTracker = require('./routes/stepTracker')
+app.use('/steps',stepTracker)
+
 
 app.post("/weight/save", auth, async(req, res) => { 
   try{ 
