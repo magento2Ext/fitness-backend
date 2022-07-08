@@ -6,23 +6,30 @@ const dateLib = require('date-and-time')
 var ObjectID = require('mongodb').ObjectID;
 require('../functions')
  
+ 
+ 
  router.post('/list', async(req,res) => {
     try{
+		var moduleName =  '';
 		if(req.body.module_id) {
 			var education = await EducationModule.find({ module_id: req.body.module_id });
+			/*const module = await  ModuleAdded.findById(req.body.module_id)	 
+			if(module.name) {
+				moduleName = module.name;
+			}*/
 		} else {
 			var education = await EducationModule.find()
 		}
-		
+			
 		var educationArray = [];
-		education.forEach(function(col) {
-			const _id = new ObjectID(req.body.module_id);
-			//const moduleDetail =  ModuleAdded.find({'_id':_id})
-			//console.log(moduleDetail)
+		education.forEach( function(col){
+			const _id = new ObjectID(col.module_id);
 			var moduleName = "Mind";
-			/*if(moduleDetail) {
-				var moduleName = moduleDetail.name;
-			}*/
+			const module =  ModuleAdded.findById(_id)	
+			if(module.name) {
+				var moduleName = module.name;
+			}
+			
 			
 			newEdu = {
 				'id' :  col._id,
@@ -36,14 +43,12 @@ require('../functions')
 				"created_at": col.created_at,
 				"timeSinc":timeAgo(col.created_at) + "ago"
 			}
-			
-			educationArray.push(newEdu);
+			educationArray.push(newEdu); 
 		})
-		
-        response = webResponse(201, true, educationArray)  
+		 response = webResponse(201, true, educationArray)  
 		res.send(response)
 		return "";
-    }catch(err){ console.log(err)
+    }catch(err){  console.log(err)
         response = webResponse(200, false, "Something went wrong, please try again.")  
 	    res.send(response)
 		return;
@@ -82,7 +87,7 @@ require('../functions')
 		education.created_at = new Date()
 		
 		const educationDetail =  await education.save()  
-		response = webResponse(200, true, "Education Module Saved.")  
+		response = webResponse(202, true, educationDetail)  
 		res.send(response)		
 		return;
 		
