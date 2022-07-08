@@ -64,8 +64,8 @@ require('../functions')
 			educationDetail.video_link= req.body.video_link,
 			educationDetail.module_id= req.body.module_id,
 			educationDetail.is_picture= req.body.is_picture,
-			await educationDetail.save()
-			response = webResponse(200, true, "Education Module Updated")  
+			const educationDetailSaved = await educationDetail.save()
+			response = webResponse(202, true, educationDetailSaved)  
 			res.send(response)
 			return "";
 		}
