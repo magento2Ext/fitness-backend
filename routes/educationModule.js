@@ -63,7 +63,7 @@ require('../functions')
 			educationDetail.placeholder_image= req.body.placeholder_image,
 			educationDetail.video_link= req.body.video_link,
 			educationDetail.module_id= req.body.module_id,
-			educationDetail.is_picture= req.body.is_picture,
+			educationDetail.is_picture= req.body.is_picture
 			const educationDetailSaved = await educationDetail.save()
 			response = webResponse(202, true, educationDetailSaved)  
 			res.send(response)
