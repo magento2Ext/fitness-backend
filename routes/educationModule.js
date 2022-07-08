@@ -1,7 +1,9 @@
  const express = require("express");
  const router = express.Router()
  const EducationModule = require('../models/education')
+ const ModuleAdded = require('../models/module')
 const dateLib = require('date-and-time')
+var ObjectID = require('mongodb').ObjectID;
 require('../functions')
  
  router.post('/list', async(req,res) => {
@@ -14,18 +16,26 @@ require('../functions')
 		
 		var educationArray = [];
 		education.forEach(function(col) {
+			const _id = new ObjectID(req.body.module_id);
+			//const moduleDetail =  ModuleAdded.find({'_id':_id})
+			//console.log(moduleDetail)
+			var moduleName = "Mind";
+			/*if(moduleDetail) {
+				var moduleName = moduleDetail.name;
+			}*/
+			
 			newEdu = {
 				'id' :  col._id,
 				"title": col.title,
 				"description": col.description,
 				"placeholder_image": col.placeholder_image,
 				"video_link": col.video_link,
+				"module_name": moduleName,
 				"module_id": col.module_id,
 				"is_picture": col.is_picture,
 				"created_at": col.created_at,
 				"timeSinc":timeAgo(col.created_at) + "ago"
 			}
-			
 			
 			educationArray.push(newEdu);
 		})
@@ -107,7 +117,10 @@ router.delete('/delete', async(req,res) => {
 			return "";
 		}
 		  
-		educationDetail.deleteOne(req.body.id)
+		const _id = new ObjectID(req.body.id);
+		await EducationModule.deleteOne( {'_id':_id})
+		
+		
 		response = webResponse(200, true, "Education Module deleted") 
 		res.send(response)
 		return "";

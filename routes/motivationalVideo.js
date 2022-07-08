@@ -1,7 +1,7 @@
  const express = require("express");
  const router = express.Router()
  const MotivationalVideo = require('../models/motivational_video')
-
+var ObjectID = require('mongodb').ObjectID;
 require('../functions')
  
  router.post('/list', async(req,res) => {
@@ -81,12 +81,13 @@ router.delete('/delete', async(req,res) => {
 			res.send(response)
 			return "";
 		}
+		  const _id = new ObjectID(req.body.id);
+		await MotivationalVideo.deleteOne( {'_id':_id})
 		  
-		videoDetail.deleteOne(req.body.id)
-		response = webResponse(200, true, "Motivational video deleted") 
+		var response = webResponse(200, true, "Motivational video deleted") 
 		res.send(response)
 		return "";
-	}catch(err){
+	}catch(err){ console.log(err)
         response = webResponse(200, false, "Something went wrong, please try again.")  
 	    res.send(response)
 		return;
