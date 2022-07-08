@@ -224,7 +224,7 @@ router.post('/reset/password', async(req,res) => {
  
 router.get('/detail/:id', async(req,res) => {
     try{
-           const employee = await Employee.findById(req.params.id)
+           const employee = await Employee.findById(req.body.id)
 		   res.json(employee)
     }catch(err){
         res.send('Error ' + err)
@@ -255,7 +255,7 @@ router.delete('/delete', async(req,res) => {
 			return "";
 		}
 		  
-		employee.deleteOne(req.params.id)
+		employee.deleteOne(req.body.id)
 		response = webResponse(200, true, "Employee deleted") 
 		res.send(response)
 		return "";
@@ -408,7 +408,7 @@ router.post('/verify',async(req,res)=> {
 
 router.put('/update/:id',async(req,res)=> {
 	 try{
-        const employee = await Employee.findById(req.params.id) 
+        const employee = await Employee.findById(req.body.id) 
 		
 		employee.firstName = req.body.firstName,
         employee.lastName = req.body.lastName,

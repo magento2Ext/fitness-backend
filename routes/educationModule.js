@@ -107,7 +107,7 @@ router.delete('/delete', async(req,res) => {
 			return "";
 		}
 		  
-		educationDetail.deleteOne(req.params.id)
+		educationDetail.deleteOne(req.body.id)
 		response = webResponse(200, true, "Education Module deleted") 
 		res.send(response)
 		return "";
