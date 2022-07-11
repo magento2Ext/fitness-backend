@@ -9,6 +9,7 @@
  const jwt = require('jsonwebtoken');
  const auth = require("../middleware/auth");
  const dateLib = require('date-and-time')
+ var ObjectID = require('mongodb').ObjectID;
 require('../functions')
  
  router.post('/set/target', auth, async(req,res) => { 
@@ -287,8 +288,11 @@ router.delete('/delete', async(req,res) => {
 			res.send(response)
 			return "";
 		}
+		
+		const _id = new ObjectID(req.body.id);
+		await Employee.deleteOne( {'_id':_id})
 		  
-		employee.deleteOne(req.body.id)
+		//employee.deleteOne(req.body.id)
 		response = webResponse(200, true, "Employee deleted") 
 		res.send(response)
 		return "";
