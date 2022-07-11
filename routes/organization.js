@@ -9,6 +9,7 @@
  const bcrypt = require('bcryptjs');
  const jwt = require('jsonwebtoken');
  const auth = require("../middleware/auth");
+  var ObjectID = require('mongodb').ObjectID;
 require('../functions')
  
  router.get('/list', async(req,res) => {
@@ -224,8 +225,10 @@ router.delete('/delete', async(req,res) => {
 		}
 		
 		const employees = await Employee.deleteMany({'organizationId':req.body.id})
-		
-		organization.deleteOne(req.body.id)
+
+		const _id = new ObjectID(req.body.id);
+		await Organization.deleteOne( {'_id':_id})
+		//organization.deleteOne(req.body.id)
 		response = webResponse(200, true, "Organization deleted") 
 		res.send(response)
 		return "";
