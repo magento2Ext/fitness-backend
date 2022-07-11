@@ -3,13 +3,46 @@
  const Employee = require('../models/employee')
  const Organization = require('../models/organization')
  const Theme = require('../models/theme_setting')
+ const EmpStepTarget = require('../models/employee_step_target')
  const md5 = require('md5');
  const bcrypt = require('bcryptjs');
  const jwt = require('jsonwebtoken');
- 
+ const auth = require("../middleware/auth");
+ const dateLib = require('date-and-time')
 require('../functions')
  
- router.get('/list', async(req,res) => {
+ router.post('/set/target', auth, async(req,res) => { 
+    try{ 
+	    var empId = req.user.user_id;
+		var today =  dateLib.format(new Date(),'YYYY-MM-DD');
+		
+		const empStepTarget = new EmpStepTarget({
+			employeeId: empId,
+			step_target: req.body.step_target,
+			date: today
+		})
+		
+		const empStepTargetDetails = await EmpStepTarget.findOne({ date: today,  employeeId: req.user.user_id});
+		if (empStepTargetDetails) {  
+			empStepTargetDetails.step_target =  req.body.step_target
+			const a1 = await empStepTargetDetails.save()
+			response = webResponse(200, true, "Target added")  
+			res.send(response);
+			return;
+		} else{
+			const a1 = await empStepTarget.save()
+			response = webResponse(200, true, "Target added")  
+			res.send(response);
+			return;
+		}		
+    }catch(err){ 
+		response = webResponse(403, false, err)  
+	    res.send(response)
+		return;
+    }
+})
+ 
+router.get('/list', async(req,res) => {
     try{
 		const aliens = await Employee.find()
         res.json(aliens)
@@ -27,7 +60,7 @@ router.get('/list/:id', async(req,res) => {
         res.send('Error ' + err)
     }
 })
- 
+
 router.post('/forget/password', async(req,res) => {
     try{ 
         const employeeExist = await Employee.findOne({ email: req.body.email });
