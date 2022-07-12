@@ -59,7 +59,7 @@
 			}
 		}).sort({date:1})
 		
-    var stepTarget = await EmpStepTarget.findOne({ date: "2022-07-10", employeeId: req.user.user_id}).sort({date:-1});
+    var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
 	if(stepTarget) {
 		emptStepTarget = stepTarget;
 		target = true;

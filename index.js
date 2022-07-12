@@ -137,9 +137,7 @@ app.post("/weight", auth, async(req, res) => {
 			}
 		}).sort({date:1})
 		
-		var weightArray = [];
-		
-	
+		var weightArray = [];		
 		var i=0;
 		weightList.forEach(function(col) {
 			// Do something with each collection.				  
