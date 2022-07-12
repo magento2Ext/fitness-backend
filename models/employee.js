@@ -56,6 +56,10 @@ const employeeSchema = new mongoose.Schema({
         type: String,
         default: false
     },
+    picture: {
+		type: String,
+		default:"https://fitness-frontend.s3.us-west-2.amazonaws.com/default/avatar.png"
+	},
     isVerified: {
         type: Boolean,
         default: false

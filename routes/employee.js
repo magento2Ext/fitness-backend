@@ -43,13 +43,22 @@ require('../functions')
     }
 })
  
-router.get('/list', async(req,res) => {
+router.post('/list', auth, async(req,res) => {
     try{
-		const aliens = await Employee.find()
-        res.json(aliens)
-		return '';
+		var empId = req.user.user_id;
+		const employeeDetails = await Employee.findById(empId)
+		if(employeeDetails.employeeType && employeeDetails.employeeType == "Coorporate") {
+			var employees = await Employee.find({employeeType:"Coorporate", organizationId:employeeDetails.organizationId})
+		} else {
+			var employees = await Employee.find({employeeType:"Individual"})
+		}
+        response = webResponse(201, true, result)  
+		res.send(response)
+			return "";
     }catch(err){
-        res.send('Error ' + err)
+        response = webResponse(200, false, "Something went wrong, please try again.")  
+		res.send(response)
+		return "";
     }
 })
 
