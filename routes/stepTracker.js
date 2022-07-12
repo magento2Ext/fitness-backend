@@ -127,6 +127,8 @@
 		data.step_target = emptStepTarget
 		data.target = target
 		data.activity = stepFinalArray
+		data.best_streak = "1000"
+		data.avg_pace = "100"
 		
 		response = webResponse(201, true, data)  
 		res.send(response);
