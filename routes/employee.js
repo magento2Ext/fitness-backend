@@ -52,7 +52,7 @@ router.post('/list', auth, async(req,res) => {
 		} else {
 			var employees = await Employee.find({employeeType:"Individual"})
 		}
-        response = webResponse(201, true, result)  
+        response = webResponse(201, true, employees)  
 		res.send(response)
 			return "";
     }catch(err){
