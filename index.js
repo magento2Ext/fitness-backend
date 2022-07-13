@@ -44,6 +44,9 @@ app.use('/employee',employeeRouter)
 const adminRouter = require('./routes/admin')
 app.use('/admin',adminRouter)
 
+const upload = require('./routes/upload')
+///app.use('/file', upload)
+
 const videoRouter = require('./routes/motivationalVideo')
 app.use('/mvideos',videoRouter)
 
@@ -53,11 +56,10 @@ app.use('/education/module',educationRouter)
 const stepTracker = require('./routes/stepTracker')
 app.use('/steps',stepTracker)
 
-const teacherCatsRouter = require('./routes/teacherCategories')
-app.use('/categories',teacherCatsRouter)
+const chatGroup = require('./routes/chatGroup')
+app.use('/chat_group',chatGroup)
 
-const teacher = require('./routes/teacher')
-app.use('/teacher',teacher)
+
 
 
 app.post("/weight/save", auth, async(req, res) => { 
