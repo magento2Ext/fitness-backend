@@ -21,7 +21,7 @@ const chatGroupSchema = new mongoose.Schema({
     },
    
     users: {
-        type: String,
+        type: Array,
         required: true,
         default: null
     },

@@ -5,12 +5,29 @@
  var ObjectID = require('mongodb').ObjectID;
  require('../functions')
  
- router.post('/list', async(req,res) => {
+ router.post('/list', auth, async(req,res) => {
     try{
-		const chatGroup = await ChatGroup.find()
-        response = webResponse(201, true, chatGroup)  
+		var empId = req.user.user_id; 
+		const chatGroup = await ChatGroup.find({'users': {'$in': empId}})
+		
+		var chatGroupArray = [];
+		
+		chatGroup.forEach( function(col){
+			chat = {
+				'id' :  col._id,
+				"group_name": col.group_name,
+				"group_picture": col.group_picture,
+				"challenge": col.challenge,
+				"users_count": col.users.length,
+				
+			}
+			chatGroupArray.push(chat);
+		})
+		
+		
+        response = webResponse(201, true, chatGroupArray)  
 		res.send(response)		
-		return;;
+		return;
     }catch(err){
         response = webResponse(200, false, "Something went wrong, please try again")  
 	    res.send(response)
@@ -35,18 +52,27 @@
 				res.send(response)
 				return "";
 			}
+			var users = req.body.users
+			var userArray = users.split(',');
+			userArray.push(empId);
+			
+			
 			chatGroupDetail.group_name= req.body.group_name,
 			chatGroupDetail.group_picture= req.body.group_picture,
 			chatGroupDetail.challenge= req.body.challenge,
-			chatGroupDetail.users= req.body.users+","+empId
+			chatGroupDetail.users = userArray
 			
 			const chatGroupDetailSaved = await chatGroupDetail.save()
 			response = webResponse(200, true, "Group updated")  
 			res.send(response)
 			return "";
 		}
+		
 		if(req.body.users) {
-			chatGroup.users = req.body.users +","+ empId
+			var users = req.body.users
+			var userArray = users.split(',');
+			userArray.push(empId);
+			chatGroup.users = userArray
 		}
 		const chatGroupDetail =  await chatGroup.save()  
 		response = webResponse(200, true, "Group created")  
