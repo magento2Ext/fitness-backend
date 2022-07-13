@@ -53,6 +53,12 @@ app.use('/education/module',educationRouter)
 const stepTracker = require('./routes/stepTracker')
 app.use('/steps',stepTracker)
 
+const teacherCatsRouter = require('./routes/teacherCategories')
+app.use('/categories',teacherCatsRouter)
+
+const teacher = require('./routes/teacher')
+app.use('/teacher',teacher)
+
 
 app.post("/weight/save", auth, async(req, res) => { 
   try{ 
