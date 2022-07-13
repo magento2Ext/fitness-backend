@@ -1,6 +1,7 @@
  const express = require("express");
  const router = express.Router()
  const ChatGroup = require('../models/chat_group')
+ const Employee = require('../models/employee')
   const auth = require("../middleware/auth");
  var ObjectID = require('mongodb').ObjectID;
  require('../functions')
@@ -24,7 +25,6 @@
 			chatGroupArray.push(chat);
 		})
 		
-		
         response = webResponse(201, true, chatGroupArray)  
 		res.send(response)		
 		return;
@@ -32,6 +32,51 @@
         response = webResponse(200, false, "Something went wrong, please try again")  
 	    res.send(response)
 		return;
+    }
+})
+
+router.post('/detail', auth, async(req,res) => {
+    try{
+        var empId = req.user.user_id; 
+		const id = req.body.id
+		
+		if(!(id)) {
+			jsonObj = []
+			var item = {
+				'key' : 'id',
+				'value' : 'required' 
+			}
+			jsonObj.push(item);
+			response = webResponse(406, false, jsonObj) 
+			res.send(response)
+			return "";
+		}
+		
+		const chatGroup = await ChatGroup.findById(req.body.id)
+		if(chatGroup == null) {
+			response = webResponse(200, false, "Group not found")  
+		    res.send(response)	
+		} else {
+			var empIds = chatGroup.users
+			 
+			const employees = await Employee.find({ _id: {$in:  empIds }})
+			chat = {
+				'id' :  chatGroup._id,
+				"group_name": chatGroup.group_name,
+				"group_picture": chatGroup.group_picture,
+				"challenge": chatGroup.challenge,
+				"users_count": chatGroup.users.length,
+				"users": employees,
+				
+			}
+			response = webResponse(202, true, chat)  
+			res.send(response)		
+			return;
+		}
+		
+		
+    }catch(err){
+        res.send('Error ' + err)
     }
 })
  
