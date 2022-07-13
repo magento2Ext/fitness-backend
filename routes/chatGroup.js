@@ -28,7 +28,6 @@
 			users: req.body.users,
 			group_admin: empId
 		})
-		
 		if(req.body.id && req.body.id != "0") {
 			const chatGroupDetail = await ChatGroup.findById(req.body.id) 	
 			if(!chatGroupDetail){
@@ -39,14 +38,16 @@
 			chatGroupDetail.group_name= req.body.group_name,
 			chatGroupDetail.group_picture= req.body.group_picture,
 			chatGroupDetail.challenge= req.body.challenge,
-			chatGroupDetail.users= req.body.users
+			chatGroupDetail.users= req.body.users+","+empId
 			
 			const chatGroupDetailSaved = await chatGroupDetail.save()
 			response = webResponse(200, true, "Group updated")  
 			res.send(response)
 			return "";
 		}
-		
+		if(req.body.users) {
+			chatGroup.users = req.body.users +","+ empId
+		}
 		const chatGroupDetail =  await chatGroup.save()  
 		response = webResponse(200, true, "Group created")  
 		res.send(response)		
