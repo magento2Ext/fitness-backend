@@ -96,6 +96,7 @@ router.post("/module/list", auth, async(req, res) => {
         zipCode: req.body.zipCode,
         referCode: referCode,
         modules: req.body.modules,
+		module_id: req.body.module_id,
 		logo: process.env.ORGLOGO,
 		themecode: '62c3de94a4db9348c847b5e1'
     })
@@ -288,7 +289,8 @@ router.put('/update/:id',async(req,res)=> {
         organization.password = req.body.password,
         organization.zipCode = req.body.zipCode,
 		organization.themecolor= req.body.themecolor,
-		organization.modules = req.body.modules
+		organization.modules = req.body.modules,
+		organization.module_id = req.body.module_id
         const a1 = await organization.save()
         response = webResponse(202, true, a1)  
 	    res.send(response)

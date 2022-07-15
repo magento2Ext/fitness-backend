@@ -62,6 +62,19 @@ router.post('/list', auth, async(req,res) => {
     }
 })
 
+router.post('/web/list', async(req,res) => { 
+    try{
+		const employee = await Employee.find()
+        response = webResponse(201, true, employee)  
+		res.send(response)		
+		return;;
+    }catch(err){
+        response = webResponse(200, false, "Something went wrong, please try again")  
+	    res.send(response)
+		return;
+    }
+})
+
 router.get('/list/:id', async(req,res) => { 
     try{
            const employeedd = await Employee.find({organizationId:req.params.id})
