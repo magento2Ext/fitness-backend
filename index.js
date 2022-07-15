@@ -59,6 +59,12 @@ app.use('/steps',stepTracker)
 const chatGroup = require('./routes/chatGroup')
 app.use('/chat_group',chatGroup)
 
+const teacherCategories = require('./routes/teacherCategories')
+app.use('/categories',teacherCategories)
+
+const teacher = require('./routes/teacher')
+app.use('/teacher',teacher)
+
 
 
 
