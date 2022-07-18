@@ -1,26 +1,38 @@
 const fs = require('fs');
 const AWS = require('aws-sdk');
-
-/*const s3 = new AWS.S3({
+ const express = require("express");
+ const app = express.Router()
+ var multer = require('multer')
+var multerS3 = require('multer-s3-transform')
+ require('../functions')
+const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY
 });
 
-const uploadFile = (fileName) => {
-    const fileContent = fs.readFileSync(fileName);
 
-    const params = {
-        Bucket: "fitness-frontend",
-        Key: 'cat.jpg', // File name you want to save as in S3
-        Body: fileContent
-    };
 
-    s3.upload(params, function(err, data) {
-        if (err) {
-            throw err;
-        }
-        console.log("File uploaded successfully. ${data.Location}");
-    });
-};
+var upload = multer({
+   storage: multerS3({
+       s3: s3,
+       bucket:"soulcial/media",
+	   acl: 'public-read',
+       metadata: function (req, file, cb) {
+           cb(null, { fieldName: file.fieldname });
+       },
+       key: function (req, file, cb) {
+          //console.log(file.location);
+            cb(null, Date.now().toString())
+       },
+	    contentType: multerS3.AUTO_CONTENT_TYPE
+   })
+})
 
-uploadFile('cat.jpg');*/
+app.post('/upload', upload.single('picture'), function (req, res, next) { 
+	var data = {'message':'File uploaded', 'url':req.file.location}
+	response = webResponse(202, true, data)  
+	res.send(response)
+	return "";
+}) 
+
+ module.exports = app
