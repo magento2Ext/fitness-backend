@@ -1,57 +1,43 @@
 const mongoose = require('mongoose')
 
 
-const organizationSchema = new mongoose.Schema({
-
-    organizationName: {
+const teacherSchema = new mongoose.Schema({
+	teacher_id: {
         type: String,
         required: true,
 		default: null
     },
-    /*logo: {
+    audio_title: {
         type: String,
         required: true,
 		default: null
-    },*/
-    email: {
+    },
+    audio_image: {
         type: String,
         required: true,
         default: null
     },
-    password: {
+	audio_voice: {
         type: String,
         required: true,
         default: null
     },
-    zipCode: {
+	audio_duration: {
         type: String,
         required: true,
         default: null
     },
-    referCode: {
+	parent_cat: {
         type: String,
         required: true,
         default: null
     },
-	logo: {
-        type: String,
-        default: null
-    },
-	themecode: {
-        type: String,
-        default: null
-    },
-    modules: {
+	child_cat: {
         type: String,
         required: true,
-        default: null
-    },
-	module_id: {
-        type: String,
-        required: false,
         default: null
     }
-
+   
 })
-  
-module.exports = mongoose.model('Organization',organizationSchema)
+
+module.exports = mongoose.model('teacher_audio',teacherSchema)

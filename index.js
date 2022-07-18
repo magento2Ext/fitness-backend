@@ -63,6 +63,11 @@ app.use('/chat_group',chatGroup)
 //app.use('/chat',chat)
 
 
+const teacherCategories = require('./routes/teacherCategories')
+app.use('/categories',teacherCategories)
+
+const teacher = require('./routes/teacher')
+app.use('/teacher',teacher)
 
 
 app.post("/weight/save", auth, async(req, res) => { 
