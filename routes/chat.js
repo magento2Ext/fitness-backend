@@ -60,10 +60,41 @@ router.post('/save', auth, async(req,res) => {
 
 router.post('/list', auth, async(req,res) => {
 	try { 
+	
+	   const groupId = req.body.groupId
+		
+		if(!(groupId)) {
+			jsonObj = []
+			var item = {
+				'key' : 'groupId',
+				'value' : 'required' 
+			}
+			jsonObj.push(item);
+			response = webResponse(406, false, jsonObj) 
+			res.send(response)
+			return "";
+		}
 		var empId = req.user.user_id;
-		var groupId = req.body.groupId;
-	const chat = await Chat.find({ groupId: groupId}).populate('employeeId')
-		res.send(chat)
+		const chat = await Chat.find({ groupId: groupId}).populate('employeeId')
+		var chatList = [];
+		chat.forEach( function(col){
+			var isMyMessage = 0;
+			if(empId == col.employeeId._id) {
+				isMyMessage = 1;
+			}
+			chatDetail = {
+				'id' :  col._id,
+				"dateTime": col.dateTime,
+				"profile_picture": col.employeeId.picture,
+				"message": col.message,
+				"isMyMessage":isMyMessage,
+				
+			}
+			chatList.push(chatDetail);
+		})
+		
+		response = webResponse(201, false, chatList)  
+	    res.send(response)
 		return;
 	} catch (err) { console.log(err)
 		response = webResponse(403, false, err)  
