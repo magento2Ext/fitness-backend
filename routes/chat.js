@@ -50,11 +50,29 @@ router.post('/save', auth, async(req,res) => {
 		//firebase end
 		
 		
+	} catch (err) { 
+		response = webResponse(403, false, err)  
+	    res.send(response)
+		return;
+	}
+})
+
+/*router.post('/list', auth, async(req,res) => {
+	try { 
+		var empId = req.user.user_id;
+		var groupId = req.body.groupId;
+	const chat = await Chat.find({ groupId: groupId}).populate('employees')
+		res.send(chat)
+		return;
 	} catch (err) { console.log(err)
 		response = webResponse(403, false, err)  
 	    res.send(response)
 		return;
 	}
 })
+
+
+*/
+
 
 module.exports = router
