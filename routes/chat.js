@@ -5,6 +5,7 @@
  const Chat = require('../models/chat')
  const Employee = require('../models/employee')
  var serviceAccount = require('../admin.json');
+ const dateLib = require('date-and-time')
  
  admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
@@ -84,7 +85,7 @@ router.post('/list', auth, async(req,res) => {
 			}
 			chatDetail = {
 				'id' :  col._id,
-				"dateTime": col.dateTime,
+				"dateTime": dateLib.format(new Date(col.dateTime),'YYYY-MM-DD HH:MM:SS'),
 				"profile_picture": col.employeeId.picture,
 				"message": col.message,
 				"isMyMessage":isMyMessage,
