@@ -26,23 +26,68 @@ require('../functions')
 		query.limit = size 
 		console.log(query)
 		const totalRecords = await Organization.countDocuments().exec();
-        Organization.find({},{},query,function(err,data) {
+		
+		var ModuleList =  await Module.find()
+		var moduleArray = []
+		
+		ModuleList.forEach( function(moduleDetail){
+			var obj = []
+			var id = moduleDetail._id
+			moduleArray[id] = moduleDetail.name;
+		}) 
+		
+         Organization.find({},{},query,function(err,data) {
 				if(err) {
-					//response = {"error" : true,"message" : "Error fetching data"};
 					response = webResponse(200, false, "Error fetching data")  
+					res.json(response);
+				    return "";
 				} else {
 					const result = {}
 					console.log(size)
 					result.totalRecords =  totalRecords;
 					result.rowsPerPage = size;
 					result.pages = Math.ceil(totalRecords/size);
-					result.data = data;
+					
+					var orgList = [];
+					data.forEach( function(col){
+						var modules = col.modules; 
+						var moduleIds = modules.split(",")
+						var moduleNames = ''
+						var i = 0;
+						moduleIds.forEach( function(modId){
+							if(moduleArray[modId])  {
+								if(i > 0) {
+									moduleNames = moduleNames+ ',' + moduleArray[modId] 
+								} else {
+									moduleNames = moduleNames + moduleArray[modId] 
+								}
+							}
+							i++;
+						})
+						orgDetail = {
+							'_id' :  col._id,
+							"organizationName": col.organizationName,
+							"email": col.email,
+							"password": col.password,
+							"zipCode":col.zipCode,
+							"referCode":col.referCode,
+							"logo":col.logo,
+							"themecode":col.themecode,
+							"modules":moduleNames,
+							"module_id":col.module_id,
+							
+						}
+						orgList.push(orgDetail);
+					})
+					
+					result.data = orgList;
 					response = webResponse(202, true, result)  
-				}
-				res.json(response);
+					res.send(response);
+				   return "";
+				}				
 			});
-           //res.json(aliens)
-    }catch(err){
+           
+    }catch(err){ console.log(err)
         res.send('Error ' + err)
     }
 })
