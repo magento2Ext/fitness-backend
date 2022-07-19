@@ -5,10 +5,11 @@
  const Chat = require('../models/chat')
  const Employee = require('../models/employee')
  var serviceAccount = require('../admin.json');
+ 
  admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
-	databaseURL: "https://soulcial-5467d-default-rtdb.asia-southeast1.firebasedatabase.app",
-	authDomain: "soulcial-5467d.firebaseapp.com",
+	databaseURL: process.env.FIREBASE_DB,
+	authDomain: process.env.AUTH_DOMAIN,
  });
 
 var db=admin.database();
@@ -57,11 +58,11 @@ router.post('/save', auth, async(req,res) => {
 	}
 })
 
-/*router.post('/list', auth, async(req,res) => {
+router.post('/list', auth, async(req,res) => {
 	try { 
 		var empId = req.user.user_id;
 		var groupId = req.body.groupId;
-	const chat = await Chat.find({ groupId: groupId}).populate('employees')
+	const chat = await Chat.find({ groupId: groupId}).populate('employeeId')
 		res.send(chat)
 		return;
 	} catch (err) { console.log(err)
@@ -71,8 +72,6 @@ router.post('/save', auth, async(req,res) => {
 	}
 })
 
-
-*/
 
 
 module.exports = router

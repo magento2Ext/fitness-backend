@@ -2,11 +2,16 @@ const mongoose = require('mongoose')
 
 
 const chatSchema = new mongoose.Schema({
-
-    employeeId: {
+    /*employeeId: {
         type: String,
         required: true,
 		default: null
+    },*/
+
+	employeeId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Employee',
+        required: true,
     },
    
     groupId: {
