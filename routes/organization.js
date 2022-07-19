@@ -395,7 +395,7 @@ router.put('/update/:id',async(req,res)=> {
 						}
 		
 		
-        response = webResponse(202, true, a1)  
+        response = webResponse(202, true, orgDetail)  
 	    res.send(response)
     }catch(err){ console.log(err)
         res.send('err')
