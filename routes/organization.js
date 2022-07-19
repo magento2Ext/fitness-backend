@@ -9,8 +9,8 @@
  const bcrypt = require('bcryptjs');
  const jwt = require('jsonwebtoken');
  const auth = require("../middleware/auth");
-  var ObjectID = require('mongodb').ObjectID;
-require('../functions')
+ var ObjectID = require('mongodb').ObjectID;
+ require('../functions')
  
  router.get('/list', async(req,res) => {
 	if(req.query.page) {
@@ -156,9 +156,37 @@ router.post("/module/list", auth, async(req, res) => {
 		let subject = 'Organization Code'
 		sendEmail(req.body.email, subject, emailContent)
 		
-		response = webResponse(201, true, a1)  
+		var modules = a1.modules; 
+		var ids = modules.split(",")
+		var ModuleList = await Module.find({ _id : { $in : ids } })
+		
+		var moduleNames = ''
+		var i = 0;
+		ModuleList.forEach(function(mod){
+			if(i > 0) {
+				moduleNames = moduleNames+ ',' + mod.name
+			} else {
+				moduleNames = moduleNames +mod.name
+			}
+			i++;
+		})
+		
+		var orgDetail = {
+							'_id' :  a1._id,
+							"organizationName": a1.organizationName,
+							"email": a1.email,
+							"password": a1.password,
+							"zipCode":a1.zipCode,
+							"referCode":a1.referCode,
+							"logo":a1.logo,
+							"themecode":a1.themecode,
+							"modules":moduleNames,
+							"module_id":a1.module_id
+						}
+		
+		response = webResponse(201, true, orgDetail)  
 	    res.send(response)
-    }catch(err){
+    }catch(err){ console.log(err)
 		response = webResponse(403, false, err)  
 	    res.send(response)
     }
@@ -337,6 +365,36 @@ router.put('/update/:id',async(req,res)=> {
 		organization.modules = req.body.modules,
 		organization.module_id = req.body.module_id
         const a1 = await organization.save()
+		
+		var modules = a1.modules; 
+		var ids = modules.split(",")
+		var ModuleList = await Module.find({ _id : { $in : ids } })
+		
+		var moduleNames = ''
+		var i = 0;
+		ModuleList.forEach(function(mod){
+			if(i > 0) {
+				moduleNames = moduleNames+ ',' + mod.name
+			} else {
+				moduleNames = moduleNames +mod.name
+			}
+			i++;
+		})
+		
+		var orgDetail = {
+							'_id' :  a1._id,
+							"organizationName": a1.organizationName,
+							"email": a1.email,
+							"password": a1.password,
+							"zipCode":a1.zipCode,
+							"referCode":a1.referCode,
+							"logo":a1.logo,
+							"themecode":a1.themecode,
+							"modules":moduleNames,
+							"module_id":a1.module_id
+						}
+		
+		
         response = webResponse(202, true, a1)  
 	    res.send(response)
     }catch(err){ console.log(err)
