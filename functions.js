@@ -40,8 +40,8 @@ sendEmail = function( emailId, subject, emailContent) {
     var transporter = nodemailer.createTransport({
 		service: 'gmail',
 		auth: {
-			user: 'technodeviser05@gmail.com',
-			pass: 'wmxzglrmiviyfnea'
+			user: 'njarewal82@gmail.com',
+			pass: 'tnhxwdaiirfoblfl'
 		}
 	});
 	
