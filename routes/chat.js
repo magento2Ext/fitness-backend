@@ -22,7 +22,8 @@ router.post('/save', auth, async(req,res) => {
 		const message = new Chat({
 			groupId: req.body.groupId,
 			employeeId: empId,
-			message: req.body.message
+			message: req.body.message,
+			dateTime: new Date()
 		})
 	  
 		await message.save()  
