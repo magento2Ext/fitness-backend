@@ -94,9 +94,14 @@ router.post('/list', auth, async(req,res) => {
 			if(empId == col.employeeId._id) {
 				isMyMessage = 1;
 			}
+			
+			//let s = "2005-07-08T11:22:33+0000";
+			let d = col.dateTime;
+			var date = d.split(" ")
+			
 			chatDetail = {
 				'id' :  col._id,
-				"dateTime": dateLib.format(new Date(col.dateTime),'YYYY-MM-DD hh:mm:ss'),
+				"dateTime": dateLib.format(new Date(col.dateTime),'YYYY-MM-DD')+' '+date[4],
 				"dateTimeSaved": col.dateTime,
 				"profile_picture": col.employeeId.picture,
 				"message": col.message,
