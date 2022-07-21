@@ -89,18 +89,7 @@ timeAgo = function(date1) {
   return Math.floor(seconds) + " seconds";
 };
 
-formatDate = function(date) {
-	return (
-    [
-      date.getFullYear(),
-      padTo2Digits(date.getMonth() + 1),
-      padTo2Digits(date.getDate()),
-    ].join('-') +
-    ' ' +
-    [
-      padTo2Digits(date.getHours()),
-      padTo2Digits(date.getMinutes()),
-      padTo2Digits(date.getSeconds()),
-    ].join(':')
-  );
+convertTZ = function(date, tzString) {
+	    return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: tzString}));   
+
 };
