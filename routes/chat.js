@@ -88,7 +88,6 @@ router.post('/list', auth, async(req,res) => {
 		}
 		var empId = req.user.user_id;
 		const chat = await Chat.find({ groupId: groupId}).sort({dateTime:1}).populate('employeeId')
-		console.log(chat)
 		var chatList = [];
 		chat.forEach( function(col){
 			var isMyMessage = 0;
@@ -97,7 +96,7 @@ router.post('/list', auth, async(req,res) => {
 			}
 			chatDetail = {
 				'id' :  col._id,
-				"dateTime": dateLib.format(new Date(col.dateTime),'YYYY-MM-DD HH:MM:SS'),
+				"dateTime": dateLib.format(new Date(col.dateTime),'YYYY-MM-DD hh:mm:ss'),
 				"profile_picture": col.employeeId.picture,
 				"message": col.message,
 				"appTempId": col.appTempId,

@@ -10,7 +10,7 @@ const API_PORT = process.env.API_PORT
 const Weight = require('./models/weight')
 const dateLib = require('date-and-time')
 
- const admin=require('firebase-admin');
+const admin=require('firebase-admin');
 var serviceAccount = require('./admin.json');
  admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
@@ -34,7 +34,7 @@ app.use(cors(corsOptions))
 
 
 
- const url = process.env.MONGO_URI;
+const url = process.env.MONGO_URI;
 mongoose.connect(url, {useNewUrlParser:true})
 const con = mongoose.connection
 
@@ -195,7 +195,7 @@ app.post("/weight", auth, async(req, res) => {
 		});
 		var weightFinalArray = [];
 			
-		for(i=oneWeekAgo; i<=date;  i.setDate(i.getDate() + 1)) { console.log(i)
+		for(i=oneWeekAgo; i<=date;  i.setDate(i.getDate() + 1)) { 
 			var found = 0; 
 			for( var j = 0, len = weightArray.length; j < len; j++ ) { 
 				var weightData = '';
@@ -220,7 +220,7 @@ app.post("/weight", auth, async(req, res) => {
 		}
 		
 		
-		//console.log(weightArray);
+		
 		var data = {}; 
 		data.weight_diff = weightFinalArray
 		data.lastOneWeekWeight = weightArray
