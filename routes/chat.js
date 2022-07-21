@@ -115,7 +115,7 @@ router.post('/list', auth, async(req,res) => {
 		response = webResponse(201, false, chatList)  
 	    res.send(response)
 		return;
-	} catch (err) { console.log(err)
+	} catch (err) { 
 		response = webResponse(403, false, err)  
 	    res.send(response)
 		return;

@@ -22,6 +22,7 @@ const verifyToken = (req, res, next) => {
   } catch (err) {
 	response = webResponse(401, false, "Invalid Token")  
 	res.send(response)
+	return;
   }
   return next();
 };
