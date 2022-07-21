@@ -36,6 +36,12 @@ const chatSchema = new mongoose.Schema({
         default: null
 	},
 	
+	appTempId:{
+		type: String,
+		required: true,
+        default: null
+	},
+	
 	dateTime:{
 		type: String,
         default: new Date()

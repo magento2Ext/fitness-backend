@@ -9,6 +9,15 @@ app.use(express.json())
 const API_PORT = process.env.API_PORT
 const Weight = require('./models/weight')
 const dateLib = require('date-and-time')
+
+ const admin=require('firebase-admin');
+var serviceAccount = require('./admin.json');
+ admin.initializeApp({
+	credential: admin.credential.cert(serviceAccount),
+	databaseURL: process.env.FIREBASE_DB,
+	authDomain: process.env.AUTH_DOMAIN,
+ });
+
  
 const whitelist = [process.env.REACT_APP_URL]
 const corsOptions = {

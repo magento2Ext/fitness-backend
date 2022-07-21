@@ -2,9 +2,20 @@
  const router = express.Router()
  const ChatGroup = require('../models/chat_group')
  const Employee = require('../models/employee')
-  const auth = require("../middleware/auth");
+ const auth = require("../middleware/auth");
  var ObjectID = require('mongodb').ObjectID;
  require('../functions')
+
+ const admin=require('firebase-admin');
+/*var serviceAccount = require('../admin.json');
+ admin.initializeApp({
+	credential: admin.credential.cert(serviceAccount),
+	databaseURL: process.env.FIREBASE_DB,
+	authDomain: process.env.AUTH_DOMAIN,
+ });*/
+ 
+ var db=admin.database();
+ var chatRef=db.ref("chat");
  
  router.post('/list', auth, async(req,res) => {
     try{
@@ -119,11 +130,35 @@ router.post('/detail', auth, async(req,res) => {
 			userArray.push(empId);
 			chatGroup.users = userArray
 		}
-		const chatGroupDetail =  await chatGroup.save()  
-		response = webResponse(200, true, "Group created")  
-		res.send(response)		
-		return;
-	}catch(err){ 
+		const chatGroupDetail =  await chatGroup.save() 
+		var groupId = chatGroupDetail._id
+		
+		var firebaseData = {}
+		firebaseData.id = ""
+		firebaseData.profile_picture =  ""
+		firebaseData.dateTime = "",
+		firebaseData.profile_picture =  ""
+		firebaseData.message =  ""
+		firebaseData.isMyMessage = 0
+		firebaseData.appTempId = ""
+		
+		
+			var group = chatRef.child( groupId.toString());
+			group.update(firebaseData,(err)=>{
+			if(err){
+				resMessage = "Something went wrong" + err;
+				response = webResponse(200, true, resMessage)  
+				res.send(response)		
+				return;
+			}
+			else{
+				resMessage = "Group created"
+				response = webResponse(200, true, resMessage)  
+				res.send(response)		
+				return;
+			}
+		})
+	}catch(err){  console.log(err)
 		response = webResponse(403, false, err)  
 	    res.send(response)
 		return;

@@ -1,19 +1,19 @@
  const express = require("express");
  const router = express.Router()
- const admin=require('firebase-admin');
  const auth = require("../middleware/auth");
  const Chat = require('../models/chat')
  const Employee = require('../models/employee')
- var serviceAccount = require('../admin.json');
- const dateLib = require('date-and-time')
+  const dateLib = require('date-and-time')
+ const admin=require('firebase-admin');
  
+/*var serviceAccount = require('../admin.json');
  admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
 	databaseURL: process.env.FIREBASE_DB,
 	authDomain: process.env.AUTH_DOMAIN,
- });
-
-var db=admin.database();
+ });*/
+ 
+ var db=admin.database();
 var chatRef=db.ref("chat");
 
 router.post('/save', auth, async(req,res) => {
@@ -23,20 +23,30 @@ router.post('/save', auth, async(req,res) => {
 			groupId: req.body.groupId,
 			employeeId: empId,
 			message: req.body.message,
+			appTempId: req.body.appTempId,
 			dateTime: new Date()
 		})
 	  
-		await message.save()  
+		var chatData = await message.save()  
 		
 		//firebase start
 		const employeeDetails = await Employee.findById(empId)
 		const username = employeeDetails.firstName + ' ' +employeeDetails.lastName;
 	   	const data = req.body;
 		var resMessage = "";
-		data.username = username
+		var firebaseData = {}
+		var chatId = chatData.id
+		
+		firebaseData.id = chatId.toString()
+		firebaseData.profile_picture =  employeeDetails.picture
+		firebaseData.dateTime = dateLib.format(new Date(chatData.dateTime),'YYYY-MM-DD HH:MM:SS'),
+		firebaseData.profile_picture =  employeeDetails.picture
+		firebaseData.message =  chatData.message
+		firebaseData.appTempId =  chatData.appTempId
+		firebaseData.isMyMessage = 1
 		
         var oneUser=chatRef.child(req.body.groupId);
-			oneUser.update(data,(err)=>{
+			oneUser.update(firebaseData,(err)=>{
 			if(err){
 				resMessage = "Something went wrong" + err;
 				response = webResponse(200, true, resMessage)  
@@ -77,7 +87,8 @@ router.post('/list', auth, async(req,res) => {
 			return "";
 		}
 		var empId = req.user.user_id;
-		const chat = await Chat.find({ groupId: groupId}).populate('employeeId')
+		const chat = await Chat.find({ groupId: groupId}).sort({dateTime:1}).populate('employeeId')
+		console.log(chat)
 		var chatList = [];
 		chat.forEach( function(col){
 			var isMyMessage = 0;
@@ -89,6 +100,7 @@ router.post('/list', auth, async(req,res) => {
 				"dateTime": dateLib.format(new Date(col.dateTime),'YYYY-MM-DD HH:MM:SS'),
 				"profile_picture": col.employeeId.picture,
 				"message": col.message,
+				"appTempId": col.appTempId,
 				"isMyMessage":isMyMessage,
 				
 			}
