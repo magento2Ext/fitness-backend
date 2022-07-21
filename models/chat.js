@@ -44,7 +44,7 @@ const chatSchema = new mongoose.Schema({
 	
 	dateTime:{
 		type: String,
-        default: new Date()
+        default: null
 	}
    
 })
