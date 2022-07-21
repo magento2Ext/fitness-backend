@@ -102,7 +102,7 @@ router.post('/list', auth, async(req,res) => {
 			chatDetail = {
 				'id' :  col._id,
 				//"dateTime1": dateLib.format(new Date(col.dateTime),'YYYY-MM-DD')+' '+date[4],
-				"dateTime": dateLib.format(new Date(asiaDate),'YYYY-MM-DD hh:mm:ss'),
+				"dateTime": dateLib.format(new Date(asiaDate),'YYYY-MM-DD HH:mm:ss'),
 				"dateTimeSaved": col.dateTime,
 				"profile_picture": col.employeeId.picture,
 				"message": col.message,
