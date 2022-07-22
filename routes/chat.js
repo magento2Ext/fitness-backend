@@ -37,10 +37,12 @@ router.post('/save', auth, async(req,res) => {
 		var firebaseData = {}
 		var chatId = chatData.id
 		
+		var asiaDate =  convertTZ(new Date(chatData.dateTime), 'Asia/Kolkata');
+				
 		firebaseData.id = chatId.toString()
 		firebaseData.profile_picture =  employeeDetails.picture
-		firebaseData.dateTime = dateLib.format(new Date(chatData.dateTime),'YYYY-MM-DD HH:MM:SS'),
-		firebaseData.profile_picture =  employeeDetails.picture
+		firebaseData.dateTime = dateLib.format(new Date(asiaDate),'YYYY-MM-DD HH:mm:ss'), 
+		firebaseData.userId =  empId
 		firebaseData.message =  chatData.message
 		firebaseData.appTempId =  chatData.appTempId
 		firebaseData.isMyMessage = 1
@@ -96,8 +98,8 @@ router.post('/list', auth, async(req,res) => {
 			}
 			
 			//let s = "2005-07-08T11:22:33+0000";
-			let d = col.dateTime;
-			var date = d.split(" ")
+			//let d = col.dateTime;
+			//var date = d.split(" ")
 			var asiaDate =  convertTZ(new Date(col.dateTime), 'Asia/Kolkata');
 			chatDetail = {
 				'id' :  col._id,
@@ -105,6 +107,7 @@ router.post('/list', auth, async(req,res) => {
 				"dateTime": dateLib.format(new Date(asiaDate),'YYYY-MM-DD HH:mm:ss'),
 				"dateTimeSaved": col.dateTime,
 				"profile_picture": col.employeeId.picture,
+				"userId" : empId,
 				"message": col.message,
 				"appTempId": col.appTempId,
 				"isMyMessage":isMyMessage,
