@@ -65,58 +65,7 @@
     }
  })
  
- router.post('/accept/invite', auth, async(req,res) => {
-	try{
-		var empId = req.user.user_id;
-		const groupId = req.body.groupId
-		
-		if(!(groupId)) {
-			jsonObj = []
-			var item = {
-				'key' : 'Group Id',
-				'value' : 'required' 
-			}
-			jsonObj.push(item);
-			response = webResponse(406, false, jsonObj) 
-			res.send(response)
-			return "";
-		}
-		
-		const employeeDetails = await Employee.findById(empId)
-		const groupDetails = await ChatGroup.findById(groupId)
-		if(employeeDetails.employeeType && employeeDetails.employeeType == "Coorporate") {
-			var employees = await Employee.find({employeeType:"Coorporate", organizationId:employeeDetails.organizationId})
-		} else {
-			var employees = await Employee.find({employeeType:"Individual"})
-		}
-		var employeeList = [];
-		
-		employees.forEach( function(col){
-			var isInvited = false;
-			var isAdded = false;
-			var users = groupDetails.users
-			var requestedUsers = groupDetails.chat_group_requested_users
-			employee = {
-				'id' :  col._id,
-				"firstName": col.firstName,
-				"lastName": col.lastName,
-				"picture": col.picture,
-				"isInvited":requestedUsers.includes( col._id),
-				"isAdded": users.includes( col._id)
-			}
-			employeeList.push(employee);
-		})
-		
-		
-        response = webResponse(201, true, employeeList)  
-		res.send(response)
-			return "";
-    }catch(err){ console.log(err)
-        response = webResponse(200, false, "Something went wrong, please try again.")  
-		res.send(response)
-		return "";
-    } 
- })
+
  
  router.post('/list', auth, async(req,res) => {
     try{
@@ -170,7 +119,7 @@ router.post('/detail', auth, async(req,res) => {
 		if(chatGroup == null) {
 			response = webResponse(200, false, "Group not found")  
 		    res.send(response)	
-		} else {
+		} else { 
 			var empIds = chatGroup.users
 			var requestedUserIds = chatGroup.chat_group_requested_users
 			 
@@ -217,9 +166,11 @@ router.post('/detail', auth, async(req,res) => {
 				return "";
 			}
 			var users = req.body.users
-			var userArray = users.split(',');
-			userArray.push(empId);
-			
+			var userArray = []
+			if(users != "") {
+			   userArray = users.split(',');
+			}
+		    userArray.push(empId);
 			var requestedUsers = req.body.chat_group_requested_users
 			var requestedUsersArray = requestedUsers.split(',');
 			
@@ -282,6 +233,61 @@ router.post('/detail', auth, async(req,res) => {
 		return;
     }
 })
+
+ router.post('/accept/invite', auth, async(req,res) => {
+	try{
+		var empId = req.user.user_id;
+		var empId = "62d6c512fb6310e31ec8ef99";
+		const groupId = req.body.groupId
+		
+		if(!(groupId)) {
+			jsonObj = []
+			var item = {
+				'key' : 'Group Id',
+				'value' : 'required' 
+			}
+			jsonObj.push(item);
+			response = webResponse(406, false, jsonObj) 
+			res.send(response)
+			return "";
+		}
+		
+		const employeeDetails = await Employee.findById(empId)
+		const groupDetails = await ChatGroup.findById(groupId)
+		if(groupDetails == null) {
+			response = webResponse(200, false, "Group not found.") 
+			res.send(response)
+			return "";
+		}
+		
+		var invitedUsers = groupDetails.chat_group_requested_users
+		var users = groupDetails.users
+		
+		const index = invitedUsers.indexOf(empId); 
+		if (index > -1) { 
+			users.push(empId) 
+		    invitedUsers.splice(index, 1)
+			
+		    groupDetails.chat_group_requested_users = invitedUsers;
+			groupDetails.users = users
+			
+			const chatGroupDetailSaved  = await groupDetails.save();
+			response = webResponse(200, true, "Invitation accepted")  
+			res.send(response)
+			return "";
+		} else {
+			response = webResponse(200, false, "You are not invited.") 
+			res.send(response)
+			return "";
+		}
+		
+    }catch(err){ console.log(err)
+        response = webResponse(200, false, "Something went wrong, please try again.")  
+		res.send(response)
+		return "";
+    } 
+ })
+
 
 /*router.delete('/delete', async(req,res) => {
     try{
