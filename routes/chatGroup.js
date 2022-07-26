@@ -76,13 +76,30 @@
 		var chatGroupArray = [];
 		
 		chatGroup.forEach( function(col){
+			var requestedUserIds = col.chat_group_requested_users
+			var empIds = col.users
+			
+			var isInvited = isAdded = false;
+			var userRequested = requestedUserIds.indexOf(empId); 
+			if (userRequested > -1) { 
+				isInvited = true;
+			}
+			
+			var userAdded = empIds.indexOf(empId); 
+			if (userAdded > -1) { 
+				isAdded = true;
+			}
+			
+			
 			chat = {
-				'id' :  col._id,
+				'id': col._id,
 				"group_name": col.group_name,
 				"group_picture": col.group_picture,
 				"challenge": col.challenge,
 				"users_count": col.users.length,
-				"users_request_count": col.chat_group_requested_users.length
+				"users_request_count": col.chat_group_requested_users.length,
+				"isInvited": isInvited,
+				"isAdded": isAdded
 				
 			}
 			chatGroupArray.push(chat);
