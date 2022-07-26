@@ -20,7 +20,8 @@
  router.post('/list', auth, async(req,res) => {
     try{
 		var empId = req.user.user_id; 
-		const chatGroup = await ChatGroup.find({'users': {'$in': empId}})
+		//const chatGroup = await ChatGroup.find({'users': {'$in': empId}})
+		const chatGroup = await ChatGroup.find( { $or:[ {'users':{'$in': empId}}, {'chat_group_requested_users':{'$in': empId}} ]} )
 		
 		var chatGroupArray = [];
 		
@@ -31,6 +32,7 @@
 				"group_picture": col.group_picture,
 				"challenge": col.challenge,
 				"users_count": col.users.length,
+				"users_request_count": col.chat_group_requested_users.length
 				
 			}
 			chatGroupArray.push(chat);
@@ -98,6 +100,7 @@ router.post('/detail', auth, async(req,res) => {
 			group_name: req.body.group_name,
 			group_picture: req.body.group_picture,
 			challenge: req.body.challenge,
+			chat_group_requested_users: req.body.chat_group_requested_users,
 			users: req.body.users,
 			group_admin: empId
 		})
@@ -112,11 +115,14 @@ router.post('/detail', auth, async(req,res) => {
 			var userArray = users.split(',');
 			userArray.push(empId);
 			
+			var requestedUsers = req.body.chat_group_requested_users
+			var requestedUsersArray = requestedUsers.split(',');
 			
 			chatGroupDetail.group_name= req.body.group_name,
 			chatGroupDetail.group_picture= req.body.group_picture,
 			chatGroupDetail.challenge= req.body.challenge,
 			chatGroupDetail.users = userArray
+			chatGroupDetail.chat_group_requested_users = requestedUsersArray
 			
 			const chatGroupDetailSaved = await chatGroupDetail.save()
 			response = webResponse(200, true, "Group updated")  
@@ -129,6 +135,12 @@ router.post('/detail', auth, async(req,res) => {
 			var userArray = users.split(',');
 			userArray.push(empId);
 			chatGroup.users = userArray
+		}
+		
+		if(req.body.chat_group_requested_users) {
+			var requestedUsers = req.body.chat_group_requested_users
+			var requestedUsersArray = requestedUsers.split(',');
+			chatGroup.chat_group_requested_users = requestedUsersArray
 		}
 		const chatGroupDetail =  await chatGroup.save() 
 		var groupId = chatGroupDetail._id

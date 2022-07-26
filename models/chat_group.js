@@ -22,7 +22,11 @@ const chatGroupSchema = new mongoose.Schema({
    
     users: {
         type: Array,
-        required: true,
+        default: null
+    },
+   
+    chat_group_requested_users: {
+        type: Array,
         default: null
     },
    
@@ -30,8 +34,7 @@ const chatGroupSchema = new mongoose.Schema({
         type: String,
         required: true,
         default: null
-    }
-   
+    }   
 })
 
 module.exports = mongoose.model('chat_groups',chatGroupSchema)
