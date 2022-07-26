@@ -138,7 +138,7 @@ router.post('/reset/password', async(req,res) => {
 			employeeType: req.body.employeeType
 		})
 		
-		if (!(employee.firstName && employee.lastName && employee.email && employee.userName && employee.zipCode && employee.referCode && employee.employeeType && employee.password)) { 
+		if (!(employee.firstName && employee.lastName && employee.email && employee.userName && employee.referCode && employee.employeeType && employee.password)) { 
 			jsonObj = []
 			if(!(employee.firstName)) {
 				var item = {
@@ -175,13 +175,13 @@ router.post('/reset/password', async(req,res) => {
 				}
 			   jsonObj.push(item);
 			}
-			if(!(employee.zipCode)) {
+			/*if(!(employee.zipCode)) {
 				var item = {
 					'key' : 'Zipcode',
 					'value' : 'required' 
 				}
 			   jsonObj.push(item);
-			}
+			}*/
 			if(!(employee.referCode)) {
 				var item = {
 					'key' : 'Refercode',
@@ -198,8 +198,8 @@ router.post('/reset/password', async(req,res) => {
 			   jsonObj.push(item);
 			}
 			
-		  response = webResponse(406, false, jsonObj) 
-		  res.send(response)
+		    response = webResponse(406, false, jsonObj) 
+		    res.send(response)
 		  return;
 		}
 	
@@ -233,6 +233,10 @@ router.post('/reset/password', async(req,res) => {
 		
 		if(req.body.is_exclusive) {
 			employee.is_exclusive = req.body.is_exclusive
+		}
+		
+		if(req.body.zipCode) {
+			employee.zipCode = req.body.zipCode
 		}
 		if(req.body.referCode) {
 			
@@ -269,7 +273,7 @@ router.post('/reset/password', async(req,res) => {
 			return;
 		}
 		
-    }catch(err){  console.log(err)
+    }catch(err){  //console.log(err)
 		//res.send('Error ' + err)
 		response = webResponse(403, false, err)  
 	    res.send(response)

@@ -30,7 +30,6 @@ const employeeSchema = new mongoose.Schema({
     },
     zipCode: {
         type: String,
-        required: true,
         default: null
     },
     otp: {
