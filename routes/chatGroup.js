@@ -47,6 +47,7 @@
 				"firstName": col.firstName,
 				"lastName": col.lastName,
 				"picture": col.picture,
+				"email": col.email,
 				"isInvited":requestedUsers.includes( col._id),
 				"isAdded": users.includes( col._id)
 			}
@@ -64,7 +65,7 @@
     }
  })
  
- router.post('/invite/user', auth, async(req,res) => {
+ router.post('/accept/invite', auth, async(req,res) => {
 	try{
 		var empId = req.user.user_id;
 		const groupId = req.body.groupId
