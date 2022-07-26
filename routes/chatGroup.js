@@ -126,16 +126,31 @@ router.post('/detail', auth, async(req,res) => {
 			const employees = await Employee.find({ _id: {$in:  empIds }})
 			const requestedUsers = await Employee.find({ _id: {$in:  requestedUserIds }})
 			
+			var isInvited = isAdded = false;
+			var userRequested = requestedUserIds.indexOf(empId); 
+			if (userRequested > -1) { 
+				isInvited = true;
+			}
+			
+			var userAdded = empIds.indexOf(empId); 
+			if (userAdded > -1) { 
+				isAdded = true;
+			}
+			
+			
 			chat = {
 				'id' :  chatGroup._id,
 				"group_name": chatGroup.group_name,
 				"group_picture": chatGroup.group_picture,
 				"challenge": chatGroup.challenge,
+				"isInvited": isInvited,
+				"isAdded": isAdded,
 				"users_count": chatGroup.users.length,
 				"users": employees,
 				"requestedUsers": requestedUsers
 				
 			}
+			
 			response = webResponse(202, true, chat)  
 			res.send(response)		
 			return;
