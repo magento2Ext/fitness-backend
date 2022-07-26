@@ -7,15 +7,115 @@
  require('../functions')
 
  const admin=require('firebase-admin');
-/*var serviceAccount = require('../admin.json');
- admin.initializeApp({
-	credential: admin.credential.cert(serviceAccount),
-	databaseURL: process.env.FIREBASE_DB,
-	authDomain: process.env.AUTH_DOMAIN,
- });*/
  
  var db=admin.database();
  var chatRef=db.ref("chat");
+ 
+ router.post('/employee/list', auth, async(req,res) => {
+    try{
+		var empId = req.user.user_id;
+		const groupId = req.body.groupId
+		
+		if(!(groupId)) {
+			jsonObj = []
+			var item = {
+				'key' : 'Group Id',
+				'value' : 'required' 
+			}
+			jsonObj.push(item);
+			response = webResponse(406, false, jsonObj) 
+			res.send(response)
+			return "";
+		}
+		
+		const employeeDetails = await Employee.findById(empId)
+		const groupDetails = await ChatGroup.findById(groupId)
+		if(employeeDetails.employeeType && employeeDetails.employeeType == "Coorporate") {
+			var employees = await Employee.find({employeeType:"Coorporate", organizationId:employeeDetails.organizationId})
+		} else {
+			var employees = await Employee.find({employeeType:"Individual"})
+		}
+		var employeeList = [];
+		
+		employees.forEach( function(col){
+			var isInvited = false;
+			var isAdded = false;
+			var users = groupDetails.users
+			var requestedUsers = groupDetails.chat_group_requested_users
+			employee = {
+				'id' :  col._id,
+				"firstName": col.firstName,
+				"lastName": col.lastName,
+				"picture": col.picture,
+				"isInvited":requestedUsers.includes( col._id),
+				"isAdded": users.includes( col._id)
+			}
+			employeeList.push(employee);
+		})
+		
+		
+        response = webResponse(201, true, employeeList)  
+		res.send(response)
+		return "";
+    }catch(err){ 
+        response = webResponse(200, false, "Something went wrong, please try again.")  
+		res.send(response)
+		return "";
+    }
+ })
+ 
+ router.post('/invite/user', auth, async(req,res) => {
+	try{
+		var empId = req.user.user_id;
+		const groupId = req.body.groupId
+		
+		if(!(groupId)) {
+			jsonObj = []
+			var item = {
+				'key' : 'Group Id',
+				'value' : 'required' 
+			}
+			jsonObj.push(item);
+			response = webResponse(406, false, jsonObj) 
+			res.send(response)
+			return "";
+		}
+		
+		const employeeDetails = await Employee.findById(empId)
+		const groupDetails = await ChatGroup.findById(groupId)
+		if(employeeDetails.employeeType && employeeDetails.employeeType == "Coorporate") {
+			var employees = await Employee.find({employeeType:"Coorporate", organizationId:employeeDetails.organizationId})
+		} else {
+			var employees = await Employee.find({employeeType:"Individual"})
+		}
+		var employeeList = [];
+		
+		employees.forEach( function(col){
+			var isInvited = false;
+			var isAdded = false;
+			var users = groupDetails.users
+			var requestedUsers = groupDetails.chat_group_requested_users
+			employee = {
+				'id' :  col._id,
+				"firstName": col.firstName,
+				"lastName": col.lastName,
+				"picture": col.picture,
+				"isInvited":requestedUsers.includes( col._id),
+				"isAdded": users.includes( col._id)
+			}
+			employeeList.push(employee);
+		})
+		
+		
+        response = webResponse(201, true, employeeList)  
+		res.send(response)
+			return "";
+    }catch(err){ console.log(err)
+        response = webResponse(200, false, "Something went wrong, please try again.")  
+		res.send(response)
+		return "";
+    } 
+ })
  
  router.post('/list', auth, async(req,res) => {
     try{
@@ -71,8 +171,11 @@ router.post('/detail', auth, async(req,res) => {
 		    res.send(response)	
 		} else {
 			var empIds = chatGroup.users
+			var requestedUserIds = chatGroup.chat_group_requested_users
 			 
 			const employees = await Employee.find({ _id: {$in:  empIds }})
+			const requestedUsers = await Employee.find({ _id: {$in:  requestedUserIds }})
+			
 			chat = {
 				'id' :  chatGroup._id,
 				"group_name": chatGroup.group_name,
@@ -80,6 +183,7 @@ router.post('/detail', auth, async(req,res) => {
 				"challenge": chatGroup.challenge,
 				"users_count": chatGroup.users.length,
 				"users": employees,
+				"requestedUsers": requestedUsers
 				
 			}
 			response = webResponse(202, true, chat)  
