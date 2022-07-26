@@ -5,8 +5,23 @@
  const md5 = require('md5');
  const bcrypt = require('bcryptjs');
  const jwt = require('jsonwebtoken');
+ const Organization = require('../models/organization')
 require('../functions')
  
+
+router.put('/organization/update/:id', async(req,res) => {
+    try{ 
+        const organization = await Organization.findById(req.params.id) 	 
+		organization.logo = req.body.logo
+        organization.themecode = req.body.themecode
+        const a1 = await organization.save()
+        response = webResponse(202, true, a1)  
+	    res.send(response)
+    }catch(err){ console.log(err)
+        res.send(err)
+        //res.json(err)
+    }
+})
 
 router.post('/login', async(req,res) => {
 	try { 
@@ -50,7 +65,7 @@ router.post('/login', async(req,res) => {
 		  // save user token
 		  admin.token = token; 
 		  const result = {};
-          result.access_token = 'Bearer '+token
+          result.access_token = token
 		  result.admin = admin
 		  
 		  response = webResponse(202, true, result)  

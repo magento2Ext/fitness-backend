@@ -203,7 +203,7 @@ router.post('/detail', auth, async(req,res) => {
 			if(users != "") {
 			   userArray = users.split(',');
 			}
-		    userArray.push(empId);
+		    userArray.push(empId); 
 			var requestedUsers = req.body.chat_group_requested_users
 			var requestedUsersArray = requestedUsers.split(',');
 			
@@ -222,6 +222,10 @@ router.post('/detail', auth, async(req,res) => {
 		if(req.body.users) {
 			var users = req.body.users
 			var userArray = users.split(',');
+			userArray.push(empId);
+			chatGroup.users = userArray
+		} else {
+			var userArray = []
 			userArray.push(empId);
 			chatGroup.users = userArray
 		}
