@@ -6,12 +6,6 @@
   const dateLib = require('date-and-time')
  const admin=require('firebase-admin');
  
-/*var serviceAccount = require('../admin.json');
- admin.initializeApp({
-	credential: admin.credential.cert(serviceAccount),
-	databaseURL: process.env.FIREBASE_DB,
-	authDomain: process.env.AUTH_DOMAIN,
- });*/
  
  var db=admin.database();
 var chatRef=db.ref("chat");
@@ -41,6 +35,7 @@ router.post('/save', auth, async(req,res) => {
 				
 		firebaseData.id = chatId.toString()
 		firebaseData.profile_picture =  employeeDetails.picture
+		firebaseData.user_name =  employeeDetails.firstName + " " + employeeDetails.lastName
 		firebaseData.dateTime = dateLib.format(new Date(asiaDate),'YYYY-MM-DD HH:mm:ss'), 
 		firebaseData.userId =  empId
 		firebaseData.message =  chatData.message
@@ -97,9 +92,6 @@ router.post('/list', auth, async(req,res) => {
 				isMyMessage = 1;
 			}
 			
-			//let s = "2005-07-08T11:22:33+0000";
-			//let d = col.dateTime;
-			//var date = d.split(" ")
 			var asiaDate =  convertTZ(new Date(col.dateTime), 'Asia/Kolkata');
 			chatDetail = {
 				'id' :  col._id,
@@ -107,6 +99,7 @@ router.post('/list', auth, async(req,res) => {
 				"dateTime": dateLib.format(new Date(asiaDate),'YYYY-MM-DD HH:mm:ss'),
 				"dateTimeSaved": col.dateTime,
 				"profile_picture": col.employeeId.picture,
+				"user_name": col.employeeId.firstName + " " +col.employeeId.lastName,
 				"userId" : empId,
 				"message": col.message,
 				"appTempId": col.appTempId,

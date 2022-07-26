@@ -136,6 +136,7 @@ router.post('/detail', auth, async(req,res) => {
 		var firebaseData = {}
 		firebaseData.id = ""
 		firebaseData.profile_picture =  ""
+		firebaseData.user_name =  ""
 		firebaseData.dateTime = "",
 		firebaseData.userId =  ""
 		firebaseData.message =  ""
