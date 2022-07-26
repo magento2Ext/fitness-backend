@@ -227,7 +227,7 @@ router.post('/detail', auth, async(req,res) => {
 				return;
 			}
 		})
-	}catch(err){  console.log(err)
+	}catch(err){  
 		response = webResponse(403, false, err)  
 	    res.send(response)
 		return;
@@ -237,7 +237,6 @@ router.post('/detail', auth, async(req,res) => {
  router.post('/accept/invite', auth, async(req,res) => {
 	try{
 		var empId = req.user.user_id;
-		var empId = "62d6c512fb6310e31ec8ef99";
 		const groupId = req.body.groupId
 		
 		if(!(groupId)) {
