@@ -160,6 +160,7 @@ router.post('/detail', auth, async(req,res) => {
 				"group_name": chatGroup.group_name,
 				"group_picture": chatGroup.group_picture,
 				"challenge": chatGroup.challenge,
+				"group_admin": chatGroup.group_admin,
 				"isInvited": isInvited,
 				"isAdded": isAdded,
 				"users_count": chatGroup.users.length,
