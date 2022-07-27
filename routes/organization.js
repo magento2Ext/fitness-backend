@@ -364,6 +364,9 @@ router.put('/update/:id',async(req,res)=> {
 		organization.themecolor= req.body.themecolor,
 		organization.modules = req.body.modules,
 		organization.module_id = req.body.module_id
+		
+		organization.logo = req.body.logo
+        organization.themecode = req.body.themecode
         const a1 = await organization.save()
 		
 		var modules = a1.modules; 
