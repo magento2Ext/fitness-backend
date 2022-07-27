@@ -1,6 +1,7 @@
  const express = require("express");
  const router = express.Router()
  const Organization = require('../models/organization')
+ const ChatGroup = require('../models/chat_group')
  const Employee = require('../models/employee')
  const Module = require('../models/module')
  const md5 = require('md5');
@@ -12,6 +13,10 @@
  var ObjectID = require('mongodb').ObjectID;
  require('../functions')
  
+ const admin=require('firebase-admin');
+ var db=admin.database();
+ var chatRef=db.ref("chat");
+
  router.get('/list', async(req,res) => {
 	if(req.query.page) {
 		var pageNo = parseInt(req.query.page)
@@ -134,14 +139,11 @@ router.post("/module/list", auth, async(req, res) => {
 	let referCode = (Math.random() + 1).toString(36).substring(6);
 	const organization = new Organization({
         organizationName: req.body.organizationName,
-       // logo: req.file.name,
-       // hexCode: req.body.hexCode,
         email: req.body.email,
-       // password: md5(req.body.password),
         zipCode: req.body.zipCode,
         referCode: referCode,
         modules: req.body.modules,
-		module_id: req.body.module_id,
+        module_id: req.body.modules,
 		subModule_id: req.body.subModule_id,
 		logo: process.env.ORGLOGO,
 		themecode: '62c3de94a4db9348c847b5e1'
@@ -159,7 +161,9 @@ router.post("/module/list", auth, async(req, res) => {
 		if(req.body.password) {
 			organization.password = await bcrypt.hashSync(req.body.password, 12)
 		}
+
         const a1 =  await organization.save() 
+		
 		
 		let emailContent = "Organization Code is "+referCode;
 		let subject = 'Organization Code'
@@ -193,9 +197,43 @@ router.post("/module/list", auth, async(req, res) => {
 							"module_id":a1.module_id
 						}
 		
-		response = webResponse(201, true, orgDetail)  
-	    res.send(response)
-    }catch(err){ console.log(err)
+		const chatGroup = new ChatGroup({
+			group_name: a1.organizationName,
+			group_picture: a1.logo,
+			challenge: "0",
+			organization_id: a1.id,
+			is_default: true
+		})
+		
+		const chatGroupDetail =  await chatGroup.save() 
+		var groupId = chatGroupDetail._id
+		
+		var firebaseData = {}
+		firebaseData.id = ""
+		firebaseData.profile_picture =  ""
+		firebaseData.user_name =  ""
+		firebaseData.dateTime = "",
+		firebaseData.userId =  ""
+		firebaseData.message =  ""
+		firebaseData.isMyMessage = 0
+		firebaseData.appTempId = ""
+		
+		
+		var group = chatRef.child( groupId.toString());
+		group.update(firebaseData,(err)=>{
+			if(err){
+				resMessage = "Something went wrong" + err;
+				response = webResponse(200, true, resMessage)  
+				res.send(response)		
+				return;
+			}
+			else{
+				response = webResponse(201, true, orgDetail)  
+	            res.send(response)
+				return;
+			}
+		})		
+    }catch(err){ 
 		response = webResponse(403, false, err)  
 	    res.send(response)
     }

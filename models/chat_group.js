@@ -32,9 +32,18 @@ const chatGroupSchema = new mongoose.Schema({
    
     group_admin: {
         type: String,
-        required: true,
         default: null
-    }   
+    },
+   
+    organization_id: {
+        type: String,
+        default: null
+    },
+	
+	is_default: {
+		type: Boolean,
+		default: false
+	}
 })
 
 module.exports = mongoose.model('chat_groups',chatGroupSchema)

@@ -48,7 +48,6 @@ const organizationSchema = new mongoose.Schema({
     },
 	module_id: {
         type: String,
-        required: false,
         default: null
     },
 	subModule_id: {

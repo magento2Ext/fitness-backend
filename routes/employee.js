@@ -10,6 +10,7 @@
  const auth = require("../middleware/auth");
  const dateLib = require('date-and-time')
  var ObjectID = require('mongodb').ObjectID;
+ const ChatGroup = require('../models/chat_group')
 require('../functions')
  
  router.post('/set/target', auth, async(req,res) => { 
@@ -242,6 +243,7 @@ router.post('/reset/password', async(req,res) => {
 			
 			const orgDetails = await Organization.findOne({ referCode: req.body.referCode });
 			if (orgDetails) {  
+
 				employee.organizationId = orgDetails.id
 			} else{
 				response = webResponse(200, false, 'Invalid refer code')  
@@ -267,13 +269,27 @@ router.post('/reset/password', async(req,res) => {
 			return;
 		}  else {
 			employee.otp = req.body.otp;
-			const a1 =  await employee.save() 
+			const a1 =  await employee.save()
+ 
+			if(req.body.employeeType && (req.body.employeeType == "Coorporate" || req.body.employeeType == "coorporate" )) { 
+				var orgId = a1.organizationId
+				const chatGroup = await ChatGroup.findOne( {'organizationId': orgId, 'is_default': 1} )
+				if(chatGroup != null) {
+					var userArray = chatGroup.users
+
+					userArray.push(a1.id); 
+					chatGroup.users = userArray
+					chatGroup.save();
+				}
+		
+			}
+
 			response = webResponse(202, true, a1)  
 			res.send(response)		
 			return;
 		}
 		
-    }catch(err){  //console.log(err)
+    }catch(err){  console.log(err)
 		//res.send('Error ' + err)
 		response = webResponse(403, false, err)  
 	    res.send(response)
