@@ -89,4 +89,31 @@ router.post('/submodule/list', async(req,res) => {
     }
 })
 
+router.post('/module/submodule', async(req,res) => {
+    try{
+		var modules = await Module.find()
+		var subModules = await SubModule.find()
+		var subModuleList = []
+		for(var i=0; i< modules.length; i++) {
+			console.log(modules[i].id)
+			var subModules = await SubModule.find({"moduleId":modules[i].id})
+			moduleData = {
+				module_id : modules[i].id,
+				module_name : modules[i].name,
+				subcategories: subModules
+			}
+			subModuleList.push(moduleData);
+		}
+		
+		response = webResponse(201, true, subModuleList)  
+		res.send(response)		
+		return;
+    }catch(err){ 
+	console.log(err)
+        response = webResponse(200, false, "Something went wrong, please try again")  
+	    res.send(response)
+		return;
+    }
+})
+
  module.exports = router
