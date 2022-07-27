@@ -50,6 +50,11 @@ const organizationSchema = new mongoose.Schema({
         type: String,
         required: false,
         default: null
+    },
+	subModule_id: {
+        type: String,
+        required: false,
+        default: null
     }
 
 })

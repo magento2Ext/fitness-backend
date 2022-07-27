@@ -142,9 +142,18 @@ router.post("/module/list", auth, async(req, res) => {
         referCode: referCode,
         modules: req.body.modules,
 		module_id: req.body.module_id,
+		subModule_id: req.body.subModule_id,
 		logo: process.env.ORGLOGO,
 		themecode: '62c3de94a4db9348c847b5e1'
     })
+	if(req.body.logo && req.body.logo != "") {
+		organization.logo = req.body.logo
+	}
+	
+	if(req.body.themecode && req.body.themecode != "") {
+		organization.themecode = req.body.themecode
+	}
+	
 
     try{
 		if(req.body.password) {
@@ -364,6 +373,7 @@ router.put('/update/:id',async(req,res)=> {
 		organization.themecolor= req.body.themecolor,
 		organization.modules = req.body.modules,
 		organization.module_id = req.body.module_id
+		organization.subModule_id = req.body.module_id
 		
 		organization.logo = req.body.logo
         organization.themecode = req.body.themecode
