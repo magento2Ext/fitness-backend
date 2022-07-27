@@ -3,6 +3,7 @@
  const auth = require("../middleware/auth");
  const Chat = require('../models/chat')
  const Employee = require('../models/employee')
+ const UserChatNode = require('../models/user_chat_nodes')
   const dateLib = require('date-and-time')
  const admin=require('firebase-admin');
  
@@ -14,13 +15,18 @@ router.post('/save', auth, async(req,res) => {
 	try { 
 		var empId = req.user.user_id;
 		const message = new Chat({
-			groupId: req.body.groupId,
+			//groupId: req.body.groupId,
 			employeeId: empId,
 			message: req.body.message,
 			appTempId: req.body.appTempId,
 			dateTime: new Date()
 		})
 	  
+		if(req.body.groupId && req.body.groupId != "") {
+			message.groupId = req.body.groupId
+		} else {
+			message.sendTo = req.body.sendTo
+		}
 		var chatData = await message.save()  
 		
 		//firebase start
@@ -34,16 +40,45 @@ router.post('/save', auth, async(req,res) => {
 		var asiaDate =  convertTZ(new Date(chatData.dateTime), 'Asia/Kolkata');
 				
 		firebaseData.id = chatId.toString()
-		firebaseData.profile_picture =  employeeDetails.picture
-		firebaseData.user_name =  employeeDetails.firstName + " " + employeeDetails.lastName
+		firebaseData.appTempId =  chatData.appTempId
 		firebaseData.dateTime = dateLib.format(new Date(asiaDate),'YYYY-MM-DD HH:mm:ss'), 
 		firebaseData.userId =  empId
 		firebaseData.message =  chatData.message
-		firebaseData.appTempId =  chatData.appTempId
-		firebaseData.isMyMessage = 1
 		
-        var oneUser=chatRef.child(req.body.groupId);
-			oneUser.update(firebaseData,(err)=>{
+		var picture = employeeDetails.picture
+		var name = employeeDetails.firstName + " " + employeeDetails.lastName
+		
+		
+		
+		if(req.body.groupId && req.body.groupId != "") {
+			firebaseData.profile_picture =  picture
+			firebaseData.user_name =  name
+			firebaseData.isMyMessage = 1
+				
+			var oneUser=chatRef.child(req.body.groupId);
+		} else {
+			firebaseData.senderPicture =  picture
+			firebaseData.senderName =  name
+			firebaseData.time = dateLib.format(new Date(asiaDate),'HH:mm:ss'), 
+		
+			firebaseData.isSend  = false
+			
+			var isMessageSentFirstTime = false;
+			var userChatNode = await UserChatNode.findOne( {'users':{'$all': [empId, req.body.sendTo]}} )
+						
+			if(userChatNode == null) {
+				const chatNode = new UserChatNode({
+					users: [empId, req.body.sendTo],
+					node: empId+"_"+req.body.sendTo
+				})
+				userChatNode = await chatNode.save()
+				isMessageSentFirstTime = true
+			} 
+			var oneUser=chatRef.child(userChatNode.node);
+		}
+		
+       
+		oneUser.update(firebaseData,(err)=>{
 			if(err){
 				resMessage = "Something went wrong" + err;
 				response = webResponse(200, true, resMessage)  
@@ -51,16 +86,27 @@ router.post('/save', auth, async(req,res) => {
 				return;
 			}
 			else{
-				resMessage = "Messsage sent"
-				response = webResponse(200, true, resMessage)  
-				res.send(response)		
-				return;
+				if(req.body.groupId && req.body.groupId != "") {
+					resMessage = "Messsage sent"
+					response = webResponse(200, true, resMessage)  
+					res.send(response)		
+					return;
+				} else {
+					var result = {};
+					result.resMessage = "Messsage sent"
+					result.isMessageSentFirstTime = isMessageSentFirstTime
+					result.firebase_node = userChatNode.node
+					response = webResponse(202, true, result)  
+					res.send(response)		
+					return;
+				}
+				
 			}
 		})
 		//firebase end
 		
 		
-	} catch (err) { 
+	} catch (err) {  console.log(err)
 		response = webResponse(403, false, err)  
 	    res.send(response)
 		return;

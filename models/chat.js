@@ -16,8 +16,14 @@ const chatSchema = new mongoose.Schema({
    
     groupId: {
         type: String,
-        required: true,
+        required: false,
         default: null
+    },
+	
+	sentTo: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Employee',
+        required: false,
     },
 	
     message: {
