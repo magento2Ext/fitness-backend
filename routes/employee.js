@@ -45,7 +45,7 @@ require('../functions')
 				
 				var subModules = []
 				if(ids.length > 0) { 
-					subModules = await SubModule.find({'_id':{'$in': ids}})
+					subModules = await SubModule.find({'moduleId':moduleId,'_id':{'$in': ids}})
 				}
 			} else{
 				response = webResponse(200, false, 'Organization not found')  
