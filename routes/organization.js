@@ -82,6 +82,7 @@
 							"themecode":col.themecode,
 							"modules":moduleNames,
 							"module_id":col.module_id,
+							"subModule_id":col.subModule_id
 							
 						}
 						orgList.push(orgDetail);
@@ -196,7 +197,8 @@ router.post("/module/list", auth, async(req, res) => {
 							"logo":a1.logo,
 							"themecode":a1.themecode,
 							"modules":moduleNames,
-							"module_id":a1.module_id
+							"module_id":a1.module_id,
+							"subModule_id":a1.subModule_id
 						}
 		
 		const chatGroup = new ChatGroup({
@@ -444,7 +446,8 @@ router.put('/update/:id',async(req,res)=> {
 							"logo":a1.logo,
 							"themecode":a1.themecode,
 							"modules":moduleNames,
-							"module_id":a1.module_id
+							"module_id":a1.module_id,
+							"subModule_id":a1.subModule_id
 						}
 		
 		
