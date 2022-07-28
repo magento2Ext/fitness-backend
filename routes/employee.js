@@ -11,8 +11,63 @@
  const dateLib = require('date-and-time')
  var ObjectID = require('mongodb').ObjectID;
  const ChatGroup = require('../models/chat_group')
+ const SubModule = require('../models/sub_module')
 require('../functions')
  
+ router.post('/submodule/list', auth, async(req,res) => {
+    try{
+
+		const moduleId = req.body.moduleId
+		// Validate user input
+		if(!(moduleId)) {
+			jsonObj = []
+			var item = {
+				'key' : 'ModuleId ',
+				'value' : 'required' 
+			}
+			jsonObj.push(item);
+			response = webResponse(406, false, jsonObj) 
+			res.send(response)
+			return "";
+		}
+
+		var empId = req.user.user_id;
+		const employeeDetails = await Employee.findById(empId)
+		
+		if(employeeDetails.employeeType && employeeDetails.employeeType == "Coorporate") {
+			const orgDetails = await Organization.findById(employeeDetails.organizationId);
+			if (orgDetails) {  
+				var subModuleIds = orgDetails.subModule_id
+				var ids = []
+				if(subModuleIds != "") {
+					ids = subModuleIds.split(",")
+				}  
+				
+				var subModules = []
+				if(ids.length > 0) { 
+					subModules = await SubModule.find({'_id':{'$in': ids}})
+				}
+			} else{
+				response = webResponse(200, false, 'Organization not found')  
+				res.send(response)
+				return;
+			}
+		} else {
+			var employees = await Employee.find({employeeType:"Individual"})
+			var subModules = await SubModule.find({"moduleId":req.body.moduleId})
+		} 
+
+		
+		response = webResponse(201, true, subModules)  
+		res.send(response)		
+		return;
+    }catch(err){
+        response = webResponse(200, false, "Something went wrong, please try again")  
+	    res.send(response)
+		return;
+    }
+ })
+
  router.post('/set/target', auth, async(req,res) => { 
     try{ 
 	    var empId = req.user.user_id;
