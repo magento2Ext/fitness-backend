@@ -60,12 +60,30 @@ router.post('/submodule/save', async(req,res) => {
 			name: req.body.name,
 			image: req.body.image
 		})
+
+		if(req.body.id) {
+			const subModule = await SubModule.findById(req.body.id) 	
+			if(!subModule){
+				response = webResponse(404, false, "Sub Module not found")  
+				res.send(response)
+				return "";
+			}
+			subModule.moduleId= req.body.moduleId,
+			subModule.name= req.body.name,
+			subModule.image= req.body.image
+			
+			const subModuleSaved = await subModule.save()
+			response = webResponse(202, true, subModuleSaved)  
+			res.send(response)
+			return "";
+		}
+
 		const subModule = await subModuleData.save()  
 		response = webResponse(202, true, subModule)  
 		res.send(response)		
 		return;
 		
-    }catch(err){
+    }catch(err){// console.log(err)
         response = webResponse(403, false, err)  
 	    res.send(response)
 		return;
