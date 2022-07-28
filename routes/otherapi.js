@@ -74,8 +74,8 @@ router.post('/submodule/save', async(req,res) => {
 
 router.post('/submodule/list', async(req,res) => {
     try{
-		if(req.body.id) {
-			var subModules = await SubModule.find({"moduleId":req.body.id})
+		if(req.body.moduleId) {
+			var subModules = await SubModule.find({"moduleId":req.body.moduleId})
 		} else {
 			var subModules = await SubModule.find()
         }
