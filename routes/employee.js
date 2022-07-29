@@ -121,10 +121,56 @@ router.post('/list', auth, async(req,res) => {
 router.post('/web/list', async(req,res) => { 
     try{
 		const employee = await Employee.find()
-        response = webResponse(201, true, employee)  
+		if(employee)
+		{
+			var employeeList = [];
+			for(i=0;i<employee.length;i++)
+			{
+				
+				var OrgId = employee[i].organizationId
+				if(OrgId != 'false')
+				{
+					var Orgdetail = await Organization.findById(OrgId)
+					if(Orgdetail) {
+						OrgName = Orgdetail.organizationName;
+						
+						employeedata = {
+							'id' :  employee[i]._id,
+							"firstName": employee[i].firstName,
+							"lastName": employee[i].lastName,
+							"email": employee[i].email,
+							"userName": employee[i].userName,
+							"zipCode":employee[i].zipCode,
+							"employeeType": employee[i].employeeType,
+							"is_exclusive": employee[i].is_exclusive,
+							"org_name": OrgName,
+						}
+						employeeList.push(employeedata);
+					}					
+				}
+				else
+				{
+					employeedata = {
+							'id' :  employee[i]._id,
+							"firstName": employee[i].firstName,
+							"lastName": employee[i].lastName,
+							"email": employee[i].email,
+							"userName": employee[i].userName,
+							"zipCode":employee[i].zipCode,
+							"employeeType": employee[i].employeeType,
+							"is_exclusive": employee[i].is_exclusive,
+							"org_name": 'N/A',
+						}
+						employeeList.push(employeedata);
+				} 
+			}
+		}
+		
+        response = webResponse(201, true, employeeList)  
 		res.send(response)		
 		return;;
     }catch(err){
+		console.log()
         response = webResponse(200, false, "Something went wrong, please try again")  
 	    res.send(response)
 		return;
