@@ -307,6 +307,53 @@ router.post('/login', async(req,res) => {
   }
 })
 
+router.post('/forgot', async(req,res) => {
+	try { 
+		const email = req.body.email
+				
+		// Validate user input
+		
+		if (!(email)) { 
+			jsonObj = []
+			if(!(email)) {
+				var item = {
+					'key' : 'email',
+					'value' : 'required' 
+				}
+			   jsonObj.push(item);
+			}
+						
+		  response = webResponse(406, false, jsonObj) 
+		  res.send(response)
+		}
+	   const organization = await Organization.findOne({ email });
+
+		if (organization) {
+			var chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			var passwordLength = 10;
+			var password = "";
+			for (var i = 0; i <= passwordLength; i++) {
+				var randomNumber = Math.floor(Math.random() * chars.length);
+				password += chars.substring(randomNumber, randomNumber +1);
+			}
+			organization.password = bcrypt.hashSync(password, 12)
+			result = await organization.save()
+			let emailContent = "Your new password is "+password;
+			let subject = 'Organization Forgot Password'
+			sendEmail(req.body.email, subject, emailContent)
+		}
+		else
+		{
+			result = "false"
+		}
+		response = webResponse(202, true, result)  
+		res.send(response)
+	} catch (err) {
+    console.log(err);
+  }
+})
+
+
 router.post('/forget/password', async(req,res) => {
     try{
         const organizationExist = await Organization.findOne({ email: req.body.email });

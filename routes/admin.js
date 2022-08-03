@@ -79,6 +79,52 @@ router.post('/login', async(req,res) => {
 })
 
 
+router.post('/forgot', async(req,res) => {
+	try { 
+		const email = req.body.email
+				
+		// Validate user input
+		
+		if (!(email)) { 
+			jsonObj = []
+			if(!(email)) {
+				var item = {
+					'key' : 'email',
+					'value' : 'required' 
+				}
+			   jsonObj.push(item);
+			}
+						
+		  response = webResponse(406, false, jsonObj) 
+		  res.send(response)
+		}
+	   const admin = await Admin.findOne({ email });
+
+		if (admin) {
+			var chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			var passwordLength = 10;
+			var password = "";
+			for (var i = 0; i <= passwordLength; i++) {
+				var randomNumber = Math.floor(Math.random() * chars.length);
+				password += chars.substring(randomNumber, randomNumber +1);
+			}
+			admin.password = bcrypt.hashSync(password, 12)
+			result = await admin.save()
+			let emailContent = "Your new password is "+password;
+			let subject = 'Admin Forgot Password'
+			sendEmail(req.body.email, subject, emailContent)
+		}
+		else
+		{
+			result = "false"
+		}
+		response = webResponse(202, true, result)  
+		res.send(response)
+	} catch (err) {
+    console.log(err);
+  }
+})
+
 router.post('/save/theme', async(req,res) => {
 	const theme = new Theme({
         themeName: req.body.themeName,
