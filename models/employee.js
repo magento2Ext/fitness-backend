@@ -27,16 +27,16 @@ const employeeSchema = new mongoose.Schema({
         type: String,
         required: true,
         default: null
-    },
+    }/* ,
     zipCode: {
         type: String,
         default: null
-    },
+    } */,
     otp: {
         type: String,
         required: true,
         default: null
-    },
+    }/* ,
     employeeType: {
         type: String,
         required: true,
@@ -50,7 +50,7 @@ const employeeSchema = new mongoose.Schema({
         type: String,
 		required: true,
         default: false
-    },
+    } */,
     organizationId: {
         type: String,
         default: false
