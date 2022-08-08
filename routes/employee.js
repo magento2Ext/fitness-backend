@@ -234,13 +234,13 @@ router.post('/reset/password', async(req,res) => {
 			lastName: req.body.lastName,
 			email: req.body.email,
 			userName: req.body.userName,
-			password: req.body.password,
-			zipCode: req.body.zipCode,
+			password: req.body.password
+			/* zipCode: req.body.zipCode,
 			referCode: req.body.referCode,
-			employeeType: req.body.employeeType
+			employeeType: req.body.employeeType */
 		})
 		
-		if (!(employee.firstName && employee.lastName && employee.email && employee.userName && employee.referCode && employee.employeeType && employee.password)) { 
+		if (!(employee.firstName && employee.lastName && employee.email && employee.userName && employee.password)) { 
 			jsonObj = []
 			if(!(employee.firstName)) {
 				var item = {
@@ -284,21 +284,21 @@ router.post('/reset/password', async(req,res) => {
 				}
 			   jsonObj.push(item);
 			}*/
-			if(!(employee.referCode)) {
+			/* if(!(employee.referCode)) {
 				var item = {
 					'key' : 'Refercode',
 					'value' : 'required' 
 				}
 			   jsonObj.push(item);
-			}
+			} */
 			
-			if(!(employee.employeeType)) {
+			/* if(!(employee.employeeType)) {
 				var item = {
 					'key' : 'EmployeeType',
 					'value' : 'required' 
 				}
 			   jsonObj.push(item);
-			}
+			} */
 			
 		    response = webResponse(406, false, jsonObj) 
 		    res.send(response)
@@ -319,12 +319,12 @@ router.post('/reset/password', async(req,res) => {
 			return;
 		}
 		
-		if(req.body.employeeType && (req.body.employeeType == "Coorporate" || req.body.employeeType == "coorporate" )) { 
+		/* if(req.body.employeeType && (req.body.employeeType == "Coorporate" || req.body.employeeType == "coorporate" )) { 
 			employee.isVerified = "false"
 		} else {
 			employee.isVerified = "true"
-		}
-		
+		} */
+		employee.isVerified = "false"
 		if(req.body.password) {
 			employee.password = await bcrypt.hashSync(req.body.password, 12)
 		}
@@ -333,14 +333,14 @@ router.post('/reset/password', async(req,res) => {
 			employee.otp = otp;
 		}
 		
-		if(req.body.is_exclusive) {
+		/* if(req.body.is_exclusive) {
 			employee.is_exclusive = req.body.is_exclusive
-		}
+		} */
 		
-		if(req.body.zipCode) {
+		/* if(req.body.zipCode) {
 			employee.zipCode = req.body.zipCode
-		}
-		if(req.body.referCode) {
+		} */
+		/* if(req.body.referCode) {
 			
 			const orgDetails = await Organization.findOne({ referCode: req.body.referCode });
 			if (orgDetails) {  
@@ -351,7 +351,7 @@ router.post('/reset/password', async(req,res) => {
 				res.send(response)
 				return;
 			}
-		}
+		} */
 		
 		if(!req.body.otp) {
 			let otp = Math.floor(1000 + Math.random() * 9000);
@@ -372,7 +372,7 @@ router.post('/reset/password', async(req,res) => {
 			employee.otp = req.body.otp;
 			const a1 =  await employee.save()
  
-			if(req.body.employeeType && (req.body.employeeType == "Coorporate" || req.body.employeeType == "coorporate" )) { 
+			/* if(req.body.employeeType && (req.body.employeeType == "Coorporate" || req.body.employeeType == "coorporate" )) { 
 				var orgId = a1.organizationId
 				const chatGroup = await ChatGroup.findOne( {'organizationId': orgId, 'is_default': 1} )
 				if(chatGroup != null) {
@@ -383,7 +383,7 @@ router.post('/reset/password', async(req,res) => {
 					chatGroup.save();
 				}
 		
-			}
+			} */
 
 			response = webResponse(202, true, a1)  
 			res.send(response)		
