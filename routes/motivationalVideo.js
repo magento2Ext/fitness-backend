@@ -6,7 +6,7 @@ require('../functions')
  
  router.post('/list', async(req,res) => {
     try{
-		const videos = await MotivationalVideo.find()
+		const videos = await MotivationalVideo.find({auth_user_id:req.body.auth_user_id})
         response = webResponse(201, true, videos)  
 		res.send(response)		
 		return;;
@@ -20,6 +20,7 @@ require('../functions')
  router.post('/save', async(req,res) => {
 	try{ 
 		const video = new MotivationalVideo({
+			auth_user_id: req.body.auth_user_id,
 			name: req.body.name,
 			title: req.body.title,
 			description: req.body.description,
@@ -35,6 +36,7 @@ require('../functions')
 				res.send(response)
 				return "";
 			}
+			videoDetail.auth_user_id= req.body.auth_user_id,
 			videoDetail.name= req.body.name,
 			videoDetail.title= req.body.title,
 			videoDetail.description= req.body.description,
