@@ -2,7 +2,12 @@ const mongoose = require('mongoose')
 
 
 const educationSchema = new mongoose.Schema({
-
+	auth_user_id: {
+        type: String,
+        required: true,
+		default: null
+    },
+	
     title: {
         type: String,
         required: true,

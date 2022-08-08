@@ -12,13 +12,13 @@ require('../functions')
     try{
 		var moduleName =  '';
 		if(req.body.module_id) {
-			var education = await EducationModule.find({ module_id: req.body.module_id });
+			var education = await EducationModule.find({ module_id: req.body.module_id,auth_user_id:req.body.auth_user_id });
 			/*const module = await  ModuleAdded.findById(req.body.module_id)	 
 			if(module.name) {
 				moduleName = module.name;
 			}*/
 		} else {
-			var education = await EducationModule.find()
+			var education = await EducationModule.find({auth_user_id:req.body.auth_user_id})
 		}
 			
 		var educationArray = [];
@@ -59,6 +59,7 @@ require('../functions')
  router.post('/save', async(req,res) => {
 	try{ 
 		const education = new EducationModule({
+			auth_user_id: req.body.auth_user_id,
 			title: req.body.title,
 			description: req.body.description,
 			placeholder_image: req.body.placeholder_image,
@@ -74,6 +75,7 @@ require('../functions')
 				res.send(response)
 				return "";
 			}
+			educationDetail.auth_user_id= req.body.auth_user_id,
 			educationDetail.title= req.body.title,
 			educationDetail.description= req.body.description,
 			educationDetail.placeholder_image= req.body.placeholder_image,

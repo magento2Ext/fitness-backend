@@ -2,7 +2,12 @@ const mongoose = require('mongoose')
 
 
 const videoSchema = new mongoose.Schema({
-
+	auth_user_id: {
+        type: String,
+        required: true,
+		default: null
+    },
+	
     name: {
         type: String,
         required: true,
