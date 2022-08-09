@@ -526,4 +526,86 @@ router.put('/update/theme',async(req,res)=> {
 
 })
 
+
+router.get('/getMyOrganizations', async(req, res) => {
+	let myOrganizations = req.body.myOrganizations
+	if(req.query.page) {
+		var pageNo = parseInt(req.query.page)
+	} else {
+		var pageNo = 1;
+	}
+	
+    try{
+		 var query = {}
+   
+		query.skip = size * (pageNo - 1)
+		query.limit = size 
+		console.log(query)
+		const totalRecords = await Organization.countDocuments().exec();
+		
+		var ModuleList =  await Module.find()
+		var moduleArray = []
+		
+		ModuleList.forEach( function(moduleDetail){
+			var obj = []
+			var id = moduleDetail._id
+			moduleArray[id] = moduleDetail.name;
+		}) 
+		
+         Organization.find({_id: {$in: myOrganizations}}, {},query, function(err,data) {
+				if(err) {
+					response = webResponse(200, false, "Error fetching data")  
+					res.json(response);
+				    return "";
+				} else {
+					const result = {}
+					console.log(size)
+					result.totalRecords =  totalRecords;
+					result.rowsPerPage = size;
+					result.pages = Math.ceil(totalRecords/size);
+					
+					var orgList = [];
+					data.forEach( function(col){
+						var modules = col.modules; 
+						var moduleIds = modules.split(",")
+						var moduleNames = ''
+						var i = 0;
+						moduleIds.forEach( function(modId){
+							if(moduleArray[modId])  {
+								if(i > 0) {
+									moduleNames = moduleNames+ ',' + moduleArray[modId] 
+								} else {
+									moduleNames = moduleNames + moduleArray[modId] 
+								}
+							}
+							i++;
+						})
+						orgDetail = {
+							'_id' :  col._id,
+							"organizationName": col.organizationName,
+							"email": col.email,
+							"password": col.password,
+							"zipCode":col.zipCode,
+							"referCode":col.referCode,
+							"logo":col.logo,
+							"themecode":col.themecode,
+							"modules":moduleNames,
+							"module_id":col.module_id,
+							"subModule_id":col.subModule_id
+						}
+						orgList.push(orgDetail);
+					})
+					
+					result.data = orgList;
+					response = webResponse(202, true, result)  
+					res.send(response);
+				   return "";
+				}				
+			});
+           
+    }catch(err){ console.log(err)
+        res.send('Error ' + err)
+    }
+})
+
  module.exports = router
