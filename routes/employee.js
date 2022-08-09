@@ -234,7 +234,8 @@ router.post('/reset/password', async(req,res) => {
 			lastName: req.body.lastName,
 			email: req.body.email,
 			userName: req.body.userName,
-			password: req.body.password
+			password: req.body.password,
+			employeeType: 'Individual'
 			/* zipCode: req.body.zipCode,
 			referCode: req.body.referCode,
 			employeeType: req.body.employeeType */
