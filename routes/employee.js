@@ -235,7 +235,8 @@ router.post('/reset/password', async(req,res) => {
 			email: req.body.email,
 			userName: req.body.userName,
 			password: req.body.password,
-			employeeType: 'Individual'
+			employeeType: 'Individual',
+			isVerified: true
 			/* zipCode: req.body.zipCode,
 			referCode: req.body.referCode,
 			employeeType: req.body.employeeType */
