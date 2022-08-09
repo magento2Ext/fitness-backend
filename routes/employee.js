@@ -326,7 +326,7 @@ router.post('/reset/password', async(req,res) => {
 		} else {
 			employee.isVerified = "true"
 		} */
-		employee.isVerified = "false"
+		// employee.isVerified = "false"
 		if(req.body.password) {
 			employee.password = await bcrypt.hashSync(req.body.password, 12)
 		}
