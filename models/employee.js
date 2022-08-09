@@ -62,8 +62,9 @@ const employeeSchema = new mongoose.Schema({
     isVerified: {
         type: Boolean,
         default: false
-    }
+    },
+    userOrganizations: []
 
 })
 
-module.exports = mongoose.model('Employee',employeeSchema)
+module.exports = mongoose.model('Employee', employeeSchema)
