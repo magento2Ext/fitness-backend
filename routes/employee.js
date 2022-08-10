@@ -181,17 +181,30 @@ router.post('/web/list', async(req,res) => {
 router.get('/list/:id', async(req,res) => { 
     try{
 
-		 let data = await organizationRequests.aggregate([
-		           {$match:  { orgId: req.params.id }},
-                   {$lookup: {
-							from: "employees",
-							localField: "_id",
-							foreignField: "employeeId",
-							as: "request"
-						}}
-			])
+		 let data = await organizationRequests({orgId: req.params.id});
 
-		   res.json(data);
+		 if(data.length != 0){
+
+			let userArray = [];
+			let count = 0;
+
+			data.forEach( async(e) => {
+
+			let emp = await Employee.findOne({_id: e.employeeId});
+			emp.request = e.status;
+			userArray.push(emp);
+			count++;
+			if(count === data.length){
+				res.json(data);
+			}
+			
+			})
+			
+
+		 }else{
+			res.json([]);
+		 }
+ 
 
     }catch(err){
         res.send('Error ' + err)
