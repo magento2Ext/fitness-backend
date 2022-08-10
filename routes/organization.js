@@ -102,34 +102,36 @@
 
 router.post("/module/list", auth, async(req, res) => { 
   try{ 
-		var empId = req.user.user_id;
-		const employee = await Employee.findById(empId)
-		if(!employee){
-			response = webResponse(404, false, "Employee not found.")  
-			res.send(response)
-			return;
-		}
-		if(employee.employeeType == "Coorporate") {
-			const org = await Organization.findById(employee.organizationId)
-			if(org) {
-				var modules = org.modules; 
-				var ids = modules.split(",")
-				var ModuleList = await Module.find({ _id : { $in : ids } })
-			   // var ModuleList = await Module.find({ _id : { $in : ['62c697e764a3d1c9be8c7f15','62c6980964a3d1c9be8c7f18'] } })
-				response = webResponse(201, true, ModuleList)  
-				res.send(response)		
-				return;
-			} else{
-				response = webResponse(404, false, "Organization not found")  
-				res.send(response)
-				return;
-			}
-		} else{
-			const modulesAvailable = await Module.find()
-			response = webResponse(201, true, modulesAvailable)  
-			res.send(response)		
-			return;
-		}
+
+	res.send({'msg': 'yes'})
+		// var empId = req.user.user_id;
+		// const employee = await Employee.findById(empId)
+		// if(!employee){
+		// 	response = webResponse(404, false, "Employee not found.")  
+		// 	res.send(response)
+		// 	return;
+		// }
+		// if(employee.employeeType == "Coorporate") {
+		// 	const org = await Organization.findById(employee.organizationId)
+		// 	if(org) {
+		// 		var modules = org.modules; 
+		// 		var ids = modules.split(",")
+		// 		var ModuleList = await Module.find({ _id : { $in : ids } })
+		// 	   // var ModuleList = await Module.find({ _id : { $in : ['62c697e764a3d1c9be8c7f15','62c6980964a3d1c9be8c7f18'] } })
+		// 		response = webResponse(201, true, ModuleList)  
+		// 		res.send(response)		
+		// 		return;
+		// 	} else{
+		// 		response = webResponse(404, false, "Organization not found")  
+		// 		res.send(response)
+		// 		return;
+		// 	}
+		// } else{
+		// 	const modulesAvailable = await Module.find()
+		// 	response = webResponse(201, true, modulesAvailable)  
+		// 	res.send(response)		
+		// 	return;
+		// }
 	} catch(err){   console.log(err)
 		response = webResponse(403, false, err)  
 	    res.send(response)
