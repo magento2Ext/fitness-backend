@@ -4,6 +4,7 @@
  const ChatGroup = require('../models/chat_group')
  const Employee = require('../models/employee')
  const Module = require('../models/module')
+ const OrganizationCode = require('../models/organizationCode')
  const md5 = require('md5');
  const nodemailer = require('nodemailer');
  const size = process.env.RECORD_LIMIT
@@ -588,6 +589,61 @@ router.post("/orginzations/list", auth,  async(req, res) => {
 			res.send(response)
 			return;
 		}
+
+})
+
+
+
+router.post("/addCode", auth,  async(req, res) => {
+
+		try{ 
+         let data = {
+			 orgId: req.body.orgId,
+             code: req.body.code
+		 }
+
+		 let newCode = new OrganizationCode(data);
+		 let result = newCode.save();
+
+		 response = webResponse(202, true, result)  
+						res.json(response);
+						return "";
+
+		} catch(err){ 
+			console.log(err)
+			response = webResponse(403, false, err)  
+			res.send(response)
+			return;
+		}
+
+})
+
+
+router.post("/confirmCode", auth,  async(req, res) => {
+
+	try{ 
+	 let data = {
+		 orgId: req.body.orgId,
+		 code: req.body.code
+	 }
+
+	 let codeData = OrganizationCode.find(data);
+	 if(codeData.length!=0){
+		response = webResponse(202, true, "Code Matched")  
+		res.json(response);
+		return "";
+	 }else{
+		response = webResponse(200, false, "No Matched Code")  
+		res.json(response);
+		return "";
+	 }
+
+	} catch(err){ 
+		console.log(err)
+		response = webResponse(403, false, err)  
+		res.send(response)
+		return;
+	}
 
 })
 
