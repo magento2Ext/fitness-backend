@@ -548,7 +548,7 @@ router.post("/orginzations/list", auth,  async(req, res) => {
 					res.json(response);
 				    return "";
 				} else {
-					// const result = {}
+					const result = {}
 					let orgList = [];
 					let count = 0;
 
@@ -563,9 +563,9 @@ router.post("/orginzations/list", auth,  async(req, res) => {
 							}
 							orgList.push(orgDetail);
 							count++;
-							if(count === data.length){							
-								// result.data = orgList;
-								response = webResponse(202, true, orgList)  
+							if(count === data.length){	
+								result['result'] = orgList;						
+								response = webResponse(202, true, result)  
 								res.send(response);
 								return "";
 							}
