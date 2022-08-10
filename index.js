@@ -80,6 +80,12 @@ app.use('/categories',teacherCategories)
 const teacher = require('./routes/teacher')
 app.use('/teacher',teacher)
 
+app.post("/testApi", async(req, res) => { 
+
+	res.send({'status': 1})
+
+})
+
 
 app.post("/weight/save", auth, async(req, res) => { 
   try{ 
