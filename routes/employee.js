@@ -182,16 +182,17 @@ router.get('/list/:id', async(req,res) => {
     try{
 
 		 let data = await organizationRequests.aggregate([
-		           {$match: { orgId: req.params.id }},
-{					$lookup: {
+		           {$match:  { orgId: req.params.id }},
+                   {$lookup: {
 							from: "employees",
-							localField: "_id",
-							foreignField: "employeeId",
+							localField: "employeeId",
+							foreignField: "_id",
 							as: "request"
 						}}
 			])
 
 		   res.json(data);
+
     }catch(err){
         res.send('Error ' + err)
     }
