@@ -528,7 +528,10 @@ router.put('/update/theme',async(req,res)=> {
 
 
 router.get('/getMyOrganizations', async(req, res) => {
-	let myOrganizations = req.body.myOrganizations
+	let myQuery = {};
+	if(req.body.type === 'myOrgs')   myQuery = {$in: req.body.myOrganizations}
+	else  myQuery = {$nin: req.body.myOrganizations}
+	
 	if(req.query.page) {
 		var pageNo = parseInt(req.query.page)
 	} else {
@@ -552,7 +555,7 @@ router.get('/getMyOrganizations', async(req, res) => {
 			moduleArray[id] = moduleDetail.name;
 		}) 
 		
-         Organization.find({_id: {$in: myOrganizations}}, {},query, function(err,data) {
+         Organization.find({_id: myQuery}, {},query, function(err,data) {
 				if(err) {
 					response = webResponse(200, false, "Error fetching data")  
 					res.json(response);
@@ -607,5 +610,6 @@ router.get('/getMyOrganizations', async(req, res) => {
         res.send('Error ' + err)
     }
 })
+
 
  module.exports = router
