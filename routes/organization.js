@@ -102,36 +102,34 @@
 
 router.post("/module/list", auth, async(req, res) => { 
   try{ 
-
-	res.send({'msg': 'yes'})
-		// var empId = req.user.user_id;
-		// const employee = await Employee.findById(empId)
-		// if(!employee){
-		// 	response = webResponse(404, false, "Employee not found.")  
-		// 	res.send(response)
-		// 	return;
-		// }
-		// if(employee.employeeType == "Coorporate") {
-		// 	const org = await Organization.findById(employee.organizationId)
-		// 	if(org) {
-		// 		var modules = org.modules; 
-		// 		var ids = modules.split(",")
-		// 		var ModuleList = await Module.find({ _id : { $in : ids } })
-		// 	   // var ModuleList = await Module.find({ _id : { $in : ['62c697e764a3d1c9be8c7f15','62c6980964a3d1c9be8c7f18'] } })
-		// 		response = webResponse(201, true, ModuleList)  
-		// 		res.send(response)		
-		// 		return;
-		// 	} else{
-		// 		response = webResponse(404, false, "Organization not found")  
-		// 		res.send(response)
-		// 		return;
-		// 	}
-		// } else{
-		// 	const modulesAvailable = await Module.find()
-		// 	response = webResponse(201, true, modulesAvailable)  
-		// 	res.send(response)		
-		// 	return;
-		// }
+		var empId = req.user.user_id;
+		const employee = await Employee.findById(empId)
+		if(!employee){
+			response = webResponse(404, false, "Employee not found.")  
+			res.send(response)
+			return;
+		}
+		if(employee.employeeType == "Coorporate") {
+			const org = await Organization.findById(employee.organizationId)
+			if(org) {
+				var modules = org.modules; 
+				var ids = modules.split(",")
+				var ModuleList = await Module.find({ _id : { $in : ids } })
+			   // var ModuleList = await Module.find({ _id : { $in : ['62c697e764a3d1c9be8c7f15','62c6980964a3d1c9be8c7f18'] } })
+				response = webResponse(201, true, ModuleList)  
+				res.send(response)		
+				return;
+			} else{
+				response = webResponse(404, false, "Organization not found")  
+				res.send(response)
+				return;
+			}
+		} else{
+			const modulesAvailable = await Module.find()
+			response = webResponse(201, true, modulesAvailable)  
+			res.send(response)		
+			return;
+		}
 	} catch(err){   console.log(err)
 		response = webResponse(403, false, err)  
 	    res.send(response)
@@ -530,9 +528,60 @@ router.put('/update/theme', async(req,res)=> {
 
 router.post("/orginzations/list", auth,  async(req, res) => {
 
-	res.send({status: 1})
+		try{ 
+
+			var empId = req.user.user_id;
+			const employee = await Employee.findById(empId)
+			if(!employee){
+				response = webResponse(404, false, "Employee not found.")  
+				res.send(response)
+				return;
+			}
+
+			let myQuery = {};
+			if(req.body.type === 'myOrgs')   myQuery = {$in: employee.userOrganizations}
+			else  myQuery = {$nin: employee.userOrganizations}
+
+			Organization.find({_id: myQuery}, function(err, data) {
+				if(err) {
+					response = webResponse(200, false, "Error fetching data")  
+					res.json(response);
+				    return "";
+				} else {
+					const result = {}
+					let count = 0;
+
+					if(data.length!=0){
+
+						let orgDetail = {
+							'_id' :  col._id,
+							"organizationName": col.organizationName,
+							"logo":col.logo,
+						}
+						orgList.push(orgDetail);
+						count++;
+						if(count === data.length){							
+							result.data = orgList;
+							response = webResponse(202, true, result)  
+							res.send(response);
+							return "";
+						}
+
+					}else{
+						response = webResponse(200, false, "No data found")  
+						res.json(response);
+						return "";
+					}
+				}				
+			});
 
 
+		} catch(err){ 
+			console.log(err)
+			response = webResponse(403, false, err)  
+			res.send(response)
+			return;
+		}
 
 })
 
