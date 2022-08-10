@@ -63,7 +63,10 @@ const employeeSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    userOrganizations: []
+    userOrganizations: {
+		type: Array,
+		default:[]
+	}
 
 })
 

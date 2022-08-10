@@ -507,7 +507,7 @@ router.put('/update/:id',async(req,res)=> {
 
 })
 
-router.put('/update/theme',async(req,res)=> {
+router.put('/update/theme', async(req,res)=> {
 	 try{ 
         const organization = await Organization.findById(req.params.id) 	 
 		organization.organizationName = req.body.organizationName
@@ -523,92 +523,66 @@ router.put('/update/theme',async(req,res)=> {
         res.send('err')
         //res.json(err)
     }
-
 })
 
 
-router.get('/getMyOrganizations', async(req, res) => {
-	let myQuery = {};
-	if(req.body.type === 'myOrgs')   myQuery = {$in: req.body.userOrganizations}
-	else  myQuery = {$nin: req.body.userOrganizations}
-	
-	if(req.query.page) {
-		var pageNo = parseInt(req.query.page)
-	} else {
-		var pageNo = 1;
-	}
-	
-    try{
-		 var query = {}
-   
-		query.skip = size * (pageNo - 1)
-		query.limit = size 
-		console.log(query)
-		const totalRecords = await Organization.countDocuments().exec();
-		
-		var ModuleList =  await Module.find()
-		var moduleArray = []
-		
-		ModuleList.forEach( function(moduleDetail){
-			var obj = []
-			var id = moduleDetail._id
-			moduleArray[id] = moduleDetail.name;
-		}) 
-		
-         Organization.find({_id: myQuery}, {},query, function(err,data) {
+router.get('/getMyOrganizations', auth, async(req, res) => {
+
+		try{ 
+
+			var empId = req.user.user_id;
+			const employee = await Employee.findById(empId)
+			if(!employee){
+				response = webResponse(404, false, "Employee not found.")  
+				res.send(response)
+				return;
+			}
+
+			let myQuery = {};
+			if(req.body.type === 'myOrgs')   myQuery = {$in: employee.userOrganizations}
+			else  myQuery = {$nin: employee.userOrganizations}
+
+			Organization.find({_id: myQuery}, function(err, data) {
 				if(err) {
 					response = webResponse(200, false, "Error fetching data")  
 					res.json(response);
 				    return "";
 				} else {
 					const result = {}
-					console.log(size)
-					result.totalRecords =  totalRecords;
-					result.rowsPerPage = size;
-					result.pages = Math.ceil(totalRecords/size);
-					
-					var orgList = [];
-					data.forEach( function(col){
-						var modules = col.modules; 
-						var moduleIds = modules.split(",")
-						var moduleNames = ''
-						var i = 0;
-						moduleIds.forEach( function(modId){
-							if(moduleArray[modId])  {
-								if(i > 0) {
-									moduleNames = moduleNames+ ',' + moduleArray[modId] 
-								} else {
-									moduleNames = moduleNames + moduleArray[modId] 
-								}
-							}
-							i++;
-						})
-						orgDetail = {
+					let count = 0;
+
+					if(data.length!=0){
+
+						let orgDetail = {
 							'_id' :  col._id,
 							"organizationName": col.organizationName,
-							"email": col.email,
-							"password": col.password,
-							"zipCode":col.zipCode,
-							"referCode":col.referCode,
 							"logo":col.logo,
-							"themecode":col.themecode,
-							"modules":moduleNames,
-							"module_id":col.module_id,
-							"subModule_id":col.subModule_id
 						}
 						orgList.push(orgDetail);
-					})
-					
-					result.data = orgList;
-					response = webResponse(202, true, result)  
-					res.send(response);
-				   return "";
+						count++;
+						if(count === data.length){							
+							result.data = orgList;
+							response = webResponse(202, true, result)  
+							res.send(response);
+							return "";
+						}
+
+					}else{
+						response = webResponse(200, false, "No data found")  
+						res.json(response);
+						return "";
+					}
 				}				
 			});
-           
-    }catch(err){ console.log(err)
-        res.send('Error ' + err)
-    }
+
+
+		} catch(err){ 
+			console.log(err)
+			response = webResponse(403, false, err)  
+			res.send(response)
+			return;
+		}
+
 })
 
 
