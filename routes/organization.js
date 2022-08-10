@@ -5,6 +5,7 @@
  const Employee = require('../models/employee')
  const Module = require('../models/module')
  const OrganizationCode = require('../models/orgCode')
+ const organizationRequests = require('../models/orgRequests')
  const md5 = require('md5');
  const nodemailer = require('nodemailer');
  const size = process.env.RECORD_LIMIT
@@ -597,6 +598,7 @@ router.post("/orginzations/list", auth,  async(req, res) => {
 router.post("/addCode", auth,  async(req, res) => {
 
 		try{ 
+
          let data = {
 			 orgId: req.body.orgId,
              code: req.body.code
@@ -622,6 +624,15 @@ router.post("/addCode", auth,  async(req, res) => {
 router.post("/confirmCode", auth,  async(req, res) => {
 
 	try{ 
+
+	var empId = req.user.user_id;
+	const employee = await Employee.findById(empId)
+	if(!employee){
+		response = webResponse(404, false, "Employee not found.")  
+		res.send(response)
+		return;
+	}
+
 	 let data = {
 		 orgId: req.body.orgId,
 		 code: req.body.code
@@ -629,9 +640,23 @@ router.post("/confirmCode", auth,  async(req, res) => {
 
 	 let codeData = OrganizationCode.find(data);
 	 if(codeData.length!=0){
-		response = webResponse(202, true, "Code Matched")  
-		res.json(response);
-		return "";
+		 let data = {
+			orgId: req.body.orgId,
+			employeeId: empId,
+		 }
+		 let newOrgReq = new organizationRequests(data);
+		 let result = newOrgReq.save();
+
+		 if(result){
+			response = webResponse(202, true, "Code Matched")  
+			res.json(response);
+			return "";
+		 }else{
+			response = webResponse(200, false, "No Matched Code")  
+			res.json(response);
+			return "";
+		 }
+
 	 }else{
 		response = webResponse(200, false, "No Matched Code")  
 		res.json(response);
