@@ -553,7 +553,7 @@ router.post("/orginzations/list", auth,  async(req, res) => {
 
 					if(data.length!=0){
 
-						data.foreEach( (col) => {
+						data.forEach( (col) => {
 
 							let orgDetail = {
 								'_id' :  col._id,
