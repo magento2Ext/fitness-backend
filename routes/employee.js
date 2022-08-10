@@ -179,7 +179,7 @@ router.post('/web/list', async(req,res) => {
 
 router.get('/list/:id', async(req,res) => { 
     try{
-           const employeedd = await Employee.find({organizationId:req.params.id})
+           const employeedd = await Employee.find({userOrganizations: {$in: [req.params.id]}})
 		   res.json(employeedd)
     }catch(err){
         res.send('Error ' + err)
