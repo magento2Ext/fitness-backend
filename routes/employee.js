@@ -181,7 +181,7 @@ router.post('/web/list', async(req,res) => {
 router.get('/list/:id', async(req,res) => { 
     try{
 
-		 let data = await organizationRequests({orgId: req.params.id});
+		 let data = await organizationRequests.find({orgId: req.params.id});
 
 		 if(data.length != 0){
 
