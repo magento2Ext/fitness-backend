@@ -507,7 +507,7 @@ router.put('/update/:id',async(req,res)=> {
 
 })
 
-router.put('/update/theme',async(req,res)=> {
+router.put('/update/theme', async(req,res)=> {
 	 try{ 
         const organization = await Organization.findById(req.params.id) 	 
 		organization.organizationName = req.body.organizationName
@@ -523,7 +523,74 @@ router.put('/update/theme',async(req,res)=> {
         res.send('err')
         //res.json(err)
     }
+})
+
+
+router.post("/orginzations/list", auth,  async(req, res) => {
+
+		try{ 
+
+			var empId = req.user.user_id;
+			const employee = await Employee.findById(empId)
+			if(!employee){
+				response = webResponse(404, false, "Employee not found.")  
+				res.send(response)
+				return;
+			}
+
+			let myQuery = {};
+			if(req.body.type === 'myOrgs')   myQuery = {$in: employee.userOrganizations}
+			else  myQuery = {$nin: employee.userOrganizations}
+
+			Organization.find({_id: myQuery}, function(err, data) {
+				if(err) {
+					response = webResponse(200, false, "Error fetching data")  
+					res.json(response);
+				    return "";
+				} else {
+					// const result = {}
+					let orgList = [];
+					let count = 0;
+
+					if(data.length!=0){
+
+						data.forEach( (col) => {
+
+							let orgDetail = {
+								'_id' :  col._id,
+								"organizationName": col.organizationName,
+								"logo":col.logo,
+							}
+							orgList.push(orgDetail);
+							count++;
+							if(count === data.length){							
+								// result.data = orgList;
+								response = webResponse(202, true, orgList)  
+								res.send(response);
+								return "";
+							}
+
+						})
+
+
+
+					}else{
+						response = webResponse(200, false, "No data found")  
+						res.json(response);
+						return "";
+					}
+				}				
+			});
+
+
+		} catch(err){ 
+			console.log(err)
+			response = webResponse(403, false, err)  
+			res.send(response)
+			return;
+		}
 
 })
+
 
  module.exports = router

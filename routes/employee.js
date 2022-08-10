@@ -234,7 +234,9 @@ router.post('/reset/password', async(req,res) => {
 			lastName: req.body.lastName,
 			email: req.body.email,
 			userName: req.body.userName,
-			password: req.body.password
+			password: req.body.password,
+			employeeType: 'Individual',
+			isVerified: true
 			/* zipCode: req.body.zipCode,
 			referCode: req.body.referCode,
 			employeeType: req.body.employeeType */
@@ -324,7 +326,7 @@ router.post('/reset/password', async(req,res) => {
 		} else {
 			employee.isVerified = "true"
 		} */
-		employee.isVerified = "false"
+		// employee.isVerified = "false"
 		if(req.body.password) {
 			employee.password = await bcrypt.hashSync(req.body.password, 12)
 		}
