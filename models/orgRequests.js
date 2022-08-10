@@ -8,7 +8,7 @@ const organizationRequestsSchema = new mongoose.Schema({
 		default: null
     },
     employeeId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
 		default: null
     },
