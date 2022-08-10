@@ -553,19 +553,25 @@ router.post("/orginzations/list", auth,  async(req, res) => {
 
 					if(data.length!=0){
 
-						let orgDetail = {
-							'_id' :  col._id,
-							"organizationName": col.organizationName,
-							"logo":col.logo,
-						}
-						orgList.push(orgDetail);
-						count++;
-						if(count === data.length){							
-							result.data = orgList;
-							response = webResponse(202, true, result)  
-							res.send(response);
-							return "";
-						}
+						data.foreEach( (col) => {
+
+							let orgDetail = {
+								'_id' :  col._id,
+								"organizationName": col.organizationName,
+								"logo":col.logo,
+							}
+							orgList.push(orgDetail);
+							count++;
+							if(count === data.length){							
+								result.data = orgList;
+								response = webResponse(202, true, result)  
+								res.send(response);
+								return "";
+							}
+
+						})
+
+
 
 					}else{
 						response = webResponse(200, false, "No data found")  
