@@ -549,6 +549,7 @@ router.post("/orginzations/list", auth,  async(req, res) => {
 				    return "";
 				} else {
 					const result = {}
+					let orgList = [];
 					let count = 0;
 
 					if(data.length!=0){
