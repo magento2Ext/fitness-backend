@@ -181,7 +181,7 @@ router.post('/web/list', async(req,res) => {
 router.get('/list/:id', async(req,res) => { 
     try{
 
-		organizationRequests.aggregate([{
+		 let data = organizationRequests.aggregate([{
 		           $match: { orgId: req.params.id },
 					$lookup: {
 							from: "employees",
@@ -191,7 +191,7 @@ router.get('/list/:id', async(req,res) => {
 						}
 			}])
 
-		   res.json(Employee);
+		   res.json(data);
     }catch(err){
         res.send('Error ' + err)
     }
