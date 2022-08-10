@@ -4,7 +4,7 @@
  const ChatGroup = require('../models/chat_group')
  const Employee = require('../models/employee')
  const Module = require('../models/module')
- const OrganizationCode = require('../models/organizationCode')
+ const OrganizationCode = require('../models/orgCode')
  const md5 = require('md5');
  const nodemailer = require('nodemailer');
  const size = process.env.RECORD_LIMIT
