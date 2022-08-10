@@ -526,7 +526,7 @@ router.put('/update/theme', async(req,res)=> {
 })
 
 
-router.post('/getOrganizationList', auth, async(req, res) => {
+router.post('/getOrganizationList', async(req, res) => {
 
 		try{ 
 
