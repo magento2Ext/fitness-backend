@@ -529,8 +529,8 @@ router.put('/update/theme',async(req,res)=> {
 
 router.get('/getMyOrganizations', async(req, res) => {
 	let myQuery = {};
-	if(req.body.type === 'myOrgs')   myQuery = {$in: req.body.myOrganizations}
-	else  myQuery = {$nin: req.body.myOrganizations}
+	if(req.body.type === 'myOrgs')   myQuery = {$in: req.body.userOrganizations}
+	else  myQuery = {$nin: req.body.userOrganizations}
 	
 	if(req.query.page) {
 		var pageNo = parseInt(req.query.page)
