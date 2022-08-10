@@ -12,6 +12,7 @@
  var ObjectID = require('mongodb').ObjectID;
  const ChatGroup = require('../models/chat_group')
  const SubModule = require('../models/sub_module')
+ const organizationRequests = require('../models/orgRequests')
 require('../functions')
  
  router.post('/submodule/list', auth, async(req,res) => {
@@ -179,8 +180,18 @@ router.post('/web/list', async(req,res) => {
 
 router.get('/list/:id', async(req,res) => { 
     try{
-           const employeedd = await Employee.find({userOrganizations: {$in: [req.params.id]}})
-		   res.json(employeedd)
+
+		organizationRequests.aggregate([{
+		           $match: { orgId: req.params.id },
+					$lookup: {
+							from: "employees",
+							localField: "_id",
+							foreignField: "employeeId",
+							as: "request"
+						}
+			}])
+
+		   res.json(Employee);
     }catch(err){
         res.send('Error ' + err)
     }
