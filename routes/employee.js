@@ -191,7 +191,7 @@ router.get('/list/:id', async(req,res) => {
 			data.forEach( async(e) => {
 
 			let emp = await Employee.findOne({_id: e.employeeId});
-			emp.request = e.status;
+			emp['requestStatus'] = e.status;
 			userArray.push(emp);
 			count++;
 			if(count === data.length){
@@ -623,6 +623,9 @@ router.put('/update/:id',async(req,res)=> {
         employee.zipCode = req.body.zipCode,
         employee.is_exclusive = req.body.is_exclusive,
         employee.isVerified = req.body.isVerified
+		// let orgs = employee.userOrganizations
+		// let newOrgs = orgs.push(req.body.orgId);
+		// employee.userOrganizations = newOrgs;
         const a1 = await employee.save()
         response = webResponse(202, true, a1)  
 	    res.send(response)   
