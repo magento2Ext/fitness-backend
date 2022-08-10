@@ -67,7 +67,6 @@ const employeeSchema = new mongoose.Schema({
 		type: Array,
 		default:[]
 	}
-
 })
 
 module.exports = mongoose.model('Employee', employeeSchema)
