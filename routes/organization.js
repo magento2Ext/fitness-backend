@@ -635,11 +635,11 @@ router.post("/confirmCode", auth,  async(req, res) => {
 	}
 
 	 let data = {
-		 orgId: req.body.orgId,
-		 code: req.body.code
+		 _id: req.body.orgId,
+		 referCode: req.body.code
 	 }
 
-	 let codeData = await OrganizationCode.find(data);
+	 let codeData = await Organization.find(data);
 	 if(codeData.length!=0){
 	
 		 let data = {
