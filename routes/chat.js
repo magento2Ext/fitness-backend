@@ -223,9 +223,8 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 	   
 				 for(let key of messages){
 	   
-				   var other_person_id =  key.deliveredTo[0] == empId ? key.employeeId  : key.deliveredTo[0];
-				   let myId = String(other_person_id).split('"');
-				   console.log("myId", myId);
+				   var other_person_id =  key.deliveredTo[0] == empId ? String(key.employeeId)  : String(key.deliveredTo[0]);
+
 				   if(ids.indexOf(other_person_id)== -1){
 				
 				   console.log(ids);
