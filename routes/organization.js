@@ -639,7 +639,7 @@ router.post("/confirmCode", auth,  async(req, res) => {
 		 code: req.body.code
 	 }
 
-	 let codeData = OrganizationCode.find(data);
+	 let codeData = await OrganizationCode.find(data);
 	 if(codeData.length!=0){
 		 let data = {
 			orgId: req.body.orgId,
