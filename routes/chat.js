@@ -225,6 +225,8 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 	   
 				   var other_person_id =  key.deliveredTo[0] == empId ? key.employeeId  : key.deliveredTo[0];
 				   
+				   console.log(other_person_id);
+				   
 				   if(ids.indexOf(other_person_id)==-1){
 				   
 				   ids.push(other_person_id);
