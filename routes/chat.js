@@ -247,20 +247,19 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 								response = webResponse(201, true, data)  
 								res.send(response)
 								return;
-					 }
+					         }
 						   }
 						       
 						 })
 	   
 					   }else{
-	       console.log('elseelseelse')
-						 i++;
-	   
-					 if(i == messages.length){
-						response = webResponse(201, true, data)  
-						res.send(response)
-						return;
-					 }
+	      
+						i++;
+						if(i == messages.length){
+							response = webResponse(201, true, data)  
+							res.send(response)
+							return;
+						}
 					   }   
 	   
 					 }
@@ -274,11 +273,6 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 		 
 		  });
 
-
-
-		response = webResponse(201, true, chat)  
-	    res.send(response)
-		return;
 	} catch (err) { 
 		response = webResponse(403, false, err)  
 	    res.send(response)
