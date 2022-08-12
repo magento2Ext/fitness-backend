@@ -230,18 +230,23 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 				   ids.push(other_person_id);
 	   
 				   Employee.findOne({_id: other_person_id}, function(err, user){
-					console.log('user', user);
+					 
 						 var dist = {
 						   picture: user.picture,
 						   name : user.firstName[0].toUpperCase()+user.firstName.slice(1)+ ' '+user.lastName[0].toUpperCase()+user.lastName.slice(1),
 						   dateTime : key.dateTime,
 						   message : key.message,
 						   _id : user._id,
-						   }      
+						   }  
+
 						   data.push(dist);      
 						   i++;      
 						   if(i == messages.length){
-							 
+								if(i == messages.length){
+								response = webResponse(201, true, data)  
+								res.send(response)
+								return;
+					 }
 						   }
 						       
 						 })
