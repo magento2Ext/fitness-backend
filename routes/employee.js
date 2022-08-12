@@ -191,7 +191,7 @@ router.get('/list/:id', async(req,res) => {
 			data.forEach( async(e) => {
 
 			let emp = await Employee.findOne({_id: e.employeeId});
-			emp['requestStatus'] = e.status;
+			emp.requestStatus = e.status;
 			userArray.push(emp);
 			count++;
 			if(count === data.length){
