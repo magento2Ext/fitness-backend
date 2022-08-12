@@ -6,6 +6,7 @@
  const UserChatNode = require('../models/user_chat_nodes')
   const dateLib = require('date-and-time')
  const admin=require('firebase-admin');
+const { errors } = require("formidable");
  
  
  var db=admin.database();
@@ -297,9 +298,8 @@ router.post('/get_single_inboxes/list_new', auth, async(req,res) => {
 		const empId = req.user.user_id;
 		let orgList = empId.userOrganizations;
 	    let allEmployees = await Employee.find({userOrganizations: {$in: orgList}});
-
+		let allIds = [];
 		if(allEmployees.length > 0){
-			let allIds = [];
 			allEmployees.forEach( (key) => {
 				allIds.push(key._id)
 			})
