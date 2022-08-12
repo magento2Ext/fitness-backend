@@ -212,50 +212,65 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 	try { 
 
 		const empId = req.user.user_id;
-		console.log('empId', empId);
+ 
+		Chat.find({$or:[{deliveredTo: {$in: [empId]}}, {employeeId : empId}]}, null, {sort: {'dateTime': -1}}, function(err, messages){
 
-		const chat = await Chat.aggregate([{
-			$match: {$or:[{deliveredTo: {$in: [empId]}}, {employeeId : empId}]}
-		}, {
-			$sort: {
-				"dateTime": -1 // sort by "most recent first" - kindly note that it should be "sent" not "sended"
-			}
-		}, {
-			$limit: 1 // return no more than one document
-		}])
-
-		// const chat = await Chat.find({$or:[{deliveredTo: {$in: [empId]}}, {employeeId : empId}]}).sort({dateTime:-1}).limit(1);
-
-		 
-
-		console.log('chat', chat)
-		
-		// const empId = req.user.user_id;
-				 
-		// const chat = await Chat.find({$or:[{deliveredTo: {$in: [empId]}, employeeId : another_emp_id}]}).sort({dateTime:1}).populate('employeeId', 'deliveredTo[0]')
-		// var chatList = [];
-		// chat.forEach( function(col){
-		// 	var isMyMessage = 0;
-		// 	if(empId == col.employeeId._id) {
-		// 		isMyMessage = 1;
-		// 	}
+			var data =[];
+			if(messages.length!=0){
+	
+				var ids = [];
+				var i = 0;
+	   
+				 for(let key of messages){
+	   
+				   var other_person_id =  (key.deliveredTo[0] == empId) ? key.deliveredTo[0] : empId
+				   
+				   if(ids.indexOf(other_person_id)==-1){
+				   
+				   ids.push(other_person_id);
+	   
+				   Employee.findOne({_id: other_person_id}, function(err, user){
+	   
+						 var dist = {
+						   picture: user.picture,
+						   name : user.firstName[0].toUpperCase()+user.firstName.slice(1)+ ' '+user.lastName[0].toUpperCase()+user.lastName.slice(1),
+						   dateTime : key.dateTime,
+						   message : key.message,
+						   _id : user._id,
+						   }      
+						   data.push(dist);      
+						   i++;      
+						   if(i == messages.length){
+							 
+						   }
+						       
+						 })
+	   
+					   }else{
+	   
+	   
+						 i++;
+	   
+					 if(i == messages.length){
+						response = webResponse(201, true, data)  
+						res.send(response)
+						return;
+					 }
+					   }   
+	   
+					 }
 			
-		// 	var asiaDate =  convertTZ(new Date(col.dateTime), 'Asia/Kolkata');
-		// 	chatDetail = {
-		// 		'id' :  col._id,
-		// 		"dateTime": dateLib.format(new Date(asiaDate),'YYYY-MM-DD HH:mm:ss'),
-		// 		"dateTimeSaved": col.dateTime,
-		// 		"profile_picture": col.employeeId.picture,
-		// 		"user_name": col.employeeId.firstName + " " +col.employeeId.lastName,
-		// 		"userId" : empId,
-		// 		"message": col.message,
-		// 		"appTempId": col.appTempId,
-		// 		"isMyMessage":isMyMessage,
-				
-		// 	}
-		// 	chatList.push(chatDetail);
-		// })
-		
+	   
+			 }else{
+				response = webResponse(201, true, 'No chat')  
+				res.send(response)
+				return;
+			 }
+		 
+		  });
+
+
+
 		response = webResponse(201, true, chat)  
 	    res.send(response)
 		return;
