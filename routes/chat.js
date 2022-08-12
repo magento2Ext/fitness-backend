@@ -242,8 +242,9 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 						   data.push(dist);      
 						   i++;      
 						   if(i == messages.length){
-							console.log('messages.length')
+						
 								if(i == messages.length){
+									console.log('messages.length')
 								response = webResponse(201, true, data)  
 								res.send(response)
 								return;
@@ -256,6 +257,7 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 	      
 						i++;
 						if(i == messages.length){
+							console.log('messages.length')
 							response = webResponse(201, true, data)  
 							res.send(response)
 							return;
