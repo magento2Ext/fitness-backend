@@ -677,6 +677,51 @@ router.post("/acceptRequest", auth,  async(req, res) => {
 
 	try{ 
 
+		var empId = req.user.user_id;
+		 
+		Employee.updateOne({_id: req.body.empId}, {$set: {organizationId: req.body.orgId}});
+		const employee = await Employee.findOne({_id: empId});
+		const result = {};
+		result.employee = employee
+		var appData = null;
+
+		const organization = await Organization.findById(req.body.empId)
+		result.organization = organization
+		var themecode = organization.themecode
+		var logo = organization.logo
+		if(organization != null && organization.themecode != null) {
+			appData = await Theme.findById(organization.themecode)
+		}						
+		
+		if(appData == null) {
+			appData = await Theme.findOne()
+		}
+		if(logo == null)
+		{
+			var logo = process.env.ORGLOGO
+		}
+		
+		result.appData = appData
+		result.logo = logo
+
+		response = webResponse(202, true, result);  
+		res.json(response);
+		return "";
+
+	} catch(err){ 
+		console.log(err)
+		response = webResponse(403, false, err)  
+		res.send(response)
+		return;
+	}
+
+})
+
+
+router.post("/swicthOrg", auth,  async(req, res) => {
+
+	try{ 
+
 		if(req.body.status === 1) {
 			Employee.updateOne({_id: req.body.empId}, {$set: {isVerified: true}}, {$push: {userOrganizations: req.body.orgId}});
 		}
