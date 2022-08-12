@@ -655,8 +655,9 @@ router.put('/update/:id',async(req,res)=> {
 	    res.send(response)  
 
     }catch(err){
+		console.log('err', err)
         res.send(err)
-        // res.send('Error')
+        
     }
 
 })
