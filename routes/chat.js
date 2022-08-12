@@ -213,7 +213,7 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 
 		const empId = req.user.user_id;
  
-		Chat.find({$or:[{deliveredTo: {$in: [empId]}}, {employeeId : empId}]}, null, {sort: {'dateTime': -1}}, function(err, messages){
+		Chat.find({$or:[{deliveredTo: {$in: [empId]}}, {employeeId : empId}]}, null, {sort: {'dateTime': -1}}, async function(err, messages){
 
 			var data =[];
 			if(messages.length!=0){
@@ -228,15 +228,22 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 				   if(ids.indexOf(other_person_id)==-1){
 				   
 				   ids.push(other_person_id);
-	   
+
+	               let nodeId = await UserChatNode.findOne( {'users':{'$all': [empId, other_person_id]}} )
 				   Employee.findOne({_id: other_person_id}, function(err, user){
-					 
+					     let date = new Date(key.dateTime);
 						 var dist = {
 						   picture: user.picture,
 						   name : user.firstName[0].toUpperCase()+user.firstName.slice(1)+ ' '+user.lastName[0].toUpperCase()+user.lastName.slice(1),
-						   dateTime : key.dateTime,
+						   dateTime : date.getDate()+
+						   "-"+String(date.getMonth()+1).padStart(2, '0')+
+						   "-"+date.getFullYear()+
+						   " "+date.getHours()+
+						   ":"+date.getMinutes()+
+						   ":"+date.getSeconds(),
 						   message : key.message,
 						   _id : user._id,
+						   nodeId: nodeId
 						   }  
 
 						   data.push(dist);      
