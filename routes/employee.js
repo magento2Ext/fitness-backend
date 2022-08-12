@@ -632,8 +632,11 @@ router.post('/verify',async(req,res)=> {
 
 
 router.put('/update/:id',async(req,res)=> {
+
 	 try{
 
+
+		console.log(req.body.isVerified, typeof(req.body.isVerified))
 		let data = {
 			firstName: req.body.firstName,
 			lastName: req.body.lastName,
