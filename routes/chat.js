@@ -296,6 +296,7 @@ router.post('/get_single_inboxes/list_new', auth, async(req,res) => {
 	try { 
 
 		const empId = req.user.user_id;
+		console.log('empId', empId);
 		const employeeDetails = await Employee.findById(empId)
 		let orgId = employeeDetails.organizationId;
 	    let allEmployees = await Employee.find({userOrganizations: {$in: [orgId]}});
