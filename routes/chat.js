@@ -299,15 +299,18 @@ router.post('/get_single_inboxes/list_new', auth, async(req,res) => {
 		let orgList = empId.userOrganizations;
 	    let allEmployees = await Employee.find({userOrganizations: {$in: orgList}});
 		let allIds = [];
+		let stringTypeAllIds = [];
 		if(allEmployees.length > 0){
 			allEmployees.forEach( (key) => {
-				allIds.push(key._id)
+				allIds.push(key._id);
+				stringTypeAllIds.push(String(key._id));
 			})
 		}
 	    
 		console.log(allIds);
+		console.log(stringTypeAllIds);
 		
-		Chat.find({$or:[{$and: [{deliveredTo: {$in: [empId]}}, {employeeId: {$in: allIds}}]}, {$and: [{deliveredTo: {$in: allIds}}, {employeeId: {$in: [empId]}}]}]}, null, {sort: {'dateTime': -1}}, async function(err, messages){
+		Chat.find({$or:[{$and: [{deliveredTo: {$in: [empId]}}, {employeeId: {$in: allIds}}]}, {$and: [{deliveredTo: {$in: stringTypeAllIds}}, {employeeId: {$in: [empId]}}]}]}, null, {sort: {'dateTime': -1}}, async function(err, messages){
 
 			var data =[];
 			if(messages.length!=0){
