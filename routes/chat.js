@@ -212,8 +212,21 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 	try { 
 
 		const empId = req.user.user_id;
-		console.log('empId', empId)
-		const chat = await Chat.find({$or:[{deliveredTo: {$in: [empId]}}, {employeeId : empId}]}).sort({dateTime:1}).populate('employeeId', 'deliveredTo[0]')
+		console.log('empId', empId);
+
+		const chat = await Chat.collection.aggregate({
+			$match: {$or:[{deliveredTo: {$in: [empId]}}, {employeeId : empId}]}
+		}, {
+			$sort: {
+				"dateTime": -1 // sort by "most recent first" - kindly note that it should be "sent" not "sended"
+			}
+		}, {
+			$limit: 1 // return no more than one document
+		})
+
+		// const chat = await Chat.find({$or:[{deliveredTo: {$in: [empId]}}, {employeeId : empId}]}).sort({dateTime:-1}).limit(1);
+
+		 
 
 		console.log('chat', chat)
 		
