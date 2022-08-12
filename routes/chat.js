@@ -173,7 +173,7 @@ router.post('/single_chat/list', auth, async(req,res) => {
 		const empId = req.user.user_id;
 	    const another_emp_id = req.body.another_emp_id
 		 
-		const chat = await Chat.find({$or:[{deliveredTo: {$in: [myId]}, employeeId : another_emp_id}, {deliveredTo: {$in: [another_emp_id]}, employeeId : myId}]}).sort({dateTime:1}).populate('employeeId')
+		const chat = await Chat.find({$or:[{deliveredTo: {$in: [empId]}, employeeId : another_emp_id}, {deliveredTo: {$in: [another_emp_id]}, employeeId : empId}]}).sort({dateTime:1}).populate('employeeId')
 		var chatList = [];
 		chat.forEach( function(col){
 			var isMyMessage = 0;
