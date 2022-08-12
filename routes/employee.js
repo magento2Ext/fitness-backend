@@ -203,7 +203,8 @@ router.get('/list/:id', async(req,res) => {
 				"referCode":emp.referCode,
 				"organizationId": emp.organizationId,
 				"isVerified": e.isVerified,
-				"picture": emp.picture
+				"picture": emp.picture,
+				"reqId": e._id
 			}
 			userArray.push(dict);
 			count++;
@@ -646,7 +647,6 @@ router.put('/update/:id',async(req,res)=> {
 
 		if(req.body.isVerified) {
 			await Employee.updateOne({_id: req.body.id}, {$push: {userOrganizations: req.body.orgId}}); 
-			employee.userOrganizations = newOrgs;
 		}
 
 		organizationRequests.updateOne({_id: req.body.reqId}, {$set: {status: req.body.isVerified ? 1 : 2}});
