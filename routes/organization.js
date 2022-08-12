@@ -685,7 +685,7 @@ router.post("/acceptRequest", auth,  async(req, res) => {
 		result.employee = employee
 		var appData = null;
 
-		const organization = await Organization.findById(req.body.empId)
+		const organization = await Organization.findById(req.body.orgId)
 		result.organization = organization
 		var themecode = organization.themecode
 		var logo = organization.logo
