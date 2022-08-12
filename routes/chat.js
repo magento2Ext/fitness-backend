@@ -214,7 +214,8 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 		const empId = req.user.user_id;
  
 		Chat.find({$or:[{deliveredTo: {$in: [empId]}}, {employeeId : empId}]}, null, {sort: {'dateTime': -1}}, function(err, messages){
-
+   
+			console.log('messages', messages);
 			var data =[];
 			if(messages.length!=0){
 	
