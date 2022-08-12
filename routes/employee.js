@@ -643,10 +643,10 @@ router.put('/update/:id',async(req,res)=> {
 			isVerified: req.body.isVerified,
 		}
 
-        const employee = await Employee.updateOne({_id: req.body.id}, {$set: data}); 
+            await Employee.updateOne({_id: req.body.id}, {$set: data}); 
 
 		if(req.body.isVerified) {
-			await Employee.updateOne({_id: req.body.id}, {$push: {userOrganizations: req.body.orgId}}); 
+			await Employee.updateOne({_id: req.body.id}, {$set: {organizationId: req.body.orgId}},  {$push: {userOrganizations: req.body.orgId}}); 
 		}
 
 		organizationRequests.updateOne({_id: req.body.reqId}, {$set: {status: req.body.isVerified ? 1 : 2}});
