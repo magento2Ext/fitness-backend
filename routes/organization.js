@@ -641,22 +641,30 @@ router.post("/confirmCode", auth,  async(req, res) => {
 
 	 let codeData = await OrganizationCode.find(data);
 	 if(codeData.length!=0){
+	
 		 let data = {
 			orgId: req.body.orgId,
 			employeeId: empId,
 		 }
-		 let newOrgReq = new organizationRequests(data);
-		 let result = newOrgReq.save();
 
-		 if(result){
-			response = webResponse(202, true, "Code Matched")  
-			res.json(response);
-			return "";
-		 }else{
-			response = webResponse(200, false, "No Matched Code")  
-			res.json(response);
-			return "";
-		 }
+		  organizationRequests.deleteMany(data, () => {
+
+			let newOrgReq = new organizationRequests(data);
+			let result = newOrgReq.save();
+   
+			if(result){
+			   response = webResponse(202, true, "Code Matched")  
+			   res.json(response);
+			   return "";
+			}else{
+			   response = webResponse(200, false, "No Matched Code")  
+			   res.json(response);
+			   return "";
+			}
+
+		  });
+
+
 
 	 }else{
 		response = webResponse(200, false, "No Matched Code")  
