@@ -193,16 +193,16 @@ router.get('/list/:id', async(req,res) => {
 			let emp = await Employee.findOne({_id: e.employeeId});
 			let dict =     {
 				"_id": emp._id,
-				"firstName": emp._id,
-				"lastName": emp._id,
-				"email": emp._id,
-				"userName": emp._id,
-				"zipCode": emp._id,
-				"employeeType": emp._id,
-				"is_exclusive": emp._id,
-				"referCode":emp._id,
-				"organizationId": emp._id,
-				"isVerified": e.status,
+				"firstName": emp.firstName,
+				"lastName": emp.lastName,
+				"email": emp.email,
+				"userName": emp.userName,
+				"zipCode": emp.zipCode,
+				"employeeType": emp.employeeType,
+				"is_exclusive": emp.is_exclusive,
+				"referCode":emp.referCode,
+				"organizationId": emp.organizationId,
+				"isVerified": e.isVerified,
 				"picture": emp.picture
 			}
 			userArray.push(dict);
