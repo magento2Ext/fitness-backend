@@ -655,8 +655,8 @@ router.put('/update/:id',async(req,res)=> {
 
 		organizationRequests.updateOne({_id: req.body.reqId}, {$set: {status: req.body.isVerified ? 1 : 2}});
        
-		response = webResponse(200, true, 'Updated');
-	    res.send(response)  
+		response = webResponse(201, true, 'Updated')  
+		res.send(response)
 
     }catch(err){
 		console.log('err', err)
