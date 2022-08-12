@@ -256,7 +256,7 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 		// 	chatList.push(chatDetail);
 		// })
 		
-		response = webResponse(201, false, chat)  
+		response = webResponse(201, true, chat)  
 	    res.send(response)
 		return;
 	} catch (err) { 
