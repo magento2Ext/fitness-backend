@@ -243,7 +243,7 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 						   ":"+date.getSeconds(),
 						   message : key.message,
 						   _id : user._id,
-						   nodeId: nodeId
+						   nodeId: nodeId.node
 						   }  
 
 						   data.push(dist);      
