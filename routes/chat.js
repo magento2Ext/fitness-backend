@@ -212,9 +212,10 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 	try { 
 
 		const empId = req.user.user_id;
+		console.log('empId', empId)
 		const chat = await Chat.find({$or:[{deliveredTo: {$in: [empId]}, employeeId : empId}]}).sort({dateTime:1}).populate('employeeId', 'deliveredTo[0]')
 
-		console.log(chat)
+		console.log('chat', chat)
 		
 		// const empId = req.user.user_id;
 				 
