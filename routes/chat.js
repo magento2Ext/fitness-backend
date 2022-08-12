@@ -223,10 +223,11 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 	   
 				 for(let key of messages){
 	   
-				   var other_person_id =  key.deliveredTo[0] == empId ? String(key.employeeId)  : String(key.deliveredTo[0]);
-
+					var other_person_id =  key.deliveredTo[0] == empId ? String(key.employeeId)  : (key.deliveredTo[0]);
+			 
 				   if(ids.indexOf(other_person_id)== -1){
-				
+				   
+				   ids.push(other_person_id);
 				   console.log(ids);
 	               let nodeId = await UserChatNode.findOne( {'users':{'$all': [empId, other_person_id]}} )
 				   Employee.findOne({_id: other_person_id}, function(err, user){
