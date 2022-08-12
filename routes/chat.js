@@ -291,4 +291,97 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 
 
 
+router.post('/get_single_inboxes/list_new', auth, async(req,res) => {
+	try { 
+
+		const empId = req.user.user_id;
+		let orgList = empId.userOrganizations;
+	    let allEmployees = await Employee.find({userOrganizations: {$in: orgList}});
+
+		if(allEmployees.length > 0){
+			let allIds = [];
+			allEmployees.forEach( (key) => {
+				allIds.push(key._id)
+			})
+		}
+	    
+		
+		Chat.find({$or:[{$and: [{deliveredTo: {$in: [empId]}}, {employeeId: {$in: allIds}}]}, {$and: [{deliveredTo: {$in: allIds}}, {employeeId: {$in: [empId]}}]}]}, null, {sort: {'dateTime': -1}}, async function(err, messages){
+
+			var data =[];
+			if(messages.length!=0){
+	
+				var ids = [];
+				var i = 0;
+	   
+				 for(let key of messages){
+	   
+					var other_person_id =  key.deliveredTo[0] == empId ? String(key.employeeId)  : (key.deliveredTo[0]);
+			 
+				   if(ids.indexOf(other_person_id)== -1){
+				   
+				   ids.push(other_person_id);
+				   console.log(ids);
+	               let nodeId = await UserChatNode.findOne( {'users':{'$all': [empId, other_person_id]}} )
+				   Employee.findOne({_id: other_person_id}, function(err, user){
+					     let date = new Date(key.dateTime);
+						 var dist = {
+						   picture: user.picture,
+						   name : user.firstName[0].toUpperCase()+user.firstName.slice(1)+ ' '+user.lastName[0].toUpperCase()+user.lastName.slice(1),
+						   dateTime : date.getDate()+
+						   "-"+String(date.getMonth()+1).padStart(2, '0')+
+						   "-"+date.getFullYear()+
+						   " "+date.getHours()+
+						   ":"+date.getMinutes()+
+						   ":"+date.getSeconds(),
+						   message : key.message,
+						   _id : user._id,
+						   nodeId: nodeId !=null ? nodeId.node : ''
+						   }  
+
+						   data.push(dist);      
+						   i++;      
+						   if(i == messages.length){
+						
+								if(i == messages.length){
+									console.log('messages.length 222')
+								response = webResponse(202, true, data)  
+								res.send(response)
+								return;
+					         }
+						   }
+						       
+						 })
+	   
+					   }else{
+	      
+						i++;
+						if(i == messages.length){
+							console.log('messages.length 111')
+							response = webResponse(202, true, data)  
+							res.send(response)
+							return;
+						}
+					   }   
+	   
+					 }
+			
+	   
+			 }else{
+				response = webResponse(201, true, 'No chat')  
+				res.send(response)
+				return;
+			 }
+		 
+		  });
+
+	} catch (err) { 
+		response = webResponse(403, false, err)  
+	    res.send(response)
+		return;
+	}
+});
+
+
+
 module.exports = router
