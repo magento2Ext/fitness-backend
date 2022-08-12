@@ -214,8 +214,7 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 		const empId = req.user.user_id;
  
 		Chat.find({$or:[{deliveredTo: {$in: [empId]}}, {employeeId : empId}]}, null, {sort: {'dateTime': -1}}, function(err, messages){
-   
-			console.log('messages', messages);
+
 			var data =[];
 			if(messages.length!=0){
 	
@@ -231,7 +230,7 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 				   ids.push(other_person_id);
 	   
 				   Employee.findOne({_id: other_person_id}, function(err, user){
-	   
+					console.log('user', user);
 						 var dist = {
 						   picture: user.picture,
 						   name : user.firstName[0].toUpperCase()+user.firstName.slice(1)+ ' '+user.lastName[0].toUpperCase()+user.lastName.slice(1),
