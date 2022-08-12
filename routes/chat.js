@@ -215,7 +215,7 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 		const chat = await Chat.aggregate([
 			{ 
 				$match: {
-						$or: [{deliveredTo: {$in: [empId]}, employeeId : empId}]
+						$or: [{deliveredTo: {$in: [empId]}}, {employeeId : empId}]
 				}
 			}
 							  ]);
