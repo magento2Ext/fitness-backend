@@ -191,8 +191,21 @@ router.get('/list/:id', async(req,res) => {
 			data.forEach( async(e) => {
 
 			let emp = await Employee.findOne({_id: e.employeeId});
-			emp.requestStatus = e.status;
-			userArray.push(emp);
+			let dict =     {
+				"_id": emp._id,
+				"firstName": emp._id,
+				"lastName": emp._id,
+				"email": emp._id,
+				"userName": emp._id,
+				"zipCode": emp._id,
+				"employeeType": emp._id,
+				"is_exclusive": emp._id,
+				"referCode":emp._id,
+				"organizationId": emp._id,
+				"isVerified": e.status,
+				"picture": emp.picture
+			}
+			userArray.push(dict);
 			count++;
 			if(count === data.length){
 				res.json(userArray);
