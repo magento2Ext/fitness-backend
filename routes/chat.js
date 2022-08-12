@@ -213,7 +213,7 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 
 		const empId = req.user.user_id;
 		console.log('empId', empId)
-		const chat = await Chat.find().sort({dateTime:1})
+		const chat = await Chat.find({employeeId: empId}).sort({dateTime:1})
 
 		console.log('chat', chat)
 		
