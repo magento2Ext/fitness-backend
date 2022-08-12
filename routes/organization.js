@@ -673,4 +673,26 @@ router.post("/confirmCode", auth,  async(req, res) => {
 })
 
 
+router.post("/acceptRequest", auth,  async(req, res) => {
+
+	try{ 
+
+		if(req.body.status === 1) {
+			Employee.updateOne({_id: req.body.empId}, {$set: {isVerified: true}}, {$push: {userOrganizations: req.body.orgId}});
+		}
+		organizationRequests.updateOne({_id: req.body.reqId}, {$set: {status: status}});
+		response = webResponse(202, true, "Success");  
+		res.json(response);
+		return "";
+
+	} catch(err){ 
+		console.log(err)
+		response = webResponse(403, false, err)  
+		res.send(response)
+		return;
+	}
+
+})
+
+
  module.exports = router
