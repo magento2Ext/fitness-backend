@@ -296,8 +296,9 @@ router.post('/get_single_inboxes/list_new', auth, async(req,res) => {
 	try { 
 
 		const empId = req.user.user_id;
-		let orgList = empId.userOrganizations;
-	    let allEmployees = await Employee.find({userOrganizations: {$in: orgList}});
+		const employeeDetails = await Employee.findById(empId)
+		let orgId = employeeDetails.organizationId;
+	    let allEmployees = await Employee.find({userOrganizations: {$in: [orgId]}});
 		let allIds = [];
 		let stringTypeAllIds = [];
 		if(allEmployees.length > 0){
@@ -309,8 +310,20 @@ router.post('/get_single_inboxes/list_new', auth, async(req,res) => {
 	    
 		console.log(allIds);
 		console.log(stringTypeAllIds);
+		let query = {};
+		if(allIds.length != 0 ){
+			query = {
+				$or:[
+					{$and: [{deliveredTo: {$in: [empId]}}, {employeeId: {$in: allIds}}]},
+					{$and: [{deliveredTo: {$in: stringTypeAllIds}}, {employeeId: {$in: [empId]}}]}
+				]
+			}
+		}else{
+			query = {$or:[{deliveredTo: {$in: [empId]}}, {employeeId : empId}]}
+		}
+	
 		
-		Chat.find({$or:[{$and: [{deliveredTo: {$in: [empId]}}, {employeeId: {$in: allIds}}]}, {$and: [{deliveredTo: {$in: stringTypeAllIds}}, {employeeId: {$in: [empId]}}]}]}, null, {sort: {'dateTime': -1}}, async function(err, messages){
+		Chat.find(query, null, {sort: {'dateTime': -1}}, async function(err, messages){
 
 			var data =[];
 			if(messages.length!=0){
