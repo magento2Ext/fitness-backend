@@ -633,17 +633,18 @@ router.post('/verify',async(req,res)=> {
 router.put('/update/:id',async(req,res)=> {
 	 try{
         const employee = await Employee.findById(req.body.id) 
-		
 		employee.firstName = req.body.firstName,
         employee.lastName = req.body.lastName,
         employee.email = req.body.email,
         employee.zipCode = req.body.zipCode,
         employee.is_exclusive = req.body.is_exclusive,
         employee.isVerified = req.body.isVerified
-		// let orgs = employee.userOrganizations
-		// let newOrgs = orgs.push(req.body.orgId);
-		// employee.userOrganizations = newOrgs;
-        const a1 = await employee.save()
+		let orgs = employee.userOrganizations
+		let newOrgs = orgs.push(req.body.orgId);
+        const a1 = await employee.save();
+		if(req.body.isVerified) employee.userOrganizations = newOrgs;
+
+		organizationRequests.updateOne({_id: req.body.reqId}, {$set: {status: req.body.isVerified ? 1 : 2}});
         response = webResponse(202, true, a1)  
 	    res.send(response)   
     }catch(err){
