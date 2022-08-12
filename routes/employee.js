@@ -241,8 +241,9 @@ router.post('/forget/password', async(req,res) => {
 
 router.post('/reset/password', async(req,res) => {
     try{
-
-        const employee = await Employee.updateOne({ email: req.body.email }, {$set: {password: req.body.password}}, {new: true});
+        
+		let newPassword = employee.password = await bcrypt.hashSync(req.body.password, 12)
+        const employee = await Employee.updateOne({ email: req.body.email }, {$set: {password: newPassword}}, {new: true});
 		if(employee){
 			response = webResponse(200, true, "Password Updated")  
 			res.send(response)
@@ -250,7 +251,6 @@ router.post('/reset/password', async(req,res) => {
 			response = webResponse(200, false, "Password Not Updated")  
 			res.send(response)
 		}
-       
     }catch(err){
         res.send('Error ' + err)
     }
