@@ -205,7 +205,66 @@ router.post('/single_chat/list', auth, async(req,res) => {
 	    res.send(response)
 		return;
 	}
-})
+});
+
+
+router.post('/get_single_inboxes/list', auth, async(req,res) => {
+	try { 
+
+		const empId = req.user.user_id;
+		const chat = await Chat.aggregate([
+			{ 
+				$match: {
+							  $or: [{deliveredTo: {$in: [empId]}, employeeId : empId}]
+				}
+			},
+			{
+			  $addFields: {
+				duration: {
+					$divide: 
+					[{
+						$subtract: ["$$NOW", "$createdAt"]}, 36000]
+				}
+			  }
+			},
+			{$sort: {duration: -1}}
+							  ]);
+		
+		// const empId = req.user.user_id;
+				 
+		// const chat = await Chat.find({$or:[{deliveredTo: {$in: [empId]}, employeeId : another_emp_id}]}).sort({dateTime:1}).populate('employeeId', 'deliveredTo[0]')
+		// var chatList = [];
+		// chat.forEach( function(col){
+		// 	var isMyMessage = 0;
+		// 	if(empId == col.employeeId._id) {
+		// 		isMyMessage = 1;
+		// 	}
+			
+		// 	var asiaDate =  convertTZ(new Date(col.dateTime), 'Asia/Kolkata');
+		// 	chatDetail = {
+		// 		'id' :  col._id,
+		// 		"dateTime": dateLib.format(new Date(asiaDate),'YYYY-MM-DD HH:mm:ss'),
+		// 		"dateTimeSaved": col.dateTime,
+		// 		"profile_picture": col.employeeId.picture,
+		// 		"user_name": col.employeeId.firstName + " " +col.employeeId.lastName,
+		// 		"userId" : empId,
+		// 		"message": col.message,
+		// 		"appTempId": col.appTempId,
+		// 		"isMyMessage":isMyMessage,
+				
+		// 	}
+		// 	chatList.push(chatDetail);
+		// })
+		
+		response = webResponse(201, false, chat)  
+	    res.send(response)
+		return;
+	} catch (err) { 
+		response = webResponse(403, false, err)  
+	    res.send(response)
+		return;
+	}
+});
 
 
 
