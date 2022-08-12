@@ -651,9 +651,10 @@ router.post("/confirmCode", auth,  async(req, res) => {
 
 			let newOrgReq = new organizationRequests(data);
 			let result = newOrgReq.save();
+			result.message = "Code Matched";
    
 			if(result){
-			   response = webResponse(202, true, "Code Matched")  
+			   response = webResponse(202, true, result)  
 			   res.json(response);
 			   return "";
 			}else{
