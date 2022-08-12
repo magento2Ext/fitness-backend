@@ -643,6 +643,10 @@ router.put('/update/:id',async(req,res)=> {
 			isVerified: req.body.isVerified,
 		}
 
+		if(req.body.isVerified) {
+			data['organizationId'] = req.body.orgId;
+		}
+
             await Employee.updateOne({_id: req.body.id}, {$set: data}, {new: true}); 
 
 		if(req.body.isVerified) {
@@ -651,7 +655,7 @@ router.put('/update/:id',async(req,res)=> {
 
 		organizationRequests.updateOne({_id: req.body.reqId}, {$set: {status: req.body.isVerified ? 1 : 2}});
        
-		let response = webResponse(202, true, 'Updated')  
+		response = webResponse(200, true, 'Updated');
 	    res.send(response)  
 
     }catch(err){

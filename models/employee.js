@@ -16,31 +16,24 @@ const employeeSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true
-		//unique: true
     },
     userName: {
         type: String,
         required: true
-		//unique: true
     },
     password: {
         type: String,
         required: true,
         default: null
-    }/* ,
-    zipCode: {
-        type: String,
-        default: null
-    } */,
+    },
     otp: {
         type: String,
         required: true,
         default: null
-    }/* ,
+    },
     employeeType: {
         type: String,
-        required: true,
-        default: null
+        default: 'Individual',
     },
     is_exclusive: {
         type: Boolean,
@@ -48,9 +41,8 @@ const employeeSchema = new mongoose.Schema({
     },
     referCode: {
         type: String,
-		required: true,
         default: false
-    } */,
+    },
     organizationId: {
         type: String,
         default: false
