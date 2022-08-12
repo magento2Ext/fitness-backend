@@ -5,6 +5,7 @@
  const Employee = require('../models/employee')
  const Module = require('../models/module')
  const OrganizationCode = require('../models/orgCode')
+ const Theme = require('../models/theme_setting')
  const organizationRequests = require('../models/orgRequests')
  const md5 = require('md5');
  const nodemailer = require('nodemailer');
