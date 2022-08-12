@@ -241,12 +241,16 @@ router.post('/forget/password', async(req,res) => {
 
 router.post('/reset/password', async(req,res) => {
     try{
-        const employee = await Employee.findOne({ email: req.body.email });
-		
-		employee.password = req.body.password
-        const a1 = await employee.save()
-        response = webResponse(200, true, "Password Updated")  
-	    res.send(response)
+
+        const employee = await Employee.updateOne({ email: req.body.email }, {$set: {password: req.body.password}}, {new: true});
+		if(employee){
+			response = webResponse(200, true, "Password Updated")  
+			res.send(response)
+		}else{
+			response = webResponse(200, false, "Password Not Updated")  
+			res.send(response)
+		}
+       
     }catch(err){
         res.send('Error ' + err)
     }
