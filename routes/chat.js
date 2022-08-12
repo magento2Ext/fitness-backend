@@ -209,7 +209,7 @@ router.post('/single_chat/list', auth, async(req,res) => {
 });
 
 
-router.post('/get_single_inboxes/list', auth, async(req,res) => {
+router.post('/get_single_inboxes/list_old', auth, async(req,res) => {
 	try { 
 
 		const empId = req.user.user_id;
@@ -292,7 +292,7 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 
 
 
-router.post('/get_single_inboxes/list_new', auth, async(req,res) => {
+router.post('/get_single_inboxes/list', auth, async(req,res) => {
 	try { 
 
 		const empId = req.user.user_id;
