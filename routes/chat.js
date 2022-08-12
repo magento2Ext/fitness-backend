@@ -376,6 +376,7 @@ router.post('/get_single_inboxes/list_new', auth, async(req,res) => {
 		  });
 
 	} catch (err) { 
+		console.log('err', list_new)
 		response = webResponse(403, false, err)  
 	    res.send(response)
 		return;
