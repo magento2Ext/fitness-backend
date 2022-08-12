@@ -305,6 +305,7 @@ router.post('/get_single_inboxes/list_new', auth, async(req,res) => {
 			})
 		}
 	    
+		console.log(allIds);
 		
 		Chat.find({$or:[{$and: [{deliveredTo: {$in: [empId]}}, {employeeId: {$in: allIds}}]}, {$and: [{deliveredTo: {$in: allIds}}, {employeeId: {$in: [empId]}}]}]}, null, {sort: {'dateTime': -1}}, async function(err, messages){
 
