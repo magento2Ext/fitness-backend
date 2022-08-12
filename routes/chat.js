@@ -229,6 +229,9 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 			},
 			{$sort: {duration: -1}}
 							  ]);
+
+
+							  console.log(chat)
 		
 		// const empId = req.user.user_id;
 				 
