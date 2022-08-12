@@ -312,7 +312,7 @@ router.post('/get_single_inboxes/list_new', auth, async(req,res) => {
 		console.log(allIds);
 		console.log(stringTypeAllIds);
 		let query = {};
-		if(allIds.length != 0 ){
+		if(orgId){
 			query = {
 				$or:[
 					{$and: [{deliveredTo: {$in: [empId]}}, {employeeId: {$in: allIds}}]},
