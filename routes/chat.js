@@ -299,7 +299,14 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 		console.log('empId', empId);
 		const employeeDetails = await Employee.findById(empId)
 		let orgId = employeeDetails.organizationId;
-	    let allEmployees = await Employee.find({userOrganizations: {$in: [orgId]}});
+		let allEmployees = {}
+		if(orgId){
+			allEmployees  = await Employee.find({userOrganizations: {$in: [orgId]}});
+		}else{
+			allEmployees  = await Employee.find({organizationId: false});
+		}
+
+	
 		let allIds = [];
 		let stringTypeAllIds = [];
 		if(allEmployees.length > 0){
@@ -312,16 +319,14 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 		console.log(allIds);
 		console.log(stringTypeAllIds);
 		let query = {};
-		if(orgId){
+ 
 			query = {
 				$or:[
 					{$and: [{deliveredTo: {$in: [empId]}}, {employeeId: {$in: allIds}}]},
 					{$and: [{deliveredTo: {$in: stringTypeAllIds}}, {employeeId: {$in: [empId]}}]}
 				]
 			}
-		}else{
-			query = {$or:[{deliveredTo: {$in: [empId]}}, {employeeId : empId}]}
-		}
+ 
 	
 		
 		Chat.find(query, null, {sort: {'dateTime': -1}}, async function(err, messages){
