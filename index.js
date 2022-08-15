@@ -133,24 +133,7 @@ app.post("/weight/list", auth, async(req, res) => {
 app.post("/weight", auth, async(req, res) => { 
   try{ 
 
-
-	////
-
-	let monthlyData = await Weight.find({
-		$where: () =>  { 
-		  var currentDate = new Date(); 
-		  var lastMonthDate = new Date(currentDate.setMonth(currentDate.getMonth() - 1)); 
-	       console.log(this.date.getMonth(), lastMonthDate.getMonth())
-		  return this.date.getFullYear() === lastMonthDate.getFullYear() 
-			&& this.date.getMonth() === lastMonthDate.getMonth(); 
-		}
-	  })
-
-	  response = webResponse(202, true, monthlyData)  
-	  res.send(response);
-
-	  return;
-	////
+c
 		var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 		
 		var oneWeekAgo = new Date();
@@ -158,6 +141,8 @@ app.post("/weight", auth, async(req, res) => {
 		
 		var oneMonthAgo = new Date();
 		oneMonthAgo.setDate(oneMonthAgo.getDate() - 30);
+
+		console.log('oneMonthAgo', oneMonthAgo);
 		
 		var date = new Date();
 		
