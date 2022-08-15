@@ -133,7 +133,6 @@ app.post("/weight/list", auth, async(req, res) => {
 app.post("/weight", auth, async(req, res) => { 
   try{ 
 
-c
 		var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 		
 		var oneWeekAgo = new Date();
