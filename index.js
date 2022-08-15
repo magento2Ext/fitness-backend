@@ -157,8 +157,7 @@ app.post("/weight", auth, async(req, res) => {
 			}
 		}).sort({date:-1});
 		
-		console.log('req.user.user_id', req.user.user_id)
-		console.log('oneMonthAgo', oneMonthAgo)
+ 
 		const weightLastMonth = await Weight.find({ employeeId: req.user.user_id,
 			date: {
 				$gte: dateLib.format(oneMonthAgo,'YYYY-MM-DD')
@@ -230,7 +229,78 @@ app.post("/weight", auth, async(req, res) => {
 				weightFinalArray.push(weightData);
 			}
 		}
-		
+
+
+
+
+		/////
+
+		let monthlyArray = [];		
+		let i = 0;
+        
+		weightLastMonth.forEach(col =>  {
+			console.log(dateLib.format(col.date,'YYYY-MM-DD'))
+			console.log(dateLib.format(date,'YYYY-MM-DD'))
+
+		})
+
+		// weightLastMonth.forEach(col =>  {
+		 			  
+		// 	if(i == 0) {
+		// 		weight = {
+		// 			'date' : dateLib.format(col.date,'YYYY-MM-DD'),
+		// 			'weight' : col.weight,
+		// 			'day' :  days[col.date.getDay()],
+		// 			'difference':0,
+		// 			'weightLine':''
+					
+		// 		}
+		// 	} else{
+		// 		var difference = col.weight - weightList[i-1].weight;
+		// 		if(difference > 0) {
+		// 			var line = difference+" kilogram over weight."
+		// 		} else {
+		// 			var line = difference+" kilogram under weight."
+		// 		}
+		// 	    weight = {
+		// 			'date' :  dateLib.format(col.date,'YYYY-MM-DD'),
+		// 			'weight' : col.weight,
+		// 			'day' :  days[col.date.getDay()],
+		// 			'difference': difference,
+		// 			'weightLine':line,
+		// 		}
+		// 	}
+		// 	weightArray.push(weight);
+		// 	i++;		
+		// });
+		// var weightFinalArray = [];
+			
+		// for(i=oneWeekAgo; i<=date;  i.setDate(i.getDate() + 1)) { 
+		// 	var found = 0; 
+		// 	for( var j = 0, len = weightArray.length; j < len; j++ ) { 
+		// 		var weightData = '';
+		// 	    if( weightArray[j]['day'] == days[i.getDay()]) {
+		// 			found = 1;
+		// 			weightData = weightArray[j];
+		// 			break;
+		// 		} 
+		// 	}
+		// 	if(found == 0) {
+		// 		weight = {
+		// 			'date' : dateLib.format(i,'YYYY-MM-DD'),
+		// 			'weight' : "0",
+		// 			'day' : days[i.getDay()],
+		// 			'difference':0,
+		// 			'weightLine':''
+		// 		}
+		// 		weightFinalArray.push(weight);
+		// 	}   else{
+		// 		weightFinalArray.push(weightData);
+		// 	}
+		// }
+
+
+		/////
 		
 		
 		var data = {}; 
