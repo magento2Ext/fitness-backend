@@ -132,8 +132,27 @@ app.post("/weight/list", auth, async(req, res) => {
 
 app.post("/weight", auth, async(req, res) => { 
   try{ 
-		var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
+
+	////
+
+	let monthlyData = await Weight.find({
+		$where: function() { 
+		  var currentDate = new Date(); 
+		  var lastMonthDate = new Date(currentDate.setMonth(currentDate.getMonth() - 1)); 
+	  
+		  return this.date.getFullYear() === lastMonthDate.getFullYear() 
+			&& this.date.getMonth() === lastMonthDate.getMonth(); 
+		}
+	  })
+
+	  response = webResponse(202, true, monthlyData)  
+	  res.send(response);
+
+	  return;
+	////
+		var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+		
 		var oneWeekAgo = new Date();
 		oneWeekAgo.setDate(oneWeekAgo.getDate() - 6);
 		
@@ -263,7 +282,9 @@ app.post("/weight", auth, async(req, res) => {
 		return;
     }
   
-}); 
+}
+
+); 
 
 const otherApiRouter = require('./routes/otherapi')
 app.use('/',otherApiRouter) 

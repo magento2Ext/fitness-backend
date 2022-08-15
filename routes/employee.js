@@ -634,8 +634,7 @@ router.post('/verify',async(req,res)=> {
 router.put('/update/:id',async(req,res)=> {
 
 	 try{
-
-
+		let orgData = await Organization.find({_id: req.body.orgId});
 		console.log(req.body.isVerified, typeof(req.body.isVerified))
 		let data = {
 			firstName: req.body.firstName,
@@ -648,12 +647,16 @@ router.put('/update/:id',async(req,res)=> {
 
 		if(req.body.isVerified == "true") {
 			data['organizationId'] = req.body.orgId;
-		}
 
+		}
             await Employee.updateOne({_id: req.body.id}, {$set: data}, {new: true}); 
 
 		if(req.body.isVerified == "true") {
 			await Employee.updateOne({_id: req.body.id}, {$set: {organizationId: req.body.orgId}, $push: {userOrganizations: req.body.orgId}}, {new: true}); 
+			employee.otp = otp;
+			let emailContent = "Congratulations! "+ orgData.organizationName + " has approved you as its member";
+			let subject = 'Organization approval'
+			sendEmail(req.body.email, subject, emailContent)
 		}
 
 		organizationRequests.updateOne({_id: req.body.reqId}, {$set: {status: req.body.isVerified == "false" ? 2 : 1}});
