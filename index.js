@@ -137,7 +137,7 @@ app.post("/weight", auth, async(req, res) => {
 	////
 
 	let monthlyData = await Weight.find({
-		$where: function() { 
+		$where: () =>  { 
 		  var currentDate = new Date(); 
 		  var lastMonthDate = new Date(currentDate.setMonth(currentDate.getMonth() - 1)); 
 	       console.log(this.date.getMonth(), lastMonthDate.getMonth())
