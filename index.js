@@ -164,8 +164,7 @@ app.post("/weight", auth, async(req, res) => {
 		}).sort({date:-1});
 
 		console.log('weightLastMonth', weightLastMonth);
-		
-		
+	
 		const weightList = await Weight.find({  employeeId: req.user.user_id,
 			date: {
 				$gte: dateLib.format(oneWeekAgo,'YYYY-MM-DD'),
@@ -238,7 +237,7 @@ app.post("/weight", auth, async(req, res) => {
 		data.recentWeight = 0
 		data.weightLastDay = 0
 		data.weightLastWeek = 0
-		data.weightLastMonth = 0
+		data.weightLastMonthArray = weightLastMonth
 		
 		if(recentWeight != null) {
 			data.recentWeight = recentWeight.weight
