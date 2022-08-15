@@ -140,7 +140,7 @@ app.post("/weight", auth, async(req, res) => {
 		$where: function() { 
 		  var currentDate = new Date(); 
 		  var lastMonthDate = new Date(currentDate.setMonth(currentDate.getMonth() - 1)); 
-	  
+	       console.log(this.date.getMonth(), lastMonthDate.getMonth())
 		  return this.date.getFullYear() === lastMonthDate.getFullYear() 
 			&& this.date.getMonth() === lastMonthDate.getMonth(); 
 		}
