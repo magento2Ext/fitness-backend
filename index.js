@@ -235,8 +235,7 @@ app.post("/weight", auth, async(req, res) => {
 
 		/////
 
-		let monthlyArray = [];		
-		let i = 0;
+ 
         
 		weightLastMonth.forEach(col =>  {
 			console.log(dateLib.format(col.date,'YYYY-MM-DD'))
