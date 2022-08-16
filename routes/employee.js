@@ -634,6 +634,8 @@ router.post('/verify',async(req,res)=> {
 router.put('/update/:id',async(req,res)=> {
 
 	 try{
+        console.log(req.body.isVerified, typeof(req.body.isVerified));
+		return;
 		let orgData = await Organization.find({_id: req.body.orgId});
 		console.log(req.body.isVerified, typeof(req.body.isVerified))
 		let data = {

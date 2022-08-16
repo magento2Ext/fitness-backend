@@ -626,16 +626,16 @@ router.post("/confirmCode", auth,  async(req, res) => {
 
 	try{ 
 
-	var empId = req.user.user_id;
-	const employee = await Employee.findById(empId)
-	if(!employee){
-		response = webResponse(404, false, "Employee not found.")  
-		res.send(response)
-		return;
-	}
+		var empId = req.user.user_id;
+		const employee = await Employee.findById(empId)
+		if(!employee){
+			response = webResponse(404, false, "Employee not found.")  
+			res.send(response)
+			return;
+		}
 
-	 let codeData = await Organization.findOne({referCode: req.body.code});
-	 if(codeData != null){
+		let codeData = await Organization.findOne({referCode: req.body.code});
+		if(codeData != null){
 	
 		 let data = {
 			orgId: req.body.orgId,
