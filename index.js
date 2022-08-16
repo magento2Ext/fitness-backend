@@ -426,15 +426,12 @@ app.post("/analytics", auth, async(req, res) => {
 				  weightFinalArray.push(weightData);
 			  }
 		  }
-
+		  let weightFinalArray1 = [];
 		  getMonthly();
-  
-  
-  
   
 		  /////
 
-		  let weightFinalArray1 = [];
+		 
 		  function getMonthly(){
 
 			var weightArray1 = [];		
