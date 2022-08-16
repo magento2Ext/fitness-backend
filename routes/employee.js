@@ -666,9 +666,24 @@ router.put('/update/:id',async(req,res)=> {
 		let itsResult = await organizationRequests.updateOne({_id: req.body.reqId}, {$set: {status: req.body.isVerified ? '1' : '2'}});
 		console.log('itsResult', itsResult);
        
-		const a1 = await Employee.findOne({_id: req.body.id});
-		a1['isVerified'] = req.body.isVerified ? '1' : '2';
-        response = webResponse(202, true, a1);
+		const emp = await Employee.findOne({_id: req.body.id});
+		let dict =     {
+			"_id": emp._id,
+			"firstName": emp.firstName,
+			"lastName": emp.lastName,
+			"email": emp.email,
+			"userName": emp.userName,
+			"zipCode": emp.zipCode,
+			"employeeType": emp.employeeType,
+			"is_exclusive": emp.is_exclusive,
+			"referCode":emp.referCode,
+			"organizationId": emp.organizationId,
+			"isVerified": req.body.isVerified ? '1' : '2',
+			"picture": emp.picture,
+			"reqId": req.body.orgId
+		}
+ 
+        response = webResponse(202, true, dict);
 	    res.send(response);
 
     }catch(err){
