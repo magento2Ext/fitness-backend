@@ -426,6 +426,8 @@ app.post("/analytics", auth, async(req, res) => {
 				  weightFinalArray.push(weightData);
 			  }
 		  }
+
+		  getMonthly();
   
   
   
