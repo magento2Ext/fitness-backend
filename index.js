@@ -235,12 +235,13 @@ app.post("/weight", auth, async(req, res) => {
 
 		/////
 
- 
+       for(let i = 0; i <=30; i++){
+		   
+	   }
         
 		weightLastMonth.forEach(col =>  {
 			console.log(dateLib.format(col.date,'YYYY-MM-DD'))
 			console.log(dateLib.format(date,'YYYY-MM-DD'))
-
 		})
 
 		// weightLastMonth.forEach(col =>  {
@@ -339,6 +340,183 @@ app.post("/weight", auth, async(req, res) => {
 }
 
 ); 
+
+
+app.post("/analytics", auth, async(req, res) => { 
+	try{ 
+  
+		  var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+		  
+		  var oneWeekAgo = new Date();
+		  oneWeekAgo.setDate(oneWeekAgo.getDate() - 6);
+		  
+		  var oneMonthAgo = new Date();
+		  oneMonthAgo.setDate(oneMonthAgo.getDate() - 30);
+  
+		  var date = new Date();
+ 
+   
+		  const weightLastMonth = await Weight.find({ employeeId: req.user.user_id,
+			  date: {
+				  $gte: dateLib.format(oneMonthAgo,'YYYY-MM-DD')
+			  }
+		  }).sort({date:-1});
+  
+	  
+		  const weightList = await Weight.find({  employeeId: req.user.user_id,
+			  date: {
+				  $gte: dateLib.format(oneWeekAgo,'YYYY-MM-DD'),
+				  $lte: dateLib.format(date,'YYYY-MM-DD')
+			  }
+		  }).sort({date:1})
+		  
+		  var weightArray = [];		
+		  var i=0;
+		  weightList.forEach(function(col) {
+			  // Do something with each collection.				  
+			  if(i == 0) {
+				  weight = {
+					  'date' : dateLib.format(col.date,'YYYY-MM-DD'),
+					  'weight' : col.weight,
+					  'day' :  days[col.date.getDay()],
+					  'difference':0,
+					  'weightLine':''
+					  
+				  }
+			  } else{
+				  var difference = col.weight - weightList[i-1].weight;
+				  if(difference > 0) {
+					  var line = difference+" kilogram over weight."
+				  } else {
+					  var line = difference+" kilogram under weight."
+				  }
+				  weight = {
+					  'date' :  dateLib.format(col.date,'YYYY-MM-DD'),
+					  'weight' : col.weight,
+					  'day' :  days[col.date.getDay()],
+					  'difference': difference,
+					  'weightLine':line,
+				  }
+			  }
+			  weightArray.push(weight);
+			  i++;		
+		  });
+		  var weightFinalArray = [];
+			  
+		  for(i=oneWeekAgo; i<=date;  i.setDate(i.getDate() + 1)) { 
+			  var found = 0; 
+			  for( var j = 0, len = weightArray.length; j < len; j++ ) { 
+				  var weightData = '';
+				  if( weightArray[j]['day'] == days[i.getDay()]) {
+					  found = 1;
+					  weightData = weightArray[j];
+					  break;
+				  } 
+			  }
+			  if(found == 0) {
+				  weight = {
+					  'date' : dateLib.format(i,'YYYY-MM-DD'),
+					  'weight' : "0",
+					  'day' : days[i.getDay()],
+					  'difference':0,
+					  'weightLine':''
+				  }
+				  weightFinalArray.push(weight);
+			  }   else{
+				  weightFinalArray.push(weightData);
+			  }
+		  }
+  
+  
+  
+  
+		  /////
+
+
+		  function getMonthly(){
+
+			var weightArray1 = [];		
+			var i = 0;
+
+			weightLastMonth.forEach(col =>  {
+						 
+				if(i == 0) {
+					weight = {
+						'date' : dateLib.format(col.date,'YYYY-MM-DD'),
+						'weight' : col.weight,
+						'day' :  days[col.date.getDay()],
+						'difference':0,
+						'weightLine':''
+					}
+				} else{
+					var difference = col.weight - weightList[i-1].weight;
+					if(difference > 0) {
+						var line = difference+" kilogram over weight."
+					} else {
+						var line = difference+" kilogram under weight."
+					}
+					weight = {
+						'date' :  dateLib.format(col.date,'YYYY-MM-DD'),
+						'weight' : col.weight,
+						'day' :  days[col.date.getDay()],
+						'difference': difference,
+						'weightLine':line,
+					}
+				}
+				weightArray1.push(weight);
+				i++;		
+			});
+
+			var weightFinalArray1 = [];
+				
+			for(i=oneMonthAgo; i<=date;  i.setDate(i.getDate() + 1)) { 
+				var found = 0; 
+				for( var j = 0, len = weightArray1.length; j < len; j++ ) { 
+					var weightData = '';
+					if( weightArray1[j]['day'] == days[i.getDay()]) {
+						found = 1;
+						weightData = weightArray1[j];
+						break;
+					} 
+				}
+				if(found == 0) {
+					weight = {
+						'date' : dateLib.format(i,'YYYY-MM-DD'),
+						'weight' : "0",
+						'day' : days[i.getDay()],
+						'difference':0,
+						'weightLine':''
+					}
+					weightFinalArray1.push(weight);
+				}   else{
+					weightFinalArray1.push(weightData);
+				}
+			}
+
+		  }
+
+
+  
+  
+		  /////
+		  
+		  
+		  var data = {}; 
+		  data.weightWeekly = weightFinalArray
+		  data.weightMonthly = weightFinalArray1
+ 
+		  response = webResponse(202, true, data)  
+		  res.send(response);
+		  return;
+	  } catch(err){   
+		  response = webResponse(403, false, err)  
+		  res.send(response)
+		  return;
+	  }
+	
+  }
+  
+  ); 
 
 const otherApiRouter = require('./routes/otherapi')
 app.use('/',otherApiRouter) 
