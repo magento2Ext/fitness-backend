@@ -663,11 +663,12 @@ router.put('/update/:id',async(req,res)=> {
 			console.log('emailRes', emailRes);
 		}
 
-		organizationRequests.updateOne({_id: req.body.reqId}, {$set: {status: req.body.isVerified ? '1' : '2'}});
+		let itsResult = await organizationRequests.updateOne({_id: req.body.reqId}, {$set: {status: req.body.isVerified ? '1' : '2'}});
+		console.log('itsResult', itsResult);
        
-		const a1 = await Employee.findOne({_id: req.body.id})
-        response = webResponse(202, true, a1)  
-	    res.send(response)   
+		const a1 = await Employee.findOne({_id: req.body.id});
+        response = webResponse(202, true, a1)  ;
+	    res.send(response);
 
     }catch(err){
 		console.log('err', err)
