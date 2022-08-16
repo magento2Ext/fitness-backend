@@ -505,7 +505,7 @@ app.post("/analytics", auth, async(req, res) => {
 			startDate.setDate(startDate.getDate() - 29);
 
 			var startWeeklyDate = new Date();
-			startWeeklyDate.setDate(startWeeklyDate.getDate() - 29);
+			startWeeklyDate.setDate(startWeeklyDate.getDate() - 6);
 			
 			var emptStepTarget = "0";
 			var target = false;
@@ -571,6 +571,7 @@ app.post("/analytics", auth, async(req, res) => {
 					if(found == 0) {
 						step = {
 							'date' : dateLib.format(i,'YYYY-MM-DD'),
+							'day': days[i.getDay()],
 							'steps' : "0",
 							'km' : "0",
 							'calories':"0",
@@ -604,6 +605,7 @@ app.post("/analytics", auth, async(req, res) => {
 						if(found == 0) {
 							step = {
 								'date' : dateLib.format(i,'YYYY-MM-DD'),
+								'day': days[i.getDay()],
 								'steps' : "0",
 								'km' : "0",
 								'calories':"0",
