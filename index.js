@@ -503,6 +503,9 @@ app.post("/analytics", auth, async(req, res) => {
 	
 			var startDate = new Date();
 			startDate.setDate(startDate.getDate() - 29);
+
+			var startWeeklyDate = new Date();
+			startWeeklyDate.setDate(startWeeklyDate.getDate() - 29);
 			
 			var emptStepTarget = "0";
 			var target = false;
@@ -513,6 +516,13 @@ app.post("/analytics", auth, async(req, res) => {
 						$lte: dateLib.format(endDate,'YYYY-MM-DD')
 					}
 				}).sort({date:1})
+
+			const stepTrackerListWeekly = await StepTracker.find({  employeeId: req.user.user_id,
+				date: {
+					$gte: dateLib.format(startDate,'YYYY-MM-DD'),
+					$lte: dateLib.format(startWeeklyDate,'YYYY-MM-DD')
+				}
+			}).sort({date:1})
 				
 			var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
 			if(stepTarget) {
@@ -545,7 +555,7 @@ app.post("/analytics", auth, async(req, res) => {
 				}
 			);
 			
-			var stepFinalArray = [];
+			    var stepFinalArray = [];
 				var steps = 0;	
 				var noOfFound = 0;
 				for(i=startDate; i<=endDate;  i.setDate(i.getDate() + 1)) { 
@@ -573,6 +583,40 @@ app.post("/analytics", auth, async(req, res) => {
 						stepFinalArray.push(stepTrackerData);
 					}
 				}
+
+				let stepFinalArrayWeekly = [];
+				getMonthlySteps();
+
+				function getMonthlySteps(){
+					
+					var steps = 0;	
+					var noOfFound = 0;
+					for(i=startWeeklyDate; i<=endDate;  i.setDate(i.getDate() + 1)) { 
+						var found = 0; 
+						for( var j = 0, len = stepTrackerList.length; j < len; j++ ) { 
+						   var stepTrackerData = '';
+							if( stepTrackerList[j]['date'] == dateLib.format(i,'YYYY-MM-DD')) {
+								found = 1;
+								stepTrackerData = stepTrackerList[j];
+								break;
+							} 
+						}
+						if(found == 0) {
+							step = {
+								'date' : dateLib.format(i,'YYYY-MM-DD'),
+								'steps' : "0",
+								'km' : "0",
+								'calories':"0",
+								'duration':'00:00:00'
+							}
+							stepFinalArrayWeekly.push(step);
+						}   else{
+							noOfFound = Number(noOfFound)+ 1
+							steps = Number(stepTrackerData.steps) + Number(steps)
+							stepFinalArrayWeekly.push(stepTrackerData);
+						}
+					}
+				}
 				
 				
 				var avg = steps/noOfFound;
@@ -582,6 +626,7 @@ app.post("/analytics", auth, async(req, res) => {
 				stepsData.step_target = emptStepTarget
 				stepsData.target = target
 				stepsData.activity = stepFinalArray
+				stepsData.weekly = stepFinalArrayWeekly
 				stepsData.best_streak = "1000"
 				stepsData.avg_pace = "100"
 
