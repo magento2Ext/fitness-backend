@@ -494,6 +494,8 @@ app.post("/analytics", auth, async(req, res) => {
 
 		  }
 
+		  steps();
+
 
 		  function steps(){
 			var endDate = new Date(); 
