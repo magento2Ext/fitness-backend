@@ -598,8 +598,14 @@ app.post("/analytics", auth, async(req, res) => {
 						   var stepTrackerData = '';
 							if( stepTrackerListWeekly[j]['date'] == dateLib.format(i,'YYYY-MM-DD')) {
 								found = 1;
-								console.log('stepTrackerListWeekly', stepTrackerListWeekly);
-								stepTrackerData = stepTrackerListWeekly[j];
+								stepTrackerData  = {
+									'date' : stepTrackerListWeekly[j].date,
+									'day': days[i.getDay()],
+									'steps' : stepTrackerListWeekly[j].steps,
+									'km' : stepTrackerListWeekly[j].km,
+									'calories': stepTrackerListWeekly[j].calories,
+									'duration': stepTrackerListWeekly[j].duration,
+								}
 								break;
 							} 
 						}
