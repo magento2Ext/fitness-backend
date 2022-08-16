@@ -432,7 +432,7 @@ app.post("/analytics", auth, async(req, res) => {
   
 		  /////
 
-
+		  let weightFinalArray1 = [];
 		  function getMonthly(){
 
 			var weightArray1 = [];		
@@ -467,7 +467,7 @@ app.post("/analytics", auth, async(req, res) => {
 				i++;		
 			});
 
-			var weightFinalArray1 = [];
+		
 				
 			for(i=oneMonthAgo; i<=date;  i.setDate(i.getDate() + 1)) { 
 				var found = 0; 
