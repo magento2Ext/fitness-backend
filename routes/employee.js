@@ -634,10 +634,9 @@ router.post('/verify',async(req,res)=> {
 router.put('/update/:id',async(req,res)=> {
 
 	 try{
-        console.log(req.body.isVerified, typeof(req.body.isVerified));
-		return;
+ 
 		let orgData = await Organization.find({_id: req.body.orgId});
-		console.log(req.body.isVerified, typeof(req.body.isVerified))
+		
 		let data = {
 			firstName: req.body.firstName,
 			lastName: req.body.lastName,
@@ -651,7 +650,8 @@ router.put('/update/:id',async(req,res)=> {
 			data['organizationId'] = req.body.orgId;
 
 		}
-            await Employee.updateOne({_id: req.body.id}, {$set: data}, {new: true}); 
+     
+		await Employee.updateOne({_id: req.body.id}, {$set: data}, {new: true}); 
 
 		if(req.body.isVerified == "true") {
 			await Employee.updateOne({_id: req.body.id}, {$set: {organizationId: req.body.orgId}, $push: {userOrganizations: req.body.orgId}}, {new: true}); 
