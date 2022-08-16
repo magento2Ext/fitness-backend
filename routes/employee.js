@@ -643,17 +643,17 @@ router.put('/update/:id',async(req,res)=> {
 			email: req.body.email,
 			zipCode: req.body.zipCode,
 			is_exclusive: req.body.is_exclusive,
-			isVerified: req.body.isVerified == "true" ? true : false,
+			isVerified: req.body.isVerified,
 		}
 
-		if(req.body.isVerified == "true") {
+		if(req.body.isVerified) {
 			data['organizationId'] = req.body.orgId;
 
 		}
      
 		await Employee.updateOne({_id: req.body.id}, {$set: data}, {new: true}); 
 
-		if(req.body.isVerified == "true") {
+		if(req.body.isVerified) {
 			console.log('657')
 			await Employee.updateOne({_id: req.body.id}, {$set: {organizationId: req.body.orgId}, $push: {userOrganizations: req.body.orgId}}, {new: true}); 
  
@@ -663,7 +663,7 @@ router.put('/update/:id',async(req,res)=> {
 			console.log('emailRes', emailRes);
 		}
 
-		organizationRequests.updateOne({_id: req.body.reqId}, {$set: {status: req.body.isVerified == "false" ? 2 : 1}});
+		organizationRequests.updateOne({_id: req.body.reqId}, {$set: {status: req.body.isVerified ? '1' : '2'}});
        
 		const a1 = await Employee.findOne({_id: req.body.id})
         response = webResponse(202, true, a1)  
