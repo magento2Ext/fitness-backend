@@ -202,7 +202,7 @@ router.get('/list/:id', async(req,res) => {
 				"is_exclusive": emp.is_exclusive,
 				"referCode":emp.referCode,
 				"organizationId": emp.organizationId,
-				"isVerified": e.isVerified,
+				"isVerified": e.status,
 				"picture": emp.picture,
 				"reqId": e._id
 			}
@@ -635,7 +635,7 @@ router.put('/update/:id',async(req,res)=> {
 
 	 try{
  
-		let orgData = await Organization.find({_id: req.body.orgId});
+		let orgData = await Organization.findOne({_id: req.body.orgId});
 
 		let data = {
 			firstName: req.body.firstName,
