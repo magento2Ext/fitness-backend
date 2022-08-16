@@ -484,7 +484,7 @@ app.post("/analytics", auth, async(req, res) => {
 				if(found == 0) {
 					weight = {
 						'date' : dateLib.format(i,'YYYY-MM-DD'),
-						'weight' : weightData,
+						'weight' : latestWeight,
 						'day' : days[i.getDay()],
 						'difference':0,
 						'weightLine':''
