@@ -656,7 +656,7 @@ router.put('/update/:id',async(req,res)=> {
 		if(req.body.isVerified == "true") {
 			console.log('657')
 			await Employee.updateOne({_id: req.body.id}, {$set: {organizationId: req.body.orgId}, $push: {userOrganizations: req.body.orgId}}, {new: true}); 
-			employee.otp = otp;
+ 
 			let emailContent = "Congratulations! "+ orgData.organizationName + " has approved you as its member";
 			let subject = 'Organization approval'
 			let emailRes = sendEmail(req.body.email, subject, emailContent);
