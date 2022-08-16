@@ -436,9 +436,10 @@ app.post("/analytics", auth, async(req, res) => {
 
 			var weightArray1 = [];		
 			var i = 0;
+			let latestWeight = 0;
 
 			weightLastMonth.forEach(col =>  {
-						 
+				console.log('col.weightcol.weight', col.weight)
 				if(i == 0) {
 					weight = {
 						'date' : dateLib.format(col.date,'YYYY-MM-DD'),
@@ -447,6 +448,7 @@ app.post("/analytics", auth, async(req, res) => {
 						'difference':0,
 						'weightLine':''
 					}
+					
 				} else{
 					var difference = col.weight - weightList[i-1].weight;
 					if(difference > 0) {
