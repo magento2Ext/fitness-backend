@@ -8,8 +8,8 @@ const auth = require("./middleware/auth");
 app.use(express.json())
 const API_PORT = process.env.API_PORT
 const Weight = require('./models/weight')
-const StepTracker = require('../models/step_tracker')
-const EmpStepTarget = require('../models/employee_step_target')
+const StepTracker = require('./models/step_tracker')
+const EmpStepTarget = require('./models/employee_step_target')
 const dateLib = require('date-and-time')
 
 const admin=require('firebase-admin');
