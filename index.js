@@ -632,7 +632,6 @@ app.post("/analytics", auth, async(req, res) => {
 				stepsData.totalSteps = steps.toString()
 				stepsData.avgStep = avg.toString()
 				stepsData.todayData = stepTrackerDetailsToday
-				stepsData.step_target = emptStepTarget
 				stepsData.target = target
 				stepsData.activity = stepFinalArray
 				stepsData.weekly = stepFinalArrayWeekly
