@@ -598,6 +598,7 @@ app.post("/analytics", auth, async(req, res) => {
 						   var stepTrackerData = '';
 							if( stepTrackerListWeekly[j]['date'] == dateLib.format(i,'YYYY-MM-DD')) {
 								found = 1;
+								console.log('stepTrackerListWeekly', stepTrackerListWeekly);
 								stepTrackerData = stepTrackerListWeekly[j];
 								break;
 							} 
