@@ -594,11 +594,11 @@ app.post("/analytics", auth, async(req, res) => {
 					var noOfFound = 0;
 					for(i=startWeeklyDate; i<=endDate;  i.setDate(i.getDate() + 1)) { 
 						var found = 0; 
-						for( var j = 0, len = stepTrackerList.length; j < len; j++ ) { 
+						for( var j = 0, len = stepTrackerListWeekly.length; j < len; j++ ) { 
 						   var stepTrackerData = '';
-							if( stepTrackerList[j]['date'] == dateLib.format(i,'YYYY-MM-DD')) {
+							if( stepTrackerListWeekly[j]['date'] == dateLib.format(i,'YYYY-MM-DD')) {
 								found = 1;
-								stepTrackerData = stepTrackerList[j];
+								stepTrackerData = stepTrackerListWeekly[j];
 								break;
 							} 
 						}
