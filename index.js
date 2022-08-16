@@ -436,10 +436,9 @@ app.post("/analytics", auth, async(req, res) => {
 
 			var weightArray1 = [];		
 			var i = 0;
-			let latestWeight = 0;
-
+		
 			weightLastMonth.forEach(col =>  {
-				console.log('col.weightcol.weight', col.weight)
+			 
 				if(i == 0) {
 					weight = {
 						'date' : dateLib.format(col.date,'YYYY-MM-DD'),
@@ -457,11 +456,11 @@ app.post("/analytics", auth, async(req, res) => {
 						var line = difference+" kilogram under weight."
 					}
 					weight = {
-						'date' :  dateLib.format(col.date,'YYYY-MM-DD'),
-						'weight' : col.weight,
-						'day' :  days[col.date.getDay()],
+						'date': dateLib.format(col.date,'YYYY-MM-DD'),
+						'weight': col.weight,
+						'day': days[col.date.getDay()],
 						'difference': difference,
-						'weightLine':line,
+						'weightLine': line,
 					}
 				}
 				weightArray1.push(weight);
@@ -472,18 +471,20 @@ app.post("/analytics", auth, async(req, res) => {
 				
 			for(i=oneMonthAgo; i<=date;  i.setDate(i.getDate() + 1)) { 
 				var found = 0; 
+				let latestWeight = 0;
 				for( var j = 0, len = weightArray1.length; j < len; j++ ) { 
 					var weightData = '';
 					if( weightArray1[j]['day'] == days[i.getDay()]) {
 						found = 1;
 						weightData = weightArray1[j];
+						latestWeight = weightData.weight;
 						break;
 					} 
 				}
 				if(found == 0) {
 					weight = {
 						'date' : dateLib.format(i,'YYYY-MM-DD'),
-						'weight' : "0",
+						'weight' : weightData,
 						'day' : days[i.getDay()],
 						'difference':0,
 						'weightLine':''
