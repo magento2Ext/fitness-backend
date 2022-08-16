@@ -494,6 +494,7 @@ app.post("/analytics", auth, async(req, res) => {
 
 		  }
 
+		  let stepsData = {}; 
 		  steps();
 
 
@@ -573,7 +574,7 @@ app.post("/analytics", auth, async(req, res) => {
 					}
 				}
 				
-				var stepsData = {}; 
+				
 				var avg = steps/noOfFound;
 				stepsData.totalSteps = steps.toString()
 				stepsData.avgStep = avg.toString()
