@@ -494,7 +494,8 @@ app.post("/analytics", auth, async(req, res) => {
 
 		  }
 
-		  let stepsData = {}; 
+		  let stepFinalArrayWeekly = [];
+		  var stepFinalArrayMonthly = [];
 		  steps();
 
 
@@ -555,7 +556,7 @@ app.post("/analytics", auth, async(req, res) => {
 				}
 			);
 			
-			    var stepFinalArray = [];
+			   
 				var steps = 0;	
 				var noOfFound = 0;
 				for(i=startDate; i<=endDate;  i.setDate(i.getDate() + 1)) { 
@@ -577,15 +578,15 @@ app.post("/analytics", auth, async(req, res) => {
 							'calories':"0",
 							'duration':'00:00:00'
 						}
-						stepFinalArray.push(step);
+						stepFinalArrayMonthly.push(step);
 					}   else{
 						noOfFound = Number(noOfFound)+ 1
 						steps = Number(stepTrackerData.steps) + Number(steps)
-						stepFinalArray.push(stepTrackerData);
+						stepFinalArrayMonthly.push(stepTrackerData);
 					}
 				}
 
-				let stepFinalArrayWeekly = [];
+				
 				getMonthlySteps();
 
 				function getMonthlySteps(){
@@ -627,25 +628,15 @@ app.post("/analytics", auth, async(req, res) => {
 					}
 				}
 				
-				
-				var avg = steps/noOfFound;
-				stepsData.totalSteps = steps.toString()
-				stepsData.avgStep = avg.toString()
-				stepsData.todayData = stepTrackerDetailsToday
-				stepsData.target = target
-				stepsData.activity = stepFinalArray
-				stepsData.weekly = stepFinalArrayWeekly
-				stepsData.best_streak = "1000"
-				stepsData.avg_pace = "100"
-
 		  }
 
 		  setTimeout(() => {
 			var data = {}; 
 			data.weightWeekly = weightFinalArray
 			data.weightMonthly = weightFinalArray1
-			data.steps = stepsData
-   
+			data.stepsMonthly = stepFinalArrayMonthly
+			data.stepsWeekly = stepFinalArrayWeekly
+		
 			response = webResponse(202, true, data)  
 			res.send(response);
 		  }, 5000);
