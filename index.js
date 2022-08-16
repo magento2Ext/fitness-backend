@@ -498,7 +498,7 @@ app.post("/analytics", auth, async(req, res) => {
 		  steps();
 
 
-		  function steps(){
+		  async function  steps(){
 			var endDate = new Date(); 
 	
 			var startDate = new Date();
@@ -606,7 +606,8 @@ app.post("/analytics", auth, async(req, res) => {
   
   ); 
 
-const otherApiRouter = require('./routes/otherapi')
+const otherApiRouter = require('./routes/otherapi');
+const { LEGAL_TCP_SOCKET_OPTIONS } = require("mongodb");
 app.use('/',otherApiRouter) 
 
 app.get('/', (req,res) => {
