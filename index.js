@@ -584,16 +584,19 @@ app.post("/analytics", auth, async(req, res) => {
 				stepsData.activity = stepFinalArray
 				stepsData.best_streak = "1000"
 				stepsData.avg_pace = "100"
+
 		  }
 
-		  
-		  var data = {}; 
-		  data.weightWeekly = weightFinalArray
-		  data.weightMonthly = weightFinalArray1
-		  data.steps = stepsData
- 
-		  response = webResponse(202, true, data)  
-		  res.send(response);
+		  setTimeout(() => {
+			var data = {}; 
+			data.weightWeekly = weightFinalArray
+			data.weightMonthly = weightFinalArray1
+			data.steps = stepsData
+   
+			response = webResponse(202, true, data)  
+			res.send(response);
+		  }, 5000);
+
 		  return;
 	  } catch(err){ 
 		  console.log(err)  
