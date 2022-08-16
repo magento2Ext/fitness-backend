@@ -666,7 +666,7 @@ router.put('/update/:id',async(req,res)=> {
 		organizationRequests.updateOne({_id: req.body.reqId}, {$set: {status: req.body.isVerified == "false" ? 2 : 1}});
        
 		const a1 = await Employee.findOne({_id: req.body.id})
-        response = webResponse(200, true, a1)  
+        response = webResponse(202, true, a1)  
 	    res.send(response)   
 
     }catch(err){
