@@ -667,7 +667,7 @@ router.put('/update/:id',async(req,res)=> {
 		console.log('itsResult', itsResult);
        
 		const a1 = await Employee.findOne({_id: req.body.id});
-		a1.isVerified = req.body.isVerified;
+		a1.isVerified = req.body.isVerified ? '1' : '2';
         response = webResponse(202, true, a1);
 	    res.send(response);
 
