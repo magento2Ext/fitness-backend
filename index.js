@@ -468,10 +468,10 @@ app.post("/analytics", auth, async(req, res) => {
 			});
 
 		
-				
+			let latestWeight = 0;
 			for(i=oneMonthAgo; i<=date;  i.setDate(i.getDate() + 1)) { 
 				var found = 0; 
-				let latestWeight = 0;
+				
 				for( var j = 0, len = weightArray1.length; j < len; j++ ) { 
 					var weightData = '';
 					if( weightArray1[j]['day'] == days[i.getDay()]) {
