@@ -508,7 +508,8 @@ app.post("/analytics", auth, async(req, res) => {
 		  response = webResponse(202, true, data)  
 		  res.send(response);
 		  return;
-	  } catch(err){   
+	  } catch(err){ 
+		  console.log(err)  
 		  response = webResponse(403, false, err)  
 		  res.send(response)
 		  return;
