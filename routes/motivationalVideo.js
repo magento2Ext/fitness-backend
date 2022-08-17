@@ -1,6 +1,7 @@
  const express = require("express");
  const router = express.Router()
  const MotivationalVideo = require('../models/motivational_video')
+ const Employee = require('../models/employee')
  const auth = require("../middleware/auth");
 var ObjectID = require('mongodb').ObjectID;
 require('../functions')
