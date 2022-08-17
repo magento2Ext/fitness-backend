@@ -3,6 +3,7 @@
  const EducationModule = require('../models/education')
  const ModuleAdded = require('../models/module')
 const dateLib = require('date-and-time')
+const Employee = require('../models/employee')
 const auth = require("../middleware/auth");
 var ObjectID = require('mongodb').ObjectID;
 require('../functions')
