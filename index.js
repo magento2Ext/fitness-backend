@@ -95,6 +95,7 @@ app.post("/weight/save", auth, async(req, res) => {
 			date: req.body.date
 		})
 		const weightDetails = await Weight.findOne({ date: req.body.date,  employeeId: req.user.user_id});
+		
 		if (weightDetails) {  
 			weightDetails.weight =  req.body.weight
 			const a1 = await weightDetails.save()
@@ -467,6 +468,8 @@ app.post("/analytics", auth, async(req, res) => {
 		
 			let latestWeight = 0;
 			for(i=oneMonthAgo; i<=date;  i.setDate(i.getDate() + 1)) { 
+
+				console.log('iiiiii', i)
 				var found = 0; 
 				
 				for( var j = 0, len = weightArray1.length; j < len; j++ ) { 
