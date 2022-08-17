@@ -139,6 +139,8 @@ router.post('/detail', auth, async(req,res) => {
 		} else { 
 			var empIds = chatGroup.users
 			var requestedUserIds = chatGroup.chat_group_requested_users
+
+			console.log(empIds, requestedUserIds)
 			 
 			const employees = await Employee.find({ _id: {$in:  empIds }})
 			const requestedUsers = await Employee.find({ _id: {$in:  requestedUserIds }})
