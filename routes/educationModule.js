@@ -78,10 +78,10 @@ router.post('/educationList', auth, async(req,res) => {
 
 		education.forEach( async (col) => {
 
-			console.log(col)
+		
 		    
 			let moduleName = await  ModuleAdded.findById(col.module_id);
-
+			console.log('moduleName', moduleName)
 			newEdu = {
 				'id' :  col._id,
 				"title": col.title,
@@ -97,6 +97,9 @@ router.post('/educationList', auth, async(req,res) => {
 
 			educationArray.push(newEdu); 
 		})
+
+		console.log(educationArray)
+
 		 response = webResponse(201, true, educationArray)  
 		res.send(response)
 		return "";
