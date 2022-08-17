@@ -7,6 +7,12 @@ const videoSchema = new mongoose.Schema({
         required: true,
 		default: null
     },
+
+    userType: {
+        type: String,
+        required: true,
+		default: null
+    },
 	
     name: {
         type: String,

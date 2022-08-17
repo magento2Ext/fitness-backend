@@ -16,6 +16,29 @@ require('../functions')
 		return;
     }
 })
+
+router.post('/Videoslist', auth, async(req,res) => {
+    try{
+
+		var empId = req.user.user_id;
+		const employeeDetails = await Employee.findById(empId);
+        let query = {};
+		if(employeeDetails.userOrganizations.length !=0 ){
+			query = {userType: 'org'}
+		}else{
+			query = {userType: 'admin'}
+		}
+		
+		const videos = await MotivationalVideo.find(query)
+        response = webResponse(201, true, videos)  
+		res.send(response)		
+		return;;
+    }catch(err){
+        response = webResponse(200, false, "Something went wrong, please try again")  
+	    res.send(response)
+		return;
+    }
+})
  
  router.post('/save', async(req,res) => {
 	try{ 
@@ -26,7 +49,8 @@ require('../functions')
 			description: req.body.description,
 			placeholder_image: req.body.placeholder_image,
 			video_link: req.body.video_link,
-			video_duration: req.body.video_duration
+			video_duration: req.body.video_duration,
+			userType: req.body.userType,
 		})
 		
 		if(req.body.id) {
@@ -41,8 +65,8 @@ require('../functions')
 			videoDetail.title= req.body.title,
 			videoDetail.description= req.body.description,
 			videoDetail.placeholder_image= req.body.placeholder_image,
-			videoDetail.video_link= req.body.video_link,
-			videoDetail.video_duration= req.body.video_duration
+			videoDetail.video_link = req.body.video_link,
+			videoDetail.video_duration = req.body.video_duration
 			const videoDetailSaved = await videoDetail.save()
 			response = webResponse(202, true, videoDetailSaved)  
 			res.send(response)
