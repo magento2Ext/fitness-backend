@@ -72,7 +72,12 @@
 		var empId = req.user.user_id; 
 		const employeeDetails = await Employee.findById(empId)
 		//const chatGroup = await ChatGroup.find({'users': {'$in': empId}})
-		const chatGroup = await ChatGroup.find( { $or:[ {'users':{'$in': empId}}, {'chat_group_requested_users':{'$in': empId}} ], organization_id: employeeDetails.organizationId} )
+		let query = { $or:[ {'users':{'$in': empId}}, {'chat_group_requested_users':{'$in': empId}} ]}
+
+		if(employeeDetails.userOrganizations.length != 0 ){
+			query['organization_id'] =  employeeDetails.organizationId
+		}
+		const chatGroup = await ChatGroup.find(query)
 		
 		console.log('chatGroup', chatGroup);
 		var chatGroupArray = [];
