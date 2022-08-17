@@ -476,7 +476,7 @@ app.post("/analytics", auth, async(req, res) => {
 				
 				for( var j = 0, len = weightArray1.length; j < len; j++ ) { 
 					var weightData = '';
-				    let spliDate = i.split('T')[0]
+				    let spliDate = String(i).split('T')[0]
 					if( weightArray1[j]['date'] == spliDate) {
 						found = 1;
 						weightData = weightArray1[j];
