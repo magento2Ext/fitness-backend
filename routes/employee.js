@@ -559,22 +559,22 @@ router.post('/login', async(req,res) => {
             result.access_token = token
 			result.employee = employee
 			var appData = null;
+			let logo;
 			if(employee.organizationId && employee.organizationId != 'false') {
 			    const organization = await Organization.findById(employee.organizationId)
 			    result.organization = organization
 				var themecode = organization.themecode
-				var logo = organization.logo
+				logo = organization.logo
 				if(organization != null && organization.themecode != null) {
 				   appData = await Theme.findById(organization.themecode)
 			    }
+			}else{
+				 logo = process.env.ORGLOGO
 			}
 			if(appData == null) {
 				appData = await Theme.findOne()
 			}
-			if(logo == null)
-			{
-				var logo = process.env.ORGLOGO
-			}
+ 
 			
 			result.appData = appData
 		    result.logo = logo
@@ -693,5 +693,6 @@ router.put('/update/:id',async(req,res)=> {
     }
 
 })
+
 
  module.exports = router
