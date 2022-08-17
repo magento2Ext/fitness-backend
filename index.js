@@ -469,11 +469,12 @@ app.post("/analytics", auth, async(req, res) => {
 			let latestWeight = 0;
 			for(i=oneMonthAgo; i<=date;  i.setDate(i.getDate() + 1)) { 
 
-				console.log('iiiiii', i)
+				
 				var found = 0; 
 				
 				for( var j = 0, len = weightArray1.length; j < len; j++ ) { 
 					var weightData = '';
+					console.log('weightArray1[j]', weightArray1[j]['day'],  days[i.getDay()])
 					if( weightArray1[j]['day'] == days[i.getDay()]) {
 						found = 1;
 						weightData = weightArray1[j];
@@ -481,6 +482,7 @@ app.post("/analytics", auth, async(req, res) => {
 						break;
 					} 
 				}
+
 				if(found == 0) {
 					weight = {
 						'date' : dateLib.format(i,'YYYY-MM-DD'),
