@@ -648,13 +648,14 @@ router.put('/update/:id',async(req,res)=> {
 
 		if(req.body.isVerified) {
 			data['organizationId'] = req.body.orgId;
-
 		}
      
 		await Employee.updateOne({_id: req.body.id}, {$set: data}, {new: true}); 
 
 		if(req.body.isVerified) {
-			console.log('657')
+
+			await ChatGroup.updateOne({organization_id: req.body.orgId}, {$push: {users: req.body.id}});
+			 
 			await Employee.updateOne({_id: req.body.id}, {$set: {organizationId: req.body.orgId}, $push: {userOrganizations: req.body.orgId}}, {new: true}); 
  
 			let emailContent = "Congratulations! "+ orgData.organizationName + " has approved you as its member";
