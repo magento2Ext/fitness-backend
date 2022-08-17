@@ -537,7 +537,7 @@ router.post('/login', async(req,res) => {
 
 		if (employee && (await bcrypt.compare(password, employee.password))) {
 			 
-			if(employee.isVerified == false && employee.length == 0) {
+			if(employee.isVerified == false && employee.userOrganizations.length == 0) {
 				response = webResponse(200, false, "User not verified")  
 				res.send(response)
 				return;
