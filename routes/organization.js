@@ -638,7 +638,7 @@ router.post("/confirmCode", auth,  async(req, res) => {
 		if(codeData != null){
 	
 		 let data = {
-			orgId: req.body.orgId,
+			orgId: codeData._id,
 			employeeId: empId,
 		 }
 
@@ -717,7 +717,6 @@ router.post("/swicthOrg", auth,  async(req, res) => {
 			res.json(response);
 			return "";
 		}, 1000);
-
 
 	} catch(err){ 
 		console.log(err)
