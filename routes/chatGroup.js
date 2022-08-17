@@ -176,7 +176,7 @@ router.post('/detail', auth, async(req,res) => {
 		
 		
     }catch(err){
-		conole.log(err);
+		console.log(err);
         res.send('Error ' + err)
     }
 })
