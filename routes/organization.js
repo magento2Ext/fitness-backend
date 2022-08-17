@@ -577,7 +577,7 @@ router.post("/orginzations/list", auth,  async(req, res) => {
 
 
 					}else{
-						response = webResponse(200, false, "No data found")  
+						response = webResponse(200, false)  
 						res.json(response);
 						return "";
 					}
