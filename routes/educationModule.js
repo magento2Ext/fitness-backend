@@ -65,7 +65,7 @@ router.post('/educationList', auth, async(req,res) => {
 		const employeeDetails = await Employee.findById(empId);
         let query = {};
 		if(employeeDetails.userOrganizations.length !=0 ){
-			query = {userType: 'org'}
+			query = {userType: 'org', auth_user_id: employeeDetails.organizationId}
 		}else{
 			query = {userType: 'admin'}
 		}

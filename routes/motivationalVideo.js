@@ -1,6 +1,7 @@
  const express = require("express");
  const router = express.Router()
  const MotivationalVideo = require('../models/motivational_video')
+ const auth = require("../middleware/auth");
 var ObjectID = require('mongodb').ObjectID;
 require('../functions')
  
@@ -24,11 +25,11 @@ router.post('/Videoslist', auth, async(req,res) => {
 		const employeeDetails = await Employee.findById(empId);
         let query = {};
 		if(employeeDetails.userOrganizations.length !=0 ){
-			query = {userType: 'org'}
+			query = {userType: 'org', auth_user_id: employeeDetails.organizationId}
 		}else{
 			query = {userType: 'admin'}
 		}
-		
+
 		const videos = await MotivationalVideo.find(query)
         response = webResponse(201, true, videos)  
 		res.send(response)		
