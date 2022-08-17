@@ -69,6 +69,8 @@ router.post('/educationList', auth, async(req,res) => {
 		}else{
 			query = {userType: 'admin'}
 		}
+
+		console.log(employeeDetails)
 		
 		var education = await EducationModule.find(query);
 			
