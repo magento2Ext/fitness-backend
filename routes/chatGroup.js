@@ -139,15 +139,21 @@ router.post('/detail', auth, async(req,res) => {
 		} else { 
 			var empIds = chatGroup.users
 			var requestedUserIds = chatGroup.chat_group_requested_users
-            let objIds =  requestedUserIds.map((key, value) =>  ObjectId.fromString( value ));
+            let objIds =  [];
+			requestedUserIds.forEach( (key) => {
+				if(key.match(/^[0-9a-fA-F]{24}$/)){
+					objIds.push(key)
+				}
+			})
+			
 
 			console.log('objIds', objIds)
            
 			const employees = await Employee.find({ _id: {$in:  empIds }})
-			const requestedUsers = await Employee.find({ _id: {$in:  requestedUserIds }})
+			const requestedUsers = await Employee.find({ _id: {$in:  objIds }})
 			
 			var isInvited = isAdded = false;
-			var userRequested = requestedUserIds.indexOf(empId); 
+			var userRequested = objIds.indexOf(empId); 
 			if (userRequested > -1) { 
 				isInvited = true;
 			}
