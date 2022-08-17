@@ -70,13 +70,15 @@ router.post('/educationList', auth, async(req,res) => {
 			query = {userType: 'admin'}
 		}
 
-		console.log(employeeDetails)
+		
 		
 		var education = await EducationModule.find(query);
 			
 		var educationArray = [];
 
 		education.forEach( async (col) => {
+
+			console.log(col)
 		    
 			let moduleName = await  ModuleAdded.findById(col.module_id);
 
