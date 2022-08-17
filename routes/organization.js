@@ -682,8 +682,10 @@ router.post("/swicthOrg", auth,  async(req, res) => {
 	try{ 
 
 		var empId = req.user.user_id;
+
+		console.log('req.body.orgId', req.body.orgId);
 		 
-		Employee.updateOne({_id: req.body.empId}, {$set: {organizationId: req.body.orgId}});
+		Employee.updateOne({_id: empId}, {$set: {organizationId: req.body.orgId}});
 
 		const result = {};
 		
