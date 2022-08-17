@@ -74,6 +74,7 @@
 		//const chatGroup = await ChatGroup.find({'users': {'$in': empId}})
 		const chatGroup = await ChatGroup.find( { $or:[ {'users':{'$in': empId}}, {'chat_group_requested_users':{'$in': empId}} ], organization_id: employeeDetails.organizationId} )
 		
+		console.log('chatGroup', chatGroup);
 		var chatGroupArray = [];
 		
 		chatGroup.forEach( function(col){
