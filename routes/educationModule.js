@@ -64,14 +64,12 @@ router.post('/educationList', auth, async(req,res) => {
 		var empId = req.user.user_id;
 		const employeeDetails = await Employee.findById(empId);
         let query = {};
-		if(employeeDetails.organizationId){
+		if(employeeDetails.userOrganizations.length !=0 ){
 			query = {userType: 'org'}
 		}else{
 			query = {userType: 'admin'}
 		}
 
-		
-		
 		var education = await EducationModule.find(query);
 			
 		var educationArray = [];
