@@ -76,33 +76,42 @@ router.post('/educationList', auth, async(req,res) => {
 			
 		var educationArray = [];
 
-		education.forEach( async (col) => {
+		if(education.length!= 0){
+			let count = 0;
+			education.forEach( async (col) => {
+				let moduleName = await  ModuleAdded.findById(col.module_id);
+				console.log('moduleName', moduleName)
+				newEdu = {
+					'id' :  col._id,
+					"title": col.title,
+					"description": col.description,
+					"placeholder_image": col.placeholder_image,
+					"video_link": col.video_link,
+					"module_name": moduleName != null ? moduleName.name : 'Mind',
+					"module_id": col.module_id,
+					"is_picture": col.is_picture,
+					"created_at": col.created_at,
+					"timeSinc":timeAgo(col.created_at) + "ago"
+				}
+	
+				educationArray.push(newEdu); 
+				count++;
+				if(count == education.length){
+					response = webResponse(201, true, educationArray)  
+					res.send(response)
+					return "";
+				}
+			})
+		}else{
+			response = webResponse(201, true, educationArray)  
+			res.send(response)
+			return "";
+		}
 
-		
-		    
-			let moduleName = await  ModuleAdded.findById(col.module_id);
-			console.log('moduleName', moduleName)
-			newEdu = {
-				'id' :  col._id,
-				"title": col.title,
-				"description": col.description,
-				"placeholder_image": col.placeholder_image,
-				"video_link": col.video_link,
-				"module_name": moduleName != null ? moduleName.name : 'Mind',
-				"module_id": col.module_id,
-				"is_picture": col.is_picture,
-				"created_at": col.created_at,
-				"timeSinc":timeAgo(col.created_at) + "ago"
-			}
 
-			educationArray.push(newEdu); 
-		})
 
-		console.log(educationArray)
+	 
 
-		 response = webResponse(201, true, educationArray)  
-		res.send(response)
-		return "";
     }catch(err){  console.log(err)
         response = webResponse(200, false, "Something went wrong, please try again.")  
 	    res.send(response)
