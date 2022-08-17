@@ -64,13 +64,64 @@
 		return "";
     }
  })
- 
 
- 
+
+
  router.post('/list', auth, async(req,res) => {
     try{
 		var empId = req.user.user_id; 
+		const employeeDetails = await Employee.findById(empId)
 		//const chatGroup = await ChatGroup.find({'users': {'$in': empId}})
+		const chatGroup = await ChatGroup.find( { $or:[ {'users':{'$in': empId}}, {'chat_group_requested_users':{'$in': empId}} ], organization_id: employeeDetails.organizationId} )
+		
+		var chatGroupArray = [];
+		
+		chatGroup.forEach( function(col){
+			var requestedUserIds = col.chat_group_requested_users
+			var empIds = col.users
+			
+			var isInvited = isAdded = false;
+			var userRequested = requestedUserIds.indexOf(empId); 
+			if (userRequested > -1) { 
+				isInvited = true;
+			}
+			
+			var userAdded = empIds.indexOf(empId); 
+			if (userAdded > -1) { 
+				isAdded = true;
+			}
+			
+			
+			chat = {
+				'id': col._id,
+				"group_name": col.group_name,
+				"group_picture": col.group_picture,
+				"challenge": col.challenge,
+				"users_count": col.users.length,
+				"users_request_count": col.chat_group_requested_users.length,
+				"isInvited": isInvited,
+				"isAdded": isAdded
+				
+			}
+			chatGroupArray.push(chat);
+		})
+		
+        response = webResponse(201, true, chatGroupArray)  
+		res.send(response)		
+		return;
+    }catch(err){
+        response = webResponse(200, false, "Something went wrong, please try again")  
+	    res.send(response)
+		return;
+    }
+})
+
+
+router.post('/list', auth, async(req,res) => {
+    try{
+
+		var empId = req.user.user_id; 
+	 
 		const chatGroup = await ChatGroup.find( { $or:[ {'users':{'$in': empId}}, {'chat_group_requested_users':{'$in': empId}} ]} )
 		
 		var chatGroupArray = [];
