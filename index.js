@@ -476,8 +476,8 @@ app.post("/analytics", auth, async(req, res) => {
 				
 				for( var j = 0, len = weightArray1.length; j < len; j++ ) { 
 					var weightData = '';
-					console.log('weightArray1[j]', i)
-					if( weightArray1[j]['day'] == days[i.getDay()]) {
+				    let spliDate = i.split('T')[0]
+					if( weightArray1[j]['date'] == spliDate) {
 						found = 1;
 						weightData = weightArray1[j];
 						latestWeight = weightData.weight;
