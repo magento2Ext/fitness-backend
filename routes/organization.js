@@ -708,7 +708,7 @@ router.post("/swicthOrg", auth,  async(req, res) => {
 		result.appData = appData
 		result.logo = logo
 
-		setTimeout(() => {
+		setTimeout(async () => {
 			const employee = await Employee.findOne({_id: empId});
 			result.employee = employee
 			response = webResponse(202, true, result);  
