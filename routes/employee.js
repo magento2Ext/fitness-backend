@@ -654,7 +654,9 @@ router.put('/update/:id',async(req,res)=> {
 
 		if(req.body.isVerified) {
 
-			await ChatGroup.updateOne({organization_id: req.body.orgId}, {$push: {users: req.body.id}});
+			const orgresult1 = await ChatGroup.updateOne({organization_id: String(req.body.orgId)}, {$push: {users: req.body.id}});
+
+			console.log('orgresult1', orgresult1)
 			 
 			await Employee.updateOne({_id: req.body.id}, {$set: {organizationId: req.body.orgId}, $push: {userOrganizations: req.body.orgId}}, {new: true}); 
  
