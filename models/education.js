@@ -7,6 +7,12 @@ const educationSchema = new mongoose.Schema({
         required: true,
 		default: null
     },
+
+    userType: {
+        type: String,
+        required: true,
+		default: null
+    },
 	
     title: {
         type: String,
@@ -51,4 +57,4 @@ const educationSchema = new mongoose.Schema({
    
 })
 
-module.exports = mongoose.model('education',educationSchema)
+module.exports = mongoose.model('education', educationSchema)

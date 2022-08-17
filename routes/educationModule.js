@@ -3,6 +3,7 @@
  const EducationModule = require('../models/education')
  const ModuleAdded = require('../models/module')
 const dateLib = require('date-and-time')
+const auth = require("../middleware/auth");
 var ObjectID = require('mongodb').ObjectID;
 require('../functions')
  
@@ -55,6 +56,51 @@ require('../functions')
 		return;
     }
 })
+
+router.post('/educationList', auth, async(req,res) => {
+    try{
+
+		var empId = req.user.user_id;
+		const employeeDetails = await Employee.findById(empId);
+        let query = {};
+		if(employeeDetails.organizationId){
+			query = {userType: 'org'}
+		}else{
+			query = {userType: 'admin'}
+		}
+		
+		var education = await EducationModule.find(query);
+			
+		var educationArray = [];
+
+		education.forEach( async (col) => {
+		    
+			let moduleName = await  ModuleAdded.findById(col.module_id);
+
+			newEdu = {
+				'id' :  col._id,
+				"title": col.title,
+				"description": col.description,
+				"placeholder_image": col.placeholder_image,
+				"video_link": col.video_link,
+				"module_name": moduleName != null ? moduleName.name : 'Mind',
+				"module_id": col.module_id,
+				"is_picture": col.is_picture,
+				"created_at": col.created_at,
+				"timeSinc":timeAgo(col.created_at) + "ago"
+			}
+
+			educationArray.push(newEdu); 
+		})
+		 response = webResponse(201, true, educationArray)  
+		res.send(response)
+		return "";
+    }catch(err){  console.log(err)
+        response = webResponse(200, false, "Something went wrong, please try again.")  
+	    res.send(response)
+		return;
+    }
+})
  
  router.post('/save', async(req,res) => {
 	try{ 
@@ -65,7 +111,8 @@ require('../functions')
 			placeholder_image: req.body.placeholder_image,
 			video_link: req.body.video_link,
 			module_id: req.body.module_id,
-			is_picture: req.body.is_picture
+			is_picture: req.body.is_picture,
+			userType: req.body.userType
 		})
 		
 		if(req.body.id) {
