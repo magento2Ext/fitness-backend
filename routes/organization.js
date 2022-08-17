@@ -684,9 +684,9 @@ router.post("/swicthOrg", auth,  async(req, res) => {
 		var empId = req.user.user_id;
 		 
 		Employee.updateOne({_id: req.body.empId}, {$set: {organizationId: req.body.orgId}});
-		const employee = await Employee.findOne({_id: empId});
+
 		const result = {};
-		result.employee = employee
+		
 		var appData = null;
 
 		const organization = await Organization.findById(req.body.orgId)
@@ -708,9 +708,14 @@ router.post("/swicthOrg", auth,  async(req, res) => {
 		result.appData = appData
 		result.logo = logo
 
-		response = webResponse(202, true, result);  
-		res.json(response);
-		return "";
+		setTimeout(() => {
+			const employee = await Employee.findOne({_id: empId});
+			result.employee = employee
+			response = webResponse(202, true, result);  
+			res.json(response);
+			return "";
+		}, 1000);
+
 
 	} catch(err){ 
 		console.log(err)
