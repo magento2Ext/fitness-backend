@@ -126,13 +126,13 @@
 			const promise = new Promise( async (resolve, reject) => {
 
 				let allSteps = 	await StepTracker.find({  employeeId: req.user.user_id}).sort({date:1});
-        console.log('allSteps', allSteps)
-				let count = 1;
-				let streaks = [];
-				let oneCount = Number(allSteps[0].steps);
-
+    
 				if(allSteps.length == 0 ) resolve(0)
 				else{
+
+					let count = 1;
+					let streaks = [];
+					let oneCount = Number(allSteps[0].steps);
       
 					allSteps.forEach( (key) => {
 				   
