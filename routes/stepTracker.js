@@ -131,7 +131,7 @@
 				let allSteps = 	await StepTracker.find({  employeeId: req.user.user_id}).sort({date:1});
     
 				if(allSteps.length == 0 ) {
-					 
+					console.log('bestStreakK 11')
 					resolve(0)}
 				else{
 
