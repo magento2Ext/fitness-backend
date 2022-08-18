@@ -143,11 +143,9 @@
 					allSteps.forEach( (key) => {
 
 					
-						if(allSteps[count] != null && allSteps[count] != undefined){
-
-							console.log('allSteps[count]', allSteps[count])
+						console.log('allSteps[count]', allSteps[count])
 						
-							console.log('bestStreakK 11', key)
+						if(allSteps[count] != null && allSteps[count] != undefined){
 
 							let date1 = new Date(allSteps[count].date.replace(/-/g, "/"));
 							let date2 = new Date(key.date.replace(/-/g, "/"));
@@ -177,6 +175,16 @@
 							}
 			
 							
+						}else{
+							count++;
+							if(count === allSteps.length){
+								if(streaks.length == 0) resolve(0);
+								else{
+									let max = Math.max(...streaks);
+									resolve(max)
+								}
+							}
+
 						}
 			
 					})
