@@ -49,7 +49,7 @@
 	var startDate = new Date();
 	startDate.setDate(startDate.getDate() - 29);
 	
-	var emptStepTarget = "0";
+	var emptStepTarget = {};
 	var target = false;
 	
 	const stepTrackerList = await StepTracker.find({  employeeId: req.user.user_id,
@@ -119,6 +119,137 @@
 			}
 		}
 		
+		var data = {}; 
+		var avg = steps/noOfFound;
+		data.totalSteps = steps.toString()
+		data.avgStep = avg.toString()
+		data.todayData = stepTrackerDetailsToday
+		data.step_target = emptStepTarget
+		data.target = target
+		data.activity = stepFinalArray
+		data.best_streak = "1000"
+		data.avg_pace = "100"
+		
+		response = webResponse(201, true, data)  
+		res.send(response);
+		return;
+})
+
+
+
+
+router.post('/app_analytics', auth, async(req,res) => {
+	var endDate = new Date(); 
+	
+	var startDate = new Date();
+	startDate.setDate(startDate.getDate() - 29);
+	
+	var emptStepTarget['stepTarget'] = "0";
+	var target = false;
+	
+	const stepTrackerList = await StepTracker.find({  employeeId: req.user.user_id,
+			date: {
+				$gte: dateLib.format(startDate,'YYYY-MM-DD'),
+				$lte: dateLib.format(endDate,'YYYY-MM-DD')
+			}
+		}).sort({date:1})
+		
+    var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
+	if(stepTarget) {
+		emptStepTarget['stepTarget'] = stepTarget.step_target;
+		target = true;
+	}
+	
+    var stepTrackerDetailsToday = await StepTracker.findOne({ date: dateLib.format(endDate,'YYYY-MM-DD'),  employeeId: req.user.user_id});
+	if(!stepTrackerDetailsToday) {
+		stepTrackerDetailsToday = {
+			'date' : dateLib.format(endDate,'YYYY-MM-DD'),
+			'steps' : "0",
+			'km' : "0",
+			'calories':"0",
+			'duration':'00:00:00'
+		}
+	}
+	
+	var tracker = await StepTracker.aggregate([
+			{ $group: {
+				_id: '$employeeId',
+				stepAvg: { $avg: '$steps'}
+			}}
+		], function (err, results) {
+			if (err) {
+				console.error(err);
+			} else {
+				console.log(results);
+			}
+		}
+	);
+	
+	var stepFinalArray = [];
+		var steps = 0;	
+		var noOfFound = 0;
+		for(i=startDate; i<=endDate;  i.setDate(i.getDate() + 1)) { 
+			var found = 0; 
+			for( var j = 0, len = stepTrackerList.length; j < len; j++ ) { 
+			   var stepTrackerData = '';
+			    if( stepTrackerList[j]['date'] == dateLib.format(i,'YYYY-MM-DD')) {
+					found = 1;
+					stepTrackerData = stepTrackerList[j];
+					break;
+				} 
+			}
+			if(found == 0) {
+				step = {
+					'date' : dateLib.format(i,'YYYY-MM-DD'),
+					'steps' : "0",
+					'km' : "0",
+					'calories':"0",
+					'duration':'00:00:00'
+				}
+				stepFinalArray.push(step);
+			}   else{
+				noOfFound = Number(noOfFound)+ 1
+				steps = Number(stepTrackerData.steps) + Number(steps)
+				stepFinalArray.push(stepTrackerData);
+			}
+		}
+		
+
+
+
+
+		// var step = [];
+		// var steps = 0;	
+		// var noOfFound = 0;
+		// for(i=startDate; i<=endDate;  i.setDate(i.getDate() + 1)) { 
+		// 	var found = 0; 
+		// 	for( var j = 0, len = stepTrackerList.length; j < len; j++ ) { 
+		// 	   var stepTrackerData = '';
+		// 	    if( stepTrackerList[j]['date'] == dateLib.format(i,'YYYY-MM-DD')) {
+		// 			found = 1;
+		// 			stepTrackerData = stepTrackerList[j];
+		// 			break;
+		// 		} 
+		// 	}
+		// 	if(found == 0) {
+		// 		step = {
+		// 			'date' : dateLib.format(i,'YYYY-MM-DD'),
+		// 			'steps' : "0",
+		// 			'km' : "0",
+		// 			'calories':"0",
+		// 			'duration':'00:00:00'
+		// 		}
+		// 		stepFinalArray.push(step);
+		// 	}   else{
+		// 		noOfFound = Number(noOfFound)+ 1
+		// 		steps = Number(stepTrackerData.steps) + Number(steps)
+		// 		stepFinalArray.push(stepTrackerData);
+		// 	}
+		// }
+		
+
+
+
 		var data = {}; 
 		var avg = steps/noOfFound;
 		data.totalSteps = steps.toString()
