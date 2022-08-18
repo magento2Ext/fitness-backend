@@ -119,6 +119,26 @@
 			}
 		}
 		
+		bestStreak();
+
+
+		function bestStreak(){
+
+		let allSteps = 	await StepTracker.find({  employeeId: req.user.user_id}).sort({date:1});
+        
+		let count = 0;
+		allSteps.forEach( (key) => {
+           
+			let difference = allSteps[count+1].date.getTime() - key.date.getTime();
+
+			let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+			console.log(TotalDays + ' days to world Cup');
+
+			count++;
+
+		})
+
+		}
 		
 		var data = {}; 
 		var avg = steps/noOfFound;
