@@ -128,11 +128,12 @@
 			const promise = new Promise( async (resolve, reject) => {
 
 				let allSteps = 	await StepTracker.find({  employeeId: req.user.user_id}).sort({date:1});
-				console.log('bestStreakK 11')
-				console.log('bestStreakK 11', allSteps)
+		 
+		
 				if(allSteps.length == 0 ) {
 				
-					resolve(0)}
+					resolve(0)
+				}
 				else{
 
 					let count = 1;
@@ -143,6 +144,8 @@
 				   
 						if(allSteps[count] != null && allSteps[count] != undefined){
 						
+							console.log('bestStreakK 11', key)
+
 							let date1 = new Date(allSteps[count].date.replace(/-/g, "/"));
 							let date2 = new Date(key.date.replace(/-/g, "/"));
 				
