@@ -119,10 +119,10 @@
 				stepFinalArray.push(stepTrackerData);
 			}
 		}
-		
+		console.log('bestStreakK')
 	   let bestStreakK = await bestStreak();
 
-	   console.log('bestStreakK', bestStreakK)
+	  
 
 		async function bestStreak(){
 
