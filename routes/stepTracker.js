@@ -128,13 +128,13 @@
         
 		let count = 0;
 		allSteps.forEach( (key) => {
-           
-			let difference = allSteps[count+1].date.getTime() - key.date.getTime();
+            console.log(key + ' days to world Cup');
+			// let difference = allSteps[count+1].date.getTime() - key.date.getTime();
 
-			let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
-			console.log(TotalDays + ' days to world Cup');
+			// let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+			// console.log(TotalDays + ' days to world Cup');
 
-			count++;
+			// count++;
 
 		})
 
