@@ -143,6 +143,7 @@
 				if(days > 1) {
 					streaks.push(oneCount);
 					oneCount = Number(key.steps);
+					if(count === allSteps.length) streaks.push(oneCount);
 				}
 
 				if(days == 1) oneCount = Number(oneCount) + Number(allSteps[count].steps);
