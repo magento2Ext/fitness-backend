@@ -119,52 +119,64 @@
 			}
 		}
 		
-		bestStreak();
-
+		let bestStreakK = await bestStreak();
 
 		async function bestStreak(){
 
-		let allSteps = 	await StepTracker.find({  employeeId: req.user.user_id}).sort({date:1});
+			const promise = new Promise( async (resolve, reject) => {
+
+				let allSteps = 	await StepTracker.find({  employeeId: req.user.user_id}).sort({date:1});
         
-		let count = 1;
-		let streaks = [];
-		let oneCount = Number(allSteps[0].steps);
-		allSteps.forEach( (key) => {
-           
-            if(allSteps[count] != null && allSteps[count] != undefined){
-			
-				let date1 = new Date(allSteps[count].date.replace(/-/g, "/"));
-				let date2 = new Date(key.date.replace(/-/g, "/"));
-	
-				let difference =  date1.getTime() - date2.getTime()
-	
-				let days = Math.ceil(difference / (1000 * 3600 * 24));
-			
-				if(days > 1) {
-					streaks.push(oneCount);
-					oneCount = Number(key.steps);
-				}
+				let count = 1;
+				let streaks = [];
+				let oneCount = Number(allSteps[0].steps);
 
-				if(days == 1) oneCount = Number(oneCount) + Number(allSteps[count].steps);
+				if(allSteps.length == 0 ) resolve(0)
+				else{
 
-				count++;
-
-				if(days > 1 && count === allSteps.length) {
-					if(count === allSteps.length) streaks.push(oneCount);
-				}
- 
-				console.log('streaks', streaks, days, oneCount);
-
-				if(count === allSteps.length){
-					if(days == 1) streaks.push(oneCount);
-					
-				}
-
+					allSteps.forEach( (key) => {
+				   
+						if(allSteps[count] != null && allSteps[count] != undefined){
+						
+							let date1 = new Date(allSteps[count].date.replace(/-/g, "/"));
+							let date2 = new Date(key.date.replace(/-/g, "/"));
 				
-			}
+							let difference =  date1.getTime() - date2.getTime()
+				
+							let days = Math.ceil(difference / (1000 * 3600 * 24));
+						
+							if(days > 1) {
+								streaks.push(oneCount);
+								oneCount = Number(key.steps);
+							}
+			
+							if(days == 1) oneCount = Number(oneCount) + Number(allSteps[count].steps);
+			
+							count++;
+			
+							if(days > 1 && count === allSteps.length) {
+								if(count === allSteps.length) streaks.push(oneCount);
+							}
+			 
+							if(count === allSteps.length){
+								if(days == 1) streaks.push(oneCount);
+ 
+								 let max = Math.max(...streaks);
+								resolve(max)
+							}
+			
+							
+						}
+			
+					})
 
-		})
+				}
 
+
+
+			});
+
+			return promise;
 		}
 		
 		var data = {}; 
@@ -176,7 +188,7 @@
 		data.step_target = emptStepTarget
 		data.target = target
 		data.activity = stepFinalArray
-		data.best_streak = "1000"
+		data.best_streak = bestStreakK
 		data.avg_pace = "100"
 		
 		response = webResponse(201, true, data)  
