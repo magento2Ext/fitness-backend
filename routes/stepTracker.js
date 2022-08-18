@@ -122,7 +122,7 @@
 		bestStreak();
 
 
-		function bestStreak(){
+		async function bestStreak(){
 
 		let allSteps = 	await StepTracker.find({  employeeId: req.user.user_id}).sort({date:1});
         
