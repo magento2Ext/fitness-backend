@@ -122,16 +122,15 @@
 		console.log('bestStreakK')
 	   let bestStreakK = await bestStreak();
 
-	  
 
 		async function bestStreak(){
-
+			console.log('bestStreakK 11')
 			const promise = new Promise( async (resolve, reject) => {
 
 				let allSteps = 	await StepTracker.find({  employeeId: req.user.user_id}).sort({date:1});
     
 				if(allSteps.length == 0 ) {
-					console.log('bestStreakK 11')
+				
 					resolve(0)}
 				else{
 
