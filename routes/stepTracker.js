@@ -127,10 +127,11 @@
 		let allSteps = 	await StepTracker.find({  employeeId: req.user.user_id}).sort({date:1});
         
 		let count = 1;
+		let streaks = [];
+		let oneCount = allSteps[0].steps;
 		allSteps.forEach( (key) => {
-            // console.log(key + ' days to world Cup');
-             
-            if(allSteps[count] != null || allSteps[count] != undefined){
+           
+            if(allSteps[count] != null && allSteps[count] != undefined){
 				console.log(allSteps[count])
 				console.log(key)
 				let date1 = new Date(allSteps[count].date.replace(/-/g, "/"));
@@ -138,10 +139,21 @@
 	
 				let difference =  date1.getTime() - date2.getTime()
 	
-				let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
-				console.log(TotalDays + ' days to world Cup');
-	
+				let days = Math.ceil(difference / (1000 * 3600 * 24));
 				count++;
+				if(days > 1) {
+					streaks.push(oneCount);
+					oneCount = key.steps;
+				}
+
+				if(days == 1) oneCount = oneCount + allSteps[count].steps;
+
+				if(days == 1 && (count) === (allSteps.length + 1)){
+					streaks.push(oneCount);
+					console.log('streaks', streaks);
+				}
+
+
 			}
 
 		})
