@@ -119,6 +119,7 @@
 			}
 		}
 		
+		console.log(steps, noOfFound);
 		var data = {}; 
 		var avg = steps/noOfFound;
 		data.totalSteps = steps.toString()
