@@ -130,9 +130,9 @@
 				let allSteps = 	await StepTracker.find({  employeeId: req.user.user_id}).sort({date:1});
 		 
 		
-				if(allSteps.length == 0 ) {
-				console.log('allSteps 0', allSteps)
-					resolve(0)
+				if(allSteps.length < 2) {
+					if(allSteps.length == 1) resolve(allSteps[0].steps);
+					else resolve(0);
 				}
 				else{
 
@@ -175,16 +175,6 @@
 							}
 			
 							
-						}else{
-							count++;
-							if(count === allSteps.length){
-								if(streaks.length == 0) resolve(0);
-								else{
-									let max = Math.max(...streaks);
-									resolve(max)
-								}
-							}
-
 						}
 			
 					})
