@@ -700,4 +700,21 @@ router.put('/update/:id',async(req,res)=> {
 })
 
 
+router.post('/updateVisit', auth, async(req,res)=> {
+
+	try{
+		let empId = req.user.user_id;
+        await Employee.updateOne({_id: empId}, {$set: {visited: true}});
+		response = webResponse(202, true, dict);
+		res.send(response);
+
+   }catch(err){
+	   console.log('err', err)
+	   res.send(err)
+	   
+   }
+
+})
+
+
  module.exports = router

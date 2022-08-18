@@ -58,6 +58,10 @@ const employeeSchema = new mongoose.Schema({
     userOrganizations: {
 		type: Array,
 		default:[]
+	},
+    visited: {
+        type: Boolean,
+        default: false
 	}
 })
 
