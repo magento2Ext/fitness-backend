@@ -144,7 +144,7 @@ router.post('/app_analytics', auth, async(req,res) => {
 	var startDate = new Date();
 	startDate.setDate(startDate.getDate() - 29);
 	
-	var emptStepTarget['stepTarget'] = "0";
+	var emptStepTarget = {};
 	var target = false;
 	
 	const stepTrackerList = await StepTracker.find({  employeeId: req.user.user_id,
@@ -158,6 +158,8 @@ router.post('/app_analytics', auth, async(req,res) => {
 	if(stepTarget) {
 		emptStepTarget['stepTarget'] = stepTarget.step_target;
 		target = true;
+	}else{
+		emptStepTarget['stepTarget'] = "0";
 	}
 	
     var stepTrackerDetailsToday = await StepTracker.findOne({ date: dateLib.format(endDate,'YYYY-MM-DD'),  employeeId: req.user.user_id});
