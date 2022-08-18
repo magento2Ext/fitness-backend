@@ -8,6 +8,7 @@
  
  router.post('/save', auth, async(req,res) => {
 	try{ 
+
 	    var empId = req.user.user_id;
 		var today =  dateLib.format(new Date(),'YYYY-MM-DD');
 		const stepTracker = new StepTracker({
@@ -119,7 +120,9 @@
 			}
 		}
 		
-		let bestStreakK = await bestStreak();
+	   let bestStreakK = await bestStreak();
+
+	   console.log('bestStreakK', bestStreakK)
 
 		async function bestStreak(){
 
@@ -127,7 +130,9 @@
 
 				let allSteps = 	await StepTracker.find({  employeeId: req.user.user_id}).sort({date:1});
     
-				if(allSteps.length == 0 ) resolve(0)
+				if(allSteps.length == 0 ) {
+					 
+					resolve(0)}
 				else{
 
 					let count = 1;
