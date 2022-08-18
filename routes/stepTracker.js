@@ -132,8 +132,7 @@
 		allSteps.forEach( (key) => {
            
             if(allSteps[count] != null && allSteps[count] != undefined){
-				console.log(allSteps[count])
-				console.log(key)
+			
 				let date1 = new Date(allSteps[count].date.replace(/-/g, "/"));
 				let date2 = new Date(key.date.replace(/-/g, "/"));
 	
@@ -148,12 +147,14 @@
 
 				if(days == 1) oneCount = oneCount + allSteps[count].steps;
 
+				count++;
+				
 				if(days == 1 && (count) === (allSteps.length + 1)){
 					streaks.push(oneCount);
 					console.log('streaks', streaks);
 				}
 
-				count++;
+				
 			}
 
 		})
