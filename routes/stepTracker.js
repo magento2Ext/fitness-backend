@@ -124,7 +124,7 @@
 		var avg = steps/noOfFound;
 	 
 		data.totalSteps = steps.toString()
-		data.avgStep = avg == NaN ? 0 : avg.toString()
+		data.avgStep = avg == 'NaN' ? 0 : avg.toString()
 		data.todayData = stepTrackerDetailsToday
 		data.step_target = emptStepTarget
 		data.target = target
