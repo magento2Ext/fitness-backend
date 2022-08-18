@@ -65,12 +65,11 @@ router.post('/educationList', auth, async(req,res) => {
 		const employeeDetails = await Employee.findById(empId);
         let query = {};
 		if(employeeDetails.userOrganizations.length !=0 ){
-			query = {userType: 'org', auth_user_id: employeeDetails.organizationId}
+			query = {userType: 'org', auth_user_id: String(employeeDetails.organizationId)}
 		}else{
 			query = {userType: 'admin'}
 		}
 
-		
 		var education = await EducationModule.find(query);
 
 		console.log(employeeDetails, query, education)
