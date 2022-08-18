@@ -249,7 +249,7 @@ router.post('/app_analytics', auth, async(req,res) => {
 		
 
 
-
+        console.log('steps/noOfFound', steps, noOfFound)
 		var data = {}; 
 		var avg = steps/noOfFound;
 		data.totalSteps = steps.toString()
