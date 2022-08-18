@@ -119,7 +119,7 @@
 				stepFinalArray.push(stepTrackerData);
 			}
 		}
-		console.log('bestStreakK')
+	 
 	   let bestStreakK = await bestStreak();
 
 
@@ -142,9 +142,10 @@
       
 					allSteps.forEach( (key) => {
 
-						console.log(key)
-				   
+					
 						if(allSteps[count] != null && allSteps[count] != undefined){
+
+							console.log('allSteps[count]', allSteps[count])
 						
 							console.log('bestStreakK 11', key)
 
