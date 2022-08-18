@@ -239,7 +239,7 @@ router.post("/module/list", auth, async(req, res) => {
 		group.update(firebaseData,(err)=>{
 			if(err){
 				resMessage = "Something went wrong" + err;
-				response = webResponse(200, true, resMessage)  
+				response = webResponse(200, false, resMessage)  
 				res.send(response)		
 				return;
 			}
