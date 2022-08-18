@@ -69,6 +69,7 @@ router.post('/Videoslist', auth, async(req,res) => {
 			videoDetail.placeholder_image= req.body.placeholder_image,
 			videoDetail.video_link = req.body.video_link,
 			videoDetail.video_duration = req.body.video_duration
+			videoDetail.userType = req.body.userType
 			const videoDetailSaved = await videoDetail.save()
 			response = webResponse(202, true, videoDetailSaved)  
 			res.send(response)
