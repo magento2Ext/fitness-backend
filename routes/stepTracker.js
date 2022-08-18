@@ -150,7 +150,7 @@
 				count++;
 
 				console.log(count, days, allSteps.length)
-				if(days == 1 && count === allSteps.length)){
+				if(days == 1 && count === allSteps.length){
 					streaks.push(oneCount);
 					console.log('streaks', streaks);
 				}
