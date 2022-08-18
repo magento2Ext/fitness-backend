@@ -49,7 +49,7 @@
 	var startDate = new Date();
 	startDate.setDate(startDate.getDate() - 29);
 	
-	var emptStepTarget = {};
+	var emptStepTarget = "0";
 	var target = false;
 	
 	const stepTrackerList = await StepTracker.find({  employeeId: req.user.user_id,
@@ -61,7 +61,7 @@
 		
     var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
 	if(stepTarget) {
-		emptStepTarget = stepTarget;
+		emptStepTarget = stepTarget.step_target;
 		target = true;
 	}
 	
@@ -156,7 +156,7 @@ router.post('/app_analytics', auth, async(req,res) => {
 		
     var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
 	if(stepTarget) {
-		emptStepTarget = stepTarget.step_target;
+		emptStepTarget = stepTarget;
 		target = true;
 	}
 	
@@ -249,7 +249,7 @@ router.post('/app_analytics', auth, async(req,res) => {
 		
 
 
-        console.log('steps/noOfFound', steps, noOfFound)
+
 		var data = {}; 
 		var avg = steps/noOfFound;
 		data.totalSteps = steps.toString()
