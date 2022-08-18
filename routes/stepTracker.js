@@ -148,7 +148,8 @@
 				if(days == 1) oneCount = oneCount + allSteps[count].steps;
 
 				count++;
-				
+
+				console.log(count, days, allSteps.length)
 				if(days == 1 && (count) === (allSteps.length + 1)){
 					streaks.push(oneCount);
 					console.log('streaks', streaks);
