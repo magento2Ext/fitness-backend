@@ -140,7 +140,7 @@
 				let difference =  date1.getTime() - date2.getTime()
 	
 				let days = Math.ceil(difference / (1000 * 3600 * 24));
-				count++;
+			
 				if(days > 1) {
 					streaks.push(oneCount);
 					oneCount = key.steps;
@@ -153,7 +153,7 @@
 					console.log('streaks', streaks);
 				}
 
-
+				count++;
 			}
 
 		})
