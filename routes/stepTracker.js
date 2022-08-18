@@ -130,7 +130,7 @@
 		allSteps.forEach( (key) => {
             // console.log(key + ' days to world Cup');
 
-            if(count == allSteps.length - 1){
+            if(count <= allSteps.length - 1){
 				let date1 = new Date(allSteps[count+1].date.replace(/-/g, "/"));
 				let date2 = new Date(key.date.replace(/-/g, "/"));
 	
