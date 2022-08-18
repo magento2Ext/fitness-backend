@@ -705,10 +705,10 @@ router.post('/updateVisit', auth, async(req,res)=> {
 	try{
 		let empId = req.user.user_id;
 		let query = {};
-		if(req.body.type === 'disclaimer') query = {$set: {visited: true}}
-		if(req.body.type === 'guide') query = {$set: {visited: true}}
-        await Employee.updateOne({_id: empId}, query);
-		response = webResponse(202, true, dict);
+		if(req.body.type == 'disclaimer') query = {$set: {visited: true}}
+		if(req.body.type == 'guide') query = {$set: {visited: true}}
+        let result =  await Employee.updateOne({_id: empId}, query);
+		response = webResponse(202, true, result);
 		res.send(response);
 
    }catch(err){
