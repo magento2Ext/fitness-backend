@@ -131,10 +131,12 @@
 		 
 		
 				if(allSteps.length == 0 ) {
-				
+				console.log('allSteps 0', allSteps)
 					resolve(0)
 				}
 				else{
+
+					console.log('allSteps 1', allSteps)
 
 					let count = 1;
 					let streaks = [];
