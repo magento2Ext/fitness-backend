@@ -126,14 +126,14 @@
 
 		let allSteps = 	await StepTracker.find({  employeeId: req.user.user_id}).sort({date:1});
         
-		let count = 0;
+		let count = 1;
 		allSteps.forEach( (key) => {
             // console.log(key + ' days to world Cup');
-
+             
             if(count <= allSteps.length - 1){
-				console.log(allSteps[count+1])
+				console.log(allSteps[count])
 				console.log(key)
-				let date1 = new Date(allSteps[count+1].date.replace(/-/g, "/"));
+				let date1 = new Date(allSteps[count].date.replace(/-/g, "/"));
 				let date2 = new Date(key.date.replace(/-/g, "/"));
 	
 				let difference =  date2.getTime() - date1.getTime()
