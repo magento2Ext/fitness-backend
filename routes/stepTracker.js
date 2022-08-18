@@ -143,14 +143,13 @@
 				if(days > 1) {
 					streaks.push(oneCount);
 					oneCount = Number(key.steps);
-				
 				}
 
 				if(days == 1) oneCount = Number(oneCount) + Number(allSteps[count].steps);
 
 				count++;
  
-				console.log('streaks', days);
+				console.log('streaks', days, oneCount);
 
 				if(count === allSteps.length){
 					if(days == 1) streaks.push(oneCount);
