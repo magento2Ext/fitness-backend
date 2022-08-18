@@ -711,7 +711,7 @@ router.post('/updateVisit', auth, async(req,res)=> {
 		
           await Employee.updateOne({_id: empId}, query, {new: true});
 
-		  setTimeout(() => {
+		  setTimeout(async () => {
 			let result =  await Employee.findOne({_id: empId});
 			console.log('empId', empId, result);
 			response = webResponse(202, true, result);
