@@ -119,9 +119,10 @@
 			}
 		}
 		
-		console.log(steps, noOfFound);
+		
 		var data = {}; 
 		var avg = steps/noOfFound;
+		console.log(avg);
 		data.totalSteps = steps.toString()
 		data.avgStep = avg.toString()
 		data.todayData = stepTrackerDetailsToday
