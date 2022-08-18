@@ -709,11 +709,18 @@ router.post('/updateVisit', auth, async(req,res)=> {
 		if(req.body.type == 'disclaimer') query = {$set: {seenDisclaimer: true}}
 		if(req.body.type == 'guide') query = {$set: {seenGuide: true}}
 		
-        let result =  await Employee.updateOne({_id: empId}, query);
+          await Employee.updateOne({_id: empId}, query, {new: true});
 
-		console.log('empId', empId, result);
-		response = webResponse(202, true, result);
-		res.send(response);
+		  setTimeout(() => {
+			let result =  await Employee.findOne({_id: empId});
+			console.log('empId', empId, result);
+			response = webResponse(202, true, result);
+			res.send(response);
+			
+		  }, 2000);
+	
+
+
 
    }catch(err){
 	   console.log('err', err)
