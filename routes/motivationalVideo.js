@@ -80,6 +80,7 @@ router.post('/Videoslist', auth, async(req,res) => {
 		res.send(response)		
 		return;
 	}catch(err){ 
+		console.log(err)
 		response = webResponse(403, false, err)  
 	    res.send(response)
 		return;
