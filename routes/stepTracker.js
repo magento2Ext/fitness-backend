@@ -136,7 +136,7 @@
 				let date1 = new Date(allSteps[count].date.replace(/-/g, "/"));
 				let date2 = new Date(key.date.replace(/-/g, "/"));
 	
-				let difference =  date2.getTime() - date1.getTime()
+				let difference =  date1.getTime() - date2.getTime()
 	
 				let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
 				console.log(TotalDays + ' days to world Cup');
