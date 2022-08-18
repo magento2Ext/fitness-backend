@@ -49,7 +49,7 @@
 	var startDate = new Date();
 	startDate.setDate(startDate.getDate() - 29);
 	
-	var emptStepTarget = "0";
+	var emptStepTarget = {};
 	var target = false;
 	
 	const stepTrackerList = await StepTracker.find({  employeeId: req.user.user_id,
@@ -61,9 +61,9 @@
 		
     var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
 	if(stepTarget) {
-		emptStepTarget = stepTarget.step_target;
+		emptStepTarget['step_target'] = stepTarget.step_target;
 		target = true;
-	}
+	}else{emptStepTarget['step_target'] = '0';}
 	
     var stepTrackerDetailsToday = await StepTracker.findOne({ date: dateLib.format(endDate,'YYYY-MM-DD'),  employeeId: req.user.user_id});
 	if(!stepTrackerDetailsToday) {
