@@ -145,6 +145,7 @@ router.post('/educationList', auth, async(req,res) => {
 			educationDetail.video_link= req.body.video_link,
 			educationDetail.module_id= req.body.module_id,
 			educationDetail.is_picture= req.body.is_picture
+			educationDetail.userType= req.body.userType
 			const educationDetailSaved = await educationDetail.save()
 			response = webResponse(202, true, educationDetailSaved)  
 			res.send(response)
