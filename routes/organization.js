@@ -145,8 +145,8 @@ router.post("/module/list", auth, async(req, res) => {
 
 	let doesExist = await Organization.findOne({email: req.body.email});
 	if(doesExist!=null) {
-						resMessage = "This email is already in use, Please use another";
-						response = webResponse(200, true, resMessage)  
+						resMessage = "emailErr";
+						response = webResponse(200, false, resMessage)  
 						res.send(response)		
 						return;
      }
@@ -239,7 +239,7 @@ router.post("/module/list", auth, async(req, res) => {
 		group.update(firebaseData,(err)=>{
 			if(err){
 				resMessage = "Something went wrong" + err;
-				response = webResponse(200, false, resMessage)  
+				response = webResponse(200, true, resMessage)  
 				res.send(response)		
 				return;
 			}
