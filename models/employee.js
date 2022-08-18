@@ -59,7 +59,11 @@ const employeeSchema = new mongoose.Schema({
 		type: Array,
 		default:[]
 	},
-    visited: {
+    seenDisclaimer: {
+        type: Boolean,
+        default: false
+	},
+    seenGuide: {
         type: Boolean,
         default: false
 	}

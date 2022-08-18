@@ -704,7 +704,10 @@ router.post('/updateVisit', auth, async(req,res)=> {
 
 	try{
 		let empId = req.user.user_id;
-        await Employee.updateOne({_id: empId}, {$set: {visited: true}});
+		let query = {};
+		if(req.body.type === 'disclaimer') query = {$set: {visited: true}}
+		if(req.body.type === 'seenGuide') query = {$set: {visited: true}}
+        await Employee.updateOne({_id: empId}, query);
 		response = webResponse(202, true, dict);
 		res.send(response);
 
