@@ -136,13 +136,13 @@
 				}
 				else{
 
-					console.log('allSteps 1', allSteps)
-
 					let count = 1;
 					let streaks = [];
 					let oneCount = Number(allSteps[0].steps);
       
 					allSteps.forEach( (key) => {
+
+						console.log(key)
 				   
 						if(allSteps[count] != null && allSteps[count] != undefined){
 						
