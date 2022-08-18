@@ -402,7 +402,7 @@ router.post('/reset/password', async(req,res) => {
 			let otp = Math.floor(1000 + Math.random() * 9000);
 			employee.otp = otp;
 			let emailContent = "OTP is "+otp;
-			let subject = 'Register OTP '
+			let subject = 'Account Verification OTP '
 			sendEmail(req.body.email, subject, emailContent)
 			
 			const result = {};
