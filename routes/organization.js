@@ -142,6 +142,15 @@ router.post("/module/list", auth, async(req, res) => {
 });
  
  router.post('/save', async(req,res) => {
+
+	let doesExist = await Organization.findOne({email: req.body.email});
+	if(doesExist!=null) {
+						resMessage = "This email is already in use, Please use another";
+						response = webResponse(200, true, resMessage)  
+						res.send(response)		
+						return;
+     }
+
 	let referCode = (Math.random() + 1).toString(36).substring(6);
 	const organization = new Organization({
         organizationName: req.body.organizationName,
