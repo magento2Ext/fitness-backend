@@ -128,7 +128,7 @@
         
 		let count = 1;
 		let streaks = [];
-		let oneCount = allSteps[0].steps;
+		let oneCount = Number(allSteps[0].steps);
 		allSteps.forEach( (key) => {
            
             if(allSteps[count] != null && allSteps[count] != undefined){
@@ -142,10 +142,10 @@
 			
 				if(days > 1) {
 					streaks.push(oneCount);
-					oneCount = key.steps;
+					oneCount = Number(key.steps);
 				}
 
-				if(days == 1) oneCount = oneCount + allSteps[count].steps;
+				if(days == 1) oneCount = Number(oneCount) + Number(allSteps[count].steps);
 
 				count++;
 
