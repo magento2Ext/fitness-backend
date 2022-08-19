@@ -197,7 +197,7 @@
 		data.step_target = emptStepTarget
 		data.target = target
 		data.activity = stepFinalArray
-		data.best_streak = bestStreakK
+		data.best_streak = Number(bestStreakK)
 		data.avg_pace = "100"
 		
 		response = webResponse(201, true, data)  
