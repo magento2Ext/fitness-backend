@@ -46,10 +46,9 @@
 			moduleArray[id] = moduleDetail.name;
 		}) 
 		
-         Organization.find({},{},query,function(err, data) {
+         Organization.find({},{},query,function(err,data) {
 				if(err) {
-				    console.log(err)
-					response = webResponse(202, false, {message: "Error fetching data"})  
+					response = webResponse(200, false, "Error fetching data")  
 					res.json(response);
 				    return "";
 				} else {
@@ -93,7 +92,6 @@
 					})
 					
 					result.data = orgList;
-					result.message = "";
 					response = webResponse(202, true, result)  
 					res.send(response);
 				   return "";
@@ -589,7 +587,7 @@ router.post("/orginzations/list", auth,  async(req, res) => {
 
 
 					}else{
-						response = webResponse(200, false)  
+						response = webResponse(200, false, {message: ""})  
 						res.json(response);
 						return "";
 					}
