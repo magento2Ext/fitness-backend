@@ -48,7 +48,7 @@
 		
          Organization.find({},{},query,function(err, data) {
 				if(err) {
-				 
+				    console.log(err)
 					response = webResponse(202, false, {message: "Error fetching data"})  
 					res.json(response);
 				    return "";
