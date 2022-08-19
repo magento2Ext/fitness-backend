@@ -46,9 +46,10 @@
 			moduleArray[id] = moduleDetail.name;
 		}) 
 		
-         Organization.find({},{},query,function(err,data) {
+         Organization.find({},{},query,function(err, data) {
 				if(err) {
-					response = webResponse(200, false, "Error fetching data")  
+				 
+					response = webResponse(200, false, {message: "Error fetching data"})  
 					res.json(response);
 				    return "";
 				} else {
