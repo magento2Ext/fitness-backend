@@ -92,6 +92,7 @@
 					})
 					
 					result.data = orgList;
+					result.message = "";
 					response = webResponse(202, true, result)  
 					res.send(response);
 				   return "";
@@ -144,7 +145,8 @@ router.post("/module/list", auth, async(req, res) => {
  router.post('/save', async(req,res) => {
 
 	let doesExist = await Organization.findOne({email: req.body.email});
-	if(doesExist!=null) {
+
+	if(doesExist != null) {
 						resMessage = "emailErr";
 						response = webResponse(200, false, resMessage)  
 						res.send(response)		
