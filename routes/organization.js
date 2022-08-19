@@ -587,7 +587,7 @@ router.post("/orginzations/list", auth,  async(req, res) => {
 
 
 					}else{
-						response = webResponse(202, true, {})  
+						response = webResponse(202, true, [])  
 						res.json(response);
 						return "";
 					}
