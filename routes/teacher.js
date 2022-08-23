@@ -24,6 +24,7 @@ router.post('/list', async(req,res) => {
 
 router.post('/addTeacher', async(req,res) => { 
     try{
+		console.log('teachersteachers 11')
 		let {name, teacher_image, orgId, type} = req.body;
 		if(!(name && teacher_image && orgId && type)){
 	        jsonObj = []
