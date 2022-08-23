@@ -199,7 +199,7 @@ app.post("/weight", auth, async(req, res) => {
 					'weight' : col.weight,
 					'day' :  days[col.date.getDay()],
 					'difference': convertIntoTwoDecimal(difference),
-					'weightLine':line,
+					'weightLine': convertIntoTwoDecimal(line),
 				}
 			}
 			weightArray.push(weight);
