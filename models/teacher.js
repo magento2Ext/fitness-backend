@@ -10,7 +10,7 @@ const teacherSchema = new mongoose.Schema({
     },
     teacher_image: {
         type: String,
-        required: true,
+        required: false,
         default: null
     },
     orgId: {

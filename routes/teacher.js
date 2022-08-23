@@ -4,6 +4,7 @@ const Teachers = require('../models/teacher')
 const Audio = require('../models/teacher_audio')
 const Employee = require('../models/employee')
 const auth = require("../middleware/auth");
+const errors = ['', null, undefined];
 var ObjectID = require('mongodb').ObjectID;
 require('../functions')
 
@@ -23,6 +24,38 @@ router.post('/list', async(req,res) => {
 
 router.post('/addTeacher', async(req,res) => { 
     try{
+		let {name, teacher_image, orgId, type} = req.body;
+		if(!(name && teacher_image && orgId && type)){
+	        jsonObj = []
+			if(!(name)) {
+				var item = {
+					'key' : 'name',
+					'value' : 'required' 
+				}
+			   jsonObj.push(item);
+			}
+
+			if(!(orgId)) {
+				var item = {
+					'key' : 'orgId',
+					'value' : 'required' 
+				}
+			   jsonObj.push(item);
+			}
+
+			if(!(type)) {
+				var item = {
+					'key' : 'type',
+					'value' : 'required' 
+				}
+			   jsonObj.push(item);
+			}
+
+		    response = webResponse(406, false, jsonObj) 
+		    res.send(response)
+		  return;
+		}
+		
 		let newTeacher  = new Teachers({
 			name: req.body.name,
 			teacher_image: req.body.teacher_image,
