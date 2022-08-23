@@ -103,9 +103,11 @@ router.post('/teachersByOrgId', auth, async(req,res) => {
 router.post('/teachersCats', auth, async(req,res) => { 
     try{
 		var empId = req.user.user_id;
-		const employeeDetails = await Employee.findById(empId)
-
-		const teachers = await Audio.find({orgId: employeeDetails.userOrganizations.length != 0 ?  employeeDetails.organizationId : '0'});
+		const employeeDetails = await Employee.findById(empId);
+		let query  = {};
+		if(employeeDetails.userOrganizations.length != 0) query = {orgId: employeeDetails.organizationId, type: 'org'}
+		else query = {type: 'admin'}
+		const teachers = await Audio.find(query);
         response = webResponse(201, true, teachers)  
 		res.send(response)		
 		return;
