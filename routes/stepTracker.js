@@ -43,6 +43,23 @@
     }
 })
 
+router.post('/resetTarget', auth, async(req,res) => {
+	try{ 
+
+		var empId = req.user.user_id;
+		let result = await EmpStepTarget.deleteMany({employeeId: empId});
+
+		response = webResponse(202, true, result)  
+		res.send(response);
+		return;
+
+    }catch(err){ 
+		response = webResponse(403, false, err)  
+	    res.send(response)
+		return;
+    }
+})
+
 
  router.post('/list', auth, async(req,res) => {
 	var endDate = new Date(); 
@@ -204,9 +221,6 @@
 		res.send(response);
 		return;
 })
-
-
-
 
 router.post('/app_analytics', auth, async(req,res) => {
 	var endDate = new Date(); 
