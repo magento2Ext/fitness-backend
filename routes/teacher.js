@@ -83,6 +83,7 @@ router.post('/addTeacher', async(req,res) => {
 })
 
 
+
 router.post('/teachersByOrgId', auth, async(req,res) => { 
     try{
 		var empId = req.user.user_id;
@@ -215,6 +216,109 @@ router.post('/save', async(req,res) => {
 		
 		return;
 		
+	}catch(err){ 
+		teacher_res = webResponse(403, false, err)  
+	    res.send(teacher_res)
+		return;
+    } 
+})
+
+
+
+router.post('/saveTeacherPost', async(req,res) => {
+	
+	try{ 
+
+      let {teacherId, catId, title, image, url, duration, type, id} = req.body;
+
+	  if(!(teacherId && catId && title && image && url && duration && type)){
+		jsonObj = []
+		if(!(teacherId)) {
+			var item = {
+				'key' : 'teacherId',
+				'value' : 'required' 
+			}
+		   jsonObj.push(item);
+		}
+
+		if(!(catId)) {
+			var item = {
+				'key' : 'catId',
+				'value' : 'required' 
+			}
+		   jsonObj.push(item);
+		}
+
+		if(!(title)) {
+			var item = {
+				'key' : 'title',
+				'value' : 'required' 
+			}
+		   jsonObj.push(item);
+		}
+
+		if(!(image)) {
+			var item = {
+				'key' : 'image',
+				'value' : 'required' 
+			}
+		   jsonObj.push(item);
+		}
+
+		if(!(url)) {
+			var item = {
+				'key' : 'url',
+				'value' : 'required' 
+			}
+		   jsonObj.push(item);
+		}
+
+		if(!(duration)) {
+			var item = {
+				'key' : 'duration',
+				'value' : 'required' 
+			}
+		   jsonObj.push(item);
+		}
+
+		if(!(type)) {
+			var item = {
+				'key' : 'type',
+				'value' : 'required' 
+			}
+		   jsonObj.push(item);
+		}
+
+		response = webResponse(406, false, jsonObj) 
+		res.send(response)
+		return;
+	}
+
+	let data = {
+		teacherId: teacherId,
+		catId: catId,
+		title: title,
+		image: image,
+		url: url,
+		duration: duration,
+		type: type
+     }
+
+
+	 if(id){
+		let result = await Audio.updateOne({_id: id}, {$set: data}, {new: true});
+		response = webResponse(202, true, result)  
+		res.send(response)
+		return "";
+	 }else{
+		let newAudio = new Audio(data);
+		let result = await newAudio.save();
+		response = webResponse(202, true, result)  
+		res.send(response)
+		return "";
+
+	 }
+
 	}catch(err){ 
 		teacher_res = webResponse(403, false, err)  
 	    res.send(teacher_res)

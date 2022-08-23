@@ -2,35 +2,40 @@ const mongoose = require('mongoose')
 
 
 const teacherSchema = new mongoose.Schema({
-	teacher_id: {
+	teacherId: {
         type: String,
         required: true,
 		default: null
     },
-    audio_title: {
+    catId: {
+        type: String,
+        required: true,
+        default: null
+    },
+    title: {
         type: String,
         required: true,
 		default: null
     },
-    audio_image: {
+    image: {
         type: String,
         required: true,
         default: null
     },
-	audio_voice: {
+	url: {
         type: String,
         required: true,
         default: null
     },
-	audio_duration: {
+	duration: {
         type: String,
         required: true,
         default: null
     },
-	catId: {
+    type: {
         type: String,
         required: true,
-        default: null
+        default: null 
     }
    
 })
