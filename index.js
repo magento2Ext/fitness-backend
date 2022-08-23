@@ -135,17 +135,16 @@ app.post("/weight/list", auth, async(req, res) => {
 app.post("/weight", auth, async(req, res) => { 
   try{ 
         
-	    let userDetails = await Employee.findOne({_id: req.user.user_id});
+	    // let userDetails = await Employee.findOne({_id: req.user.user_id});
 
-		let date1 = new Date(userDetails.date.replace(/-/g, "/"));
-		let date2 = new Date();
+		// let date1 = new Date(userDetails.date.replace(/-/g, "/"));
+		// let date2 = new Date();
 
-		let difference1 =  date2.getTime() - date1.getTime();
+		// let difference1 =  date2.getTime() - date1.getTime();
 
-		let days1 = Math.ceil(difference1 / (1000 * 3600 * 24));
+		// let days1 = Math.ceil(difference1 / (1000 * 3600 * 24));
 
-		console.log('daysdays', days1)
-
+		// console.log('daysdays', days1)
 
 		var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 		
