@@ -30,7 +30,9 @@ router.post('/addTeacher', async(req,res) => {
 			type: req.body.type,
 		});
 		const teachers =  newTeacher.save();
-        response = webResponse(201, true, teachers);
+		if(teachers)  response = webResponse(201, true, teachers);
+		else  response = webResponse(201, false, "Something went wrong, please try again");
+       
 		res.send(response);
 		return;
 
