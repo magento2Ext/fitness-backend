@@ -53,8 +53,10 @@ router.post('/addTeacher', async(req,res) => {
 
 		    response = webResponse(406, false, jsonObj) 
 		    res.send(response)
-		  return;
+		    return;
 		}
+
+		console.log('teachersteachers')
 
 		let newTeacher  = new Teachers({
 			name: name,
@@ -64,7 +66,7 @@ router.post('/addTeacher', async(req,res) => {
 
 		if(teacher_image) newTeacher.teacher_image = teacher_image;
 		const teachers =  await newTeacher.save();
-		console.log('teachersteachers', teachers)
+		
 		if(teachers)  response = webResponse(201, true, teachers);
 		else  response = webResponse(201, false, "Something went wrong, please try again");
        
