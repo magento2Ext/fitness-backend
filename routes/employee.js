@@ -273,6 +273,7 @@ router.post('/reset/password', async(req,res) => {
  router.post('/save', async(req,res) => {
 	try{ 
 		let todayDate = new Date();
+		console.log('td', dateLib.format(todayDate,'YYYY-MM-DD'))
 		const employee = new Employee({
 			firstName: req.body.firstName,
 			lastName: req.body.lastName,
