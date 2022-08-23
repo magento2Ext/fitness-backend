@@ -71,6 +71,7 @@ router.post('/addTeacher', async(req,res) => {
 		return;
 
     }catch(err){
+		console.log(err)
         response = webResponse(200, false, "Something went wrong, please try again")  
 	    res.send(response)
 		return;
