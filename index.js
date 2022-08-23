@@ -198,7 +198,7 @@ app.post("/weight", auth, async(req, res) => {
 					'date' :  dateLib.format(col.date,'YYYY-MM-DD'),
 					'weight' : col.weight,
 					'day' :  days[col.date.getDay()],
-					'difference': difference,
+					'difference': convertIntoTwoDecimal(difference),
 					'weightLine':line,
 				}
 			}
@@ -648,9 +648,8 @@ app.post("/analytics", auth, async(req, res) => {
 		
 			response = webResponse(202, true, data)  
 			res.send(response);
+			return;
 		  }, 5000);
-
-		  return;
 	  } catch(err){ 
 		  console.log(err)  
 		  response = webResponse(403, false, err)  
@@ -661,6 +660,14 @@ app.post("/analytics", auth, async(req, res) => {
   }
   
   ); 
+
+
+  function convertIntoTwoDecimal(num){
+	let n;
+	if(num % 1 !== 0) let n = num.toFixed(2);
+	else let n = num;
+	return n;
+  }
 
 const otherApiRouter = require('./routes/otherapi');
 const { LEGAL_TCP_SOCKET_OPTIONS } = require("mongodb");
@@ -673,3 +680,4 @@ app.get('/', (req,res) => {
 app.listen(port, () => {
     console.log('Server started'+port)
 })
+
