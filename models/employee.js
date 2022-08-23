@@ -66,7 +66,11 @@ const employeeSchema = new mongoose.Schema({
     seenGuide: {
         type: Boolean,
         default: false
-	}
+	},
+    date: {
+        type: String,
+		default: '2022-07-02'
+    },
 })
 
 module.exports = mongoose.model('Employee', employeeSchema)

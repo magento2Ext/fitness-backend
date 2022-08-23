@@ -272,6 +272,7 @@ router.post('/reset/password', async(req,res) => {
  
  router.post('/save', async(req,res) => {
 	try{ 
+		let todayDate = new Date();
 		const employee = new Employee({
 			firstName: req.body.firstName,
 			lastName: req.body.lastName,
@@ -279,7 +280,8 @@ router.post('/reset/password', async(req,res) => {
 			userName: req.body.userName,
 			password: req.body.password,
 			employeeType: 'Individual',
-			isVerified: true
+			isVerified: true,
+			date: dateLib.format(todayDate,'YYYY-MM-DD')
 			/* zipCode: req.body.zipCode,
 			referCode: req.body.referCode,
 			employeeType: req.body.employeeType */
@@ -703,6 +705,7 @@ router.put('/update/:id',async(req,res)=> {
 router.post('/updateVisit', auth, async(req,res)=> {
 
 	try{
+		
 		let empId = req.user.user_id;
 		let query = {};
 	
@@ -719,9 +722,6 @@ router.post('/updateVisit', auth, async(req,res)=> {
 			
 		  }, 2000);
 	
-
-
-
    }catch(err){
 	   console.log('err', err)
 	   res.send(err)
