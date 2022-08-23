@@ -11,6 +11,7 @@ const Weight = require('./models/weight')
 const StepTracker = require('./models/step_tracker')
 const EmpStepTarget = require('./models/employee_step_target')
 const dateLib = require('date-and-time')
+const Employee = require('./models/employee')
 
 const admin=require('firebase-admin');
 var serviceAccount = require('./admin.json');
@@ -133,6 +134,18 @@ app.post("/weight/list", auth, async(req, res) => {
 
 app.post("/weight", auth, async(req, res) => { 
   try{ 
+        
+	    let userDetails = await Employee.findOne({_id: req.user.user_id});
+
+		let date1 = new Date(userDetails.date.replace(/-/g, "/"));
+		let date2 = new Date();
+
+		let difference1 =  date2.getTime() - date1.getTime();
+
+		let days1 = Math.ceil(difference1 / (1000 * 3600 * 24));
+
+		console.log('daysdays', days1)
+
 
 		var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 		
@@ -230,9 +243,6 @@ app.post("/weight", auth, async(req, res) => {
 				weightFinalArray.push(weightData);
 			}
 		}
-
-
-
 
 		/////
 
