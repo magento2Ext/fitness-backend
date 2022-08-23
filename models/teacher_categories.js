@@ -9,7 +9,7 @@ const teacherSchema = new mongoose.Schema({
     },
     image_link: {
         type: String,
-        required: true,
+        required: false,
         default: null
     }
 })

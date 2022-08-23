@@ -20,12 +20,23 @@ router.post('/list', async(req,res) => {
  
 router.post('/save', async(req,res) => {
 	 try{ 
-		const cats = new TeacherCats({
-			name: req.body.name,
-			image_link: req.body.image_link,
-			parent_cat: req.body.parent_cat
-		})
-		
+
+		let {name, image_link} = req.body;
+		if(!(name)){
+	        jsonObj = []
+			if(!(name)) {
+				var item = {
+					'key' : 'name',
+					'value' : 'required' 
+				}
+			   jsonObj.push(item);
+			}
+
+		    response = webResponse(406, false, jsonObj) 
+		    res.send(response)
+		    return;
+		}		
+
 		if(req.body.id) {
 			const catDetail = await TeacherCats.findById(req.body.id) 	
 			if(!catDetail){
@@ -33,19 +44,30 @@ router.post('/save', async(req,res) => {
 				res.send(response)
 				return "";
 			}
-			catDetail.name= req.body.name,
-			catDetail.image_link= req.body.image_link
-			catDetail.parent_cat= req.body.parent_cat
+			catDetail.name = req.body.name;
+		
+			if(image_link) 	catDetail.image_link = req.body.image_link;
+			
 			const catDetailSaved = await catDetail.save()
 			response = webResponse(202, true, catDetailSaved)  
 			res.send(response)
 			return "";
+		}else{
+
+			const cats = new TeacherCats({
+				name: req.body.name
+			})
+	
+			if(image_link) cats.image_link = image_link;
+
+			const catDetail =  await cats.save()  
+			response = webResponse(202, true, catDetail)  
+			res.send(response)		
+			return;
+
 		}
 		
-		const catDetail =  await cats.save()  
-		response = webResponse(202, true, catDetail)  
-		res.send(response)		
-		return;
+
 	}catch(err){ 
 		response = webResponse(403, false, err)  
 	    res.send(response)
