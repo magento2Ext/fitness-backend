@@ -74,7 +74,7 @@ require('../functions')
 	    var empId = req.user.user_id;
 		var today =  dateLib.format(new Date(),'YYYY-MM-DD');
 		
-		console.log('step_target', step_target);
+		console.log('step_target', req.body.step_target);
 		const empStepTarget = new EmpStepTarget({
 			employeeId: empId,
 			step_target: req.body.step_target,
@@ -95,6 +95,7 @@ require('../functions')
 			return;
 		}		
     }catch(err){ 
+		console.log(err)
 		response = webResponse(403, false, err)  
 	    res.send(response)
 		return;
