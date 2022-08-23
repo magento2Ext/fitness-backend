@@ -467,8 +467,6 @@ app.post("/analytics", auth, async(req, res) => {
 			});
 
 		
-
-		
 			let latestWeight = 0;
 			for(i=oneMonthAgo; i<=date;  i.setDate(i.getDate() + 1)) { 
 
@@ -663,9 +661,10 @@ app.post("/analytics", auth, async(req, res) => {
 
 
   function convertIntoTwoDecimal(num){
+	let toNumber = Number(num);
 	let n;
-	if(num % 1 !== 0) n = num.toFixed(2);
-	else n = num;
+	if(toNumber % 1 !== 0) n = toNumber.toFixed(2);
+	else n = toNumber;
 	return n;
   }
 
