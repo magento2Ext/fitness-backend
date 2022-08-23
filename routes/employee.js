@@ -74,6 +74,7 @@ require('../functions')
 	    var empId = req.user.user_id;
 		var today =  dateLib.format(new Date(),'YYYY-MM-DD');
 		
+		console.log('step_target', step_target);
 		const empStepTarget = new EmpStepTarget({
 			employeeId: empId,
 			step_target: req.body.step_target,
