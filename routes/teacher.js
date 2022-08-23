@@ -3,6 +3,7 @@ const router = express.Router()
 const Teachers = require('../models/teacher')
 const Audio = require('../models/teacher_audio')
 const Employee = require('../models/employee')
+const auth = require("../middleware/auth");
 var ObjectID = require('mongodb').ObjectID;
 require('../functions')
 
