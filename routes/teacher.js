@@ -55,13 +55,14 @@ router.post('/addTeacher', async(req,res) => {
 		    res.send(response)
 		  return;
 		}
-		
+
 		let newTeacher  = new Teachers({
 			name: req.body.name,
-			teacher_image: req.body.teacher_image,
 			orgId: req.body.orgId,
 			type: req.body.type,
 		});
+
+		if(req.body.teacher_image) newTeacher.teacher_image = req.body.teacher_image;
 		const teachers =  await newTeacher.save();
 		if(teachers)  response = webResponse(201, true, teachers);
 		else  response = webResponse(201, false, "Something went wrong, please try again");
