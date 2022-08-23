@@ -388,15 +388,15 @@ app.post("/analytics", auth, async(req, res) => {
 			  } else{
 				  var difference = col.weight - weightList[i-1].weight;
 				  if(difference > 0) {
-					  var line = difference+" kilogram over weight."
+					  var line = convertIntoTwoDecimal(difference)+" kilogram over weight."
 				  } else {
-					  var line = difference+" kilogram under weight."
+					  var line = convertIntoTwoDecimal(difference)+" kilogram under weight."
 				  }
 				  weight = {
 					  'date' :  dateLib.format(col.date,'YYYY-MM-DD'),
 					  'weight' : col.weight,
 					  'day' :  days[col.date.getDay()],
-					  'difference': difference,
+					  'difference': convertIntoTwoDecimal(difference),
 					  'weightLine':line,
 				  }
 			  }
