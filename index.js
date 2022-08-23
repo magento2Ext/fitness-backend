@@ -664,8 +664,8 @@ app.post("/analytics", auth, async(req, res) => {
 
   function convertIntoTwoDecimal(num){
 	let n;
-	if(num % 1 !== 0) let n = num.toFixed(2);
-	else let n = num;
+	if(num % 1 !== 0) n = num.toFixed(2);
+	else n = num;
 	return n;
   }
 
