@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router()
 const Teachers = require('../models/teacher')
 const Audio = require('../models/teacher_audio')
+const Employee = require('../models/employee')
 var ObjectID = require('mongodb').ObjectID;
 require('../functions')
 
@@ -12,6 +13,59 @@ router.post('/list', async(req,res) => {
         response = webResponse(201, true, teachers)  
 		res.send(response)		
 		return;;
+    }catch(err){
+        response = webResponse(200, false, "Something went wrong, please try again")  
+	    res.send(response)
+		return;
+    }
+})
+
+router.post('/addTeacher', async(req,res) => { 
+    try{
+		let newTeacher  = new Teachers({
+			name: req.body.name,
+			teacher_image: req.body.teacher_image,
+			orgId: req.body.orgId,
+			type: req.body.type,
+		});
+		const teachers =  newTeacher.save();
+        response = webResponse(201, true, teachers);
+		res.send(response);
+		return;
+
+    }catch(err){
+        response = webResponse(200, false, "Something went wrong, please try again")  
+	    res.send(response)
+		return;
+    }
+})
+
+
+router.post('/teachersByOrgId', auth, async(req,res) => { 
+    try{
+		var empId = req.user.user_id;
+		const employeeDetails = await Employee.findById(empId)
+
+		const teachers = await Teachers.find({orgId: employeeDetails.userOrganizations.length != 0 ?  employeeDetails.organizationId : '0'});
+        response = webResponse(201, true, teachers)  
+		res.send(response)		
+		return;
+    }catch(err){
+        response = webResponse(200, false, "Something went wrong, please try again")  
+	    res.send(response)
+		return;
+    }
+})
+
+router.post('/teachersCats', auth, async(req,res) => { 
+    try{
+		var empId = req.user.user_id;
+		const employeeDetails = await Employee.findById(empId)
+
+		const teachers = await Audio.find({orgId: employeeDetails.userOrganizations.length != 0 ?  employeeDetails.organizationId : '0'});
+        response = webResponse(201, true, teachers)  
+		res.send(response)		
+		return;
     }catch(err){
         response = webResponse(200, false, "Something went wrong, please try again")  
 	    res.send(response)

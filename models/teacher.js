@@ -12,8 +12,18 @@ const teacherSchema = new mongoose.Schema({
         type: String,
         required: true,
         default: null
+    },
+    orgId: {
+        type: String,
+        required: true,
+        default: null
+    },
+    type: {
+        type: String,
+        required: true,
+        default: null
     }
    
 })
 
-module.exports = mongoose.model('teachers',teacherSchema)
+module.exports = mongoose.model('teachers', teacherSchema)

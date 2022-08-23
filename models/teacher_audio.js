@@ -27,12 +27,7 @@ const teacherSchema = new mongoose.Schema({
         required: true,
         default: null
     },
-	parent_cat: {
-        type: String,
-        required: true,
-        default: null
-    },
-	child_cat: {
+	catId: {
         type: String,
         required: true,
         default: null
