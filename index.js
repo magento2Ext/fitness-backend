@@ -183,7 +183,7 @@ app.post("/weight", auth, async(req, res) => {
 					'date' : dateLib.format(col.date,'YYYY-MM-DD'),
 					'weight' : col.weight,
 					'day' :  days[col.date.getDay()],
-					'difference':0,
+					'difference': "0",
 					'weightLine':''
 					
 				}
@@ -222,7 +222,7 @@ app.post("/weight", auth, async(req, res) => {
 					'date' : dateLib.format(i,'YYYY-MM-DD'),
 					'weight' : "0",
 					'day' : days[i.getDay()],
-					'difference':0,
+					'difference': "0",
 					'weightLine':''
 				}
 				weightFinalArray.push(weight);
@@ -381,7 +381,7 @@ app.post("/analytics", auth, async(req, res) => {
 					  'date' : dateLib.format(col.date,'YYYY-MM-DD'),
 					  'weight' : col.weight,
 					  'day' :  days[col.date.getDay()],
-					  'difference':0,
+					  'difference': "0",
 					  'weightLine':''
 					  
 				  }
@@ -420,7 +420,7 @@ app.post("/analytics", auth, async(req, res) => {
 					  'date' : dateLib.format(i,'YYYY-MM-DD'),
 					  'weight' : "0",
 					  'day' : days[i.getDay()],
-					  'difference':0,
+					  'difference': "0",
 					  'weightLine':''
 				  }
 				  weightFinalArray.push(weight);
@@ -443,7 +443,7 @@ app.post("/analytics", auth, async(req, res) => {
 						'date' : dateLib.format(col.date,'YYYY-MM-DD'),
 						'weight' : col.weight,
 						'day' :  days[col.date.getDay()],
-						'difference':0,
+						'difference': "0",
 						'weightLine':''
 					}
 					
@@ -490,7 +490,7 @@ app.post("/analytics", auth, async(req, res) => {
 						'date' : dateLib.format(i,'YYYY-MM-DD'),
 						'weight' : latestWeight,
 						'day' : days[i.getDay()],
-						'difference':0,
+						'difference': "0",
 						'weightLine':''
 					}
 					weightFinalArray1.push(weight);
