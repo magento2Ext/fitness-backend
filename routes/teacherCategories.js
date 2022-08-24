@@ -176,8 +176,9 @@ router.post('/catsByType', auth, async (req,res) => {
 			let allCats = [];
 			posts.forEach( async (key)=> {
 
-				console.log(key)
-				let cat = await TeacherCats.findOne({_id: key.catId});
+			
+				let cat = await TeacherCats.findOne({_id: String(key.catId)});
+				console.log(cat)
 				if(cat!=null) allCats.push(cat);
 				
 				count++;
