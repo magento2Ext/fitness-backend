@@ -10,10 +10,10 @@ require('../functions')
 
 router.post('/list', async(req,res) => {
     try{
-		const cats = await TeacherCats.find()
+		const cats = await TeacherCats.find({userId: req.body.userId, status: true})
         response = webResponse(201, true, cats)  
 		res.send(response)		
-		return;;
+		return;
     }catch(err){
         response = webResponse(200, false, "Something went wrong, please try again")  
 	    res.send(response)
