@@ -213,7 +213,7 @@ router.post('/postByCat', auth, async (req,res) => {
 
 		let query  = {};
 
-		if(employee.userOrganizations.length != 0) query = {userId: employee.organizationId, postType: postType}
+		if(employee.userOrganizations.length != 0) query = {catId: catId, postType: postType}
 		else query = {userType: 'admin', postType: postType}
 
 		if(!(postType)){
@@ -224,29 +224,31 @@ router.post('/postByCat', auth, async (req,res) => {
 				  'value' : 'required' 
 			  }
 			 jsonObj.push(item);
-			 response = webResponse(406, false, jsonObj) 
-			 res.send(response)
-			 return "";
+
 		  }
+
+		  if(!(catId)) {
+			var item = {
+				'key' : 'catId',
+				'value' : 'required' 
+			}
+		   jsonObj.push(item);
+ 
+		}
+
+		response = webResponse(406, false, jsonObj) 
+		res.send(response)
+		return "";
+
 		}
 
 		const posts = await Audio.find(query);
 
 		if(posts.length != 0){
-			let count = 0;
-			let allCats = [];
-			posts.forEach( async (key)=> {
-
-				let cat = await TeacherCats.findOne({_id: key.catId});
-				allCats.push(cat);
-				count++;
-				if(count == posts.length){
-					response = webResponse(201, true, allCats)  
-					res.send(response)		
-					return;
-				}
-
-			})
+			
+			response = webResponse(201, true, posts)  
+			res.send(response)		
+			return;
 
 		}else{
 
