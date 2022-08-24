@@ -155,6 +155,9 @@ router.post('/catsByType', auth, async (req,res) => {
 				  'value' : 'required' 
 			  }
 			 jsonObj.push(item);
+			 response = webResponse(406, false, jsonObj) 
+			 res.send(response)
+			 return "";
 		  }
 		}
 
