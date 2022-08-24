@@ -238,7 +238,7 @@ router.post('/saveTeacherPost', async(req,res) => {
 
       let { userId, userType, catId, title, image, url, duration, mediaType, postType, id, teacher } = req.body;
 
-	  if(!(userId && catId && title && image && url && duration && type)){
+	  if(!(userId && catId && title && image && url && duration && mediaType && postType )){
 		jsonObj = []
 		if(!(userId)) {
 			var item = {
