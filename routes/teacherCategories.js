@@ -230,8 +230,8 @@ router.post('/postByCat', auth, async (req,res) => {
 
 		let query  = {};
 
-		if(employee.userOrganizations.length != 0) query = {catId: catId, postType: postType}
-		else query = {userType: 'admin', postType: postType}
+		if(employee.userOrganizations.length != 0) query = {userId: employee.organizationId, catId: catId, postType: postType}
+		else query = {userType: 'admin', postType: postType, catId: catId}
 
 		if(!(postType)){
 		  jsonObj = []
