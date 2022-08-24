@@ -236,7 +236,7 @@ router.post('/saveTeacherPost', async(req,res) => {
 	
 	try{ 
 
-      let {userId, userType, catId, title, image, url, duration, mediaType, postType, id} = req.body;
+      let { userId, userType, catId, title, image, url, duration, mediaType, postType, id, teacher } = req.body;
 
 	  if(!(userId && catId && title && image && url && duration && type)){
 		jsonObj = []
@@ -312,8 +312,6 @@ router.post('/saveTeacherPost', async(req,res) => {
 		   jsonObj.push(item);
 		}
 
-
-
 		response = webResponse(406, false, jsonObj) 
 		res.send(response)
 		return;
@@ -328,7 +326,8 @@ router.post('/saveTeacherPost', async(req,res) => {
 		duration: duration,
 		mediaType: mediaType,
 		postType: postType,
-		userType: userType
+		userType: userType,
+		teacher: teacher
      }
 
 	 if(id){
@@ -346,6 +345,7 @@ router.post('/saveTeacherPost', async(req,res) => {
 	 }
 
 	}catch(err){ 
+		console.log(err);
 		teacher_res = webResponse(403, false, err)  
 	    res.send(teacher_res)
 		return;
