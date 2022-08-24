@@ -20,6 +20,19 @@ router.post('/list', async(req,res) => {
 		return;
     }
 })
+
+router.post('/deleteCat', async(req,res) => {
+    try{
+		const result = await TeacherCats.updateOne({_id: req.body.id}, {$set: {status: false}}, {new: true});
+        response = webResponse(201, true, result)  
+		res.send(response)		
+		return;
+    }catch(err){
+        response = webResponse(200, false, "Something went wrong, please try again")  
+	    res.send(response)
+		return;
+    }
+})
  
 router.post('/save', async(req,res) => {
 	 try{ 
