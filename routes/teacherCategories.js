@@ -135,7 +135,7 @@ router.delete('/delete', async(req,res) => {
 
 router.post('/catsByType', auth, async (req,res) => {
     try{
-
+		let {postType} = req.body;
 		var empId = req.user.user_id;
 		const employee = await Employee.findById(empId);
 
@@ -144,7 +144,7 @@ router.post('/catsByType', auth, async (req,res) => {
 		if(employee.userOrganizations.length != 0) query = {userId: employee.organizationId, postType: postType}
 		else query = {userType: 'admin', postType: postType}
 
-		let {postType} = req.body;
+		
 
 		if(!(postType)){
 		  jsonObj = []
