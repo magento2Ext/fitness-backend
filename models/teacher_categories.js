@@ -21,6 +21,10 @@ const teacherSchema = new mongoose.Schema({
         type: String,
         required: true,
         default: null
+    },
+    status: {
+        type: Boolean,
+        default: true
     }
 })
 

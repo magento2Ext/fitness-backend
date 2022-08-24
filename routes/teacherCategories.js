@@ -177,7 +177,8 @@ router.post('/catsByType', auth, async (req,res) => {
 			posts.forEach( async (key)=> {
 
 				let cat = await TeacherCats.findOne({_id: key.catId});
-				allCats.push(cat);
+				if(cat!=null) allCats.push(cat);
+				
 				count++;
 				if(count == posts.length){
 					response = webResponse(201, true, allCats)  
