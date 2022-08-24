@@ -181,7 +181,7 @@ router.post('/catsByType', auth, async (req,res) => {
 
 		}else{
 
-			response = webResponse(201, false, "No cat")  
+			response = webResponse(201, true, [])  
 			res.send(response)		
 			return;
 
