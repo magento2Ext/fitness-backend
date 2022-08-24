@@ -2,7 +2,12 @@ const mongoose = require('mongoose')
 
 
 const teacherSchema = new mongoose.Schema({
-	teacherId: {
+	userId: {
+        type: String,
+        required: true,
+		default: null
+    },
+    userType: {
         type: String,
         required: true,
 		default: null
@@ -32,12 +37,17 @@ const teacherSchema = new mongoose.Schema({
         required: true,
         default: null
     },
-    type: {
+    mediaType: {
         type: String,
         required: true,
         default: null 
+    },
+    postType: {
+        type: String,
+        required: true,
+        default: null  
     }
-   
+
 })
 
 module.exports = mongoose.model('teacher_audio',teacherSchema)

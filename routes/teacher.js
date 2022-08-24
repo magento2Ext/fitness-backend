@@ -236,13 +236,21 @@ router.post('/saveTeacherPost', async(req,res) => {
 	
 	try{ 
 
-      let {teacherId, catId, title, image, url, duration, type, id} = req.body;
+      let {userId, userType, catId, title, image, url, duration, mediaType, postType, id} = req.body;
 
-	  if(!(teacherId && catId && title && image && url && duration && type)){
+	  if(!(userId && catId && title && image && url && duration && type)){
 		jsonObj = []
-		if(!(teacherId)) {
+		if(!(userId)) {
 			var item = {
-				'key' : 'teacherId',
+				'key' : 'userId',
+				'value' : 'required' 
+			}
+		   jsonObj.push(item);
+		}
+
+		if(!(userType)) {
+			var item = {
+				'key' : 'userType',
 				'value' : 'required' 
 			}
 		   jsonObj.push(item);
@@ -288,13 +296,23 @@ router.post('/saveTeacherPost', async(req,res) => {
 		   jsonObj.push(item);
 		}
 
-		if(!(type)) {
+		if(!(mediaType)) {
 			var item = {
-				'key' : 'type',
+				'key' : 'mediaType',
 				'value' : 'required' 
 			}
 		   jsonObj.push(item);
 		}
+
+		if(!(postType)) {
+			var item = {
+				'key' : 'postType',
+				'value' : 'required' 
+			}
+		   jsonObj.push(item);
+		}
+
+
 
 		response = webResponse(406, false, jsonObj) 
 		res.send(response)
@@ -302,15 +320,16 @@ router.post('/saveTeacherPost', async(req,res) => {
 	}
 
 	let data = {
-		teacherId: teacherId,
+		userId: userId,
 		catId: catId,
 		title: title,
 		image: image,
 		url: url,
 		duration: duration,
-		type: type
+		mediaType: mediaType,
+		postType: postType,
+		userType: userType
      }
-
 
 	 if(id){
 		let result = await Audio.updateOne({_id: id}, {$set: data}, {new: true});

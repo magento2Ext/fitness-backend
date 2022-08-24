@@ -21,12 +21,28 @@ router.post('/list', async(req,res) => {
 router.post('/save', async(req,res) => {
 	 try{ 
 
-		let {name, image_link} = req.body;
+		let {name, image_link, userId} = req.body;
 		if(!(name)){
 	        jsonObj = []
 			if(!(name)) {
 				var item = {
 					'key' : 'name',
+					'value' : 'required' 
+				}
+			   jsonObj.push(item);
+			}
+
+			if(!(userId)) {
+				var item = {
+					'key' : 'userId',
+					'value' : 'required' 
+				}
+			   jsonObj.push(item);
+			}
+
+			if(!(image_link)) {
+				var item = {
+					'key' : 'image_link',
 					'value' : 'required' 
 				}
 			   jsonObj.push(item);
@@ -44,10 +60,10 @@ router.post('/save', async(req,res) => {
 				res.send(response)
 				return "";
 			}
-			catDetail.name = req.body.name;
+			catDetail.name = name;
 		
-			if(image_link) 	catDetail.image_link = req.body.image_link;
-			
+			if(image_link) 	catDetail.image_link = image_link;
+
 			const catDetailSaved = await catDetail.save()
 			response = webResponse(202, true, catDetailSaved)  
 			res.send(response)
@@ -55,7 +71,8 @@ router.post('/save', async(req,res) => {
 		}else{
 
 			const cats = new TeacherCats({
-				name: req.body.name
+				name: name,
+				userId: userId
 			})
 	
 			if(image_link) cats.image_link = image_link;
@@ -74,6 +91,7 @@ router.post('/save', async(req,res) => {
 		return;
     } 
 })
+
 
 router.delete('/delete', async(req,res) => {
     try{
@@ -107,6 +125,64 @@ router.delete('/delete', async(req,res) => {
 		return "";
 	}catch(err){ console.log(err)
         response = webResponse(200, false, "Something went wrong, please try again.")  
+	    res.send(response)
+		return;
+    }
+})
+
+
+router.post('/catsByType', auth, async(req,res) => {
+    try{
+
+		var empId = req.user.user_id;
+		const employee = await Employee.findById(empId);
+
+		let query  = {};
+
+		if(employee.userOrganizations.length != 0) query = {userId: employee.organizationId, postType: postType}
+		else query = {userType: 'admin', postType: postType}
+
+		let {postType} = req.body;
+
+		if(!(postType)){
+		  jsonObj = []
+		  if(!(postType)) {
+			  var item = {
+				  'key' : 'postType',
+				  'value' : 'required' 
+			  }
+			 jsonObj.push(item);
+		  }
+		}
+
+		const posts = await Audio.find(query);
+
+		if(posts.length != 0){
+			let count = 0;
+			let allCats = [];
+			posts.forEach( (key)=> {
+
+				let cat = await TeacherCats.findOne({_id: key.catId});
+				allCats.push(cat);
+				count++;
+				if(count == posts.length){
+					response = webResponse(201, true, allCats)  
+					res.send(response)		
+					return;
+				}
+
+			})
+
+		}else{
+
+			response = webResponse(201, false, "No cat")  
+			res.send(response)		
+			return;
+
+		}
+
+    }catch(err){
+        response = webResponse(200, false, "Something went wrong, please try again")  
 	    res.send(response)
 		return;
     }

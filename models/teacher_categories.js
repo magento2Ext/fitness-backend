@@ -2,6 +2,11 @@ const mongoose = require('mongoose')
 
 
 const teacherSchema = new mongoose.Schema({
+    userId: {
+        type: String,
+        required: true,
+		default: null
+    },
     name: {
         type: String,
         required: true,
@@ -14,4 +19,4 @@ const teacherSchema = new mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('teacher_categories',teacherSchema)
+module.exports = mongoose.model('teacher_categories', teacherSchema)
