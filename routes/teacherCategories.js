@@ -183,6 +183,7 @@ router.post('/catsByType', auth, async (req,res) => {
 		}
 
     }catch(err){
+		console.log(err)
         response = webResponse(200, false, "Something went wrong, please try again")  
 	    res.send(response)
 		return;
