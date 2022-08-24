@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router()
 const TeacherCats = require('../models/teacher_categories')
 var ObjectID = require('mongodb').ObjectID;
+const auth = require("../middleware/auth");
 require('../functions')
 
 
@@ -131,7 +132,7 @@ router.delete('/delete', async(req,res) => {
 })
 
 
-router.post('/catsByType', auth, async(req,res) => {
+router.post('/catsByType', auth, async (req,res) => {
     try{
 
 		var empId = req.user.user_id;
