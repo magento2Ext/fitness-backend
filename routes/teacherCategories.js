@@ -24,7 +24,7 @@ router.post('/list', async(req,res) => {
 router.post('/save', async(req,res) => {
 	 try{ 
 
-		let {name, image_link, userId} = req.body;
+		let {name, image_link, userId, mediaType} = req.body;
 		if(!(name)){
 	        jsonObj = []
 			if(!(name)) {
@@ -51,6 +51,14 @@ router.post('/save', async(req,res) => {
 			   jsonObj.push(item);
 			}
 
+			if(!(mediaType)) {
+				var item = {
+					'key' : 'mediaType',
+					'value' : 'required' 
+				}
+			   jsonObj.push(item);
+			}
+
 		    response = webResponse(406, false, jsonObj) 
 		    res.send(response)
 		    return;
@@ -64,6 +72,7 @@ router.post('/save', async(req,res) => {
 				return "";
 			}
 			catDetail.name = name;
+			catDetail.mediaType = mediaType;
 		
 			if(image_link) 	catDetail.image_link = image_link;
 
@@ -75,7 +84,8 @@ router.post('/save', async(req,res) => {
 
 			const cats = new TeacherCats({
 				name: name,
-				userId: userId
+				userId: userId,
+				mediaType: mediaType
 			})
 	
 			if(image_link) cats.image_link = image_link;
@@ -145,7 +155,66 @@ router.post('/catsByType', auth, async (req,res) => {
 		if(employee.userOrganizations.length != 0) query = {userId: employee.organizationId, postType: postType}
 		else query = {userType: 'admin', postType: postType}
 
-		
+		if(!(postType)){
+		  jsonObj = []
+		  if(!(postType)) {
+			  var item = {
+				  'key' : 'postType',
+				  'value' : 'required' 
+			  }
+			 jsonObj.push(item);
+			 response = webResponse(406, false, jsonObj) 
+			 res.send(response)
+			 return "";
+		  }
+		}
+
+		const posts = await Audio.find(query);
+
+		if(posts.length != 0){
+			let count = 0;
+			let allCats = [];
+			posts.forEach( async (key)=> {
+
+				let cat = await TeacherCats.findOne({_id: key.catId});
+				allCats.push(cat);
+				count++;
+				if(count == posts.length){
+					response = webResponse(201, true, allCats)  
+					res.send(response)		
+					return;
+				}
+
+			})
+
+		}else{
+
+			response = webResponse(201, true, [])  
+			res.send(response)		
+			return;
+
+		}
+
+    }catch(err){
+		console.log(err)
+        response = webResponse(200, false, "Something went wrong, please try again")  
+	    res.send(response)
+		return;
+    }
+})
+
+
+
+router.post('/postByCat', auth, async (req,res) => {
+    try{
+		let {catId, postType} = req.body;
+		var empId = req.user.user_id;
+		const employee = await Employee.findById(empId);
+
+		let query  = {};
+
+		if(employee.userOrganizations.length != 0) query = {userId: employee.organizationId, postType: postType}
+		else query = {userType: 'admin', postType: postType}
 
 		if(!(postType)){
 		  jsonObj = []

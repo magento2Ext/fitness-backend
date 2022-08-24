@@ -14,7 +14,12 @@ const teacherSchema = new mongoose.Schema({
     },
     image_link: {
         type: String,
-        required: false,
+        required: true,
+        default: null
+    },
+    mediaType: {
+        type: String,
+        required: true,
         default: null
     }
 })
