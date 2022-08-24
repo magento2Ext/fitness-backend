@@ -341,7 +341,50 @@ router.post('/saveTeacherPost', async(req,res) => {
 		response = webResponse(202, true, result)  
 		res.send(response)
 		return "";
+	 }
 
+	}catch(err){ 
+		console.log(err);
+		teacher_res = webResponse(403, false, err)  
+	    res.send(teacher_res)
+		return;
+    } 
+})
+
+
+router.post('/getAdminPosts', async(req,res) => {
+	
+	try{ 
+
+      let {userId} = req.body;
+
+	  if(!(userId)){
+		jsonObj = []
+		if(!(userId)) {
+			var item = {
+				'key' : 'userId',
+				'value' : 'required' 
+			}
+		   jsonObj.push(item);
+		}
+
+		response = webResponse(406, false, jsonObj) 
+		res.send(response)
+		return;
+	}
+ 
+	let result = await Audio.find({userId: userId});
+
+	 if(result.length != 0){
+		
+		response = webResponse(202, true, result)  
+		res.send(response)
+		return "";
+	 }else{
+ 
+		response = webResponse(202, true, [])  
+		res.send(response)
+		return "";
 	 }
 
 	}catch(err){ 
