@@ -160,7 +160,7 @@ router.post('/catsByType', auth, async(req,res) => {
 		if(posts.length != 0){
 			let count = 0;
 			let allCats = [];
-			posts.forEach( (key)=> {
+			posts.forEach( async (key)=> {
 
 				let cat = await TeacherCats.findOne({_id: key.catId});
 				allCats.push(cat);
