@@ -349,7 +349,7 @@ router.post('/saveTeacherPost', async(req,res) => {
 
 			let result = await Audio.findOne({_id: id});
 
-			console.log('result', result)
+			console.log('result', result1)
 
 			response = webResponse(202, true, result)  
 			res.send(response)
