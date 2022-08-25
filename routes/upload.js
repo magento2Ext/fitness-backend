@@ -29,8 +29,7 @@ var upload = multer({
           )}`;
       
           var newFileName = Date.now() + "-" + filename;
-          var fullPath = 'users/profile/' + newFileName;
-          cb(null, fullPath);
+          cb(null, newFileName);
 
           //console.log(file.location);
             // cb(null, Date.now().toString())
