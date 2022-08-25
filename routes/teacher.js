@@ -429,7 +429,15 @@ router.post('/getAdminPosts', async(req,res) => {
 				foreignField: "_id",
 				as: "category"
 			}
-	}])
+	    },
+		{$unwind: '$category'},
+		{
+		  $project: {
+			title: 1, category: "$category"
+		  }
+		}
+
+])
 
 	 if(result.length != 0){
 		
