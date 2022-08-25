@@ -333,6 +333,7 @@ router.post('/saveTeacherPost', async(req,res) => {
 	 if(id){
 
 		await Audio.updateOne({_id: id}, {$set: data}, {new: true});
+
 		setTimeout(async () => {
 			let result = await Audio.aggregate([
 				{$match: {_id: id}},
@@ -344,6 +345,8 @@ router.post('/saveTeacherPost', async(req,res) => {
 						as: "category"
 					}
 			}])
+
+			console.log('result', result)
 
 			response = webResponse(202, true, result)  
 			res.send(response)
