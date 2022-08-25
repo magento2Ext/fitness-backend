@@ -381,7 +381,7 @@ router.post('/saveTeacherPost', async(req,res) => {
 					}
 			}])
 
-			response = webResponse(202, true, result)  
+			response = webResponse(202, true, result[0])  
 			res.send(response)
 			return "";
 			
