@@ -343,16 +343,16 @@ router.post('/saveTeacherPost', async(req,res) => {
 			
 				let dict =  {
 					"_id": result._id,
-					"userId": result._id,
-					"userType": result._id,
-					"catId":result._id,
-					"teacher": result._id,
-					"title": result._id,
-					"image": result._id,
-					"url": result._id,
-					"duration": result._id,
-					"mediaType": result._id,
-					"postType": result._id,
+					"userId": result.userId,
+					"userType": result.userType,
+					"catId":result.catId,
+					"teacher": result.teacher,
+					"title": result.title,
+					"image": result.image,
+					"url": result.url,
+					"duration": result.duration,
+					"mediaType": result.mediaType,
+					"postType": result.postType,
 					"category": catData
 				}
 	
