@@ -373,7 +373,16 @@ router.post('/getAdminPosts', async(req,res) => {
 		return;
 	}
  
-	let result = await Audio.find({userId: userId});
+
+	let result = await Audio.aggregate([
+		{$match: {userId: userId}},
+		{$lookup: {
+				from: "teacher_categories",
+				localField: "catId",
+				foreignField: "_id",
+				as: "category"
+			}
+	}])
 
 	 if(result.length != 0){
 		
