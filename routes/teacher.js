@@ -341,6 +341,8 @@ router.post('/saveTeacherPost', async(req,res) => {
 
 				let catData = await TeacherCats.findOne({_id: result.catId});
 				result.category = catData;
+				result['category'] = catData;
+				console.log('result', result)
 				response = webResponse(202, true, result)  
 				res.send(response)
 				return "";
