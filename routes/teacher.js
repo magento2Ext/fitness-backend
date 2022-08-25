@@ -375,11 +375,11 @@ router.post('/getAdminPosts', async(req,res) => {
  
 
 	let result = await Audio.aggregate([
-		{$match: {userId: userId}},
+		// {$match: {userId: userId}},
 		{$lookup: {
 				from: "teacher_categories",
-				localField: "_id",
-				foreignField: "catId",
+				localField: "catId",
+				foreignField: "_id",
 				as: "category"
 			}
 	}])
