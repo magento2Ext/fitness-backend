@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router()
 const Teachers = require('../models/teacher')
+const TeacherCats = require('../models/teacher_categories')
 const Audio = require('../models/teacher_audio')
 const Employee = require('../models/employee')
 const auth = require("../middleware/auth");
