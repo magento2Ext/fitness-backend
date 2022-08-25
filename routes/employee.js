@@ -734,4 +734,20 @@ router.post('/updateVisit', auth, async(req,res)=> {
 })
 
 
+
+router.post('/testUpdate', auth, async(req,res)=> {
+
+	try{
+		
+		await Employee.updateMany({$set: {picture: ""}}, {new: true});
+	
+   }catch(err){
+	   console.log('err', err)
+	   res.send(err)
+	   
+   }
+
+})
+
+
  module.exports = router
