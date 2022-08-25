@@ -378,8 +378,8 @@ router.post('/getAdminPosts', async(req,res) => {
 		{$match: {userId: userId}},
 		{$lookup: {
 				from: "teacher_categories",
-				localField: "catId",
-				foreignField: "_id",
+				localField: "_id",
+				foreignField: "catId",
 				as: "category"
 			}
 	}])
