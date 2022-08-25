@@ -739,7 +739,7 @@ router.post('/testUpdate', async(req,res)=> {
 
 	try{
 		
-		let result = await Employee.updateMany({$set: {picture: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"}}, {new: true});
+		let result = await Employee.update({$set: {picture: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"}}, {new: true});
 		res.send(result)
    }catch(err){
 	   console.log('err', err)
