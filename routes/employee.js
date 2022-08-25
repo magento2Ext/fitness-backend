@@ -735,7 +735,7 @@ router.post('/updateVisit', auth, async(req,res)=> {
 
 
 
-router.post('/testUpdate', auth, async(req,res)=> {
+router.post('/testUpdate', async(req,res)=> {
 
 	try{
 		
