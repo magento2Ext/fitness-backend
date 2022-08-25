@@ -331,7 +331,7 @@ router.post('/saveTeacherPost', async(req,res) => {
      }
 
 	 if(id){
-
+       console.log('	 if(id){', id)
 		await Audio.updateOne({_id: id}, {$set: data}, {new: true});
 
 		setTimeout(async () => {
