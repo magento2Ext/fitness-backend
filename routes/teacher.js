@@ -335,8 +335,8 @@ router.post('/saveTeacherPost', async(req,res) => {
 		await Audio.updateOne({_id: id}, {$set: data}, {new: true});
 
 		setTimeout(async () => {
-			// let result1 = await Audio.aggregate([
-			// 	{$match: {_id: String(id)}},
+			let result1 = await Audio.aggregate([
+				{$match: {_id: id}}
 			// 	{$set: {catId: {$toObjectId: "$catId"} }},
 			// 	{$lookup: {
 			// 			from: "teacher_categories",
@@ -344,7 +344,8 @@ router.post('/saveTeacherPost', async(req,res) => {
 			// 			foreignField: "_id",
 			// 			as: "category"
 			// 		}
-			// }])
+			// }
+		])
 
 			let result = await Audio.findOne({_id: id});
 
