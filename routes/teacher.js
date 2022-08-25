@@ -340,7 +340,7 @@ router.post('/saveTeacherPost', async(req,res) => {
 		    Audio.findOne({_id: id}, async (err, result) => {
 
 				let catData = await TeacherCats.findOne({_id: result.catId});
-				result['category'] = catData;
+				result.category = catData;
 				response = webResponse(202, true, result)  
 				res.send(response)
 				return "";
