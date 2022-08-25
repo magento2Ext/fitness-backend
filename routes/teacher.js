@@ -343,7 +343,7 @@ router.post('/saveTeacherPost', async(req,res) => {
 				result.category = catData;
 				result['category'] = catData;
 				setTimeout(() => {
-					console.log('result', result, catData)
+					console.log('result', typeof(result), catData)
 				}, 2000);
 	
 				response = webResponse(202, true, result)  
