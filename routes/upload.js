@@ -28,7 +28,7 @@ var upload = multer({
   
       var newFileName = Date.now() + "-" + filename;
       var fullPath = 'users/profile/' + newFileName;
-      ab_callback(null, fullPath);
+      cb(null, fullPath);
        },
 	    contentType: multerS3.AUTO_CONTENT_TYPE
    }), limits: { fileSize: 52428800 } 
