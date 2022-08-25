@@ -21,11 +21,9 @@ var upload = multer({
        },
        key: function (req, file, cb) {
       // add hash to sanitized file name
-      const filename = `${Date.now()}_${sanitize(
-        file.originalname.replace(
-          /[`~!@#$%^&*()_|+\-=÷¿?;:'",<>{}[]\\\/]/gi,
-          '',
-        ),
+      const filename = `${Date.now()}_${file.originalname.replace(
+        /[`~!@#$%^&*()_|+\-=÷¿?;:'",<>{}[]\\\/]/gi,
+        '',
       )}`;
   
       var newFileName = Date.now() + "-" + filename;
