@@ -331,10 +331,9 @@ router.post('/saveTeacherPost', async(req,res) => {
      }
 
 	 if(id){
-		let result = await Audio.updateOne({_id: id}, {$set: data}, {new: true});
 
+		await Audio.updateOne({_id: id}, {$set: data}, {new: true});
 		setTimeout(async () => {
-
 			let result = await Audio.aggregate([
 				{$match: {_id: id}},
 				{$set: {catId: {$toObjectId: "$catId"} }},
@@ -346,21 +345,19 @@ router.post('/saveTeacherPost', async(req,res) => {
 					}
 			}])
 
-			response = webResponse(202, true, result[0])  
+			response = webResponse(202, true, result)  
 			res.send(response)
 			return "";
 		}, 1000);
 
 	 }else{
 		let newAudio = new Audio(data);
-		let result = await newAudio.save();
-
-
+		let audioResult = await newAudio.save();
 
 		setTimeout(async () => {
 
 			let result = await Audio.aggregate([
-				{$match: {_id: result._id}},
+				{$match: {_id: audioResult._id}},
 				{$set: {catId: {$toObjectId: "$catId"} }},
 				{$lookup: {
 						from: "teacher_categories",
@@ -370,7 +367,7 @@ router.post('/saveTeacherPost', async(req,res) => {
 					}
 			}])
 
-			response = webResponse(202, true, result[0])  
+			response = webResponse(202, true, result)  
 			res.send(response)
 			return "";
 			
