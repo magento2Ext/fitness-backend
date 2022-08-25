@@ -431,11 +431,11 @@ router.post('/getAdminPosts', async(req,res) => {
 			}
 	    },
 		{$unwind: '$category'},
-		{
-		  $project: {
-			title: 1, category: "$category"
-		  }
-		}
+		// {
+		//   $project: {
+		// 	title: 1, category: "$category"
+		//   }
+		// }
 
 ])
 
