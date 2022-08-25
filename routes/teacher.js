@@ -340,13 +340,23 @@ router.post('/saveTeacherPost', async(req,res) => {
 		    Audio.findOne({_id: id}, async (err, result) => {
 
 				let catData = await TeacherCats.findOne({_id: result.catId});
-				result.category = catData;
-				result['category'] = catData;
-				setTimeout(() => {
-					console.log('result', typeof(result), catData)
-				}, 2000);
+			
+				let dict =  {
+					"_id": result._id,
+					"userId": result._id,
+					"userType": result._id,
+					"catId":result._id,
+					"teacher": result._id,
+					"title": result._id,
+					"image": result._id,
+					"url": result._id,
+					"duration": result._id,
+					"mediaType": result._id,
+					"postType": result._id,
+					"category": catData
+				}
 	
-				response = webResponse(202, true, result)  
+				response = webResponse(202, true, dict)  
 				res.send(response)
 				return "";
 
