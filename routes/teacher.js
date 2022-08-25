@@ -420,7 +420,7 @@ router.post('/getAdminPosts', async(req,res) => {
 	}
  
 
-	let result = await Audio.aggregate([
+	let result = await Audio.aggregateOne([
 		{$match: {userId: userId}},
 		{$set: {catId: {$toObjectId: "$catId"} }},
 		{$lookup: {
