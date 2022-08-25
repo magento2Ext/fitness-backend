@@ -331,12 +331,12 @@ router.post('/saveTeacherPost', async(req,res) => {
      }
 
 	 if(id){
-       console.log('	 if(id){', id)
+   
 		await Audio.updateOne({_id: id}, {$set: data}, {new: true});
 
 		setTimeout(async () => {
 			let result = await Audio.aggregate([
-				{$match: {_id: id}},
+				{$match: {_id: String(id)}},
 				{$set: {catId: {$toObjectId: "$catId"} }},
 				{$lookup: {
 						from: "teacher_categories",
