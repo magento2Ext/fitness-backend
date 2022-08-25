@@ -333,7 +333,7 @@ router.post('/saveTeacherPost', async(req,res) => {
 	 if(id){
 		let result = await Audio.updateOne({_id: id}, {$set: data}, {new: true});
 
-		setTimeout(() => {
+		setTimeout(async () => {
 			let result = await Audio.findOne({_id: id}); 
 			response = webResponse(202, true, result)  
 			res.send(response)
