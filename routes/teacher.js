@@ -335,20 +335,22 @@ router.post('/saveTeacherPost', async(req,res) => {
 		await Audio.updateOne({_id: id}, {$set: data}, {new: true});
 
 		setTimeout(async () => {
-			let result1 = await Audio.aggregate([
-				{$match: {_id: String(id)}},
-				{$set: {catId: {$toObjectId: "$catId"} }},
-				{$lookup: {
-						from: "teacher_categories",
-						localField: "catId",
-						foreignField: "_id",
-						as: "category"
-					}
-			}])
+			// let result1 = await Audio.aggregate([
+			// 	{$match: {_id: String(id)}},
+			// 	{$set: {catId: {$toObjectId: "$catId"} }},
+			// 	{$lookup: {
+			// 			from: "teacher_categories",
+			// 			localField: "catId",
+			// 			foreignField: "_id",
+			// 			as: "category"
+			// 		}
+			// }])
 
-			console.log('result', result1)
+			let result = await Audio.findOne({_id: id});
 
-			response = webResponse(202, true, result1)  
+			console.log('result', result)
+
+			response = webResponse(202, true, result)  
 			res.send(response)
 			return "";
 		}, 1000);
