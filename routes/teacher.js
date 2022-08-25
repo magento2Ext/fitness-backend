@@ -334,8 +334,19 @@ router.post('/saveTeacherPost', async(req,res) => {
 		let result = await Audio.updateOne({_id: id}, {$set: data}, {new: true});
 
 		setTimeout(async () => {
-			let result = await Audio.findOne({_id: id}); 
-			response = webResponse(202, true, result)  
+
+			let result = await Audio.aggregate([
+				{$match: {_id: id}},
+				{$set: {catId: {$toObjectId: "$catId"} }},
+				{$lookup: {
+						from: "teacher_categories",
+						localField: "catId",
+						foreignField: "_id",
+						as: "category"
+					}
+			}])
+
+			response = webResponse(202, true, result[0])  
 			res.send(response)
 			return "";
 		}, 1000);
@@ -343,9 +354,28 @@ router.post('/saveTeacherPost', async(req,res) => {
 	 }else{
 		let newAudio = new Audio(data);
 		let result = await newAudio.save();
-		response = webResponse(202, true, result)  
-		res.send(response)
-		return "";
+
+
+
+		setTimeout(async () => {
+
+			let result = await Audio.aggregate([
+				{$match: {_id: result._id}},
+				{$set: {catId: {$toObjectId: "$catId"} }},
+				{$lookup: {
+						from: "teacher_categories",
+						localField: "catId",
+						foreignField: "_id",
+						as: "category"
+					}
+			}])
+
+			response = webResponse(202, true, result[0])  
+			res.send(response)
+			return "";
+			
+		}, 1000);
+
 	 }
 
 	}catch(err){ 
