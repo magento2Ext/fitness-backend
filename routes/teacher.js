@@ -336,7 +336,7 @@ router.post('/saveTeacherPost', async(req,res) => {
 
 		setTimeout(async () => {
 	 
-		    Audio.findOne({_id: id}, (err, result) => {
+		    Audio.findOne({_id: id}, async (err, result) => {
 
 				let catData = await TeacherCats.findOne({_id: result.catId});
 				result['category'] = catData;
