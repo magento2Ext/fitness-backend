@@ -428,4 +428,60 @@ router.post('/detail', auth, async(req,res) => {
     }
 })
 */
+
+
+router.post('/getGroupMembers', auth, async(req,res) => {
+
+	try{
+
+		var empId = req.user.user_id;
+		// const employeeDetails = await Employee.findById(empId)
+
+		let members = await ChatGroup.findOne({_id: req.body.id});
+		if(members!=null){
+			let allMembers = members.users;
+
+			if(allMembers.length != 0){
+
+				let users = [];
+				let count = 0;
+				allMembers.forEach( (key) => {
+     
+					if(key != empId){
+						let employeee = await Employee.findById(key);
+						if(employeee != null) users.push(employeee);
+					}
+
+					count++;
+
+					if(count === allMembers.length) {
+						response = webResponse(200, true, allMembers)  
+						res.send(response)
+						return "";
+					}
+					
+				})
+
+
+			}else{
+				response = webResponse(200, false, "No Members")  
+				res.send(response)
+				return "";
+			}
+
+		}else{
+			response = webResponse(200, false, "No data")  
+			res.send(response)
+			return "";
+		}
+
+	}
+    catch(err){ console.log(err)
+	response = webResponse(200, false, "Something went wrong, please try again.")  
+	res.send(response)
+	return;
+    }
+
+});
+
  module.exports = router
