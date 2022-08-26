@@ -455,7 +455,7 @@ router.post('/getGroupMembers', auth, async(req,res) => {
 					count++;
 
 					if(count === allMembers.length) {
-						response = webResponse(200, true, users)  
+						response = webResponse(202, true, users)  
 						res.send(response)
 						return "";
 					}
@@ -464,13 +464,13 @@ router.post('/getGroupMembers', auth, async(req,res) => {
 
 
 			}else{
-				response = webResponse(200, false, "No Members")  
+				response = webResponse(202, false, "No Members")  
 				res.send(response)
 				return "";
 			}
 
 		}else{
-			response = webResponse(200, false, "No data")  
+			response = webResponse(202, false, "No data")  
 			res.send(response)
 			return "";
 		}
