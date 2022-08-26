@@ -49,7 +49,7 @@ const employeeSchema = new mongoose.Schema({
     },
     picture: {
 		type: String,
-		default:"https://soulcial-app.s3.us-west-2.amazonaws.com/appImages/Frame%403x.png"
+		default:"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
 	},
     isVerified: {
         type: Boolean,

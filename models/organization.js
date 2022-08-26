@@ -35,7 +35,7 @@ const organizationSchema = new mongoose.Schema({
     },
 	logo: {
         type: String,
-       default:"https://soulcial-app.s3.us-west-2.amazonaws.com/appImages/Frame%403x.png"
+       default:"https://soulcialapp.s3.amazonaws.com/AppImages/Frame%403x.png"
     },
 	themecode: {
         type: String,
