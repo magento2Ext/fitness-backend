@@ -193,22 +193,26 @@ router.get('/list/:id', async(req,res) => {
 			data.forEach( async(e) => {
 
 			let emp = await Employee.findOne({_id: e.employeeId});
-			let dict =     {
-				"_id": emp._id,
-				"firstName": emp.firstName,
-				"lastName": emp.lastName,
-				"email": emp.email,
-				"userName": emp.userName,
-				"zipCode": emp.zipCode,
-				"employeeType": emp.employeeType,
-				"is_exclusive": emp.is_exclusive,
-				"referCode":emp.referCode,
-				"organizationId": emp.organizationId,
-				"isVerified": e.status,
-				"picture": emp.picture,
-				"reqId": e._id
+
+			if(emp!=null){
+				let dict =     {
+					"_id": emp._id,
+					"firstName": emp.firstName,
+					"lastName": emp.lastName,
+					"email": emp.email,
+					"userName": emp.userName,
+					"zipCode": emp.zipCode,
+					"employeeType": emp.employeeType,
+					"is_exclusive": emp.is_exclusive,
+					"referCode":emp.referCode,
+					"organizationId": emp.organizationId,
+					"isVerified": e.status,
+					"picture": emp.picture,
+					"reqId": e._id
+				}
+				userArray.push(dict);
 			}
-			userArray.push(dict);
+
 			count++;
 			if(count === data.length){
 				res.json(userArray);
@@ -636,7 +640,7 @@ router.post('/verify',async(req,res)=> {
 })
 
 
-router.put('/update/:id',async(req,res)=> {
+router.put('/update/:id', async(req,res) => {
 
 	 try{
  
