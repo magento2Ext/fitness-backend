@@ -445,7 +445,7 @@ router.post('/getGroupMembers', auth, async(req,res) => {
 
 				let users = [];
 				let count = 0;
-				allMembers.forEach( (key) => {
+				allMembers.forEach( async (key) => {
      
 					if(key != empId){
 						let employeee = await Employee.findById(key);
