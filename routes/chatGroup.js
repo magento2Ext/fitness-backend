@@ -455,7 +455,7 @@ router.post('/getGroupMembers', auth, async(req,res) => {
 					count++;
 
 					if(count === allMembers.length) {
-						response = webResponse(200, true, allMembers)  
+						response = webResponse(200, true, users)  
 						res.send(response)
 						return "";
 					}
