@@ -692,7 +692,7 @@ router.put('/update/:id', async(req,res) => {
 			"is_exclusive": emp.is_exclusive,
 			"referCode":emp.referCode,
 			"organizationId": emp.organizationId,
-			"isVerified": req.body.isVerified ? '1' : '2',
+			"isVerified":  req.body.isVerified,
 			"picture": emp.picture,
 			"reqId": req.body.orgId
 		}
