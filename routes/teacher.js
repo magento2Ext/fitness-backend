@@ -525,10 +525,9 @@ router.delete('/deletePost', async(req,res) => {
 			return "";
 		}
 		// const _id = new ObjectID(req.body.id);
-		
+
 		await Audio.deleteOne( {'_id': id})
-		  
-		var response = webResponse(200, true, "Post deleted") 
+		response = webResponse(201, true, 'Post deleted')  
 		res.send(response)
 		return "";
 	}catch(err){ console.log(err)
