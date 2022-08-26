@@ -300,8 +300,7 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 		const employeeDetails = await Employee.findById(empId)
 		let orgId = employeeDetails.organizationId;
 		let allEmployees = {}
-		if(orgId){
-			console.log('1', orgId);
+		if(employeeDetails.userOrganizations.length != 0){
 			allEmployees  = await Employee.find({userOrganizations: {$in: [orgId]}});
 		}else{
 			console.log('2', empId);
