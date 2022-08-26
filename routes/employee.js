@@ -652,10 +652,10 @@ router.put('/update/:id', async(req,res) => {
 			email: req.body.email,
 			zipCode: req.body.zipCode,
 			is_exclusive: req.body.is_exclusive,
-			isVerified: req.body.isVerified,
+			isVerified: req.body.isVerified == '1' ? true : false,
 		}
 
-		if(req.body.isVerified) {
+		if(req.body.isVerified == '1') {
 			data['organizationId'] = req.body.orgId;
 		}
      
@@ -663,7 +663,7 @@ router.put('/update/:id', async(req,res) => {
 
 		console.log('req.body.isVerified', req.body.isVerified);
 
-		if(req.body.isVerified) {
+		if(req.body.isVerified == '1') {
 
 			const orgresult1 = await ChatGroup.updateOne({organization_id: String(req.body.orgId)}, {$push: {users: req.body.id}});
 
@@ -677,7 +677,7 @@ router.put('/update/:id', async(req,res) => {
 			console.log('emailRes', emailRes);
 		}
 
-		let itsResult = await organizationRequests.updateOne({_id: req.body.reqId}, {$set: {status: req.body.isVerified ? '1' : '2'}});
+		let itsResult = await organizationRequests.updateOne({_id: req.body.reqId}, {$set: {status: req.body.isVerified}});
 		console.log('itsResult', itsResult);
        
 		const emp = await Employee.findOne({_id: req.body.id});
