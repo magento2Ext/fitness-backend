@@ -711,7 +711,7 @@ router.put('/update/:id', async(req,res) => {
 
 
 
-router.put('/orgRequestAction/:id', async(req,res) => {
+router.post('/orgRequestAction', async(req,res) => {
 
 	try{
 
