@@ -195,7 +195,7 @@ router.get('/list/:id', async(req,res) => {
 router.get('/orgRequests/:id', async(req,res) => { 
     try{
 
-		 let data = await organizationRequests.find({orgId: req.params.id, status: 0});
+		 let data = await organizationRequests.find({orgId: req.params.id, status: "0"});
 
 		 if(data.length != 0){
 
