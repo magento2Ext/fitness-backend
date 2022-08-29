@@ -254,7 +254,7 @@ router.post('/detail', auth, async(req,res) => {
  router.post('/save', auth, async(req,res) => {
 	try{ 
 	    var empId = req.user.user_id;
-		const empDetails = await Employee.findOne({_id: employeeId});
+		const empDetails = await Employee.findOne({_id: empId});
 		const chatGroup = new ChatGroup({
 			group_name: req.body.group_name,
 			group_picture: req.body.group_picture,
