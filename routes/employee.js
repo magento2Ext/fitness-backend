@@ -714,20 +714,26 @@ router.put('/update/:id', async(req,res) => {
 router.post('/orgRequestAction', async(req,res) => {
 
 	try{
-		const empDetails = await Employee.findOne({_id: req.body.id});
+
+		
+		const employeeId = reqDetails.employeeId;
+		const orgId = reqDetails.orgId;
+		const reqDetails = await organizationRequests.findOne({_id: orgId});
+
+		const empDetails = await Employee.findOne({_id: employeeId});
 
 	   if(req.body.status == '1') {
-		let orgData = await Organization.findOne({_id: req.body.orgId});
+		let orgData = await Organization.findOne({_id: orgId});
 
 		let data = {
 			is_exclusive: true,
 			isVerified: req.body.status,
-			organizationId: req.body.orgId
+			organizationId: orgId
 		}
 
-		await Employee.updateOne({_id: req.body.id}, {$set: data, $push: {userOrganizations: req.body.orgId}}, {new: true}); 
+		await Employee.updateOne({_id: employeeId}, {$set: data, $push: {userOrganizations: orgId}}, {new: true}); 
 
-		await ChatGroup.updateOne({organization_id: String(req.body.orgId)}, {$push: {users: req.body.id}});
+		await ChatGroup.updateOne({organization_id: String(orgId)}, {$push: {users: employeeId}});
 
 		await organizationRequests.updateOne({_id: req.body.reqId}, {$set: {status: req.body.status}});
 
