@@ -658,12 +658,7 @@ router.put('/update/:id', async(req,res) => {
 
 	 try{
 
-		let data = {
-			firstName: req.body.firstName,
-			lastName: req.body.lastName,
-			email: req.body.email,
-			zipCode: req.body.zipCode,
-		}
+		let data = {}
 
 		if(req.body.requestType == 'removeFromOrg'){
 			data['organizationId'] = false;
@@ -672,7 +667,13 @@ router.put('/update/:id', async(req,res) => {
 			data['userOrganizations'] = [];
 			await Employee.updateOne({_id: req.body.id}, {$set: data}, {new: true}); 
 		}else{
-			data['is_exclusive'] = req.body.is_exclusive;
+			data = {
+				firstName: req.body.firstName,
+				lastName: req.body.lastName,
+				zipCode: req.body.zipCode,
+				is_exclusive: req.body.is_exclusive
+			}
+ 
 			await Employee.updateOne({_id: req.body.id}, {$set: data}, {new: true}); 
 		}
 
