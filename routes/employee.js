@@ -716,6 +716,7 @@ router.post('/orgRequestAction', async(req,res) => {
 	try{
         const reqId = req.body.reqId;
 		const reqDetails = await organizationRequests.findOne({_id: reqId});
+		console.log('reqDetails', reqDetails)
 		const employeeId = reqDetails.employeeId;
 		const orgId = reqDetails.orgId;
 	
