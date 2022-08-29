@@ -686,12 +686,8 @@ router.put('/update/:id', async(req,res) => {
 				"lastName": emp.lastName,
 				"email": emp.email,
 				"userName": emp.userName,
-				"zipCode": emp.zipCode,
-				"employeeType": emp.employeeType,
 				"is_exclusive": emp.is_exclusive,
-				"referCode":emp.referCode,
 				"organizationId": emp.organizationId,
-				"isVerified":  emp.isVerified,
 				"picture": emp.picture
 			}
 
