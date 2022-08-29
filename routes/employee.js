@@ -105,7 +105,8 @@ require('../functions')
 router.post('/list', auth, async(req,res) => {
     try{
 		var empId = req.user.user_id;
-		const employeeDetails = await Employee.findById(empId)
+		const employeeDetails = await Employee.findById(empId);
+		console.log('employeeDetails', employeeDetails)
 		if(employeeDetails.organizationId) {
 			var employees = await Employee.find({organizationId: employeeDetails.organizationId})
 		} else {
