@@ -714,11 +714,11 @@ router.put('/update/:id', async(req,res) => {
 router.post('/orgRequestAction', async(req,res) => {
 
 	try{
-
-		
+        const reqId = req.body.reqId;
+		const reqDetails = await organizationRequests.findOne({_id: reqId});
 		const employeeId = reqDetails.employeeId;
 		const orgId = reqDetails.orgId;
-		const reqDetails = await organizationRequests.findOne({_id: orgId});
+	
 
 		const empDetails = await Employee.findOne({_id: employeeId});
 
@@ -735,7 +735,7 @@ router.post('/orgRequestAction', async(req,res) => {
 
 		await ChatGroup.updateOne({organization_id: String(orgId)}, {$push: {users: employeeId}});
 
-		await organizationRequests.updateOne({_id: req.body.reqId}, {$set: {status: req.body.status}});
+		await organizationRequests.updateOne({_id: reqId}, {$set: {status: req.body.status}});
 
 		let emailContent = "Congratulations! "+ orgData.organizationName + " has approved you as its member";
 		let subject = 'Organization approval'
@@ -745,7 +745,7 @@ router.post('/orgRequestAction', async(req,res) => {
 		res.send(response);
 	   }else{
 
-		await organizationRequests.updateOne({_id: req.body.reqId}, {$set: {status: req.body.status}});
+		await organizationRequests.updateOne({_id: reqId}, {$set: {status: req.body.status}});
 		response = webResponse(202, true, 'Success');
 		res.send(response);
 
