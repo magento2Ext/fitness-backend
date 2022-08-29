@@ -28,7 +28,8 @@
 			return "";
 		}
 		
-		const employeeDetails = await Employee.findById(empId)
+		const employeeDetails = await Employee.findById(empId);
+		console.log('employeeDetails', employeeDetails);
 		const groupDetails = await ChatGroup.findById(groupId)
 		if(employeeDetails.organizationId) {
 			var employees = await Employee.find({organizationId: employeeDetails.organizationId})
