@@ -183,6 +183,17 @@ router.post('/web/list', async(req,res) => {
 router.get('/list/:id', async(req,res) => { 
     try{
 
+		let data = await Employee.find({userOrganizations: {$in: [req.params.id]}});
+		res.json(data);
+
+    }catch(err){
+        res.send('Error ' + err)
+    }
+})
+
+router.get('/list/:id', async(req,res) => { 
+    try{
+
 		 let data = await organizationRequests.find({orgId: req.params.id});
 
 		 if(data.length != 0){
@@ -230,6 +241,8 @@ router.get('/list/:id', async(req,res) => {
         res.send('Error ' + err)
     }
 })
+
+
 
 router.post('/forget/password', async(req,res) => {
     try{ 
@@ -643,68 +656,98 @@ router.post('/verify',async(req,res)=> {
 router.put('/update/:id', async(req,res) => {
 
 	 try{
- 
-		let orgData = await Organization.findOne({_id: req.body.orgId});
 
 		let data = {
 			firstName: req.body.firstName,
 			lastName: req.body.lastName,
 			email: req.body.email,
 			zipCode: req.body.zipCode,
-			is_exclusive: req.body.is_exclusive,
-			isVerified: req.body.isVerified == '1' ? true : false,
 		}
 
-		if(req.body.isVerified == '1') {
-			data['organizationId'] = req.body.orgId;
+		if(req.body.requestType == 'removeFromOrg'){
+			data['organizationId'] = false;
+			data['isVerified'] = false;
+			data['is_exclusive'] = false;
+			data['userOrganizations'] = [];
+			await Employee.updateOne({_id: req.body.id}, {$set: data}, {new: true}); 
+		}else{
+			data['is_exclusive'] = req.body.is_exclusive;
+			await Employee.updateOne({_id: req.body.id}, {$set: data}, {new: true}); 
 		}
-     
-		await Employee.updateOne({_id: req.body.id}, {$set: data}, {new: true}); 
 
-		console.log('req.body.isVerified', req.body.isVerified);
+		setTimeout(() => {
 
-		if(req.body.isVerified == '1') {
+			const emp = await Employee.findOne({_id: req.body.id});
+			let dict = {
+				"_id": emp._id,
+				"firstName": emp.firstName,
+				"lastName": emp.lastName,
+				"email": emp.email,
+				"userName": emp.userName,
+				"zipCode": emp.zipCode,
+				"employeeType": emp.employeeType,
+				"is_exclusive": emp.is_exclusive,
+				"referCode":emp.referCode,
+				"organizationId": emp.organizationId,
+				"isVerified":  emp.isVerified,
+				"picture": emp.picture
+			}
 
-			const orgresult1 = await ChatGroup.updateOne({organization_id: String(req.body.orgId)}, {$push: {users: req.body.id}});
-
-			console.log('orgresult1', orgresult1)
-			 
-			await Employee.updateOne({_id: req.body.id}, {$set: {organizationId: req.body.orgId}, $push: {userOrganizations: req.body.orgId}}, {new: true}); 
+			response = webResponse(202, true, dict);
+			res.send(response);
+			
+		}, 2000);
  
-			let emailContent = "Congratulations! "+ orgData.organizationName + " has approved you as its member";
-			let subject = 'Organization approval'
-			let emailRes = sendEmail(req.body.email, subject, emailContent);
-			console.log('emailRes', emailRes);
-		}
 
-		let itsResult = await organizationRequests.updateOne({_id: req.body.reqId}, {$set: {status: req.body.isVerified}});
-		console.log('itsResult', itsResult);
-       
-		const emp = await Employee.findOne({_id: req.body.id});
-		let dict =     {
-			"_id": emp._id,
-			"firstName": emp.firstName,
-			"lastName": emp.lastName,
-			"email": emp.email,
-			"userName": emp.userName,
-			"zipCode": emp.zipCode,
-			"employeeType": emp.employeeType,
-			"is_exclusive": emp.is_exclusive,
-			"referCode":emp.referCode,
-			"organizationId": emp.organizationId,
-			"isVerified":  req.body.isVerified,
-			"picture": emp.picture,
-			"reqId": req.body.orgId
-		}
- 
-        response = webResponse(202, true, dict);
-	    res.send(response);
 
     }catch(err){
 		console.log('err', err)
         res.send(err)
         
     }
+
+})
+
+
+
+router.put('/orgRequestAction/:id', async(req,res) => {
+
+	try{
+
+	   if(req.body.status == '1') {
+		let orgData = await Organization.findOne({_id: req.body.orgId});
+
+		let data = {
+			is_exclusive: true,
+			isVerified: req.body.status,
+			organizationId: req.body.orgId
+		}
+
+		await Employee.updateOne({_id: req.body.id}, {$set: data, $push: {userOrganizations: req.body.orgId}}, {new: true}); 
+
+		await ChatGroup.updateOne({organization_id: String(req.body.orgId)}, {$push: {users: req.body.id}});
+
+		await organizationRequests.updateOne({_id: req.body.reqId}, {$set: {status: req.body.status}});
+
+		let emailContent = "Congratulations! "+ orgData.organizationName + " has approved you as its member";
+		let subject = 'Organization approval'
+		sendEmail(req.body.email, subject, emailContent);
+
+		response = webResponse(202, true, 'Success');
+		res.send(response);
+	   }else{
+
+		await organizationRequests.updateOne({_id: req.body.reqId}, {$set: {status: req.body.status}});
+		response = webResponse(202, true, 'Success');
+		res.send(response);
+
+	   }
+	
+   }catch(err){
+	   console.log('err', err)
+	   res.send(err)
+	   
+   }
 
 })
 
@@ -751,7 +794,9 @@ router.post('/testUpdate', async(req,res)=> {
 	   
    }
 
-})
+});
+
+
 
 
  module.exports = router
