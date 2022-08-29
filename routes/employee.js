@@ -106,10 +106,10 @@ router.post('/list', auth, async(req,res) => {
     try{
 		var empId = req.user.user_id;
 		const employeeDetails = await Employee.findById(empId)
-		if(employeeDetails.employeeType && employeeDetails.employeeType == "Coorporate") {
-			var employees = await Employee.find({employeeType:"Coorporate", organizationId:employeeDetails.organizationId})
+		if(employeeDetails.userOrganizations.length != 0) {
+			var employees = await Employee.find({organizationId: employeeDetails.organizationId})
 		} else {
-			var employees = await Employee.find({employeeType:"Individual"})
+			var employees = await Employee.find({organizationId: false})
 		}
         response = webResponse(201, true, employees)  
 		res.send(response)
