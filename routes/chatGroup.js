@@ -254,14 +254,20 @@ router.post('/detail', auth, async(req,res) => {
  router.post('/save', auth, async(req,res) => {
 	try{ 
 	    var empId = req.user.user_id;
+		const empDetails = await Employee.findOne({_id: employeeId});
 		const chatGroup = new ChatGroup({
 			group_name: req.body.group_name,
 			group_picture: req.body.group_picture,
 			challenge: req.body.challenge,
 			chat_group_requested_users: req.body.chat_group_requested_users,
 			users: req.body.users,
-			group_admin: empId
+			group_admin: empId,
 		})
+
+		if(empDetails.userOrganizations.length != 0){
+			chatGroup.organization_id = empDetails.organizationId
+		}
+
 		if(req.body.id && req.body.id != "0") {
 			const chatGroupDetail = await ChatGroup.findById(req.body.id) 	
 			if(!chatGroupDetail){
