@@ -30,10 +30,10 @@
 		
 		const employeeDetails = await Employee.findById(empId)
 		const groupDetails = await ChatGroup.findById(groupId)
-		if(employeeDetails.employeeType && employeeDetails.employeeType == "Coorporate") {
-			var employees = await Employee.find({employeeType:"Coorporate", organizationId:employeeDetails.organizationId})
+		if(employeeDetails.organizationId) {
+			var employees = await Employee.find({organizationId: employeeDetails.organizationId})
 		} else {
-			var employees = await Employee.find({employeeType:"Individual"})
+			var employees = await Employee.find({organizationId: false})
 		}
 		var employeeList = [];
 		
