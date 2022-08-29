@@ -12,7 +12,7 @@
  var chatRef=db.ref("chat");
  
  router.post('/employee/list', auth, async(req,res) => {
-	console.log('employeeDetails');
+ 
     try{
 	
 
@@ -35,9 +35,9 @@
 		
 		const groupDetails = await ChatGroup.findById(groupId)
 		if(employeeDetails.organizationId) {
-			var employees = await Employee.find({organizationId: employeeDetails.organizationId})
+			var employees = await Employee.find({organizationId: employeeDetails.organizationId, _id: {$ne: empId}})
 		} else {
-			var employees = await Employee.find({organizationId: false})
+			var employees = await Employee.find({organizationId: false, _id: {$ne: empId}})
 		}
 		var employeeList = [];
 		
