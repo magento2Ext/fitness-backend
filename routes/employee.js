@@ -675,7 +675,7 @@ router.put('/update/:id', async(req,res) => {
 			await Employee.updateOne({_id: req.body.id}, {$set: data}, {new: true}); 
 		}
 
-		setTimeout(() => {
+		setTimeout(async () => {
 
 			const emp = await Employee.findOne({_id: req.body.id});
 			let dict = {
