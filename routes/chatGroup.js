@@ -74,16 +74,18 @@
  router.post('/list', auth, async(req,res) => {
     try{
 		var empId = req.user.user_id; 
-		const employeeDetails = await Employee.findById(empId)
+		const employeeDetails = await Employee.findById(empId);
+		console.log('chatGroup', employeeDetails);
 		//const chatGroup = await ChatGroup.find({'users': {'$in': empId}})
 		let query = { $or:[ {'users':{'$in': empId}}, {'chat_group_requested_users':{'$in': empId}} ]}
 
 		if(employeeDetails.userOrganizations.length != 0 ){
 			query['organization_id'] =  employeeDetails.organizationId
 		}
+
 		const chatGroup = await ChatGroup.find(query)
 		
-		console.log('chatGroup', chatGroup);
+	
 		var chatGroupArray = [];
 		
 		chatGroup.forEach( function(col){
