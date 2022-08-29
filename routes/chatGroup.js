@@ -12,7 +12,10 @@
  var chatRef=db.ref("chat");
  
  router.post('/employee/list', auth, async(req,res) => {
+	console.log('employeeDetails');
     try{
+	
+
 		var empId = req.user.user_id;
 		const groupId = req.body.groupId
 		
@@ -29,7 +32,7 @@
 		}
 		
 		const employeeDetails = await Employee.findById(empId);
-		console.log('employeeDetails', employeeDetails);
+		
 		const groupDetails = await ChatGroup.findById(groupId)
 		if(employeeDetails.organizationId) {
 			var employees = await Employee.find({organizationId: employeeDetails.organizationId})
