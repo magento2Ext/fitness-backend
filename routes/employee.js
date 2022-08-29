@@ -714,6 +714,7 @@ router.put('/update/:id', async(req,res) => {
 router.post('/orgRequestAction', async(req,res) => {
 
 	try{
+		const empDetails = await Employee.findOne({_id: req.body.id});
 
 	   if(req.body.status == '1') {
 		let orgData = await Organization.findOne({_id: req.body.orgId});
@@ -732,7 +733,7 @@ router.post('/orgRequestAction', async(req,res) => {
 
 		let emailContent = "Congratulations! "+ orgData.organizationName + " has approved you as its member";
 		let subject = 'Organization approval'
-		sendEmail(req.body.email, subject, emailContent);
+		sendEmail(empDetails.email, subject, emailContent);
 
 		response = webResponse(202, true, 'Success');
 		res.send(response);
