@@ -161,7 +161,7 @@ router.post('/list', auth, async(req,res) => {
 			groupDetails: groupDetails
 		}
 		
-		response = webResponse(201, true, finalResult)  
+		response = webResponse(202, true, finalResult)  
 	    res.send(response)
 		return;
 	} catch (err) { 
