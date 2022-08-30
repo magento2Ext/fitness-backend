@@ -154,8 +154,14 @@ router.post('/list', auth, async(req,res) => {
 			}
 			chatList.push(chatDetail);
 		})
+
+		let groupDetails = await ChatGroup.findOne({_id: groupId});
+		let finalResult = {
+			chatList: chatList,
+			groupDetails: groupDetails
+		}
 		
-		response = webResponse(201, false, chatList)  
+		response = webResponse(201, true, finalResult)  
 	    res.send(response)
 		return;
 	} catch (err) { 
