@@ -277,7 +277,7 @@ router.post('/reset/password', async(req,res) => {
     try{
         
 		let newPassword  = await bcrypt.hashSync(req.body.password, 12);
-        const employee = await Employee.updateOne({ email: req.body.email }, {$set: {password: newPassword}}, {new: true});
+        const employee = await Employee.updateOne({ email: req.body.email.toLowerCase() }, {$set: {password: newPassword}}, {new: true});
 		if(employee){
 			response = webResponse(200, true, "Password Updated")  
 			res.send(response)
@@ -297,7 +297,7 @@ router.post('/reset/password', async(req,res) => {
 		const employee = new Employee({
 			firstName: req.body.firstName,
 			lastName: req.body.lastName,
-			email: req.body.email,
+			email: req.body.email.toLowerCase(),
 			userName: req.body.userName,
 			password: req.body.password,
 			employeeType: 'Individual',
@@ -373,7 +373,7 @@ router.post('/reset/password', async(req,res) => {
 		  return;
 		}
 	
-		const employeeEmailExist = await Employee.findOne({ email: req.body.email });
+		const employeeEmailExist = await Employee.findOne({ email: req.body.email.toLowerCase() });
 		if (employeeEmailExist && employeeEmailExist != null) {  
 			response = webResponse(200, false, 'Email already exist')  
 			res.send(response)
@@ -426,7 +426,7 @@ router.post('/reset/password', async(req,res) => {
 			employee.otp = otp;
 			let emailContent = "OTP is "+otp;
 			let subject = 'Account Verification OTP '
-			sendEmail(req.body.email, subject, emailContent)
+			sendEmail(req.body.email.toLowerCase(), subject, emailContent)
 			
 			const result = {};
 			result.otp = otp
@@ -530,7 +530,7 @@ router.post('/profile', async(req,res) => {
 router.post('/login', async(req,res) => {
 	try { 
 	 //res.json(req)
-		const email = req.body.email
+		const email = req.body.email.toLowerCase()
 		const password = req.body.password
 		
 		// Validate user input
