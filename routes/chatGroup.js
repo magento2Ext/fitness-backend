@@ -295,7 +295,7 @@ router.post('/detail', auth, async(req,res) => {
 			await chatGroupDetail.save();
 
 			setTimeout(async () => {
-				const chatGroupDetailSaved = await chatGroupDetail.findOne({_id: req.body.id});
+				const chatGroupDetailSaved = await ChatGroup.findOne({_id: req.body.id});
 				let groupData = {
 					groupName: chatGroupDetailSaved.group_name,
 					picture: chatGroupDetailSaved.group_picture,
