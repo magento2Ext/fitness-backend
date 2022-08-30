@@ -2,6 +2,7 @@
  const router = express.Router()
  const auth = require("../middleware/auth");
  const Chat = require('../models/chat')
+ const ChatGroup = require('../models/chat_group')
  const Employee = require('../models/employee')
  const UserChatNode = require('../models/user_chat_nodes')
   const dateLib = require('date-and-time')
@@ -156,6 +157,7 @@ router.post('/list', auth, async(req,res) => {
 		})
 
 		let groupDetails = await ChatGroup.findOne({_id: groupId});
+
 		let finalResult = {
 			chatList: chatList,
 			groupDetails: groupDetails
