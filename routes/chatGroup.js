@@ -306,53 +306,57 @@ router.post('/detail', auth, async(req,res) => {
 				return "";
 			}, 500);
 
-		}
-		
-		if(req.body.users) {
-			var users = req.body.users
-			var userArray = users.split(',');
-			userArray.push(empId);
-			chatGroup.users = userArray
-		} else {
-			var userArray = []
-			userArray.push(empId);
-			chatGroup.users = userArray
-		}
-		
-		if(req.body.chat_group_requested_users) {
-			var requestedUsers = req.body.chat_group_requested_users
-			var requestedUsersArray = requestedUsers.split(',');
-			chatGroup.chat_group_requested_users = requestedUsersArray
-		}
-		const chatGroupDetail =  await chatGroup.save() 
-		var groupId = chatGroupDetail._id
-		
-		var firebaseData = {}
-		firebaseData.id = ""
-		firebaseData.profile_picture =  ""
-		firebaseData.user_name =  ""
-		firebaseData.dateTime = "",
-		firebaseData.userId =  ""
-		firebaseData.message =  ""
-		firebaseData.isMyMessage = 0
-		firebaseData.appTempId = ""
-		
-		
-			var group = chatRef.child( groupId.toString());
-			group.update(firebaseData,(err)=>{
-			if(err){
-				resMessage = "Something went wrong" + err;
-				response = webResponse(200, true, resMessage)  
-				res.send(response)		
-				return;
+		}else{
+
+			if(req.body.users) {
+				var users = req.body.users
+				var userArray = users.split(',');
+				userArray.push(empId);
+				chatGroup.users = userArray
+			} else {
+				var userArray = []
+				userArray.push(empId);
+				chatGroup.users = userArray
 			}
-			else{
-				resMessage = "Group created"
-				response = webResponse(200, true, resMessage)  
-				res.send(response)		
-				return;
+			
+			if(req.body.chat_group_requested_users) {
+				var requestedUsers = req.body.chat_group_requested_users
+				var requestedUsersArray = requestedUsers.split(',');
+				chatGroup.chat_group_requested_users = requestedUsersArray
 			}
-		})
+			const chatGroupDetail =  await chatGroup.save() 
+			var groupId = chatGroupDetail._id
+			
+			var firebaseData = {}
+			firebaseData.id = ""
+			firebaseData.profile_picture =  ""
+			firebaseData.user_name =  ""
+			firebaseData.dateTime = "",
+			firebaseData.userId =  ""
+			firebaseData.message =  ""
+			firebaseData.isMyMessage = 0
+			firebaseData.appTempId = ""
+			
+			
+				var group = chatRef.child( groupId.toString());
+				group.update(firebaseData,(err)=>{
+				if(err){
+					resMessage = "Something went wrong" + err;
+					response = webResponse(200, true, resMessage)  
+					res.send(response)		
+					return;
+				}
+				else{
+					resMessage = "Group created"
+					response = webResponse(200, true, resMessage)  
+					res.send(response)		
+					return;
+				}
+			})
+			
+		}
+		
+
 	}catch(err){  
 		response = webResponse(403, false, err)  
 	    res.send(response)
