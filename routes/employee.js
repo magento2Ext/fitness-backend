@@ -731,7 +731,7 @@ router.post('/orgRequestAction', async(req,res) => {
 
 		await Employee.updateOne({_id: employeeId}, {$set: data, $push: {userOrganizations: orgId}}, {new: true}); 
 
-		await ChatGroup.updateOne({organization_id: String(orgId)}, {$push: {users: employeeId}});
+		await ChatGroup.updateOne({organization_id: String(orgId)}, {$push: {users: String(employeeId)}});
 
 		await organizationRequests.updateOne({_id: reqId}, {$set: {status: req.body.status}});
 
