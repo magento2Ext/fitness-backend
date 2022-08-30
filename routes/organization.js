@@ -637,11 +637,20 @@ router.post("/confirmCode", auth,  async(req, res) => {
 	try{ 
 
 		var empId = req.user.user_id;
-		const employee = await Employee.findById(empId)
+		const employee = await Employee.findById(empId);
+
 		if(!employee){
 			response = webResponse(404, false, "Employee not found.")  
 			res.send(response)
 			return;
+		}
+
+		let existingReqs = await organizationRequests.find({employeeId: empId, status: "0"});
+
+		if(existingReqs.length != 0){
+			response = webResponse(200, false, "A request is already pending.")  
+			res.json(response);
+			return "";
 		}
 
 		let codeData = await Organization.findOne({referCode: req.body.code});
