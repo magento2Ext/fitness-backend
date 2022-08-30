@@ -292,10 +292,20 @@ router.post('/detail', auth, async(req,res) => {
 			chatGroupDetail.users = userArray
 			chatGroupDetail.chat_group_requested_users = requestedUsersArray
 			
-			const chatGroupDetailSaved = await chatGroupDetail.save()
-			response = webResponse(200, true, "Group updated")  
-			res.send(response)
-			return "";
+			await chatGroupDetail.save();
+
+			setTimeout(() => {
+				const chatGroupDetailSaved = await chatGroupDetail.findOne({_id: req.body.id});
+				let groupData = {
+					groupName: chatGroupDetailSaved.group_name,
+					picture: chatGroupDetailSaved.group_picture,
+					id: req.body.id
+				}
+				response = webResponse(202, true, groupData)  
+				res.send(response)
+				return "";
+			}, 500);
+
 		}
 		
 		if(req.body.users) {
