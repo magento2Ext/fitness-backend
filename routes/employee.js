@@ -472,7 +472,7 @@ router.post('/sendOtpAgain', async (req, res) => {
 	    const employeeEmailExist = await Employee.findOne({ email: req.body.email.toLowerCase() });
 		if(employeeEmailExist != null){
 			let otp = Math.floor(1000 + Math.random() * 9000);
-			await Employee.update({ email: req.body.email.toLowerCase()}, {$set: {otp: otp}});
+			await Employee.updateOne({ email: req.body.email.toLowerCase()}, {$set: {otp: otp}});
 			let emailContent = "OTP is "+otp;
 			let subject = 'Account Verification OTP '
 			sendEmail(req.body.email.toLowerCase(), subject, emailContent)
