@@ -467,7 +467,7 @@ router.post('/reset/password', async(req,res) => {
 })
 
 
-router.post('/sendOtpAgain', async () => {
+router.post('/sendOtpAgain', async (req, res) => {
         
 	    const employeeEmailExist = await Employee.findOne({ email: req.body.email.toLowerCase() });
 		if(employeeEmailExist != null){
