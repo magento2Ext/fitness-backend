@@ -466,6 +466,32 @@ router.post('/reset/password', async(req,res) => {
     }
 })
 
+
+router.post('/sendOtpAgain', async () => {
+        
+	    const employeeEmailExist = await Employee.findOne({ email: req.body.email.toLowerCase() });
+		if(employeeEmailExist != null){
+			let otp = Math.floor(1000 + Math.random() * 9000);
+			await Employee.update({ email: req.body.email.toLowerCase()}, {$set: {otp: otp}});
+			let emailContent = "OTP is "+otp;
+			let subject = 'Account Verification OTP '
+			sendEmail(req.body.email.toLowerCase(), subject, emailContent)
+			const result = {};
+			result.otp = otp
+			result.employee = employee
+			result.message = "OTP sent"
+			
+			response = webResponse(202, true, result)  
+			res.send(response)
+			return;
+		}else{
+			response = webResponse(200, true, "User not found.")  
+			res.send(response)
+		}
+
+ 
+})
+
  
 router.get('/detail/:id', async(req,res) => {
     try{
