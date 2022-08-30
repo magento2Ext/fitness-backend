@@ -477,8 +477,6 @@ router.post('/sendOtpAgain', async () => {
 			let subject = 'Account Verification OTP '
 			sendEmail(req.body.email.toLowerCase(), subject, emailContent)
 			const result = {};
-			result.otp = otp
-			result.employee = employee
 			result.message = "OTP sent"
 			
 			response = webResponse(202, true, result)  
