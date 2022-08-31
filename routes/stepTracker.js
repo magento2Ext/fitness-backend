@@ -80,162 +80,169 @@ router.post('/resetTarget', auth, async(req,res) => {
 
 	let days = Math.ceil(difference / (1000 * 3600 * 24));
 
-	console.log(date2, date1, days, employeeDetails.date)
-    //////
+	if(29 > days){
+		let getDays = days < 0 ? 29 : 29 - days;
 
-	var endDate = new Date(); 
+		console.log('getDays', getDays)
+
+		var endDate = new Date(); 
 	
-	var startDate = new Date();
-	startDate.setDate(startDate.getDate() - 29);
-	
-	var emptStepTarget = {};
-	var target = false;
-	
-	const stepTrackerList = await StepTracker.find({  employeeId: req.user.user_id,
-			date: {
-				$gte: dateLib.format(startDate,'YYYY-MM-DD'),
-				$lte: dateLib.format(endDate,'YYYY-MM-DD')
-			}
-		}).sort({date:1})
+		var startDate = new Date();
+		startDate.setDate(startDate.getDate() - getDays);
 		
-    var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
-	if(stepTarget) {
-		emptStepTarget['step_target'] = stepTarget.step_target;
-		target = true;
-	}else{emptStepTarget['step_target'] = '0';}
-	
-    var stepTrackerDetailsToday = await StepTracker.findOne({ date: dateLib.format(endDate,'YYYY-MM-DD'),  employeeId: req.user.user_id});
-	if(!stepTrackerDetailsToday) {
-		stepTrackerDetailsToday = {
-			'date' : dateLib.format(endDate,'YYYY-MM-DD'),
-			'steps' : "0",
-			'km' : "0",
-			'calories':"0",
-			'duration':'00:00:00'
-		}
-	}
-	
-	var tracker = await StepTracker.aggregate([
-			{ $group: {
-				_id: '$employeeId',
-				stepAvg: { $avg: '$steps'}
-			}}
-		], function (err, results) {
-			if (err) {
-				console.error(err);
-			} else {
-				console.log(results);
-			}
-		}
-	);
-	
-	var stepFinalArray = [];
-		var steps = 0;	
-		var noOfFound = 0;
-		for(i=startDate; i<=endDate;  i.setDate(i.getDate() + 1)) { 
-			var found = 0; 
-			for( var j = 0, len = stepTrackerList.length; j < len; j++ ) { 
-			   var stepTrackerData = '';
-			    if( stepTrackerList[j]['date'] == dateLib.format(i,'YYYY-MM-DD')) {
-					found = 1;
-					stepTrackerData = stepTrackerList[j];
-					break;
-				} 
-			}
-			if(found == 0) {
-				step = {
-					'date' : dateLib.format(i,'YYYY-MM-DD'),
-					'steps' : "0",
-					'km' : "0",
-					'calories':"0",
-					'duration':'00:00:00'
+		var emptStepTarget = {};
+		var target = false;
+		
+		const stepTrackerList = await StepTracker.find({  employeeId: req.user.user_id,
+				date: {
+					$gte: dateLib.format(startDate,'YYYY-MM-DD'),
+					$lte: dateLib.format(endDate,'YYYY-MM-DD')
 				}
-				stepFinalArray.push(step);
-			}   else{
-				noOfFound = Number(noOfFound)+ 1
-				steps = Number(stepTrackerData.steps) + Number(steps)
-				stepFinalArray.push(stepTrackerData);
+			}).sort({date:1})
+			
+		var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
+		if(stepTarget) {
+			emptStepTarget['step_target'] = stepTarget.step_target;
+			target = true;
+		}else{emptStepTarget['step_target'] = '0';}
+		
+		var stepTrackerDetailsToday = await StepTracker.findOne({ date: dateLib.format(endDate,'YYYY-MM-DD'),  employeeId: req.user.user_id});
+		if(!stepTrackerDetailsToday) {
+			stepTrackerDetailsToday = {
+				'date' : dateLib.format(endDate,'YYYY-MM-DD'),
+				'steps' : "0",
+				'km' : "0",
+				'calories':"0",
+				'duration':'00:00:00'
 			}
 		}
-	 
-	   let bestStreakK = await bestStreak();
-
-		async function bestStreak(){
-			
-			const promise = new Promise( async (resolve, reject) => {
-
-				let allSteps = 	await StepTracker.find({  employeeId: req.user.user_id}).sort({date:1});
+		
+		var tracker = await StepTracker.aggregate([
+				{ $group: {
+					_id: '$employeeId',
+					stepAvg: { $avg: '$steps'}
+				}}
+			], function (err, results) {
+				if (err) {
+					console.error(err);
+				} else {
+					console.log(results);
+				}
+			}
+		);
+		
+		var stepFinalArray = [];
+			var steps = 0;	
+			var noOfFound = 0;
+			for(i=startDate; i<=endDate;  i.setDate(i.getDate() + 1)) { 
+				var found = 0; 
+				for( var j = 0, len = stepTrackerList.length; j < len; j++ ) { 
+				   var stepTrackerData = '';
+					if( stepTrackerList[j]['date'] == dateLib.format(i,'YYYY-MM-DD')) {
+						found = 1;
+						stepTrackerData = stepTrackerList[j];
+						break;
+					} 
+				}
+				if(found == 0) {
+					step = {
+						'date' : dateLib.format(i,'YYYY-MM-DD'),
+						'steps' : "0",
+						'km' : "0",
+						'calories':"0",
+						'duration':'00:00:00'
+					}
+					stepFinalArray.push(step);
+				}   else{
+					noOfFound = Number(noOfFound)+ 1
+					steps = Number(stepTrackerData.steps) + Number(steps)
+					stepFinalArray.push(stepTrackerData);
+				}
+			}
 		 
-				if(allSteps.length < 2) {
-					if(allSteps.length == 1) resolve(allSteps[0].steps);
-					else resolve(0);
-				}
-				else{
-
-					let count = 1;
-					let streaks = [];
-					let oneCount = Number(allSteps[0].steps);
-      
-					allSteps.forEach( (key) => {
-
-					
-						console.log('allSteps[count]', allSteps[count])
-						
-						if(allSteps[count] != null && allSteps[count] != undefined){
-
-							let date1 = new Date(allSteps[count].date.replace(/-/g, "/"));
-							let date2 = new Date(key.date.replace(/-/g, "/"));
+		   let bestStreakK = await bestStreak();
+	
+			async function bestStreak(){
 				
-							let difference =  date1.getTime() - date2.getTime()
-				
-							let days = Math.ceil(difference / (1000 * 3600 * 24));
-						
-							if(days > 1) {
-								streaks.push(oneCount);
-								oneCount = Number(key.steps);
-							}
-			
-							if(days == 1) oneCount = Number(oneCount) + Number(allSteps[count].steps);
-			
-							count++;
-			
-							if(days > 1 && count === allSteps.length) {
-								if(count === allSteps.length) streaks.push(oneCount);
-							}
+				const promise = new Promise( async (resolve, reject) => {
+	
+					let allSteps = 	await StepTracker.find({  employeeId: req.user.user_id}).sort({date:1});
 			 
-							if(count === allSteps.length){
-								if(days == 1) streaks.push(oneCount);
- 
-								 let max = Math.max(...streaks);
-								resolve(max)
-							}
+					if(allSteps.length < 2) {
+						if(allSteps.length == 1) resolve(allSteps[0].steps);
+						else resolve(0);
+					}
+					else{
+	
+						let count = 1;
+						let streaks = [];
+						let oneCount = Number(allSteps[0].steps);
+		  
+						allSteps.forEach( (key) => {
+	
+						
+							console.log('allSteps[count]', allSteps[count])
 							
-						}
-			
-					})
-
-				}
-
-			});
-
-			return promise;
-		}
-		
-		var data = {}; 
-		var avg = steps/noOfFound;
+							if(allSteps[count] != null && allSteps[count] != undefined){
+	
+								let date1 = new Date(allSteps[count].date.replace(/-/g, "/"));
+								let date2 = new Date(key.date.replace(/-/g, "/"));
+					
+								let difference =  date1.getTime() - date2.getTime()
+					
+								let days = Math.ceil(difference / (1000 * 3600 * 24));
+							
+								if(days > 1) {
+									streaks.push(oneCount);
+									oneCount = Number(key.steps);
+								}
+				
+								if(days == 1) oneCount = Number(oneCount) + Number(allSteps[count].steps);
+				
+								count++;
+				
+								if(days > 1 && count === allSteps.length) {
+									if(count === allSteps.length) streaks.push(oneCount);
+								}
+				 
+								if(count === allSteps.length){
+									if(days == 1) streaks.push(oneCount);
 	 
-		data.totalSteps = steps.toString();
-		data.avgStep = isNaN(avg) ? 0 : avg.toString();
-		data.todayData = stepTrackerDetailsToday
-		data.step_target = emptStepTarget
-		data.target = target
-		data.activity = stepFinalArray
-		data.best_streak = Number(bestStreakK)
-		data.avg_pace = "100"
-		
-		response = webResponse(201, true, data)  
+									 let max = Math.max(...streaks);
+									resolve(max)
+								}
+								
+							}
+				
+						})
+	
+					}
+	
+				});
+	
+				return promise;
+			}
+
+			var data = {}; 
+			var avg = steps/noOfFound;
+			data.totalSteps = steps.toString();
+			data.avgStep = isNaN(avg) ? 0 : avg.toString();
+			data.todayData = stepTrackerDetailsToday
+			data.step_target = emptStepTarget
+			data.target = target
+			data.activity = stepFinalArray
+			data.best_streak = Number(bestStreakK)
+			data.avg_pace = "100"
+			
+			response = webResponse(201, true, data)  
+			res.send(response);
+			return;
+
+	}else{
+		response = webResponse(201, true, "No data yet.")  
 		res.send(response);
 		return;
+	}
 })
 
 router.post('/app_analytics', auth, async(req,res) => {
