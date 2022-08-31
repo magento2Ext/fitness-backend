@@ -150,12 +150,7 @@ app.post("/weight", auth, async(req, res) => {
 		let difference =  date1.getTime() - date2.getTime()
 
 		let days_diff = Math.ceil(difference / (1000 * 3600 * 24));
-			let getDays_monthly = days_diff < 0 ? 29 : 29 - days_diff;
-			let getDays_weekly = days_diff < 0 ? 29 : 6 - days_diff;
-
-			console.log(getDays_weekly, getDays_weekly)
-		
-
+ 
         if(6 > days_diff){
 
 			let getDays_monthly = days < 0 ? 29 : 29 - days;
@@ -170,6 +165,8 @@ app.post("/weight", auth, async(req, res) => {
 			
 			var oneMonthAgo = new Date();
 			oneMonthAgo.setDate(oneMonthAgo.getDate() - getDays_monthly);
+            console.log(oneMonthAgo, oneWeekAgo)
+			return;
 	
 			var date = new Date();
 			
