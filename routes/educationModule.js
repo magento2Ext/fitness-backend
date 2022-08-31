@@ -19,11 +19,14 @@ require('../functions')
 			var education = await EducationModule.find({auth_user_id:req.body.auth_user_id})
 		}
 
+        if(education.length == 0){
+			console.log('education', [])
+			return
+		}
 
 		var educationArray = [];
+		let count = 0;
 
-	
- 
 		education.forEach( async function(col){
 			const module = await  ModuleAdded.findById(col.module_id)	 
 			let moduleName = '';
@@ -43,12 +46,17 @@ require('../functions')
 				"created_at": col.created_at,
 				"timeSinc":timeAgo(col.created_at) + "ago"
 			}
-			educationArray.push(newEdu); 
-			console.log('education', newEdu)
+
+			count++;
+
+			if(count === education.length){
+				response = webResponse(201, true, educationArray)  
+				res.send(response)
+				return "";
+			}
+
 		})
-		 response = webResponse(201, true, educationArray)  
-		res.send(response)
-		return "";
+
     }catch(err){  console.log(err)
         response = webResponse(200, false, "Something went wrong, please try again.")  
 	    res.send(response)
