@@ -133,7 +133,7 @@ app.post("/weight/list", auth, async(req, res) => {
 }); 
 
 app.post("/weight", auth, async(req, res) => { 
-  try{ 
+//   try{ 
         
 		var empId = req.user.user_id;
 		const employeeDetails = await Employee.findById(empId);
@@ -310,12 +310,12 @@ app.post("/weight", auth, async(req, res) => {
 
 		}
         
-	} catch(err){   
-		console.log(err)
-		response = webResponse(403, false, err)  
-	    res.send(response)
-		return;
-    }
+	// } catch(err){   
+	// 	console.log(err)
+	// 	response = webResponse(403, false, err)  
+	//     res.send(response)
+	// 	return;
+    // }
   
 }
 
