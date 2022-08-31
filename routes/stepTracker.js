@@ -68,6 +68,8 @@ router.post('/resetTarget', auth, async(req,res) => {
 	var empId = req.user.user_id;
 	const employeeDetails = await Employee.findById(empId);
 
+	console.log(employeeDetails)
+
 	let nowDate = new Date();
 	nowDate.setDate(nowDate.getDate() - 29);
 
