@@ -203,7 +203,7 @@ router.post('/detail', auth, async(req,res) => {
 		} else { 
 			var empIds = chatGroup.users
 			var requestedUserIds = chatGroup.chat_group_requested_users
-            let objIds =  [];
+            let objIds = [];
 			requestedUserIds.forEach( (key) => {
 				if(key.match(/^[0-9a-fA-F]{24}$/)){
 					objIds.push(key)
@@ -236,10 +236,9 @@ router.post('/detail', auth, async(req,res) => {
 				"group_admin": chatGroup.group_admin,
 				"isInvited": isInvited,
 				"isAdded": isAdded,
-				"users_count": chatGroup.users.length,
+				"users_count": employees.length,
 				"users": employees,
 				"requestedUsers": requestedUsers
-				
 			}
 			
 			response = webResponse(202, true, chat)  
