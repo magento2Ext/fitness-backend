@@ -140,6 +140,7 @@ router.post('/educationList', auth, async(req,res) => {
 				res.send(response)
 				return "";
 			}
+
 			educationDetail.auth_user_id= req.body.auth_user_id,
 			educationDetail.title= req.body.title,
 			educationDetail.description= req.body.description,
@@ -148,8 +149,21 @@ router.post('/educationList', auth, async(req,res) => {
 			educationDetail.module_id= req.body.module_id,
 			educationDetail.is_picture= req.body.is_picture
 			educationDetail.userType= req.body.userType
-			const educationDetailSaved = await educationDetail.save()
-			response = webResponse(202, true, educationDetailSaved)  
+			const educationDetailSaved = await educationDetail.save();
+			let moduleName = await  ModuleAdded.findById(educationDetailSaved.module_id);
+			let dict = {
+				'_id' :  educationDetailSaved._id,
+				"title": educationDetailSaved.title,
+				"description": educationDetailSaved.description,
+				"placeholder_image": educationDetailSaved.placeholder_image,
+				"video_link": educationDetailSaved.video_link,
+				"module_name": moduleName,
+				"module_id": educationDetailSaved.module_id,
+				"is_picture": educationDetailSaved.is_picture,
+				"created_at": educationDetailSaved.created_at,
+				"timeSinc":timeAgo(educationDetailSaved.created_at) + "ago"
+			}
+			response = webResponse(202, true, dict)  
 			res.send(response)
 			return "";
 		}
