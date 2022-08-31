@@ -2,6 +2,7 @@
  const router = express.Router()
  const StepTracker = require('../models/step_tracker')
  const dateLib = require('date-and-time')
+ const Employee = require('../models/employee')
  const EmpStepTarget = require('../models/employee_step_target')
  require('../functions')
  const auth = require("../middleware/auth");

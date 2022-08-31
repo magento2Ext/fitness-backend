@@ -2,7 +2,6 @@
  const router = express.Router()
  const ChatGroup = require('../models/chat_group')
  const Employee = require('../models/employee')
- const Employee = require('../models/employee')
  const auth = require("../middleware/auth");
  var ObjectID = require('mongodb').ObjectID;
  require('../functions')
