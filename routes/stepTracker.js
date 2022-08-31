@@ -241,7 +241,24 @@ router.post('/resetTarget', auth, async(req,res) => {
 			return;
 
 	}else{
-		response = webResponse(201, true, "No data yet.")  
+		var data = {}; 
+		let nowDate = new Date();
+		data.totalSteps = "0";
+		data.avgStep = 0;
+		data.todayData = {
+			'date' : dateLib.format(nowDate,'YYYY-MM-DD'),
+			'steps' : "0",
+			'km' : "0",
+			'calories':"0",
+			'duration':'00:00:00'
+		}
+		data.step_target = {step_target: "0"}
+		data.target = false
+		data.activity = []
+		data.best_streak = 0
+		data.avg_pace = 0
+		
+		response = webResponse(201, true, data)  
 		res.send(response);
 		return;
 	}
