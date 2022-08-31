@@ -62,6 +62,11 @@ router.post('/resetTarget', auth, async(req,res) => {
 
 
  router.post('/list', auth, async(req,res) => {
+	var empId = req.user.user_id;
+	const employeeDetails = await Employee.findById(empId);
+
+	console.log('employeeDetails', employeeDetails)
+
 	var endDate = new Date(); 
 	
 	var startDate = new Date();
@@ -139,14 +144,12 @@ router.post('/resetTarget', auth, async(req,res) => {
 	 
 	   let bestStreakK = await bestStreak();
 
-
 		async function bestStreak(){
 			
 			const promise = new Promise( async (resolve, reject) => {
 
 				let allSteps = 	await StepTracker.find({  employeeId: req.user.user_id}).sort({date:1});
 		 
-		
 				if(allSteps.length < 2) {
 					if(allSteps.length == 1) resolve(allSteps[0].steps);
 					else resolve(0);
@@ -190,15 +193,12 @@ router.post('/resetTarget', auth, async(req,res) => {
 								 let max = Math.max(...streaks);
 								resolve(max)
 							}
-			
 							
 						}
 			
 					})
 
 				}
-
-
 
 			});
 
@@ -298,10 +298,6 @@ router.post('/app_analytics', auth, async(req,res) => {
 			}
 		}
 		
-
-
-
-
 		// var step = [];
 		// var steps = 0;	
 		// var noOfFound = 0;
@@ -331,9 +327,6 @@ router.post('/app_analytics', auth, async(req,res) => {
 		// 	}
 		// }
 		
-
-
-
 		var data = {}; 
 		var avg = steps/noOfFound;
 		data.totalSteps = steps.toString()
