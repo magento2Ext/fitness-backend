@@ -35,7 +35,7 @@ require('../functions')
 			
 			
 			newEdu = {
-				'id' :  col._id,
+				'_id' :  col._id,
 				"title": col.title,
 				"description": col.description,
 				"placeholder_image": col.placeholder_image,
@@ -106,10 +106,6 @@ router.post('/educationList', auth, async(req,res) => {
 			res.send(response)
 			return "";
 		}
-
-
-
-	 
 
     }catch(err){  console.log(err)
         response = webResponse(200, false, "Something went wrong, please try again.")  
