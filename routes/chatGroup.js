@@ -116,6 +116,7 @@
 				
 			}
 			chatGroupArray.push(chat);
+			
 		})
 		
         response = webResponse(201, true, chatGroupArray)  
@@ -473,10 +474,8 @@ router.post('/getGroupMembers', auth, async(req,res) => {
 				let count = 0;
 				allMembers.forEach( async (key) => {
      
-					if(key != empId){
-						let employeee = await Employee.findById(key);
-						if(employeee != null) users.push(employeee);
-					}
+					let employeee = await Employee.findById(key);
+					if(employeee != null) users.push(employeee);
 
 					count++;
 
