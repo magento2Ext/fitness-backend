@@ -69,7 +69,8 @@ router.post('/resetTarget', auth, async(req,res) => {
 	const employeeDetails = await Employee.findById(empId);
 
 	let nowDate = new Date();
-	let date2 = dateLib.format(nowDate.setDate(nowDate.getDate() - 29),'YYYY-MM-DD');
+	nowDate.setDate(nowDate.getDate() - 29)
+	let date2 = dateLib.format(nowDate,'YYYY-MM-DD');
 
 	let date1 = new Date(employeeDetails.date.replace(/-/g, "/"));
  

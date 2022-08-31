@@ -169,7 +169,7 @@ router.post('/educationList', auth, async(req,res) => {
 		}
 		education.created_at = new Date()
 		
-		const educationDetail =  await education.save()  
+		const educationDetailSaved =  await education.save()  
 
 		let moduleName = await  ModuleAdded.findById(educationDetailSaved.module_id);
 		let dict = {
@@ -190,6 +190,7 @@ router.post('/educationList', auth, async(req,res) => {
 		return;
 		
     }catch(err){ 
+		console.log(err)
 		response = webResponse(403, false, err)  
 	    res.send(response)
 		return;
