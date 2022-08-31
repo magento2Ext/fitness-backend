@@ -69,16 +69,15 @@ router.post('/resetTarget', auth, async(req,res) => {
 	const employeeDetails = await Employee.findById(empId);
 
 	let nowDate = new Date();
-	lastMonthDate = nowDate.setDate(nowDate.getDate() - 29);
+	let date2 = nowDate.setDate(nowDate.getDate() - 29);
 
-	// let date1 = new Date(employeeDetails.date.replace(/-/g, "/"));
-	// let date2 = new Date();
+	let date1 = new Date(employeeDetails.date.replace(/-/g, "/"));
+ 
+	let difference =  date1.getTime() - date2.getTime()
 
-	// let difference =  date1.getTime() - date2.getTime()
+	let days = Math.ceil(difference / (1000 * 3600 * 24));
 
-	// let days = Math.ceil(difference / (1000 * 3600 * 24));
-
-	console.log(lastMonthDate)
+	console.log(days)
     //////
 
 
