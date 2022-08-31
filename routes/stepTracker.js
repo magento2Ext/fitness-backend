@@ -66,10 +66,10 @@ router.post('/resetTarget', auth, async(req,res) => {
 
 	//////
 	var empId = req.user.user_id;
-	// const employeeDetails = await Employee.findById(empId);
+	const employeeDetails = await Employee.findById(empId);
 
-	// let nowDate = new Date();
-	// let date2 = nowDate.setDate(nowDate.getDate() - 29);
+	let nowDate = new Date();
+	let date2 = nowDate.setDate(nowDate.getDate() - 29);
 
 	// let date1 = new Date(employeeDetails.date.replace(/-/g, "/"));
  
@@ -77,11 +77,8 @@ router.post('/resetTarget', auth, async(req,res) => {
 
 	// let days = Math.ceil(difference / (1000 * 3600 * 24));
 
-	// console.log(days)
+	console.log(date2)
     //////
-
-
-	console.log('employeeDetails', employeeDetails)
 
 	var endDate = new Date(); 
 	
