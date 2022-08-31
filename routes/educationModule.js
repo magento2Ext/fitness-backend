@@ -15,24 +15,19 @@ require('../functions')
 		var moduleName =  '';
 		if(req.body.module_id) {
 			var education = await EducationModule.find({ module_id: req.body.module_id,auth_user_id:req.body.auth_user_id });
-			/*const module = await  ModuleAdded.findById(req.body.module_id)	 
-			if(module.name) {
-				moduleName = module.name;
-			}*/
 		} else {
 			var education = await EducationModule.find({auth_user_id:req.body.auth_user_id})
 		}
-			
+
+
 		var educationArray = [];
-		console.log(education)
+ 
 		education.forEach( function(col){
-			//const _id = new ObjectID(col.module_id);
-			var moduleName = "Mind";
-			/*const module =  ModuleAdded.findById(_id)	
+			const module = await  ModuleAdded.findById(col.module_id)	 
+			let moduleName = '';
 			if(module.name) {
-				var moduleName = module.name;
-			}*/
-			
+				moduleName = module.name;
+			}
 			
 			newEdu = {
 				'_id' :  col._id,
