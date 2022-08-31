@@ -150,160 +150,165 @@ app.post("/weight", auth, async(req, res) => {
 		let difference =  date1.getTime() - date2.getTime()
 
 		let days_diff = Math.ceil(difference / (1000 * 3600 * 24));
-
-        if(6 > days_diff){
-
 			let getDays_monthly = days < 0 ? 29 : 29 - days;
 			let getDays_weekly = days < 0 ? 29 : 6 - days;
 
 			console.log(getDays_weekly, getDays_weekly)
-
-			var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 		
-			var oneWeekAgo = new Date();
-			oneWeekAgo.setDate(oneWeekAgo.getDate() - getDays_weekly);
+
+        // if(6 > days_diff){
+
+		// 	let getDays_monthly = days < 0 ? 29 : 29 - days;
+		// 	let getDays_weekly = days < 0 ? 29 : 6 - days;
+
+		// 	console.log(getDays_weekly, getDays_weekly)
+
+		// 	var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+		
+		// 	var oneWeekAgo = new Date();
+		// 	oneWeekAgo.setDate(oneWeekAgo.getDate() - getDays_weekly);
 			
-			var oneMonthAgo = new Date();
-			oneMonthAgo.setDate(oneMonthAgo.getDate() - getDays_monthly);
+		// 	var oneMonthAgo = new Date();
+		// 	oneMonthAgo.setDate(oneMonthAgo.getDate() - getDays_monthly);
 	
-			var date = new Date();
+		// 	var date = new Date();
 			
-			const recentWeight = await Weight.findOne({ employeeId: req.user.user_id}).sort({date:-1});
+		// 	const recentWeight = await Weight.findOne({ employeeId: req.user.user_id}).sort({date:-1});
 			
-			const weightLastDay = await Weight.findOne({ employeeId: req.user.user_id,
-				date: {
-					$lt: dateLib.format(date,'YYYY-MM-DD')
-				}
-			}).sort({date:-1});
+		// 	const weightLastDay = await Weight.findOne({ employeeId: req.user.user_id,
+		// 		date: {
+		// 			$lt: dateLib.format(date,'YYYY-MM-DD')
+		// 		}
+		// 	}).sort({date:-1});
 			
-			const weightLastWeek = await Weight.findOne({ employeeId: req.user.user_id,
-				date: {
-					$lt: dateLib.format(oneWeekAgo,'YYYY-MM-DD')
-				}
-			}).sort({date:-1});
+		// 	const weightLastWeek = await Weight.findOne({ employeeId: req.user.user_id,
+		// 		date: {
+		// 			$lt: dateLib.format(oneWeekAgo,'YYYY-MM-DD')
+		// 		}
+		// 	}).sort({date:-1});
 			
 	 
-			const weightLastMonth = await Weight.find({ employeeId: req.user.user_id,
-				date: {
-					$gte: dateLib.format(oneMonthAgo,'YYYY-MM-DD')
-				}
-			}).sort({date:-1});
+		// 	const weightLastMonth = await Weight.find({ employeeId: req.user.user_id,
+		// 		date: {
+		// 			$gte: dateLib.format(oneMonthAgo,'YYYY-MM-DD')
+		// 		}
+		// 	}).sort({date:-1});
 	
-			console.log('weightLastMonth', weightLastMonth);
+		// 	console.log('weightLastMonth', weightLastMonth);
 		
-			const weightList = await Weight.find({  employeeId: req.user.user_id,
-				date: {
-					$gte: dateLib.format(oneWeekAgo,'YYYY-MM-DD'),
-					$lte: dateLib.format(date,'YYYY-MM-DD')
-				}
-			}).sort({date:1})
+		// 	const weightList = await Weight.find({  employeeId: req.user.user_id,
+		// 		date: {
+		// 			$gte: dateLib.format(oneWeekAgo,'YYYY-MM-DD'),
+		// 			$lte: dateLib.format(date,'YYYY-MM-DD')
+		// 		}
+		// 	}).sort({date:1})
 			
-			var weightArray = [];		
-			var i=0;
-			weightList.forEach(function(col) {
-				// Do something with each collection.				  
-				if(i == 0) {
-					weight = {
-						'date' : dateLib.format(col.date,'YYYY-MM-DD'),
-						'weight' : col.weight,
-						'day' :  days[col.date.getDay()],
-						'difference': "0",
-						'weightLine':''
+		// 	var weightArray = [];		
+		// 	var i=0;
+		// 	weightList.forEach(function(col) {
+		// 		// Do something with each collection.				  
+		// 		if(i == 0) {
+		// 			weight = {
+		// 				'date' : dateLib.format(col.date,'YYYY-MM-DD'),
+		// 				'weight' : col.weight,
+		// 				'day' :  days[col.date.getDay()],
+		// 				'difference': "0",
+		// 				'weightLine':''
 						
-					}
-				} else{
-					var difference = col.weight - weightList[i-1].weight;
-					if(difference > 0) {
-						var line = convertIntoTwoDecimal(difference)+" kilogram over weight."
-					} else {
-						var line = convertIntoTwoDecimal(difference)+" kilogram under weight."
-					}
-					weight = {
-						'date' :  dateLib.format(col.date,'YYYY-MM-DD'),
-						'weight' : col.weight,
-						'day' :  days[col.date.getDay()],
-						'difference': convertIntoTwoDecimal(difference),
-						'weightLine': line,
-					}
-				}
-				weightArray.push(weight);
-				i++;		
-			});
-			var weightFinalArray = [];
+		// 			}
+		// 		} else{
+		// 			var difference = col.weight - weightList[i-1].weight;
+		// 			if(difference > 0) {
+		// 				var line = convertIntoTwoDecimal(difference)+" kilogram over weight."
+		// 			} else {
+		// 				var line = convertIntoTwoDecimal(difference)+" kilogram under weight."
+		// 			}
+		// 			weight = {
+		// 				'date' :  dateLib.format(col.date,'YYYY-MM-DD'),
+		// 				'weight' : col.weight,
+		// 				'day' :  days[col.date.getDay()],
+		// 				'difference': convertIntoTwoDecimal(difference),
+		// 				'weightLine': line,
+		// 			}
+		// 		}
+		// 		weightArray.push(weight);
+		// 		i++;		
+		// 	});
+		// 	var weightFinalArray = [];
 				
-			for(i=oneWeekAgo; i<=date;  i.setDate(i.getDate() + 1)) { 
-				var found = 0; 
-				for( var j = 0, len = weightArray.length; j < len; j++ ) { 
-					var weightData = '';
-					if( weightArray[j]['day'] == days[i.getDay()]) {
-						found = 1;
-						weightData = weightArray[j];
-						break;
-					} 
-				}
-				if(found == 0) {
-					weight = {
-						'date' : dateLib.format(i,'YYYY-MM-DD'),
-						'weight' : "0",
-						'day' : days[i.getDay()],
-						'difference': "0",
-						'weightLine':''
-					}
-					weightFinalArray.push(weight);
-				}   else{
-					weightFinalArray.push(weightData);
-				}
-			}
+		// 	for(i=oneWeekAgo; i<=date;  i.setDate(i.getDate() + 1)) { 
+		// 		var found = 0; 
+		// 		for( var j = 0, len = weightArray.length; j < len; j++ ) { 
+		// 			var weightData = '';
+		// 			if( weightArray[j]['day'] == days[i.getDay()]) {
+		// 				found = 1;
+		// 				weightData = weightArray[j];
+		// 				break;
+		// 			} 
+		// 		}
+		// 		if(found == 0) {
+		// 			weight = {
+		// 				'date' : dateLib.format(i,'YYYY-MM-DD'),
+		// 				'weight' : "0",
+		// 				'day' : days[i.getDay()],
+		// 				'difference': "0",
+		// 				'weightLine':''
+		// 			}
+		// 			weightFinalArray.push(weight);
+		// 		}   else{
+		// 			weightFinalArray.push(weightData);
+		// 		}
+		// 	}
 	
-			/////
+		// 	/////
 	
-			var data = {}; 
-			data.weight_diff = weightFinalArray
-			data.lastOneWeekWeight = weightArray
-			data.recentWeight = 0
-			data.weightLastDay = 0
-			data.weightLastWeek = 0
-			data.weightLastMonthArray = weightLastMonth
+		// 	var data = {}; 
+		// 	data.weight_diff = weightFinalArray
+		// 	data.lastOneWeekWeight = weightArray
+		// 	data.recentWeight = 0
+		// 	data.weightLastDay = 0
+		// 	data.weightLastWeek = 0
+		// 	data.weightLastMonthArray = weightLastMonth
 			
-			if(recentWeight != null) {
-				data.recentWeight = recentWeight.weight
-			} 
+		// 	if(recentWeight != null) {
+		// 		data.recentWeight = recentWeight.weight
+		// 	} 
 			
-			if(weightLastDay != null) {
-				data.weightLastDay = weightLastDay.weight
-			} 
+		// 	if(weightLastDay != null) {
+		// 		data.weightLastDay = weightLastDay.weight
+		// 	} 
 			
-			if(weightLastWeek != null) {
-				data.weightLastWeek = weightLastWeek.weight
-			} 
+		// 	if(weightLastWeek != null) {
+		// 		data.weightLastWeek = weightLastWeek.weight
+		// 	} 
 			
-			data.weightLastMonth = 0;
-			if(weightLastMonth.length != 0) {
-				data.weightLastMonth = weightLastMonth[0].weight
-			} 
+		// 	data.weightLastMonth = 0;
+		// 	if(weightLastMonth.length != 0) {
+		// 		data.weightLastMonth = weightLastMonth[0].weight
+		// 	} 
 			
 			
-			response = webResponse(202, true, data)  
-			res.send(response);
-			return;
+		// 	response = webResponse(202, true, data)  
+		// 	res.send(response);
+		// 	return;
 
 
-		}else{
+		// }else{
 
-			var data = {}; 
-			data.weight_diff = []
-			data.lastOneWeekWeight = []
-			data.recentWeight = 0
-			data.weightLastDay = 0
-			data.weightLastWeek = 0
-			data.weightLastMonthArray = []
-			data.weightLastMonth = 0;
+		// 	var data = {}; 
+		// 	data.weight_diff = []
+		// 	data.lastOneWeekWeight = []
+		// 	data.recentWeight = 0
+		// 	data.weightLastDay = 0
+		// 	data.weightLastWeek = 0
+		// 	data.weightLastMonthArray = []
+		// 	data.weightLastMonth = 0;
 
-			response = webResponse(202, true, data)  
-			res.send(response);
-			return;
+		// 	response = webResponse(202, true, data)  
+		// 	res.send(response);
+		// 	return;
 
-		}
+		// }
         
 	} catch(err){   
 		console.log(err)
