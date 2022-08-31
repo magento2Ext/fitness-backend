@@ -150,8 +150,8 @@ app.post("/weight", auth, async(req, res) => {
 		let difference =  date1.getTime() - date2.getTime()
 
 		let days_diff = Math.ceil(difference / (1000 * 3600 * 24));
-			let getDays_monthly = days < 0 ? 29 : 29 - days;
-			let getDays_weekly = days < 0 ? 29 : 6 - days;
+			let getDays_monthly = days_diff < 0 ? 29 : 29 - days_diff;
+			let getDays_weekly = days_diff < 0 ? 29 : 6 - days_diff;
 
 			console.log(getDays_weekly, getDays_weekly)
 		
