@@ -52,7 +52,14 @@ router.post('/login', async(req,res) => {
 		}
 	   const admin = await Admin.findOne({ email });
 
-		if (admin && (await bcrypt.compare(password, admin.password))) {
+	   if(admin == null){
+		response = webResponse(200, false, "Account not found.")  
+	    res.send(response);
+		return;
+	   }
+
+
+		if (await bcrypt.compare(password, admin.password)) {
 		  // Create token
 		  const token = jwt.sign(
 			{ user_id: admin._id, email },
@@ -69,10 +76,14 @@ router.post('/login', async(req,res) => {
 		  result.admin = admin
 		  
 		  response = webResponse(202, true, result)  
-	      res.send(response)
+	      res.send(response);
+		  return;
+		}else{
+			response = webResponse(200, false, "Invalid password.")  
+			res.send(response);
+			return;
 		} 
-		 response = webResponse(200, false, "Invalid credentials")  
-	      res.send(response)
+ 
 	} catch (err) {
     console.log(err);
   }
