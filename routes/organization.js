@@ -301,7 +301,7 @@ router.post('/login', async(req,res) => {
 		return;
 	   }
 
-		if (organization && (await bcrypt.compare(password, organization.password))) {
+		if (await bcrypt.compare(password, organization.password)) {
 		  // Create token
 		  const token = jwt.sign(
 			{ user_id: organization._id, email },
@@ -321,7 +321,7 @@ router.post('/login', async(req,res) => {
 	      res.send(response)
 		  return;
 		}else{
-			response = webResponse(200, false, "Account not found.")  
+			response = webResponse(200, false, "Invalid password.")  
 			res.send(response);
 			return;
 		} 
