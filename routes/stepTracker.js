@@ -80,7 +80,7 @@ router.post('/resetTarget', auth, async(req,res) => {
 
 	let days = Math.ceil(difference / (1000 * 3600 * 24));
 
-	console.log(date2, date1, days)
+	console.log(date2, date1, days, employeeDetails.date)
     //////
 
 	var endDate = new Date(); 
