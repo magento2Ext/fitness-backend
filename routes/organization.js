@@ -294,6 +294,11 @@ router.post('/login', async(req,res) => {
 		}
 	   const organization = await Organization.findOne({ email });
 
+	   if(organization == null){
+		response = webResponse(200, false, "Invalid credentials")  
+	    res.send(response)
+	   }
+
 		if (organization && (await bcrypt.compare(password, organization.password))) {
 		  // Create token
 		  const token = jwt.sign(
@@ -313,8 +318,7 @@ router.post('/login', async(req,res) => {
 		  response = webResponse(202, true, result)  
 	      res.send(response)
 		} 
-		response = webResponse(200, false, "Invalid credentials")  
-	      res.send(response)
+
 	} catch (err) {
     console.log(err);
   }
@@ -409,8 +413,8 @@ router.delete('/delete', async(req,res) => {
 			return "";
 		}
 		
-		const employees = await Employee.deleteMany({'organizationId':req.body.id})
-
+		const employees = await Employee.updateMany({'userOrganizations': {$in: [req.body.id]}}, {$set: {userOrganizations: [], organizationId: false}}, {new: true});
+	
 		const _id = new ObjectID(req.body.id);
 		await Organization.deleteOne( {'_id':_id})
 		//organization.deleteOne(req.body.id)

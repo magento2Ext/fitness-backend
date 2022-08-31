@@ -71,6 +71,10 @@ const employeeSchema = new mongoose.Schema({
         type: String,
 		default: '2022-07-02'
     },
+    status: {
+        type: String,
+        default: '0'
+    }
 })
 
 module.exports = mongoose.model('Employee', employeeSchema)
