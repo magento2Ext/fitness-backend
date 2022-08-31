@@ -21,6 +21,8 @@ require('../functions')
 
 
 		var educationArray = [];
+
+		console.log('education', education)
  
 		education.forEach( async function(col){
 			const module = await  ModuleAdded.findById(col.module_id)	 
