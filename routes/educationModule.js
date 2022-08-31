@@ -22,7 +22,7 @@ require('../functions')
 
 		var educationArray = [];
 
-		console.log('education', education)
+	
  
 		education.forEach( async function(col){
 			const module = await  ModuleAdded.findById(col.module_id)	 
@@ -44,6 +44,7 @@ require('../functions')
 				"timeSinc":timeAgo(col.created_at) + "ago"
 			}
 			educationArray.push(newEdu); 
+			console.log('education', newEdu)
 		})
 		 response = webResponse(201, true, educationArray)  
 		res.send(response)
