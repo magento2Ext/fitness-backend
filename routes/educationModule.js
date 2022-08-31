@@ -22,7 +22,7 @@ require('../functions')
 
 		var educationArray = [];
  
-		education.forEach( function(col){
+		education.forEach( async function(col){
 			const module = await  ModuleAdded.findById(col.module_id)	 
 			let moduleName = '';
 			if(module.name) {
