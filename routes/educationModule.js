@@ -12,7 +12,7 @@ require('../functions')
  
  router.post('/list', async(req,res) => {
     try{
-		var moduleName =  '';
+
 		if(req.body.module_id) {
 			var education = await EducationModule.find({ module_id: req.body.module_id,auth_user_id:req.body.auth_user_id });
 		} else {
@@ -34,7 +34,7 @@ require('../functions')
 				moduleName = module.name;
 			}
 			
-			newEdu = {
+			let newEdu = {
 				'_id' :  col._id,
 				"title": col.title,
 				"description": col.description,
@@ -46,7 +46,7 @@ require('../functions')
 				"created_at": col.created_at,
 				"timeSinc":timeAgo(col.created_at) + "ago"
 			}
-
+			educationArray.push(newEdu)
 			count++;
 
 			if(count === education.length){
