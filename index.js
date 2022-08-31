@@ -159,7 +159,7 @@ app.post("/weight", auth, async(req, res) => {
         if(6 > days_diff){
 
 			let getDays_monthly = days < 0 ? 29 : 29 - days;
-			let getDays_weekly = days < 0 ? 29 : 6 - days;
+			let getDays_weekly = days < 0 ? 6 : 6 - days;
 
 			console.log(getDays_weekly, getDays_weekly)
 
