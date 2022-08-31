@@ -292,11 +292,13 @@ router.post('/login', async(req,res) => {
 		  response = webResponse(406, false, jsonObj) 
 		  res.send(response)
 		}
+
 	   const organization = await Organization.findOne({ email });
 
 	   if(organization == null){
-		response = webResponse(200, false, "Invalid credentials")  
-	    res.send(response)
+		response = webResponse(200, false, "Account not found.")  
+	    res.send(response);
+		return;
 	   }
 
 		if (organization && (await bcrypt.compare(password, organization.password))) {
@@ -317,6 +319,11 @@ router.post('/login', async(req,res) => {
 		  
 		  response = webResponse(202, true, result)  
 	      res.send(response)
+		  return;
+		}else{
+			response = webResponse(200, false, "Account not found.")  
+			res.send(response);
+			return;
 		} 
 
 	} catch (err) {
