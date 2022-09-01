@@ -81,6 +81,9 @@ app.use('/categories',teacherCategories)
 const teacher = require('./routes/teacher')
 app.use('/teacher',teacher)
 
+const weightTracker = require('./routes/weightTracker')
+app.use('/weightTracker', weightTracker)
+
 app.post("/testApi", async(req, res) => { 
 
 	res.send({'status': 1})
