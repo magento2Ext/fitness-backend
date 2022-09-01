@@ -14,7 +14,7 @@ const s3 = new AWS.S3({
 var upload = multer({
    storage: multerS3({
        s3: s3,
-       bucket:"soulcialapp/media",
+       bucket:"soulcialbucket/media",
 	   acl: 'public-read',
        metadata: function (req, file, cb) {
            cb(null, { fieldName: file.fieldname });
