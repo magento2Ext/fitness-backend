@@ -67,7 +67,6 @@ router.post('/resetTarget', auth, async(req,res) => {
 	//////
 	var empId = req.user.user_id;
 	const employeeDetails = await Employee.findById(empId);
-
 	console.log(employeeDetails)
 
 	let nowDate = new Date();
@@ -105,8 +104,12 @@ router.post('/resetTarget', auth, async(req,res) => {
 		var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
 		if(stepTarget) {
 			emptStepTarget['step_target'] = stepTarget.step_target;
+			emptStepTarget['targetType'] = stepTarget.type;
 			target = true;
-		}else{emptStepTarget['step_target'] = '0';}
+		}else{
+			emptStepTarget['step_target'] = '0';
+			emptStepTarget['targetType'] = "";
+		}
 		
 		var stepTrackerDetailsToday = await StepTracker.findOne({ date: dateLib.format(endDate,'YYYY-MM-DD'),  employeeId: req.user.user_id});
 		if(!stepTrackerDetailsToday) {
@@ -234,7 +237,8 @@ router.post('/resetTarget', auth, async(req,res) => {
 			data.target = target
 			data.activity = stepFinalArray
 			data.best_streak = Number(bestStreakK)
-			data.avg_pace = "100"
+			data.avg_pace = "100",
+			data.targetType = emptStepTarget.targetType
 			
 			response = webResponse(201, true, data)  
 			res.send(response);
@@ -257,6 +261,7 @@ router.post('/resetTarget', auth, async(req,res) => {
 		data.activity = []
 		data.best_streak = 0
 		data.avg_pace = 0
+		data.targetType = ""
 		
 		response = webResponse(201, true, data)  
 		res.send(response);

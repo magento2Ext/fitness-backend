@@ -16,8 +16,11 @@ const employeeStepTargetSchema = new mongoose.Schema({
         type: String,
         required: false,
         default: null
+    },
+    type: {
+        type: String,
+        required: true,
     }
-   
 })
 
 module.exports = mongoose.model('employee_step_target',employeeStepTargetSchema)

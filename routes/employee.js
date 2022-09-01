@@ -74,16 +74,18 @@ require('../functions')
 	    var empId = req.user.user_id;
 		var today =  dateLib.format(new Date(),'YYYY-MM-DD');
 		
-		console.log('step_target', req.body.step_target);
 		const empStepTarget = new EmpStepTarget({
 			employeeId: empId,
 			step_target: req.body.step_target,
-			date: today
+			date: today,
+			type: req.body.type
 		})
 		
 		const empStepTargetDetails = await EmpStepTarget.findOne({ date: today,  employeeId: req.user.user_id});
+		
 		if (empStepTargetDetails) {  
 			empStepTargetDetails.step_target =  req.body.step_target
+			empStepTargetDetails.type =  req.body.type
 			const a1 = await empStepTargetDetails.save()
 			response = webResponse(200, true, "Target added")  
 			res.send(response);
@@ -486,8 +488,6 @@ router.post('/sendOtpAgain', async (req, res) => {
 			response = webResponse(200, true, "User not found.")  
 			res.send(response)
 		}
-
- 
 })
 
  
