@@ -12,6 +12,7 @@
 
 	    var empId = req.user.user_id;
 		var today =  dateLib.format(new Date(),'YYYY-MM-DD');
+
 		const stepTracker = new StepTracker({
 			employeeId: empId,
 			steps: req.body.steps,
@@ -59,12 +60,10 @@ router.post('/resetTarget', auth, async(req,res) => {
 	    res.send(response)
 		return;
     }
-})
-
+});
 
  router.post('/list', auth, async(req,res) => {
-
-	//////
+ 
 	var empId = req.user.user_id;
 	const employeeDetails = await Employee.findById(empId);
 	console.log(employeeDetails)
@@ -80,6 +79,21 @@ router.post('/resetTarget', auth, async(req,res) => {
 	let difference =  date1.getTime() - date2.getTime()
 
 	let days = Math.ceil(difference / (1000 * 3600 * 24));
+
+	// let userTotalDistance = await StepTracker.aggregate([
+	// 	{ $group: {
+	// 		_id: '$employeeId',
+	// 		stepAvg: { $avg: '$km'}
+	// 	}}
+	// ]);
+
+	// let userTotalSteps = await StepTracker.aggregate([
+	// 	{ $group: {
+	// 		_id: '$employeeId',
+	// 		stepAvg: { $avg: '$steps'}
+	// 	}}
+	// ]);
+	
 
 	if(29 > days){
 		let getDays = days < 0 ? 29 : 29 - days;
@@ -136,7 +150,7 @@ router.post('/resetTarget', auth, async(req,res) => {
 			}
 		);
 		
-		var stepFinalArray = [];
+			var stepFinalArray = [];
 			var steps = 0;	
 			var noOfFound = 0;
 			for(i=startDate; i<=endDate;  i.setDate(i.getDate() + 1)) { 
@@ -239,7 +253,7 @@ router.post('/resetTarget', auth, async(req,res) => {
 			data.best_streak = Number(bestStreakK)
 			data.avg_pace = "100",
 			data.targetType = emptStepTarget.targetType
-			
+	
 			response = webResponse(201, true, data)  
 			res.send(response);
 			return;
@@ -271,10 +285,8 @@ router.post('/resetTarget', auth, async(req,res) => {
 
 router.post('/app_analytics', auth, async(req,res) => {
 	var endDate = new Date(); 
-	
 	var startDate = new Date();
 	startDate.setDate(startDate.getDate() - 29);
-	
 	var emptStepTarget = "0";
 	var target = false;
 	

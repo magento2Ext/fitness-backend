@@ -20,8 +20,6 @@
  var db=admin.database();
  var chatRef=db.ref("chat");
 
-
-
  router.get('/list', async(req,res) => {
 	if(req.query.page) {
 		var pageNo = parseInt(req.query.page)
@@ -614,8 +612,6 @@ router.post("/orginzations/list", auth,  async(req, res) => {
 		}
 
 })
-
-
 
 router.post("/addCode", auth,  async(req, res) => {
 

@@ -3,6 +3,7 @@
  const Admin = require('../models/admin')
  const Theme = require('../models/theme_setting')
  const md5 = require('md5');
+ const Employee = require('../models/employee')
  const bcrypt = require('bcryptjs');
  const jwt = require('jsonwebtoken');
  const Organization = require('../models/organization')
@@ -203,4 +204,76 @@ router.post('/save/theme', async(req,res) => {
 		return "";
     }
 })
+
+
+router.post('/getProfile', async(req,res) => {
+	try { 
+    
+		const {id, type} = req.body;
+		// Validate user input
+		if(!(id && type)) {
+
+			jsonObj = []
+			if(!(id)) {
+				var item = {
+					'key' : 'id',
+					'value' : 'required' 
+				}
+			   jsonObj.push(item);
+			}
+
+			if(!(type)) {
+				var item = {
+					'key' : 'type',
+					'value' : 'required' 
+				}
+			   jsonObj.push(item);
+			}
+
+			response = webResponse(406, false, jsonObj) 
+			res.send(response)
+			return "";
+		}
+
+		const table = req.body.type === 'admin' ? Admin : Employee ;
+	    const organization = await table.findById(req.body.id);
+
+		if(organization != null){
+
+			const token = jwt.sign(
+				{ user_id: organization._id, email: organization.email},
+				process.env.JWT_SECRET,
+				{
+				  expiresIn: "9999 years",
+				}
+			  );
+	
+			  // save user token
+			  organization.token = token; 
+			  const result = {};
+			  result.access_token = token
+			  result.organization = organization
+			  
+			  response = webResponse(202, true, result)  
+			  res.send(response)
+			  return;
+
+		}else{
+
+			response = webResponse(200, false, "User not found.")  
+			res.send(response);
+			return;
+
+		}
+
+
+
+		}catch(err){
+			response = webResponse(403, false, err)  
+			res.send(response)
+			return "";
+		}
+		
+	})
+
  module.exports = router

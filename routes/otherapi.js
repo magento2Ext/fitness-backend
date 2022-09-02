@@ -4,8 +4,6 @@
  const Module = require('../models/module')
  const SubModule = require('../models/sub_module')
  require('../functions')
- 
-
 
 router.post('/all/themes', async(req,res) => {
     try{
@@ -18,7 +16,6 @@ router.post('/all/themes', async(req,res) => {
 		return "";
     }
 })
-
 
 router.post('/module/save', async(req,res) => {
     try{
@@ -50,7 +47,6 @@ router.post('/module/list', async(req,res) => {
 		return;
     }
 })
-
 
 router.post('/submodule/save', async(req,res) => {
     try{
