@@ -3,7 +3,6 @@
  const Admin = require('../models/admin')
  const Theme = require('../models/theme_setting')
  const md5 = require('md5');
- const Employee = require('../models/employee')
  const bcrypt = require('bcryptjs');
  const jwt = require('jsonwebtoken');
  const Organization = require('../models/organization')
@@ -235,7 +234,7 @@ router.post('/getProfile', async(req,res) => {
 			return "";
 		}
 
-		const table = req.body.type === 'admin' ? Admin : Employee ;
+		const table = req.body.type === 'admin' ? Admin : Organization ;
 	    const organization = await table.findById(req.body.id);
 
 		if(organization != null){
