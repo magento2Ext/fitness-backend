@@ -347,14 +347,7 @@ app.post("/weight", auth, async(req, res) => {
 			return;
 
 		}
-        
-	// } catch(err){   
-	// 	console.log(err)
-	// 	response = webResponse(403, false, err)  
-	//     res.send(response)
-	// 	return;
-    // }
-  
+          
 }
 
 ); 
