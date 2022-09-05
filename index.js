@@ -204,7 +204,6 @@ app.post("/weight", auth, async(req, res) => {
 			let getDays_monthly = days_diff < 0 ? 29 : 29 - days_diff;
 			let getDays_weekly = days_diff < 0 ? 6 : 6 - days_diff;
 
-			
 			console.log('getDays_monthly', getDays_monthly, getDays_weekly)
 
 			var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -214,9 +213,7 @@ app.post("/weight", auth, async(req, res) => {
 			
 			var oneMonthAgo = new Date();
 			oneMonthAgo.setDate(oneMonthAgo.getDate() - getDays_monthly);
-            console.log(oneMonthAgo, oneWeekAgo)
-		 
-	
+       
 			var date = new Date();
 			
 			const recentWeight = await Weight.findOne({ employeeId: req.user.user_id}).sort({date:-1});
@@ -252,7 +249,7 @@ app.post("/weight", auth, async(req, res) => {
 			var weightArray = [];		
 			var i=0;
 			weightList.forEach(function(col) {
-				// Do something with each collection.				  
+			 			  
 				if(i == 0) {
 					weight = {
 						'date' : dateLib.format(col.date,'YYYY-MM-DD'),
@@ -305,8 +302,6 @@ app.post("/weight", auth, async(req, res) => {
 					weightFinalArray.push(weightData);
 				}
 			}
-	
-			/////
 	
 			var data = {}; 
 			data.weight_diff = weightFinalArray
