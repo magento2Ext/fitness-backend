@@ -828,5 +828,74 @@ router.post('/testUpdate', async(req,res)=> {
 
 
 
+router.post('/getProfile', auth, async(req,res) => {
+	try { 
+    
+		var empId = req.user.user_id;
+		const employee = await Employee.findById(empId);
+
+ 
+
+		if(employee != null){
+
+			const token = jwt.sign(
+				{ user_id: employee._id, email: employee.email },
+				process.env.JWT_SECRET,
+				{
+				  expiresIn: "9999 years",
+				}
+			  );
+
+			// save user token
+			employee.token = token; 
+			const result = {};
+			result.access_token = token
+			result.employee = employee
+			var appData = null;
+			let logo;
+			if(employee.organizationId && employee.organizationId != 'false') {
+				const organization = await Organization.findById(employee.organizationId)
+				result.organization = organization
+				var themecode = organization.themecode
+				logo = organization.logo
+				if(organization != null && organization.themecode != null) {
+					appData = await Theme.findById(organization.themecode)
+				}
+			}else{
+					logo = process.env.ORGLOGO
+			}
+			if(appData == null) {
+				appData = await Theme.findOne()
+			}
+	
+			
+			result.appData = appData
+			result.logo = logo
+			
+			response = webResponse(202, true, result)  
+			res.send(response)
+			return;
+			  
+	 
+
+		}else{
+
+			response = webResponse(200, false, "User not found.")  
+			res.send(response);
+			return;
+
+		}
+
+
+
+		}catch(err){
+			response = webResponse(403, false, err)  
+			res.send(response)
+			return "";
+		}
+		
+	})
+
+
 
  module.exports = router

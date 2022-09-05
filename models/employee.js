@@ -74,6 +74,10 @@ const employeeSchema = new mongoose.Schema({
     status: {
         type: String,
         default: '0'
+    },
+    height: {
+        type: String,
+        default: '0'
     }
 })
 
