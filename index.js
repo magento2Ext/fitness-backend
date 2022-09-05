@@ -85,19 +85,23 @@ app.use('/teacher',teacher)
 // app.use('/weightTracker', weightTracker)
 
 app.post("/testApi", async(req, res) => { 
-
 	res.send({'status': 1})
-
 })
-
 
 app.post("/weight/save", auth, async(req, res) => { 
   try{ 
+     	var empId = req.user.user_id;
+
 		const weight = new Weight({
 			employeeId: req.user.user_id,
 			weight: req.body.weight,
 			date: req.body.date
 		})
+
+		if(req.body.height){
+	     	await Employee.updateOne({_id: empId}, {$set: {height: req.body.height}}, {new: true});
+		}
+
 		const weightDetails = await Weight.findOne({ date: req.body.date,  employeeId: req.user.user_id});
 		
 		if (weightDetails) {  
