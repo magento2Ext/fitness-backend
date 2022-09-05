@@ -147,7 +147,7 @@ app.post("/weight", auth, async(req, res) => {
 
 		const latestWeight = await Weight.findOne({ employeeId: empId}).sort({date:-1});
 
-		if(latestWeight == null){
+		if(latestWeight == null || latestWeight.weight == '0' || latestWeight.weight == null || latestWeight.weight == undefined){
 			var data = {}; 
 			data.weight_diff = []
 			data.lastOneWeekWeight = []
