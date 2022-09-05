@@ -223,7 +223,7 @@ app.post("/weight", auth, async(req, res) => {
 				}
 			}).sort({date:-1});
 
-			console.log('weightLastDay', weightLastDay)
+			console.log('dateLib.format(date,YYYY-MM-DD)', dateLib.format(date,'YYYY-MM-DD'))
 			
 			const weightLastWeek = await Weight.findOne({ employeeId: req.user.user_id,
 				date: {
