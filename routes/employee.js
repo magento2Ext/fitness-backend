@@ -917,8 +917,8 @@ router.post('/getProfile', auth, async(req,res) => {
 			lastName: req.body.lastName,
 			email: req.body.email,
 			userName: req.body.userName,
-			picture: req.body.firstName,
-			height: req.body.firstName,
+			picture: req.body.picture,
+			height: req.body.height,
 			}
 			
 			let result = await Employee.updateOne({_id: empId}, {$set: data}, {new: true}); 
