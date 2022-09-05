@@ -156,13 +156,13 @@ app.post("/weight", auth, async(req, res) => {
 				result.BMI = BMI;
 
 				if(BMI < 18.5){
-					result.innerText = "Your BMI falls within the underweight range";    
+					result.innerText = "A BMI of 18.5 indicates that you are underweight, so you may need to put on some weight. You are recommended to ask your doctor or a dietitian for advice";    
 				}else if((BMI > 18.5) && (BMI < 24.9)){
 					result.innerText = "Your BMI falls within the normal or healthy weight range";
 				}else if((BMI > 25) && (BMI < 29.9 )){
-					result.innerText = "Your BMI falls within the overweight range";
+					result.innerText = "Your BMI falls within the overweight, so you may need to loose some weight. You are recommended to ask your doctor or a dietitian for advice";
 				}else{
-					result.innerText = "Your BMI falls within the obese range";
+					result.innerText = "Your BMI falls within the obese range, so you may need to loose weight. You are recommended to ask your doctor or a dietitian for advice";
 				}
 
 				return result;
