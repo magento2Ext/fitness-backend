@@ -148,6 +148,7 @@ app.post("/weight", auth, async(req, res) => {
 		const latestWeight = await Weight.findOne({ employeeId: empId}).sort({date:-1});
 
 		async function BMI_CAL(){
+			console.log(employeeDetails.height, latestWeight.weight)
                 let result = {};
 				let height = employeeDetails.height;
 				let weight = latestWeight.weight * 0.45359237;
