@@ -317,7 +317,7 @@ app.post("/weight", auth, async(req, res) => {
 			data.weightLastDay = 0
 			data.weightLastWeek = 0
 			data.weightLastMonthArray = weightLastMonth;
-			data.BMI = await BMI_CAL(latestWeight.weight);
+			data.BMI = await BMI_CAL(recentWeight.weight);
 			
 			if(recentWeight != null) {
 				data.recentWeight = recentWeight.weight
