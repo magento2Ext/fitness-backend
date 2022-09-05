@@ -144,8 +144,27 @@ app.post("/weight", auth, async(req, res) => {
         
 		var empId = req.user.user_id;
 		const employeeDetails = await Employee.findById(empId);
-		console.log(employeeDetails)
 
+		const latestWeight = await Weight.findOne({ employeeId: empId}).sort({date:-1});
+
+		async function BMI_CAL(){
+                let result = {};
+				let height = employeeDetails.height;
+				let weight = latestWeight.weight * 0.45359237;
+				let BMI  = (weight / ((height * height) / 10000)).toFixed(2);
+				result.innerText = BMI;
+
+				if(BMI < 18.5){
+				statement.innerText = "Your BMI falls within the underweight range";    
+				}else if((BMI > 18.5) && (BMI < 24.9)){
+				statement.innerText = "Your BMI falls within the normal or healthy weight range";
+				}else if((BMI > 25) && (BMI < 29.9 )){
+				statement.innerText = "Your BMI falls within the overweight range";
+				}else{
+				statement.innerText = "Your BMI falls within the obese range";
+				}
+		}
+		 
 		let nowDate = new Date();
 		nowDate.setDate(nowDate.getDate() - 6);
 
@@ -273,7 +292,8 @@ app.post("/weight", auth, async(req, res) => {
 			data.recentWeight = 0
 			data.weightLastDay = 0
 			data.weightLastWeek = 0
-			data.weightLastMonthArray = weightLastMonth
+			data.weightLastMonthArray = weightLastMonth;
+			data.BMI = await BMI_CAL();
 			
 			if(recentWeight != null) {
 				data.recentWeight = recentWeight.weight
@@ -308,7 +328,7 @@ app.post("/weight", auth, async(req, res) => {
 			data.weightLastWeek = 0
 			data.weightLastMonthArray = []
 			data.weightLastMonth = 0;
-
+			data.BMI = {}
 			response = webResponse(202, true, data)  
 			res.send(response);
 			return;
