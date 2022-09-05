@@ -163,6 +163,8 @@ app.post("/weight", auth, async(req, res) => {
 				}else{
 					result.innerText = "Your BMI falls within the obese range";
 				}
+
+				return result;
 		}
 		 
 		let nowDate = new Date();
