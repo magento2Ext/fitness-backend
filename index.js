@@ -348,9 +348,9 @@ app.post("/weight", auth, async(req, res) => {
 			
 			data.recentWeight = recentWeight.weight
 			
-			data.weightLastDay = weightLastDay.weight != null ? weightLastDay.weight : 'Not added'
+			data.weightLastDay = weightLastDay != null ? weightLastDay.weight : 'Not added'
 
-			data.weightLastWeek = weightLastWeek.weight !=null ? weightLastWeek.weight : 'Not added'
+			data.weightLastWeek = weightLastWeek !=null ? weightLastWeek.weight : 'Not added'
 	
 			data.weightLastMonth = 'No added';
 			if(weightLastMonth.length != 0) {
