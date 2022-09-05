@@ -318,7 +318,7 @@ app.post("/weight", auth, async(req, res) => {
 										weightFinalArray.push(weightData);
 									}
 									console.log('i,  date', i,  date)
-									if(i > date){
+									if(i == date){
 										return resolve(weightFinalArray)
 									}
 
