@@ -244,7 +244,7 @@ app.post("/weight", auth, async(req, res) => {
 			
 			var weightArray = [];		
 			var i=0;
-			weightList.forEach(function(col) {
+			weightList.forEach(async function(col) {
 			 			  
 				if(i == 0) {
 					let BMI = await BMI_CAL(col.weight);
