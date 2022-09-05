@@ -162,8 +162,8 @@ app.post("/weight", auth, async(req, res) => {
 			return;
 		}
 
-		async function BMI_CAL(){
-			console.log(employeeDetails.height, latestWeight.weight)
+		async function BMI_CAL(weight){
+			console.log(employeeDetails.height, weight)
                 let result = {};
 				let height = employeeDetails.height;
 				let weight = latestWeight.weight * 0.45359237;
@@ -248,12 +248,14 @@ app.post("/weight", auth, async(req, res) => {
 			weightList.forEach(function(col) {
 			 			  
 				if(i == 0) {
+					let BMI = await BMI_CAL(col.weight);
 					weight = {
 						'date' : dateLib.format(col.date,'YYYY-MM-DD'),
 						'weight' : col.weight,
 						'day' :  days[col.date.getDay()],
 						'difference': "0",
-						'weightLine':''
+						'weightLine':'',
+						'BMI': BMI.status
 					}
 				} else{
 					var difference = col.weight - weightList[i-1].weight;
@@ -262,12 +264,14 @@ app.post("/weight", auth, async(req, res) => {
 					} else {
 						var line = convertIntoTwoDecimal(difference)+" kilogram under weight."
 					}
+					let BMI = await BMI_CAL(col.weight);
 					weight = {
 						'date' :  dateLib.format(col.date,'YYYY-MM-DD'),
 						'weight' : col.weight,
 						'day' :  days[col.date.getDay()],
 						'difference': convertIntoTwoDecimal(difference),
 						'weightLine': line,
+						'BMI': BMI.status
 					}
 				}
 				weightArray.push(weight);
@@ -291,7 +295,9 @@ app.post("/weight", auth, async(req, res) => {
 						'weight' : "0",
 						'day' : days[i.getDay()],
 						'difference': "0",
-						'weightLine':''
+						'weightLine':'',
+						'BMI': null
+
 					}
 					weightFinalArray.push(weight);
 				}   else{
@@ -306,7 +312,7 @@ app.post("/weight", auth, async(req, res) => {
 			data.weightLastDay = 0
 			data.weightLastWeek = 0
 			data.weightLastMonthArray = weightLastMonth;
-			data.BMI = await BMI_CAL();
+			data.BMI = await BMI_CAL(latestWeight.weight);
 			
 			if(recentWeight != null) {
 				data.recentWeight = recentWeight.weight
@@ -328,7 +334,7 @@ app.post("/weight", auth, async(req, res) => {
 			response = webResponse(202, true, data)  
 			res.send(response);
 			return;
-			
+
 		}else{
 			var data = {}; 
 			data.weight_diff = []
