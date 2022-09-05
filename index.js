@@ -325,14 +325,11 @@ app.post("/weight", auth, async(req, res) => {
 				data.weightLastMonth = weightLastMonth[0].weight
 			} 
 			
-			
 			response = webResponse(202, true, data)  
 			res.send(response);
 			return;
-
-
+			
 		}else{
-
 			var data = {}; 
 			data.weight_diff = []
 			data.lastOneWeekWeight = []
@@ -345,7 +342,6 @@ app.post("/weight", auth, async(req, res) => {
 			response = webResponse(202, true, data)  
 			res.send(response);
 			return;
-
 		}
           
 }
