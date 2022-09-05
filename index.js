@@ -147,6 +147,21 @@ app.post("/weight", auth, async(req, res) => {
 
 		const latestWeight = await Weight.findOne({ employeeId: empId}).sort({date:-1});
 
+		if(latestWeight == null){
+			var data = {}; 
+			data.weight_diff = []
+			data.lastOneWeekWeight = []
+			data.recentWeight = 0
+			data.weightLastDay = 0
+			data.weightLastWeek = 0
+			data.weightLastMonthArray = []
+			data.weightLastMonth = 0;
+			data.BMI = {}
+			response = webResponse(202, true, data)  
+			res.send(response);
+			return;
+		}
+
 		async function BMI_CAL(){
 			console.log(employeeDetails.height, latestWeight.weight)
                 let result = {};
