@@ -906,6 +906,8 @@ router.post('/getProfile', auth, async(req,res) => {
 
 			const usernameExist = await Employee.findOne({username: req.body.username, _id: {$ne: empId}});
 
+			console.log(emailExist, usernameExist)
+
 			if(emailExist != null || usernameExist != null){
 			    let msg = emailExist != null ? 'Email already in use.' : 'Username already in use.'
 				response = webResponse(200, false, msg)  
