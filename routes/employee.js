@@ -902,7 +902,7 @@ router.post('/getProfile', auth, async(req,res) => {
 		try{
 
 			var empId = req.user.user_id;
-			const employee = await Employee.findOne({$or: [{email: req.body.email, _id: {$ne: empId}}, {username: req.body.username, _id: {$ne: empId}}]});
+			const employee = await Employee.find({$or: [{email: req.body.email, _id: {$ne: empId}}, {username: req.body.username, _id: {$ne: empId}}]});
             console.log('employee', employee, req.body)
 			return;
 			if(employee != null){
