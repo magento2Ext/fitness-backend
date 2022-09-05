@@ -162,11 +162,10 @@ app.post("/weight", auth, async(req, res) => {
 			return;
 		}
 
-		async function BMI_CAL(weight){
-			console.log(employeeDetails.height, weight)
+		async function BMI_CAL(	WEIGHT){
                 let result = {};
 				let height = employeeDetails.height;
-				let weight = latestWeight.weight * 0.45359237;
+				let weight = WEIGHT * 0.45359237;
 				let BMI  = (weight / ((height * height) / 10000)).toFixed(2);
 				result.BMI = BMI;
 
