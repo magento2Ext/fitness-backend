@@ -900,33 +900,33 @@ router.post('/getProfile', auth, async(req,res) => {
 	router.post('/updateEmployee', auth, async(req,res) => {
 
 		try{
-
 			var empId = req.user.user_id;
 			const emailExist = await Employee.findOne({email: req.body.email, _id: {$ne: empId}});
-
-			const usernameExist = await Employee.findOne({username: req.body.username, _id: {$ne: empId}});
-
+			
+			const usernameExist = await Employee.findOne({userName: req.body.userName, _id: {$ne: empId}});
+			
 			console.log(emailExist, usernameExist)
-
+			
 			if(emailExist != null || usernameExist != null){
-			    let msg = emailExist != null ? 'Email already in use.' : 'Username already in use.'
+				let msg = emailExist != null ? 'Email already in use.' : 'Username already in use.'
 				response = webResponse(200, false, msg)  
 				res.send(response)
 				return;
 			}
-
-		   let data = {
+			
+			let data = {
 			firstName: req.body.firstName,
 			lastName: req.body.lastName,
 			email: req.body.email,
 			userName: req.body.userName,
 			picture: req.body.firstName,
 			height: req.body.firstName,
-		   }
-
-		   let result = await Employee.updateOne({_id: empId}, {$set: data}, {new: true}); 
-		   response = webResponse(202, true, result);
-		   res.send(response);
+			}
+			
+			let result = await Employee.updateOne({_id: empId}, {$set: data}, {new: true}); 
+			response = webResponse(202, true, result);
+			res.send(response);
+   
    
 	   }catch(err){
 		   console.log('err', err)
