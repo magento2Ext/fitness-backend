@@ -903,7 +903,7 @@ router.post('/getProfile', auth, async(req,res) => {
 
 			var empId = req.user.user_id;
 			const employee = await Employee.findOne({$or: [{email: req.body.email, _id: {$ne: empId}}, {username: req.body.username, _id: {$ne: empId}}]});
-            console.log('employee', employee)
+            console.log('employee', employee, req.body)
 			return;
 			if(employee != null){
 				response = webResponse(200, false, 'Email already in use.')  
