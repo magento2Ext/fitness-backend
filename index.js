@@ -278,7 +278,7 @@ app.post("/weight", auth, async(req, res) => {
 			});
 			var weightFinalArray = [];
 
-			console.log('weightList', weightList);
+			console.log('weightArray', weightArray);
 				
 			for(i=oneWeekAgo; i<=date;  i.setDate(i.getDate() + 1)) { 
 				var found = 0; 
