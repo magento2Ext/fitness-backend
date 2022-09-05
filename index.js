@@ -165,7 +165,7 @@ app.post("/weight", auth, async(req, res) => {
 			return;
 		}
 
-		async function BMI_CAL(	WEIGHT){
+		async function BMI_CAL(WEIGHT){
                 let result = {};
 				let height = employeeDetails.height;
 				let weight = WEIGHT * 0.45359237;
@@ -294,7 +294,7 @@ app.post("/weight", auth, async(req, res) => {
 								for(i = oneWeekAgo; i <= date;  i.setDate(i.getDate() + 1)) { 
 									
 									var found = 0; 
-									console.log('weightArray', weightArray)
+							
 									for( var j = 0, len = weightArray.length; j < len; j++ ) { 
 										var weightData = '';
 										if( weightArray[j]['day'] == days[i.getDay()]) {
@@ -317,7 +317,7 @@ app.post("/weight", auth, async(req, res) => {
 									}   else{
 										weightFinalArray.push(weightData);
 									}
-
+									console.log('i,  date', i,  date)
 									if(i > date){
 										return resolve(weightFinalArray)
 									}
