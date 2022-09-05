@@ -244,6 +244,7 @@ app.post("/weight", auth, async(req, res) => {
 			
 			var weightArray = [];		
 			var i=0;
+
 			weightList.forEach(async function(col) {
 			 			  
 				if(i == 0) {
@@ -284,6 +285,7 @@ app.post("/weight", auth, async(req, res) => {
 				
 			for(i=oneWeekAgo; i<=date;  i.setDate(i.getDate() + 1)) { 
 				var found = 0; 
+				console.log('weightArray', weightArray)
 				for( var j = 0, len = weightArray.length; j < len; j++ ) { 
 					var weightData = '';
 					if( weightArray[j]['day'] == days[i.getDay()]) {
