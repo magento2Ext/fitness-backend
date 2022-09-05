@@ -150,11 +150,11 @@ app.post("/weight", auth, async(req, res) => {
 			let data = {}; 
 			data.weight_diff = []
 			data.lastOneWeekWeight = []
-			data.recentWeight = 0
-			data.weightLastDay = 0
-			data.weightLastWeek = 0
+			data.recentWeight = 'Not added'
+			data.weightLastDay = 'Not added'
+			data.weightLastWeek = 'Not added'
 			data.weightLastMonthArray = []
-			data.weightLastMonth = 0;
+			data.weightLastMonth = 'Not added';
 			data.BMI = {}
 			return data;
 		}
@@ -217,121 +217,137 @@ app.post("/weight", auth, async(req, res) => {
        
 			var date = new Date();
 			
-			const weightLastDay = await Weight.findOne({ employeeId: req.user.user_id,
+			const weightLastDay = await Weight.findOne({ employeeId: empId,
 				date: {
 					$lt: dateLib.format(date,'YYYY-MM-DD')
 				}
 			}).sort({date:-1});
 
-			console.log('dateLib.format(date,YYYY-MM-DD)', dateLib.format(date,'YYYY-MM-DD'))
-			
-			const weightLastWeek = await Weight.findOne({ employeeId: req.user.user_id,
+		
+			const weightLastWeek = await Weight.findOne({ employeeId: empId,
 				date: {
 					$lt: dateLib.format(oneWeekAgo,'YYYY-MM-DD')
 				}
 			}).sort({date:-1});
 			
-			const weightLastMonth = await Weight.find({ employeeId: req.user.user_id,
+			const weightLastMonth = await Weight.find({ employeeId: empId,
 				date: {
 					$gte: dateLib.format(oneMonthAgo,'YYYY-MM-DD')
 				}
 			}).sort({date:-1});
-	
-			const weightList = await Weight.find({  employeeId: req.user.user_id,
-				date: {
-					$gte: dateLib.format(oneWeekAgo,'YYYY-MM-DD'),
-					$lte: dateLib.format(date,'YYYY-MM-DD')
-				}
-			}).sort({date:1})
+
+
+			async function lastWeekWeight(){
+
+				let promise = new Promise( async (resolve, reject) => {
+
+					const weightList = await Weight.find({  employeeId: empId,
+						date: {
+							$gte: dateLib.format(oneWeekAgo,'YYYY-MM-DD'),
+							$lte: dateLib.format(date,'YYYY-MM-DD')
+						}
+					}).sort({date:1})
+
+                    if(weightList.length == 0){
+						return resolve([])
+					}else{
+
+						var weightArray = [];		
+						var i = 0;
 			
-			var weightArray = [];		
-			var i=0;
+						weightList.forEach(async (col) => {
+									   
+							if(i == 0) {
+								let BMI = await BMI_CAL(col.weight);
+								weight = {
+									'date' : dateLib.format(col.date,'YYYY-MM-DD'),
+									'weight' : col.weight,
+									'day' :  days[col.date.getDay()],
+									'difference': "0",
+									'weightLine':'',
+									'BMI': BMI.status
+								}
+							} else{
+								var difference = col.weight - weightList[i-1].weight;
+								if(difference > 0) {
+									var line = convertIntoTwoDecimal(difference)+" kilogram over weight."
+								} else {
+									var line = convertIntoTwoDecimal(difference)+" kilogram under weight."
+								}
+								let BMI = await BMI_CAL(col.weight);
+								weight = {
+									'date' :  dateLib.format(col.date,'YYYY-MM-DD'),
+									'weight' : col.weight,
+									'day' :  days[col.date.getDay()],
+									'difference': convertIntoTwoDecimal(difference),
+									'weightLine': line,
+									'BMI': BMI.status
+								}
+							}
+							
+							weightArray.push(weight);
+							i++;
+							
+							if(i === weightList.length){
 
-			weightList.forEach(async function(col) {
-			 			  
-				if(i == 0) {
-					let BMI = await BMI_CAL(col.weight);
-					weight = {
-						'date' : dateLib.format(col.date,'YYYY-MM-DD'),
-						'weight' : col.weight,
-						'day' :  days[col.date.getDay()],
-						'difference': "0",
-						'weightLine':'',
-						'BMI': BMI.status
-					}
-				} else{
-					var difference = col.weight - weightList[i-1].weight;
-					if(difference > 0) {
-						var line = convertIntoTwoDecimal(difference)+" kilogram over weight."
-					} else {
-						var line = convertIntoTwoDecimal(difference)+" kilogram under weight."
-					}
-					let BMI = await BMI_CAL(col.weight);
-					weight = {
-						'date' :  dateLib.format(col.date,'YYYY-MM-DD'),
-						'weight' : col.weight,
-						'day' :  days[col.date.getDay()],
-						'difference': convertIntoTwoDecimal(difference),
-						'weightLine': line,
-						'BMI': BMI.status
-					}
-				}
-				
-				weightArray.push(weight);
-				i++;		
-			});
+								var weightFinalArray = [];
+								for(i = oneWeekAgo; i <= date;  i.setDate(i.getDate() + 1)) { 
+									
+									var found = 0; 
+									console.log('weightArray', weightArray)
+									for( var j = 0, len = weightArray.length; j < len; j++ ) { 
+										var weightData = '';
+										if( weightArray[j]['day'] == days[i.getDay()]) {
+											found = 1;
+											weightData = weightArray[j];
+											break;
+										} 
+									}
+									if(found == 0) {
+										weight = {
+											'date' : dateLib.format(i,'YYYY-MM-DD'),
+											'weight' : "0",
+											'day' : days[i.getDay()],
+											'difference': "0",
+											'weightLine':'',
+											'BMI': null
+					
+										}
+										weightFinalArray.push(weight);
+									}   else{
+										weightFinalArray.push(weightData);
+									}
 
-			var weightFinalArray = [];
+									if(i > date){
+										return resolve(weightFinalArray)
+									}
 
-			for(i=oneWeekAgo; i<=date;  i.setDate(i.getDate() + 1)) { 
-				var found = 0; 
-				console.log('weightArray', weightArray)
-				for( var j = 0, len = weightArray.length; j < len; j++ ) { 
-					var weightData = '';
-					if( weightArray[j]['day'] == days[i.getDay()]) {
-						found = 1;
-						weightData = weightArray[j];
-						break;
-					} 
-				}
-				if(found == 0) {
-					weight = {
-						'date' : dateLib.format(i,'YYYY-MM-DD'),
-						'weight' : "0",
-						'day' : days[i.getDay()],
-						'difference': "0",
-						'weightLine':'',
-						'BMI': null
+								}
+
+							}
+						});
 
 					}
-					weightFinalArray.push(weight);
-				}   else{
-					weightFinalArray.push(weightData);
-				}
+					
+				})
+
+				return promise;
 			}
 	
+	
 			var data = {}; 
-			data.weight_diff = weightFinalArray
-			data.lastOneWeekWeight = weightArray
-			data.recentWeight = 0
-			data.weightLastDay = 0
-			data.weightLastWeek = 0
+			data.weight_diff = await lastWeekWeight()
+			// data.lastOneWeekWeight = weightArray
 			data.weightLastMonthArray = weightLastMonth;
 			data.BMI = await BMI_CAL(recentWeight.weight);
 			
-			if(recentWeight != null) {
-				data.recentWeight = recentWeight.weight
-			} 
+			data.recentWeight = recentWeight.weight
 			
-			if(weightLastDay != null) {
-				data.weightLastDay = weightLastDay.weight
-			} 
-			
-			if(weightLastWeek != null) {
-				data.weightLastWeek = weightLastWeek.weight
-			} 
-			
-			data.weightLastMonth = 0;
+			data.weightLastDay = weightLastDay.weight != null ? weightLastDay.weight : 'Not added'
+
+			data.weightLastWeek = weightLastWeek.weight !=null ? weightLastWeek.weight : 'Not added'
+	
+			data.weightLastMonth = 'No added';
 			if(weightLastMonth.length != 0) {
 				data.weightLastMonth = weightLastMonth[0].weight
 			} 
