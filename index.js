@@ -144,11 +144,10 @@ app.post("/weight", auth, async(req, res) => {
         
 		var empId = req.user.user_id;
 		const employeeDetails = await Employee.findById(empId);
+		const recentWeight = await Weight.findOne({ employeeId: empId}).sort({date:-1});
 
-		const latestWeight = await Weight.findOne({ employeeId: empId}).sort({date:-1});
-
-		if(latestWeight == null || latestWeight.weight == '0' || latestWeight.weight == null || latestWeight.weight == undefined){
-			var data = {}; 
+		async function noData(){
+			let data = {}; 
 			data.weight_diff = []
 			data.lastOneWeekWeight = []
 			data.recentWeight = 0
@@ -157,7 +156,11 @@ app.post("/weight", auth, async(req, res) => {
 			data.weightLastMonthArray = []
 			data.weightLastMonth = 0;
 			data.BMI = {}
-			response = webResponse(202, true, data)  
+			return data;
+		}
+
+		if(recentWeight == null || recentWeight.weight == '0' || recentWeight.weight == null || recentWeight.weight == undefined){
+			response = webResponse(202, true, await noData())  
 			res.send(response);
 			return;
 		}
@@ -186,15 +189,16 @@ app.post("/weight", auth, async(req, res) => {
 				return result;
 		}
 		 
+
 		let nowDate = new Date();
 		nowDate.setDate(nowDate.getDate() - 6);
 
-		let date_2 = dateLib.format(nowDate,'YYYY-MM-DD');
+		let nowDate_1 = dateLib.format(nowDate,'YYYY-MM-DD');
 
-		let date1 = new Date(employeeDetails.date.replace(/-/g, "/"));
-		let date2 = new Date(date_2.replace(/-/g, "/"));
+		let empJoiningDate = new Date(employeeDetails.date.replace(/-/g, "/"));
+		let nowDate_2 = new Date(nowDate_1.replace(/-/g, "/"));
 	
-		let difference =  date1.getTime() - date2.getTime()
+		let difference =  empJoiningDate.getTime() - nowDate_2.getTime()
 
 		let days_diff = Math.ceil(difference / (1000 * 3600 * 24));
  
@@ -202,8 +206,6 @@ app.post("/weight", auth, async(req, res) => {
 		
 			let getDays_monthly = days_diff < 0 ? 29 : 29 - days_diff;
 			let getDays_weekly = days_diff < 0 ? 6 : 6 - days_diff;
-
-			console.log('getDays_monthly', getDays_monthly, getDays_weekly)
 
 			var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 		
@@ -215,13 +217,13 @@ app.post("/weight", auth, async(req, res) => {
        
 			var date = new Date();
 			
-			const recentWeight = await Weight.findOne({ employeeId: req.user.user_id}).sort({date:-1});
-			
 			const weightLastDay = await Weight.findOne({ employeeId: req.user.user_id,
 				date: {
 					$lt: dateLib.format(date,'YYYY-MM-DD')
 				}
 			}).sort({date:-1});
+
+			console.log('weightLastDay', weightLastDay)
 			
 			const weightLastWeek = await Weight.findOne({ employeeId: req.user.user_id,
 				date: {
@@ -278,7 +280,7 @@ app.post("/weight", auth, async(req, res) => {
 				weightArray.push(weight);
 				i++;		
 			});
-			
+
 			var weightFinalArray = [];
 
 			for(i=oneWeekAgo; i<=date;  i.setDate(i.getDate() + 1)) { 
@@ -339,21 +341,14 @@ app.post("/weight", auth, async(req, res) => {
 			return;
 
 		}else{
-			var data = {}; 
-			data.weight_diff = []
-			data.lastOneWeekWeight = []
-			data.recentWeight = 0
-			data.weightLastDay = 0
-			data.weightLastWeek = 0
-			data.weightLastMonthArray = []
-			data.weightLastMonth = 0;
-			data.BMI = {}
-			response = webResponse(202, true, data)  
+			response = webResponse(202, true, await noData())  
 			res.send(response);
 			return;
-		}
-          
+		}     
 }
+
+
+
 
 ); 
 
