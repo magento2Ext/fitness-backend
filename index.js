@@ -320,7 +320,6 @@ app.post("/weight", auth, async(req, res) => {
 								
 									console.log('i,  date', i,  date)
 									if(i == date){
-										
 										 resolve(weightFinalArray)
 									}
 
@@ -338,7 +337,9 @@ app.post("/weight", auth, async(req, res) => {
 	
 	
 			var data = {}; 
-			data.weight_diff = await lastWeekWeight()
+			let weeklyResult = await lastWeekWeight();
+			console.log('weeklyResult', weeklyResult)
+			data.weight_diff = weeklyResult
 			// data.lastOneWeekWeight = weightArray
 			data.weightLastMonthArray = weightLastMonth;
 			data.BMI = await BMI_CAL(recentWeight.weight);
