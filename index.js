@@ -273,12 +273,14 @@ app.post("/weight", auth, async(req, res) => {
 						'BMI': BMI.status
 					}
 				}
+				
 				weightArray.push(weight);
+				console.log('weight', weight, weightArray);
 				i++;		
 			});
 			var weightFinalArray = [];
 
-			console.log('weightList', weightList);
+		
 				
 			for(i=oneWeekAgo; i<=date;  i.setDate(i.getDate() + 1)) { 
 				var found = 0; 
