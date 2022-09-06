@@ -197,13 +197,15 @@ app.post("/weight", auth, async(req, res) => {
 
 		let nowDate_1 = dateLib.format(nowDate,'MM/DD/YYYY');
 
-	
-		let empJoiningDate = new Date(employeeDetails.date.replace(/-/g, "/"));
-		let employeDate = empJoiningDate.split('/');
+	    let employeDate = employeeDetails.date.replace(/-/g, "/")
+		 
 		let refactor = employeDate[1]+'/'+employeDate[2]+'/'+employeDate[0];
+
+		let empJoiningDate = new Date(refactor);
+
 		let nowDate_2 = new Date(nowDate_1.replace(/-/g, "/"));
 	
-		let difference =  refactor.getTime() - nowDate_2.getTime()
+		let difference =  empJoiningDate.getTime() - nowDate_2.getTime()
 
 		let days_diff = Math.ceil(difference / (1000 * 3600 * 24));
 
