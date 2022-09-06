@@ -444,9 +444,10 @@ router.delete('/delete', async(req,res) => {
 		
 		await Organization.updateOne({'_id': req.body.id}, {$set: {status: status}}, {new: true});
 		
-		response = webResponse(200, true, status == '0' ? "Organization Disabled" : "Organization enabled") 
+		response = webResponse(202, true, status) 
 		res.send(response)
 		return "";
+
 	}catch(err){
         res.send('Error ' + err)
     }
