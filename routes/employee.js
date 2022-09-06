@@ -913,7 +913,7 @@ router.post('/getProfile', auth, async(req,res) => {
 			
 		    await Employee.updateOne({_id: empId}, {$set: data}, {new: true}); 
 
-			setTimeout(() => {
+			setTimeout(async () => {
 			const employee = await Employee.findById(empId);
 			const result = {};
 			result.employee = employee
