@@ -444,7 +444,7 @@ router.delete('/delete', async(req,res) => {
 		
 		await Organization.updateOne({'_id': req.body.id}, {$set: {status: status}}, {new: true});
 		
-		response = webResponse(202, true, status) 
+		response = webResponse(202, true, {status: status}) 
 		res.send(response)
 		return "";
 
