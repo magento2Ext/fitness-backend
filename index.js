@@ -162,7 +162,6 @@ app.post("/weight", auth, async(req, res) => {
 		
 
 		if(recentWeight == null || recentWeight.weight == '0' || recentWeight.weight == null || recentWeight.weight == undefined){
-			console.log('recentWeight', recentWeight);
 			response = webResponse(202, true, await noData())  
 			res.send(response);
 			return;
@@ -204,6 +203,8 @@ app.post("/weight", auth, async(req, res) => {
 		let difference =  empJoiningDate.getTime() - nowDate_2.getTime()
 
 		let days_diff = Math.ceil(difference / (1000 * 3600 * 24));
+
+		console.log('days_diff', days_diff);
  
         if(6 > days_diff){
 		
