@@ -403,14 +403,27 @@ router.post('/forget/password', async(req,res) => {
 router.delete('/delete', async(req,res) => {
     try{
         const id = req.body.id
+		const status = req.body.status
 		// Validate user input
-		if(!(id)) {
+		if(!(id && status)) {
 			jsonObj = []
-			var item = {
-				'key' : 'Organization id',
-				'value' : 'required' 
+
+			if(!(id)){
+				var item = {
+					'key' : 'Organization id',
+					'value' : 'required' 
+				}
+				jsonObj.push(item);
 			}
-			jsonObj.push(item);
+
+			if(!(status)){
+				var item = {
+					'key' : 'Organization status',
+					'value' : 'required' 
+				}
+				jsonObj.push(item);
+			}
+
 			response = webResponse(406, false, jsonObj) 
 			res.send(response)
 			return "";
@@ -418,16 +431,20 @@ router.delete('/delete', async(req,res) => {
 		
 		
 		const organization = await Organization.findById(req.body.id)
+
 		if(!organization) {
 			response = webResponse(404, false, "Organization not found") 
 			res.send(response)
 			return "";
 		}
-		
-		await Organization.updateOne({'_id': req.body.id}, {$set: {status: '0'}}, {new: true});
-		await Employee.updateMany({'userOrganizations': {$in: [req.body.id]}}, {$set: {userOrganizations: [], organizationId: false}}, {new: true});
 
-		response = webResponse(200, true, "Organization Disabled") 
+		if(status == '0'){
+			await Employee.updateMany({'userOrganizations': {$in: [req.body.id]}}, {$set: {userOrganizations: [], organizationId: false}}, {new: true});
+		}
+		
+		await Organization.updateOne({'_id': req.body.id}, {$set: {status: status}}, {new: true});
+		
+		response = webResponse(200, true, status == '0' ? "Organization Disabled" : "Organization enabled") 
 		res.send(response)
 		return "";
 	}catch(err){
