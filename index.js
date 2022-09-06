@@ -99,7 +99,7 @@ app.post("/weight/save", auth, async(req, res) => {
 		})
 
 		if(req.body.height){
-	     	await Employee.updateOne({_id: empId}, {$set: {height: req.body.height}}, {new: true});
+	     	await Employee.updateOne({_id: empId}, {$set: {height: req.body.height, heightType: req.body.heightType}}, {new: true});
 		}
 
 		const weightDetails = await Weight.findOne({ date: req.body.date,  employeeId: req.user.user_id});

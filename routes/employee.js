@@ -194,8 +194,6 @@ router.get('/list/:id/:type', async(req,res) => {
 			 res.json(data);
 		}
 		
-	
-
     }catch(err){
         res.send('Error ' + err)
     }
@@ -738,7 +736,6 @@ router.put('/update/:id', async(req,res) => {
 })
 
 
-
 router.post('/orgRequestAction', async(req,res) => {
 
 	try{
@@ -818,7 +815,6 @@ router.post('/updateVisit', auth, async(req,res)=> {
 })
 
 
-
 router.post('/testUpdate', async(req,res)=> {
 
 	try{
@@ -832,7 +828,6 @@ router.post('/testUpdate', async(req,res)=> {
    }
 
 });
-
 
 
 router.post('/getProfile', auth, async(req,res) => {
@@ -871,8 +866,6 @@ router.post('/getProfile', auth, async(req,res) => {
 			res.send(response)
 			return;
 			  
-	 
-
 		}else{
 
 			response = webResponse(200, false, "User not found.")  
@@ -881,8 +874,6 @@ router.post('/getProfile', auth, async(req,res) => {
 
 		}
 
-
-
 		}catch(err){
 			response = webResponse(403, false, err)  
 			res.send(response)
@@ -890,8 +881,6 @@ router.post('/getProfile', auth, async(req,res) => {
 		}
 		
 	});
-
-
 
 
 	router.post('/updateEmployee', auth, async(req,res) => {
@@ -916,6 +905,7 @@ router.post('/getProfile', auth, async(req,res) => {
 			userName: req.body.userName,
 			picture: req.body.picture,
 			height: req.body.height,
+			heightType: req.body.heightType
 			}
 			
 		    await Employee.updateOne({_id: empId}, {$set: data}, {new: true}); 

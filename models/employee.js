@@ -78,6 +78,9 @@ const employeeSchema = new mongoose.Schema({
     height: {
         type: String,
         default: '0'
+    },
+    heightType: {
+        type: String
     }
 })
 
