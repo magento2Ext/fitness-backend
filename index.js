@@ -227,6 +227,8 @@ app.post("/weight", auth, async(req, res) => {
 			
 			var oneMonthAgo = new Date();
 			oneMonthAgo.setDate(oneMonthAgo.getDate() - getDays_monthly);
+
+			console.log('oneMonthAgo', oneMonthAgo)
        
 			var date = new Date();
 			
@@ -256,7 +258,7 @@ app.post("/weight", auth, async(req, res) => {
 				}
 			}).sort({date:-1});
 
-			console.log(oneMonthAgo, weightLastMonth_1)
+		
 
 		
 			async function lastWeekWeight(){
