@@ -836,18 +836,8 @@ router.post('/getProfile', auth, async(req,res) => {
 
 		if(employee != null){
 
-			const token = jwt.sign(
-				{ user_id: employee._id, email: employee.email },
-				process.env.JWT_SECRET,
-				{
-				  expiresIn: "9999 years",
-				}
-			  );
-
 			// save user token
-			employee.token = token; 
 			const result = {};
-			result.access_token = token
 			result.employee = employee
 			var appData = null;
 			let logo;
@@ -921,11 +911,41 @@ router.post('/getProfile', auth, async(req,res) => {
 			height: req.body.height,
 			}
 			
-			let result = await Employee.updateOne({_id: empId}, {$set: data}, {new: true}); 
-			response = webResponse(202, true, result);
-			res.send(response);
+		    await Employee.updateOne({_id: empId}, {$set: data}, {new: true}); 
+
+			setTimeout(() => {
+			const employee = await Employee.findById(empId);
+			const result = {};
+			result.employee = employee
+			var appData = null;
+			let logo;
+			if(employee.organizationId && employee.organizationId != 'false') {
+				const organization = await Organization.findById(employee.organizationId)
+				result.organization = organization
+				var themecode = organization.themecode
+				logo = organization.logo
+				if(organization != null && organization.themecode != null) {
+					appData = await Theme.findById(organization.themecode)
+				}
+			}else{
+					logo = process.env.ORGLOGO
+			}
+			if(appData == null) {
+				appData = await Theme.findOne()
+			}
+	
+			
+			result.appData = appData
+			result.logo = logo
+			
+			response = webResponse(202, true, result)  
+			res.send(response)
+			return;
+				
+			}, 1000);
+ 
    
-   
+
 	   }catch(err){
 		   console.log('err', err)
 		   res.send(err)
@@ -933,5 +953,5 @@ router.post('/getProfile', auth, async(req,res) => {
 	   }
    
    })
-   
+
  module.exports = router
