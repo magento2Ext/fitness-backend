@@ -209,7 +209,7 @@ app.post("/weight", auth, async(req, res) => {
 
 		let days_diff = Math.ceil(difference / (1000 * 3600 * 24));
 
-		console.log('days_diff', days_diff);
+		console.log('days_diff', refactor, nowDate_1);
  
         if(6 > days_diff){
 		
