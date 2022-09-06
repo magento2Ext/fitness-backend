@@ -206,12 +206,13 @@ app.post("/weight", auth, async(req, res) => {
 		let empJoiningDate = new Date(refactor);
 
 		let nowDate_2 = new Date(nowDate_1.replace(/-/g, "/"));
+		console.log('days_diff', refactor, nowDate_1);
 	
 		let difference =  empJoiningDate.getTime() - nowDate_2.getTime()
 
 		let days_diff = Math.ceil(difference / (1000 * 3600 * 24));
 
-		console.log('days_diff', refactor, nowDate_2);
+	
  
         if(6 > days_diff){
 		
