@@ -256,9 +256,7 @@ app.post("/weight", auth, async(req, res) => {
 				}
 			}).sort({date:-1});
 
-			console.log('weightLastMonth', weightLastMonth_1)
-
-
+		
 			async function lastWeekWeight(){
 
 				let promise = new Promise( async (resolve, reject) => {
@@ -365,7 +363,12 @@ app.post("/weight", auth, async(req, res) => {
 			var data = {}; 
 			let weeklyResult = await lastWeekWeight();
 		 
-			data.weight_diff = weeklyResult
+			data.weight_diff = weeklyResult;
+
+			data.weightLastMonth = '0 ';
+			if(weightLastMonth_1 != null) {
+				data.weightLastMonth = weightLastMonth_1.weight
+			} 
 			// data.lastOneWeekWeight = weightArray
 			data.weightLastMonthArray = weightLastMonth;
 			data.BMI = await BMI_CAL(recentWeight.weight);
@@ -376,10 +379,7 @@ app.post("/weight", auth, async(req, res) => {
 
 			data.weightLastWeek = weightLastWeek !=null ? weightLastWeek.weight : 'Not added'
 	
-			data.weightLastMonth = '0 ';
-			if(weightLastMonth_1 != null) {
-				data.weightLastMonth = weightLastMonth.weight
-			} 
+
 			
 			response = webResponse(202, true, data)  
 			res.send(response);
