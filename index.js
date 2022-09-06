@@ -323,7 +323,7 @@ app.post("/weight", auth, async(req, res) => {
 							
 									count1++;
 								 
-									if(String(count1) == String(i)){
+									if(String(date) == String(i)){
 										resolve(weightFinalArray)
 								   }
 
