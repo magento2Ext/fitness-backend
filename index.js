@@ -247,6 +247,8 @@ app.post("/weight", auth, async(req, res) => {
 				}
 			}).sort({date:-1});
 
+			console.log('weightLastMonth', weightLastMonth)
+
 
 			async function lastWeekWeight(){
 
@@ -353,7 +355,7 @@ app.post("/weight", auth, async(req, res) => {
 	
 			var data = {}; 
 			let weeklyResult = await lastWeekWeight();
-			console.log('weeklyResult', weeklyResult)
+		 
 			data.weight_diff = weeklyResult
 			// data.lastOneWeekWeight = weightArray
 			data.weightLastMonthArray = weightLastMonth;
