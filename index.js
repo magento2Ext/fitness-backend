@@ -195,7 +195,9 @@ app.post("/weight", auth, async(req, res) => {
 		let nowDate = new Date();
 		nowDate.setDate(nowDate.getDate() - 6);
 
-		let nowDate_1 = dateLib.format(nowDate,'YYYY-MM-DD');
+		let nowDate_1 = dateLib.format(nowDate,'MM-DD-YYYY');
+
+		console.log(nowDate_1)
  
 	    let employeDate = employeeDetails.date.replace(/-/g, "/")
 
