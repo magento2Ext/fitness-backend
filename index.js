@@ -221,7 +221,7 @@ app.post("/weight", auth, async(req, res) => {
 			var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 		
 			var oneWeekAgo = new Date();
-			oneWeekAgo.setDate(oneWeekAgo.getDate() - getDays_weekly);
+			oneWeekAgo.setDate(oneWeekAgo.getDate() - 6);
 			
 			var oneMonthAgo = new Date();
 			oneMonthAgo.setDate(oneMonthAgo.getDate() - getDays_monthly);
