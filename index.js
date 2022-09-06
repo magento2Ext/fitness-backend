@@ -249,10 +249,10 @@ app.post("/weight", auth, async(req, res) => {
 					}).sort({date:1})
 
                     if(weightList.length == 0){
-						console.log('11111')
+						 
 						 resolve([])
 					}else{
-						console.log('22222')
+						
 						var weightArray = [];		
 						var i = 0;
 			
@@ -291,7 +291,7 @@ app.post("/weight", auth, async(req, res) => {
 							let count1 = 0;
 							
 							if(i === weightList.length){
-
+								console.log('22222')
 								var weightFinalArray = [];
 								for(i = oneWeekAgo; i <= date;  i.setDate(i.getDate() + 1)) { 
 									
