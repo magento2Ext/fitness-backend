@@ -405,7 +405,7 @@ router.delete('/delete', async(req,res) => {
         const id = req.body.id
 		const status = req.body.status
 		// Validate user input
-		if(!(id && status)) {
+		if(!(id)) {
 			jsonObj = []
 
 			if(!(id)){
