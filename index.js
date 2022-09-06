@@ -159,9 +159,10 @@ app.post("/weight", auth, async(req, res) => {
 			return data;
 		}
 
-		console.log('recentWeight', recentWeight);
+		
 
 		if(recentWeight == null || recentWeight.weight == '0' || recentWeight.weight == null || recentWeight.weight == undefined){
+			console.log('recentWeight', recentWeight);
 			response = webResponse(202, true, await noData())  
 			res.send(response);
 			return;
