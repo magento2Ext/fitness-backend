@@ -416,14 +416,7 @@ router.delete('/delete', async(req,res) => {
 				jsonObj.push(item);
 			}
 
-			if(!(status)){
-				var item = {
-					'key' : 'Organization status',
-					'value' : 'required' 
-				}
-				jsonObj.push(item);
-			}
-
+	
 			response = webResponse(406, false, jsonObj) 
 			res.send(response)
 			return "";
