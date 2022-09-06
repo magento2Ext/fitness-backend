@@ -54,6 +54,10 @@ const organizationSchema = new mongoose.Schema({
         type: String,
         required: false,
         default: null
+    },
+    status: {
+        type: String,
+        default: '1' 
     }
 
 })

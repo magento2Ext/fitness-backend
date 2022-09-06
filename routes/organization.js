@@ -299,6 +299,12 @@ router.post('/login', async(req,res) => {
 		return;
 	   }
 
+	   if(organization.status == '0'){
+		response = webResponse(200, false, "Your account has been disabled by admin.")  
+	    res.send(response);
+		return;
+	   }
+
 		if (await bcrypt.compare(password, organization.password)) {
 		  // Create token
 		  const token = jwt.sign(
@@ -418,12 +424,10 @@ router.delete('/delete', async(req,res) => {
 			return "";
 		}
 		
-		const employees = await Employee.updateMany({'userOrganizations': {$in: [req.body.id]}}, {$set: {userOrganizations: [], organizationId: false}}, {new: true});
-	
-		const _id = new ObjectID(req.body.id);
-		await Organization.deleteOne( {'_id':_id})
-		//organization.deleteOne(req.body.id)
-		response = webResponse(200, true, "Organization deleted") 
+		await Organization.updateOne({'_id': req.body.id}, {$set: {status: '0'}}, {new: true});
+		await Employee.updateMany({'userOrganizations': {$in: [req.body.id]}}, {$set: {userOrganizations: [], organizationId: false}}, {new: true});
+
+		response = webResponse(200, true, "Organization Disabled") 
 		res.send(response)
 		return "";
 	}catch(err){
