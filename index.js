@@ -291,7 +291,7 @@ app.post("/weight", auth, async(req, res) => {
 							let count1 = 0;
 							
 							if(i === weightList.length){
-								console.log('22222')
+							
 								var weightFinalArray = [];
 								for(i = oneWeekAgo; i <= date;  i.setDate(i.getDate() + 1)) { 
 									
@@ -322,6 +322,7 @@ app.post("/weight", auth, async(req, res) => {
 								
 							
 									count1++;
+									console.log('22222', count1)
 									if(count1 == 7){
 										resolve(weightFinalArray)
 								   }
