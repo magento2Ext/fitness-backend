@@ -83,8 +83,8 @@
 							"themecode":col.themecode,
 							"modules":moduleNames,
 							"module_id":col.module_id,
-							"subModule_id":col.subModule_id
-							
+							"subModule_id":col.subModule_id,
+							"status": col.status
 						}
 						orgList.push(orgDetail);
 					})
