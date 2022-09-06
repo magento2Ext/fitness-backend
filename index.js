@@ -249,7 +249,14 @@ app.post("/weight", auth, async(req, res) => {
 				}
 			}).sort({date:-1});
 
-			console.log('weightLastMonth', weightLastMonth)
+
+			const weightLastMonth_1 = await Weight.findOne({ employeeId: empId,
+				date: {
+					$eq: dateLib.format(oneMonthAgo,'YYYY-MM-DD')
+				}
+			}).sort({date:-1});
+
+			console.log('weightLastMonth', weightLastMonth_1)
 
 
 			async function lastWeekWeight(){
@@ -369,9 +376,9 @@ app.post("/weight", auth, async(req, res) => {
 
 			data.weightLastWeek = weightLastWeek !=null ? weightLastWeek.weight : 'Not added'
 	
-			data.weightLastMonth = 'No added';
-			if(weightLastMonth.length != 0) {
-				data.weightLastMonth = weightLastMonth[0].weight
+			data.weightLastMonth = 'Not added';
+			if(weightLastMonth_1 != null) {
+				data.weightLastMonth = weightLastMonth.weight
 			} 
 			
 			response = webResponse(202, true, data)  
