@@ -376,7 +376,7 @@ app.post("/weight", auth, async(req, res) => {
 
 			data.weightLastWeek = weightLastWeek !=null ? weightLastWeek.weight : 'Not added'
 	
-			data.weightLastMonth = 'Not added';
+			data.weightLastMonth = '0 ';
 			if(weightLastMonth_1 != null) {
 				data.weightLastMonth = weightLastMonth.weight
 			} 
