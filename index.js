@@ -196,10 +196,12 @@ app.post("/weight", auth, async(req, res) => {
 		nowDate.setDate(nowDate.getDate() - 6);
 
 		let nowDate_1 = dateLib.format(nowDate,'MM/DD/YYYY');
-
+ 
 	    let employeDate = employeeDetails.date.replace(/-/g, "/")
+
+		let splitDate = employeDate.split('/');
 		 
-		let refactor = employeDate[1]+'/'+employeDate[2]+'/'+employeDate[0];
+		let refactor = splitDate[1]+'/'+splitDate[2]+'/'+splitDate[0];
 
 		let empJoiningDate = new Date(refactor);
 
