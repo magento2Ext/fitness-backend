@@ -187,9 +187,9 @@ router.get('/list/:id/:type', async(req,res) => {
     try{
 		let data = [];
         if(req.params.type == 'admin'){
-			let data = await Employee.find();
+			 data = await Employee.find();
 		}else{
-			let data = await Employee.find({userOrganizations: {$in: [req.params.id]}});
+			 data = await Employee.find({userOrganizations: {$in: [req.params.id]}});
 		}
 		
 		res.json(data);
