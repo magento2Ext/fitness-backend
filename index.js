@@ -213,7 +213,7 @@ app.post("/weight", auth, async(req, res) => {
 
 		console.log('days_diff', days_diff, refactor, nowDate_1);
  
-        if(6 > days_diff){
+        // if(6 > days_diff){
 		
 			let getDays_monthly = days_diff == 0 ? 0 : (days_diff < 0 ? 29 : 29 - days_diff);
 			let getDays_weekly =  days_diff == 0 ? 0 : (days_diff < 0 ? 6 : 6 - days_diff);
@@ -374,11 +374,11 @@ app.post("/weight", auth, async(req, res) => {
 			res.send(response);
 			return;
 
-		}else{
-			response = webResponse(202, true, await noData())  
-			res.send(response);
-			return;
-		}     
+		// }else{
+		// 	response = webResponse(202, true, await noData())  
+		// 	res.send(response);
+		// 	return;
+		// }     
 }
 
 
