@@ -195,9 +195,7 @@ app.post("/weight", auth, async(req, res) => {
 		let nowDate = new Date();
 		nowDate.setDate(nowDate.getDate() - 6);
 
-		let nowDate_1 = dateLib.format(nowDate,'MM-DD-YYYY');
-
-		console.log(nowDate_1)
+		let nowDate_1 = dateLib.format(nowDate,'MM/DD/YYYY');
  
 	    let employeDate = employeeDetails.date.replace(/-/g, "/")
 
@@ -213,7 +211,7 @@ app.post("/weight", auth, async(req, res) => {
 
 		let days_diff = Math.ceil(difference / (1000 * 3600 * 24));
 
-		console.log('days_diff', refactor, nowDate_1);
+		console.log('days_diff', refactor, nowDate_2);
  
         if(6 > days_diff){
 		
