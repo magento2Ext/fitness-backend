@@ -218,6 +218,8 @@ app.post("/weight", auth, async(req, res) => {
 			let getDays_monthly = days_diff == 0 ? 0 : (days_diff < 0 ? 29 : 29 - days_diff);
 			let getDays_weekly =  days_diff == 0 ? 0 : (days_diff < 0 ? 6 : 6 - days_diff);
 
+			console.log('getDays_monthly', getDays_monthly)
+
 			var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 		
 			var oneWeekAgo = new Date();
