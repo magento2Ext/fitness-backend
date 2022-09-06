@@ -188,11 +188,13 @@ router.get('/list/:id/:type', async(req,res) => {
 		let data = [];
         if(req.params.type == 'admin'){
 			 data = await Employee.find();
+			 res.json(data);
 		}else{
 			 data = await Employee.find({userOrganizations: {$in: [req.params.id]}});
+			 res.json(data);
 		}
 		
-		res.json(data);
+	
 
     }catch(err){
         res.send('Error ' + err)
