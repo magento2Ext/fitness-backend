@@ -185,8 +185,13 @@ router.post('/web/list', async(req,res) => {
 
 router.get('/list/:id', async(req,res) => { 
     try{
-
-		let data = await Employee.find({userOrganizations: {$in: [req.params.id]}});
+		let data = [];
+        if(req.params.id == 'admin'){
+			let data = await Employee.find();
+		}else{
+			let data = await Employee.find({userOrganizations: {$in: [req.params.id]}});
+		}
+		
 		res.json(data);
 
     }catch(err){
