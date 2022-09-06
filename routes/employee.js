@@ -183,7 +183,7 @@ router.post('/web/list', async(req,res) => {
     }
 })
 
-router.get('/list/:id', async(req,res) => { 
+router.get('/list/:id/:type', async(req,res) => { 
     try{
 		let data = [];
         if(req.params.type == 'admin'){
