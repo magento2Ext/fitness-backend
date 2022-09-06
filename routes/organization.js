@@ -442,6 +442,7 @@ router.delete('/delete', async(req,res) => {
 		return "";
 
 	}catch(err){
+		console.log(err)
         res.send('Error ' + err)
     }
 })
