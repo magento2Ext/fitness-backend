@@ -747,6 +747,8 @@ router.put('/update/:id', async(req,res) => {
 router.post('/orgRequestAction', async(req,res) => {
 
 	try{
+
+		
         const reqId = req.body.reqId;
 		const reqDetails = await organizationRequests.findOne({_id: reqId});
 		console.log('reqDetails', reqDetails)
@@ -754,6 +756,11 @@ router.post('/orgRequestAction', async(req,res) => {
 		const orgId = reqDetails.orgId;
 	
 		const empDetails = await Employee.findOne({_id: employeeId});
+
+		if(empDetails.userOrganizations.length >= 1){
+			res.send('User is already a member of an organization');
+			return;
+		}
 
 	   if(req.body.status == '1') {
 		let orgData = await Organization.findOne({_id: orgId});
@@ -787,7 +794,6 @@ router.post('/orgRequestAction', async(req,res) => {
    }catch(err){
 	   console.log('err', err)
 	   res.send(err)
-	   
    }
 
 })

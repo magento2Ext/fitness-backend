@@ -47,6 +47,10 @@ const employeeSchema = new mongoose.Schema({
         type: String,
         default: false
     },
+    userOrganizations: {
+		type: Array,
+		default:[]
+	},
     picture: {
 		type: String,
 		default:"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
@@ -55,10 +59,6 @@ const employeeSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    userOrganizations: {
-		type: Array,
-		default:[]
-	},
     seenDisclaimer: {
         type: Boolean,
         default: false
