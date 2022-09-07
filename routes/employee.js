@@ -586,8 +586,14 @@ router.post('/login', async(req,res) => {
 		}
 	   const employee = await Employee.findOne({ email });
 
+	   if(employee == null){
+				response = webResponse(200, false, "Account not found.")  
+				res.send(response)
+				return;
+	   }
 
-		if (employee && (await bcrypt.compare(password, employee.password))) {
+
+		if (await bcrypt.compare(password, employee.password)) {
 			 
 			if(employee.isVerified == false && employee.userOrganizations.length == 0) {
 				response = webResponse(200, false, "User not verified")  
@@ -634,10 +640,12 @@ router.post('/login', async(req,res) => {
 		    response = webResponse(202, true, result)  
 	        res.send(response)
 		    return;
+		}else{
+			response = webResponse(200, false, "Invalid credentials")  
+			res.send(response)
+			return;
 		} 
-		response = webResponse(200, false, "Invalid credentials")  
-	      res.send(response)
-		  return;
+
 	} catch (err) {
 		console.log(err);
     }
