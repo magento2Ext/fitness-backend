@@ -661,14 +661,22 @@ router.post("/confirmCode", auth,  async(req, res) => {
 
 		var empId = req.user.user_id;
 		const employee = await Employee.findById(empId);
-
 		if(!employee){
 			response = webResponse(404, false, "Employee not found.")  
 			res.send(response)
 			return;
 		}
 
-		let existingReqs = await organizationRequests.find({employeeId: empId, status: "0"});
+		let codeData = await Organization.findOne({referCode: req.body.code});
+		if(codeData == null){
+
+			response = webResponse(200, false, "Code not matched.")  
+			res.json(response);
+			return "";
+
+		}
+
+		let existingReqs = await organizationRequests.find({orgId: codeData._id, employeeId: empId, status: "0"});
 
 		if(existingReqs.length != 0){
 			response = webResponse(200, false, "A request is already pending.")  
@@ -676,9 +684,7 @@ router.post("/confirmCode", auth,  async(req, res) => {
 			return "";
 		}
 
-		let codeData = await Organization.findOne({referCode: req.body.code});
-		if(codeData != null){
-	
+		
 		 let data = {
 			orgId: codeData._id,
 			employeeId: empId,
@@ -694,21 +700,14 @@ router.post("/confirmCode", auth,  async(req, res) => {
 			   res.json(response);
 			   return "";
 			}else{
-			   response = webResponse(200, false, "No Matched Code")  
+			   response = webResponse(200, false, "Internal server error.")  
 			   res.json(response);
 			   return "";
 			}
 
 		  });
 
-
-
-	 }else{
-		response = webResponse(200, false, "No Matched Code")  
-		res.json(response);
-		return "";
-	 }
-
+ 
 	} catch(err){ 
 		console.log(err)
 		response = webResponse(403, false, err)  
