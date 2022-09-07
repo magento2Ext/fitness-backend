@@ -751,20 +751,16 @@ router.post('/orgRequestAction', async(req,res) => {
 		
         const reqId = req.body.reqId;
 		const reqDetails = await organizationRequests.findOne({_id: reqId});
-		
+
 		if(reqDetails == null ){
 			res.send('User is already a member of an organization');
 			return;
 		}
-
-		console.log('reqDetails', reqDetails)
+ 
 		const employeeId = reqDetails.employeeId;
 		const orgId = reqDetails.orgId;
-	
 		const empDetails = await Employee.findOne({_id: employeeId});
-
-
-
+		
 	   if(req.body.status == '1') {
 		let orgData = await Organization.findOne({_id: orgId});
 
