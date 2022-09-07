@@ -753,7 +753,6 @@ router.post('/orgRequestAction', async(req,res) => {
 		const employeeId = reqDetails.employeeId;
 		const orgId = reqDetails.orgId;
 	
-
 		const empDetails = await Employee.findOne({_id: employeeId});
 
 	   if(req.body.status == '1') {
@@ -769,7 +768,7 @@ router.post('/orgRequestAction', async(req,res) => {
 
 		await ChatGroup.updateOne({organization_id: String(orgId)}, {$push: {users: String(employeeId)}});
 
-		await organizationRequests.updateOne({_id: reqId}, {$set: {status: req.body.status}});
+		await organizationRequests.deleteMany({employeeId: reqDetails.employeeId});
 
 		let emailContent = "Congratulations! "+ orgData.organizationName + " has approved you as its member";
 		let subject = 'Organization approval'
