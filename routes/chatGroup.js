@@ -271,7 +271,7 @@ router.post('/detail', auth, async(req,res) => {
 			chatGroup.organization_id = empDetails.organizationId
 		}
 
-		if(req.body.id && req.body.id != "0") {
+		if(req.body.id != "0") {
 			const chatGroupDetail = await ChatGroup.findById(req.body.id) 	
 			if(!chatGroupDetail){
 				response = webResponse(404, false, "ChatGroup not found")  
@@ -292,6 +292,8 @@ router.post('/detail', auth, async(req,res) => {
 			chatGroupDetail.challenge= req.body.challenge,
 			chatGroupDetail.users = userArray
 			chatGroupDetail.chat_group_requested_users = requestedUsersArray
+
+			console.log(userArray)
 			
 			await chatGroupDetail.save();
 
