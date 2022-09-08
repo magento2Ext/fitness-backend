@@ -1,17 +1,21 @@
- const express = require("express");
- const router = express.Router()
- const auth = require("../middleware/auth");
- const Chat = require('../models/chat')
- const ChatGroup = require('../models/chat_group')
- const Employee = require('../models/employee')
- const UserChatNode = require('../models/user_chat_nodes')
-  const dateLib = require('date-and-time')
- const admin=require('firebase-admin');
+const express = require("express");
+const router = express.Router()
+const auth = require("../middleware/auth");
+const Chat = require('../models/chat')
+const ChatGroup = require('../models/chat_group')
+const Employee = require('../models/employee')
+const UserChatNode = require('../models/user_chat_nodes')
+const dateLib = require('date-and-time')
+const admin = require('firebase-admin');
 const { errors } = require("formidable");
- 
- 
- var db=admin.database();
-var chatRef=db.ref("chat");
+
+var db = admin.database();
+let FCM = admin.messaging();
+var chatRef = db.ref("chat");
+
+const notification_options = {
+    priority: "high"
+  };
 
 router.post('/save', auth, async(req,res) => {
 	try { 
@@ -417,6 +421,24 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 		return;
 	}
 });
+
+
+app.post('/notification', (req, res)=>{
+    const  registrationToken = 'dr7HnZtuRS-jVDsaKVjr8d:APA91bGknm2a9iV-UOEh-ANl2snUzbFYZPTPHFv9_0WMrRhkk80FTOEbXbO7ojpq2Gafm2MccnLWg5bKzc0L3IsFCpOhqD1qN0dFX1JxpJz05reintP45N0e6DLLaGvuCM-Wm0mv6b5V'
+    const message = req.body.message
+    const options =  notification_options
+    
+      admin.messaging().sendToDevice(registrationToken, message, options)
+      .then( response => {
+
+       res.status(200).send("Notification sent successfully")
+       
+      })
+      .catch( error => {
+          console.log(error);
+      });
+
+})
 
 
 

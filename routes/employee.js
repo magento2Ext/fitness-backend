@@ -8,11 +8,11 @@
  const bcrypt = require('bcryptjs');
  const jwt = require('jsonwebtoken');
  const auth = require("../middleware/auth");
- const dateLib = require('date-and-time')
+ const dateLib = require('date-and-time');
  var ObjectID = require('mongodb').ObjectID;
- const ChatGroup = require('../models/chat_group')
- const SubModule = require('../models/sub_module')
- const organizationRequests = require('../models/orgRequests')
+ const ChatGroup = require('../models/chat_group');
+ const SubModule = require('../models/sub_module');
+ const organizationRequests = require('../models/orgRequests');
 require('../functions')
  
  router.post('/submodule/list', auth, async(req,res) => {
