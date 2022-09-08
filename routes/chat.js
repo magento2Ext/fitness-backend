@@ -442,12 +442,12 @@ router.post('/notification', (req, res)=>{
     
       admin.messaging().sendToDevice(registrationToken, payload, options)
       .then( response => {
-
+		console.log('responseresponse', response);
        res.status(200).send("Notification sent successfully")
        
       })
       .catch( error => {
-          console.log(error);
+          console.log('errorerror', error);
       });
 
 })
