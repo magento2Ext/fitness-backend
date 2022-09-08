@@ -425,13 +425,12 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 
 router.post('/notification', (req, res)=>{
     const  registrationToken = 'dr7HnZtuRS-jVDsaKVjr8d:APA91bGknm2a9iV-UOEh-ANl2snUzbFYZPTPHFv9_0WMrRhkk80FTOEbXbO7ojpq2Gafm2MccnLWg5bKzc0L3IsFCpOhqD1qN0dFX1JxpJz05reintP45N0e6DLLaGvuCM-Wm0mv6b5V'
-    const message = req.body.message
     const options =  notification_options
 
 	const payload = {
 		'notification': {
-		  'title': `Title`,
-		  'body': message,
+		  'title': req.body.title,
+		  'body': req.body.body,
 		}, 
 		// NOTE: The 'data' object is inside payload, not inside notification
 		'data': { 
