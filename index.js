@@ -227,8 +227,6 @@ app.post("/weight", auth, async(req, res) => {
 			
 			var oneMonthAgo = new Date();
 			oneMonthAgo.setDate(oneMonthAgo.getDate() - 29);
-
-			console.log('oneMonthAgo', oneMonthAgo)
        
 			var date = new Date();
 			
@@ -238,7 +236,6 @@ app.post("/weight", auth, async(req, res) => {
 				}
 			}).sort({date:-1});
 
-		
 			const weightLastWeek = await Weight.findOne({ employeeId: empId,
 				date: {
 					$lt: dateLib.format(oneWeekAgo,'YYYY-MM-DD')

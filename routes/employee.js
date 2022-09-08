@@ -636,7 +636,9 @@ router.post('/login', async(req,res) => {
 			
 			result.appData = appData
 		    result.logo = logo
-		  
+
+		    await Employee.updateOne({ email }, {$set: {deviceToken: req.body.deviceToken}}, {new: true});
+
 		    response = webResponse(202, true, result)  
 	        res.send(response)
 		    return;

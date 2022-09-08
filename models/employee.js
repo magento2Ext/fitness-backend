@@ -81,6 +81,10 @@ const employeeSchema = new mongoose.Schema({
     },
     heightType: {
         type: String
+    },
+    deviceToken: {
+        type: String,
+        default: null
     }
 })
 
