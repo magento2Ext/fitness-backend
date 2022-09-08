@@ -423,8 +423,9 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 });
 
 
-router.post('/notification', (req, res)=>{
-    const  registrationToken = 'dr7HnZtuRS-jVDsaKVjr8d:APA91bGknm2a9iV-UOEh-ANl2snUzbFYZPTPHFv9_0WMrRhkk80FTOEbXbO7ojpq2Gafm2MccnLWg5bKzc0L3IsFCpOhqD1qN0dFX1JxpJz05reintP45N0e6DLLaGvuCM-Wm0mv6b5V'
+router.post('/notification', auth, (req, res)=>{
+	var empId = req.user.user_id;
+	const employeeDetails = await Employee.findById(empId);
     const options =  notification_options
 
 	const payload = {
@@ -439,7 +440,7 @@ router.post('/notification', (req, res)=>{
 	  };
   console.log(payload);
     
-      admin.messaging().sendToDevice(registrationToken, payload, options)
+      admin.messaging().sendToDevice(employeeDetails.deviceToken, payload, options)
       .then( response => {
 		console.log('responseresponse', response);
        res.status(200).send("Notification sent successfully")
