@@ -423,7 +423,7 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 });
 
 
-router.post('/notification', auth, async (req, res)=>{
+router.post('/notification', auth, async (req, res) => {
 	var empId = req.user.user_id;
 	const employeeDetails = await Employee.findById(empId);
     const options =  notification_options
@@ -438,7 +438,6 @@ router.post('/notification', auth, async (req, res)=>{
 			  'personSent': 'Hello' 
 		}
 	  };
-  console.log(payload);
     
       admin.messaging().sendToDevice(employeeDetails.deviceToken, payload, options)
       .then( response => {
