@@ -29,7 +29,7 @@ const router = express.Router()
 
                 if(errors.indexOf(recentWeight.weight) === -1){
                     let BMI = await BMI_CAL(recentWeight.weight, emp.height);
-                    sendFCM(emp.deviceToken, BMI.status, BMI.innerText, {BMI: BMI});
+                    sendFCM(emp.deviceToken, BMI.status, BMI.innerText, {"BMI": BMI});
                 
                 }
 
