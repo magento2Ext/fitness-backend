@@ -448,7 +448,7 @@ router.post('/notification', auth, async (req, res) => {
 		}, 
 		// NOTE: The 'data' object is inside payload, not inside notification
 		'data': { 
-			  'personSent': JSON.stringify(data)
+			  'data': JSON.stringify(data)
 		}
 	  };
     
