@@ -79,6 +79,7 @@ function sendFCM(token, title, body, data){
 		'notification': {
 		  'title': title,
 		  'body': body,
+          'imageURL': "https://picsum.photos/id/237/500/300",
 		}, 
 		'data': {'data': data}
 	  };
