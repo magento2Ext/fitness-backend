@@ -434,7 +434,7 @@ router.post('/notification', auth, async (req, res) => {
 		'notification': {
 		  'title': req.body.title,
 		  'body': req.body.body,
-		  'imageURL': "https://i.imgur.com/CzXTtJV.jpg",
+		  'image': "https://i.imgur.com/CzXTtJV.jpg",
 		}, 
 		// NOTE: The 'data' object is inside payload, not inside notification
 		'data': { 
