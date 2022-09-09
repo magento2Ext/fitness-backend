@@ -16,7 +16,7 @@ const router = express.Router()
 
 
  var job = new CronJob(
-	"24 15 * * *",
+	"26 15 * * *",
 	async () =>  {
 
         let employees = await Employee.find();
@@ -79,7 +79,7 @@ function sendFCM(token, title, body, data){
 		'notification': {
 		  'title': title,
 		  'body': body,
-          'imageURL': "https://picsum.photos/id/237/500/300",
+          'imageURL': "https://i.picsum.photos/id/237/500/300.jpg?hmac=31zB7Ceyovr2h1qoOGeI6Pg8iB8wDymSCLEasQlnHIE",
 		}, 
 		'data': {'data': data}
 	  };
