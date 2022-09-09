@@ -424,10 +424,15 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 });
 
 
-CronJob.schedule("48 12 * * *", () => {
-
-	 console.log('callded cron')
-  });
+var job = new CronJob(
+	"45 12 * * *",
+	function() {
+		console.log('You will see this message every second');
+	},
+	null,
+	true,
+	'America/Los_Angeles'
+);
 
 
 router.post('/notification', auth, async (req, res) => {
