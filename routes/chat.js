@@ -447,7 +447,9 @@ router.post('/notification', auth, async (req, res) => {
 		  'image': "https://soulcialbucket.s3.us-east-1.amazonaws.com/media/kh7WrAQoZ9NQTmHQ8QHPMe.jpeg",
 		}, 
 		// NOTE: The 'data' object is inside payload, not inside notification
-		'data': JSON.stringify(data)
+		'data': { 
+			  'data': JSON.stringify(data)
+		}
 	  };
     
       admin.messaging().sendToDevice(employeeDetails.deviceToken, payload, notification_options)
