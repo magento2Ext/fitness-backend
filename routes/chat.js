@@ -434,8 +434,8 @@ router.post('/notification', auth, async (req, res) => {
 		PostType: 'soul_daily_video',
 		PostData: {
 			id: '631741d737a3dd30eeb5592f',
-			image_link: 'https://soulcialbucket.s3.us-east-1.amazonaws.com/media/kh7WrAQoZ9NQTmHQ8QHPMe.jpeg',
-			mediaType: 'audio',
+			post: 'https://soulcialbucket.s3.us-east-1.amazonaws.com/media/jjPUNTiMVNCDDj8NrsDZcp.mp4',
+			mediaType: 'video',
 			name: 'Inspiration for youngsters' 
 		}
 	  }
