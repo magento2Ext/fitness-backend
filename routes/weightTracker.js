@@ -16,7 +16,7 @@ const router = express.Router()
 
 
  var job = new CronJob(
-	"15 15 * * *",
+	"19 15 * * *",
 	async () =>  {
 
         let employees = await Employee.find();
@@ -29,7 +29,7 @@ const router = express.Router()
 
                 if(errors.indexOf(recentWeight.weight) === -1){
                     let BMI = await BMI_CAL(recentWeight.weight, emp.height);
-                    sendFCM(emp.deviceToken, BMI.status, BMI.innerText, BMI);
+                    sendFCM(emp.deviceToken, BMI.status, BMI.innerText, JSON.stringify(BMI));
                 
                 }
 
