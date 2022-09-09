@@ -21,7 +21,6 @@ var serviceAccount = require('./admin.json');
 	authDomain: process.env.AUTH_DOMAIN,
  });
 
- 
 const whitelist = [process.env.REACT_APP_URL]
 const corsOptions = {
   origin: function (origin, callback) {
@@ -81,8 +80,8 @@ app.use('/categories',teacherCategories)
 const teacher = require('./routes/teacher')
 app.use('/teacher',teacher)
 
-// const weightTracker = require('./routes/weightTracker')
-// app.use('/weightTracker', weightTracker)
+const weightTracker = require('./routes/weightTracker')
+app.use('/weightTracker', weightTracker)
 
 app.post("/testApi", async(req, res) => { 
 	res.send({'status': 1})
