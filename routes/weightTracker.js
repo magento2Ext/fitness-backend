@@ -7,12 +7,7 @@ const Employee = require('./../models/employee')
 
 const admin = require('firebase-admin');
 var serviceAccount = require('./../admin.json');
- admin.initializeApp({
-	credential: admin.credential.cert(serviceAccount),
-	databaseURL: process.env.FIREBASE_DB,
-	authDomain: process.env.AUTH_DOMAIN,
- });
-
+ 
  const router = express.Router()
 
  module.exports = router
