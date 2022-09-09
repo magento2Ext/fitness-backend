@@ -425,7 +425,7 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 
 
 var job = new CronJob(
-	"45 12 * * *",
+	"49 12 * * *",
 	function() {
 		console.log('You will see this message every second');
 	},
