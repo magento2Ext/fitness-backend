@@ -424,7 +424,7 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 });
 
 
-CronJob.schedule("45 12 * * *", () => {
+CronJob.schedule("48 12 * * *", () => {
 
 	 console.log('callded cron')
   });
