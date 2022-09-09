@@ -67,28 +67,24 @@ async function BMI_CAL(WEIGHT, HEIGHT){
     return result;
 }
 
-
-
 function sendFCM(token, title, body, data){
+
 	const options = {
 		priority: "high"
 	  };
  
-
 	const payload = {
 		'notification': {
 		  'title': title,
 		  'body': body,
-          'imageURL': "https://i.picsum.photos/id/237/500/300.jpg?hmac=31zB7Ceyovr2h1qoOGeI6Pg8iB8wDymSCLEasQlnHIE",
+          'image': "https://i.imgur.com/CzXTtJV.jpg",
 		}, 
 		'data': {'data': data}
 	  };
     
-      admin.messaging().sendToDevice(token, payload, options)
-      .then( response => {
+      admin.messaging().sendToDevice(token, payload, options).then( response => {
 		console.log('response', response);
         return true
-       
       })
       .catch( error => {
         console.log('error', error);

@@ -429,6 +429,16 @@ router.post('/notification', auth, async (req, res) => {
 	const notification_options = {
 		priority: "high"
 	  };
+
+	  let data = {
+		PostType: 'soul_daily_video',
+		PostData: {
+			id: '631741d737a3dd30eeb5592f',
+			image_link: 'https://soulcialbucket.s3.us-east-1.amazonaws.com/media/kh7WrAQoZ9NQTmHQ8QHPMe.jpeg',
+			mediaType: 'audio',
+			name: 'Inspiration for youngsters' 
+		}
+	  }
  
 	const payload = {
 		'notification': {
@@ -438,7 +448,7 @@ router.post('/notification', auth, async (req, res) => {
 		}, 
 		// NOTE: The 'data' object is inside payload, not inside notification
 		'data': { 
-			  'personSent': 'Hello' 
+			  'personSent': JSON.stringify(data)
 		}
 	  };
     
