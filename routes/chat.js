@@ -423,22 +423,13 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 	}
 });
 
-
-var job = new CronJob(
-	"51 12 * * *",
-	function() {
-		console.log('You will see this message every second');
-	},
-	null,
-	true
-);
-
-
 router.post('/notification', auth, async (req, res) => {
 	var empId = req.user.user_id;
 	const employeeDetails = await Employee.findById(empId);
-    const options =  notification_options
-
+	const notification_options = {
+		priority: "high"
+	  };
+ 
 	const payload = {
 		'notification': {
 		  'title': req.body.title,
@@ -450,7 +441,7 @@ router.post('/notification', auth, async (req, res) => {
 		}
 	  };
     
-      admin.messaging().sendToDevice(employeeDetails.deviceToken, payload, options)
+      admin.messaging().sendToDevice(employeeDetails.deviceToken, payload, notification_options)
       .then( response => {
 		console.log('responseresponse', response);
        res.status(200).send("Notification sent successfully")
