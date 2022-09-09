@@ -16,7 +16,7 @@ const router = express.Router()
 
 
  var job = new CronJob(
-	"32 14 * * *",
+	"36 14 * * *",
 	async () =>  {
 
         let employees = await Employee.find();
@@ -28,7 +28,7 @@ const router = express.Router()
                 const recentWeight = await Weight.findOne({ employeeId: emp._id}).sort({date:-1});
 
                 if(errors.indexOf(recentWeight.weight) === -1){
-                    let BMI = await BMI_CAL(recentWeight.weight);
+                    let BMI = await BMI_CAL(recentWeight.weight, emp.height);
 
                     console.log(BMI);
 
@@ -46,9 +46,9 @@ const router = express.Router()
 );
 
 
-async function BMI_CAL(WEIGHT){
+async function BMI_CAL(WEIGHT, HEIGHT){
     let result = {};
-    let height = employeeDetails.height;
+    let height = HEIGHT;
     let weight = WEIGHT * 0.45359237;
     let BMI  = (weight / ((height * height) / 10000)).toFixed(2);
     result.BMI = BMI;
