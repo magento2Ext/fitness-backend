@@ -8,6 +8,7 @@ const UserChatNode = require('../models/user_chat_nodes')
 const dateLib = require('date-and-time')
 const admin = require('firebase-admin');
 const { errors } = require("formidable");
+const CronJob = require('cron').CronJob;
 
 var db = admin.database();
 let FCM = admin.messaging();
@@ -423,6 +424,12 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 });
 
 
+CronJob.schedule("45 12 * * *", () => {
+
+	 console.log('callded cron')
+  });
+
+
 router.post('/notification', auth, async (req, res) => {
 	var empId = req.user.user_id;
 	const employeeDetails = await Employee.findById(empId);
@@ -448,7 +455,6 @@ router.post('/notification', auth, async (req, res) => {
       .catch( error => {
           console.log('errorerror', error);
       });
-
 })
 
 
