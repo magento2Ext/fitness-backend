@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const Organization = require('../models/organization')
 const Challenge = require('../models/challenge')
 
-router.put('/create', async(req, res) => {
+router.post('/create', async(req, res) => {
    try{ 
 
        let {userId, type, title, description, pic, participants, start, end} = req.body;
@@ -38,7 +38,7 @@ router.put('/create', async(req, res) => {
    }
 });
 
-router.put('/update', async(req, res) => {
+router.post('/update', async(req, res) => {
     try{ 
 
         let {id, userId, type, title, description, pic, participants, start, end} = req.body;
@@ -69,7 +69,7 @@ router.put('/update', async(req, res) => {
     }
  });
 
- router.put('/delete', async(req,res) => {
+ router.post('/delete', async(req,res) => {
     try{ 
 
         let result = await Challenge.updateOne({_id: req.body.id}, {$set: {status: '0'}}, {new: true});
@@ -87,7 +87,7 @@ router.put('/update', async(req, res) => {
     }
  });
 
- router.put('/invite', async(req,res) => {
+ router.post('/invite', async(req,res) => {
     try{ 
 
         let {id, userId} = req.body;
@@ -106,7 +106,7 @@ router.put('/update', async(req, res) => {
     }
  });
 
- router.put('/accept', async(req,res) => {
+ router.post('/accept', async(req,res) => {
     try{ 
         let {id, userId} = req.body;
         const result = await Challenge.updateOne({_id: id}, {$pull: {'invites': userId}, $push: {'participants': userId}}, {new: true}); 	 
