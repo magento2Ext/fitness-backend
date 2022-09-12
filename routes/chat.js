@@ -432,7 +432,7 @@ router.post('/notification', auth, async (req, res) => {
 
 	  let data = {
 		postType: 'yoga',
-		id: '63173d3670b74b82db24186d',
+		catId: '63173cdb70b74b82db241869',
 		post: 'https://soulcialbucket.s3.us-east-1.amazonaws.com/media/e3z4HZU11G6f3wmDSKDCJF.mp4',
 		mediaType: 'video',
 		name: 'Soul Peace',
