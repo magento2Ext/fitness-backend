@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Organization = require('../models/organization')
 const Challenge = require('../models/challenge')
+const auth = require("../middleware/auth");
 
 router.post('/create', async(req, res) => {
    try{ 
