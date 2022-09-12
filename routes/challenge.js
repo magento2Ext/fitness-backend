@@ -133,7 +133,7 @@ router.post('/listAll', async(req,res) => {
             {$set: {userId: {$toObjectId: "$userId"} }},
             {
                 $lookup: {
-                    from: "employee",
+                    from: "employees",
                     localField: "_id",
                     foreignField: "userId",
                     as: "user",
