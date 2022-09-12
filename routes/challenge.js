@@ -175,11 +175,11 @@ router.post('/myChallenges', auth, async(req, res) => {
             // Unwind the result arrays ( likely one or none )
             { "$unwind": "$participantsObjects" },
             // Group back to arrays
-            { "$group": {
-                "_id": "$_id",
-                "participants": { "$push": "$participants" },
-                "participantsObjects": { "$push": "$participantsObjects" }
-            }}
+            // { "$group": {
+            //     "_id": "$_id",
+            //     "participants": { "$push": "$participants" },
+            //     "participantsObjects": { "$push": "$participantsObjects" }
+            // }}
         ])
 
         if(result){
