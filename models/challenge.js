@@ -1,0 +1,56 @@
+const mongoose = require('mongoose')
+
+
+const challengeSchema = new mongoose.Schema({
+
+    userId: {
+        type: String,
+        required: true,
+		default: null
+    },
+    type: {
+        type: String,
+        required: true,
+        default: null
+    },
+    title: {
+        type: String,
+        required: true,
+        default: null
+    },
+    description: {
+        type: String,
+        required: true,
+        default: null
+    },
+    pic: {
+        type: String,
+        required: true,
+        default: null
+    },
+    participants: {
+        type: [],
+        default: []
+    },
+    invites: {
+        type: [],
+        default: []
+    },
+    start: {
+        type: String,
+        required: true,
+        default: null
+    },
+    end: {
+        type: String,
+        required: true,
+        default: null
+    },
+    status: {
+        type: String,
+        required: true,
+        default: '1'
+    }
+})
+
+module.exports = mongoose.model('Challenge', challengeSchema)

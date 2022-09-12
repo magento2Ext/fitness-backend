@@ -1,0 +1,132 @@
+const express = require("express");
+const router = express.Router()
+const Admin = require('../models/admin')
+const Theme = require('../models/theme_setting')
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const Organization = require('../models/organization')
+const Challenge = require('../models/challenge')
+
+router.put('/create', async(req, res) => {
+   try{ 
+
+       let {userId, type, title, description, pic, participants, start, end} = req.body;
+       let data = {
+                userId: userId,
+                type: type,
+                title: title,
+                description: description,
+                pic: pic,
+                participants: participants,
+                start: start,
+                end: end
+       }
+
+       let newChallenge = new Challenge(data);
+       let result = await newChallenge.save();
+
+       if(result){
+        response = webResponse(202, true, result)  
+        res.send(response)
+       }else{
+        response = webResponse(202, false, 'Error saving challenge')  
+        res.send(response)
+       }
+ 
+   }catch(err){ console.log(err)
+       res.send(err)
+   }
+});
+
+router.put('/update', async(req, res) => {
+    try{ 
+
+        let {id, userId, type, title, description, pic, participants, start, end} = req.body;
+        let data = {
+                 userId: userId,
+                 type: type,
+                 title: title,
+                 description: description,
+                 pic: pic,
+                 participants: participants,
+                 start: start,
+                 end: end
+        }
+ 
+ 
+        let result = await Challenge.updateOne({_id: id}, {$set: data}, {new: true});
+ 
+        if(result){
+         response = webResponse(202, true, result)  
+         res.send(response)
+        }else{
+         response = webResponse(202, false, 'Error saving challenge')  
+         res.send(response)
+        }
+  
+    }catch(err){ console.log(err)
+        res.send(err)
+    }
+ });
+
+ router.put('/delete', async(req,res) => {
+    try{ 
+
+        let result = await Challenge.updateOne({_id: req.body.id}, {$set: {status: '0'}}, {new: true});
+ 
+        if(result){
+         response = webResponse(202, true, result)  
+         res.send(response)
+        }else{
+         response = webResponse(202, false, 'Error saving challenge')  
+         res.send(response)
+        }
+  
+    }catch(err){ console.log(err)
+        res.send(err)
+    }
+ });
+
+ router.put('/invite', async(req,res) => {
+    try{ 
+
+        let {id, userId} = req.body;
+        const result = await Challenge.updateOne({_id: id}, {$push: {invites: userId}}, {new: true}); 	 
+       
+        if(result){
+            response = webResponse(202, true, result)  
+            res.send(response)
+           }else{
+            response = webResponse(202, false, 'Error saving challenge')  
+            res.send(response)
+           }
+    }catch(err){ console.log(err)
+        res.send(err)
+        //res.json(err)
+    }
+ });
+
+ router.put('/accept', async(req,res) => {
+    try{ 
+        let {id, userId} = req.body;
+        const result = await Challenge.updateOne({_id: id}, {$pull: {'invites': userId}}, {new: true}); 	 
+       
+        if(result){
+            response = webResponse(202, true, result)  
+            res.send(response)
+           }else{
+            response = webResponse(202, false, 'Error saving challenge')  
+            res.send(response)
+           }
+    }catch(err){ console.log(err)
+        res.send(err)
+        //res.json(err)
+    }
+    }catch(err){ console.log(err)
+        res.send(err)
+        //res.json(err)
+    }
+ });
+
+
+module.exports = router
