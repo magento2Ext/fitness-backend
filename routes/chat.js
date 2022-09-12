@@ -431,11 +431,11 @@ router.post('/notification', auth, async (req, res) => {
 	  };
 
 	  let data = {
-		postType: 'soul_daily_video',
-		id: '631741d737a3dd30eeb5592f',
-		post: 'https://soulcialbucket.s3.us-east-1.amazonaws.com/media/jjPUNTiMVNCDDj8NrsDZcp.mp4',
+		postType: 'yoga',
+		id: '63173d3670b74b82db24186d',
+		post: 'https://soulcialbucket.s3.us-east-1.amazonaws.com/media/e3z4HZU11G6f3wmDSKDCJF.mp4',
 		mediaType: 'video',
-		name: 'Inspiration for youngsters',
+		name: 'Soul Peace',
 		notificationType: "soul_guided_meditation" 
 	}
  
