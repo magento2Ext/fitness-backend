@@ -175,10 +175,16 @@ router.post('/myChallenges', auth, async(req, res) => {
             { "$unwind": "$participantsObjects" },
             { "$group": {
                 "_id": "$_id",
-                "participants": { "$push": "$participants" },
-                "participantsObjects": { "$push": "$participantsObjects" }
-            }},
-            {"$replaceRoot":{"newRoot":"$doc"}}
+                "participantsObjects": { "$push": "$participantsObjects" },
+                "userId": "$userId",
+                "type": "$type",
+                "title": "$title",
+                "description": "#description",
+                "pic": "$pic",
+                "start": "$start",
+                "end": "$end"
+
+            }}
         ])
 
         if(result){
