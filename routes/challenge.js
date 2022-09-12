@@ -176,13 +176,13 @@ router.post('/myChallenges', auth, async(req, res) => {
             { "$group": {
                 "_id": "$_id",
                 "participantsObjects": { "$push": "$participantsObjects" },
-                // "userId": "$userId",
-                // "type": "$type",
-                // "title": "$title",
-                // "description": "#description",
-                // "pic": "$pic",
-                // "start": "$start",
-                // "end": "$end"
+                "userId": { $first: "$userId"},
+                "type": { $first: "$type"},
+                "title": { $first: "$title"},
+                "description": { $first: "#description"},
+                "pic": { $first: "$pic"},
+                "start": { $first: "$start"},
+                "end": { $first: "$end"}
 
             }}
         ])
