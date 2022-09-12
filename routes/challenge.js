@@ -125,4 +125,35 @@ router.post('/update', async(req, res) => {
 });
 
 
+
+router.post('/listAll', async(req,res) => {
+    try{ 
+        
+        const result = await Challenge.aggregate([
+           
+            {
+                $lookup: {
+                    from: "employees",
+                    localField: "_id",
+                    foreignField: "userId",
+                    as: "user",
+                }
+            }
+    
+        ]); 	
+
+        if(result){
+            response = webResponse(202, true, result)  
+            res.send(response)
+           }else{
+            response = webResponse(202, false, 'Error saving challenge')  
+            res.send(response)
+           }
+    }catch(err){ console.log(err)
+        res.send(err)
+        //res.json(err)
+    };
+});
+
+
 module.exports = router
