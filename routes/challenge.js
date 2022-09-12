@@ -131,13 +131,11 @@ router.post('/listAll', async(req,res) => {
         
         const result = await Challenge.aggregate([
            
-            {
-                $lookup: {
-                    from: "employees",
-                    localField: "userId",
-                    foreignField: "_id",
-                    as: "user",
-                }
+            $lookup: {
+                from: "employees",
+                localField: "_id",
+                foreignField: "userId",
+                as: "user",
             }
     
         ]); 	
