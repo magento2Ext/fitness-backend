@@ -163,7 +163,7 @@ router.post('/myChallenges', auth, async(req, res) => {
         var empId = req.user.user_id;
         const _userId = new ObjectID(req.body.empId);
         const result =  await Challenge.aggregate([
-            {$match: {$in : {participants: [req.body.empId]}}},
+            {$match: {$in : {participants: [empId]}}},
             { "$unwind": "$participants" },
             {$set: {participants: {$toObjectId: "$participants"} }},
             { "$lookup": {
