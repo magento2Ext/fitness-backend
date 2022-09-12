@@ -134,8 +134,8 @@ router.post('/listAll', async(req,res) => {
             {
                 $lookup: {
                     from: "employees",
-                    localField: "_id",
-                    foreignField: "userId",
+                    localField: "userId",
+                    foreignField: "_id",
                     as: "user",
                 }
             }
