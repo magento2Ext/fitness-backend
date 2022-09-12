@@ -126,7 +126,7 @@ router.post('/update', async(req, res) => {
 
 
 
-router.post('/listAll', async(req,res) => {
+router.post('/listAll', async(req, res) => {
     try{ 
         
         const result = await Challenge.aggregate([
@@ -140,6 +140,46 @@ router.post('/listAll', async(req,res) => {
                 }
             }
         ]); 	
+
+        if(result){
+            response = webResponse(202, true, result)  
+            res.send(response)
+           }else{
+            response = webResponse(202, false, 'Error saving challenge')  
+            res.send(response)
+           }
+    }catch(err){ console.log(err)
+        res.send(err)
+        //res.json(err)
+    };
+});
+
+
+router.post('/myChallenges', auth, async(req, res) => {
+    try{ 
+        
+        var empId = req.user.user_id;
+        const _userId = new ObjectID(req.body.empId);
+        const result =  await Challenge.aggregate([
+            // Unwind the source
+            { "$unwind": "$participants" },
+            {$set: {participants: {$toObjectId: "$participants"} }},
+            // Do the lookup matching
+            { "$lookup": {
+               "from": "employees",
+               "localField": "participants",
+               "foreignField": "_id",
+               "as": "participantsObjects"
+            }},
+            // Unwind the result arrays ( likely one or none )
+            { "$unwind": "$participantsObjects" },
+            // Group back to arrays
+            { "$group": {
+                "_id": "$_id",
+                "participants": { "$push": "$participants" },
+                "participantsObjects": { "$push": "$participantsObjects" }
+            }}
+        ])
 
         if(result){
             response = webResponse(202, true, result)  
