@@ -435,7 +435,8 @@ router.post('/notification', auth, async (req, res) => {
 		id: '631741d737a3dd30eeb5592f',
 		post: 'https://soulcialbucket.s3.us-east-1.amazonaws.com/media/jjPUNTiMVNCDDj8NrsDZcp.mp4',
 		mediaType: 'video',
-		name: 'Inspiration for youngsters' 
+		name: 'Inspiration for youngsters',
+		notificationType: "soul_guided_meditation" 
 	}
  
 	const payload = {

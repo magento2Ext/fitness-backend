@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 
-
 const challengeSchema = new mongoose.Schema({
 
     userId: {
@@ -37,12 +36,11 @@ const challengeSchema = new mongoose.Schema({
         default: []
     },
     start: {
-        type: String,
-        required: true,
-        default: null
+        type: Date,
+        required: true
     },
     end: {
-        type: String,
+        type: Date,
         required: true,
         default: null
     },
