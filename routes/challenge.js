@@ -109,7 +109,7 @@ router.put('/update', async(req, res) => {
  router.put('/accept', async(req,res) => {
     try{ 
         let {id, userId} = req.body;
-        const result = await Challenge.updateOne({_id: id}, {$pull: {'invites': userId}}, {new: true}); 	 
+        const result = await Challenge.updateOne({_id: id}, {$pull: {'invites': userId}, $push: {'participants': userId}}, {new: true}); 	 
        
         if(result){
             response = webResponse(202, true, result)  
@@ -121,12 +121,8 @@ router.put('/update', async(req, res) => {
     }catch(err){ console.log(err)
         res.send(err)
         //res.json(err)
-    }
-    }catch(err){ console.log(err)
-        res.send(err)
-        //res.json(err)
-    }
- });
+    };
+});
 
 
 module.exports = router
