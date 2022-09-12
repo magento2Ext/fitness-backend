@@ -163,19 +163,16 @@ router.post('/myChallenges', auth, async(req, res) => {
         var empId = req.user.user_id;
         const _userId = new ObjectID(req.body.empId);
         const result =  await Challenge.aggregate([
-            // Unwind the source
+            {$match: {$in : {participants: [req.body.empId]}}},
             { "$unwind": "$participants" },
             {$set: {participants: {$toObjectId: "$participants"} }},
-            // Do the lookup matching
             { "$lookup": {
                "from": "employees",
                "localField": "participants",
                "foreignField": "_id",
                "as": "participantsObjects"
             }},
-            // Unwind the result arrays ( likely one or none )
             { "$unwind": "$participantsObjects" },
-            // Group back to arrays
             { "$group": {
                 "_id": "$_id",
                 "participants": { "$push": "$participants" },
