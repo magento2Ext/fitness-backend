@@ -177,7 +177,8 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "_id": "$_id",
                 "participants": { "$push": "$participants" },
                 "participantsObjects": { "$push": "$participantsObjects" }
-            }}
+            }},
+            {"$replaceRoot":{"newRoot":"$doc"}}
         ])
 
         if(result){
