@@ -45,7 +45,7 @@ const router = express.Router()
 
 
 var job = new CronJob(
-	"47 18 * * *",
+	"49 18 * * *",
 	async () =>  {
         console.log('entering here');
         let employees = await Employee.find();
