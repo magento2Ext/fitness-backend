@@ -61,7 +61,7 @@ var job = new CronJob(
                 });
 
                 if(weightToday == null){
-                    sendFCM(emp.deviceToken, 'Weight Reminder', "It seems like you forgot to add today's weight", JSON.stringify({'data': '0'}));
+                    sendFCM(emp.deviceToken, 'Weight Reminder', "It seems like you forgot to add today's weight", '');
                 }
             }
 
