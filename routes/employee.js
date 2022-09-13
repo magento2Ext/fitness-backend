@@ -764,9 +764,10 @@ router.post('/orgRequestAction', async(req,res) => {
 		const employeeId = reqDetails.employeeId;
 		const orgId = reqDetails.orgId;
 		const empDetails = await Employee.findOne({_id: employeeId});
-		
-	   if(req.body.status == '1') {
 		let orgData = await Organization.findOne({_id: orgId});
+
+	   if(req.body.status == '1') {
+		
 
 		let data = {
 			is_exclusive: true,
@@ -791,6 +792,14 @@ router.post('/orgRequestAction', async(req,res) => {
 		response = webResponse(202, true, 'Success');
 		res.send(response);
 	   }else{
+
+		let emailContent = "Oops! "+ orgData.organizationName + " Organization has rejected your joing request, you may try again!";
+		let subject = 'Joining request rejected!'
+		sendEmail(empDetails.email, subject, emailContent);
+     
+		if(errors.indexOf(empDetails.deviceToken) == -1){
+		   sendFCM(empDetails.deviceToken, 'Joining request rejected!', 'Oops! '+ orgData.organizationName + ' Organization has rejected your joing request, you may try again!');
+		}
 
 		await organizationRequests.updateOne({_id: reqId}, {$set: {status: req.body.status}});
 		response = webResponse(202, true, 'Success');
