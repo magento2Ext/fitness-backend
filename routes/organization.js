@@ -15,6 +15,7 @@
  const auth = require("../middleware/auth");
  var ObjectID = require('mongodb').ObjectID;
  require('../functions')
+ const sendFCM = require('./fcm');
  
  const admin=require('firebase-admin');
  var db=admin.database();
@@ -757,7 +758,7 @@ router.post("/swicthOrg", auth,  async(req, res) => {
 			response = webResponse(202, true, result);  
 			res.json(response);
 			return "";
-		}, 1000);
+		}, 200);
 
 	} catch(err){ 
 		console.log(err)
@@ -789,6 +790,5 @@ router.post("/swicthOrg", auth,  async(req, res) => {
 // 	}
 
 // })
-
 
  module.exports = router
