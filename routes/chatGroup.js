@@ -258,7 +258,7 @@ router.post('/detail', auth, async(req,res) => {
  router.post('/save', auth, async(req,res) => {
 	try{ 
 		
-		console.log('differencedifference', req.body);
+ 
 
 	    var empId = req.user.user_id;
 		const empDetails = await Employee.findOne({_id: empId});
@@ -276,7 +276,7 @@ router.post('/detail', auth, async(req,res) => {
 		}
 
 		if(req.body.id != "0") {
-			console.log('differencedifference', req.body.chat_group_requested_users);
+			console.log('1')
 			const chatGroupDetail = await ChatGroup.findById(req.body.id);
 			const existingUsers = chatGroupDetail.chat_group_requested_users;
 			let difference = req.body.chat_group_requested_users.filter(x => !existingUsers.includes(x));
@@ -325,7 +325,7 @@ router.post('/detail', auth, async(req,res) => {
 			}, 500);
 
 		}else{
-
+            console.log('2')
 			if(req.body.users) {
 				var users = req.body.users
 				var userArray = users.split(',');
