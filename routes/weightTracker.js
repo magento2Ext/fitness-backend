@@ -45,7 +45,7 @@ const router = express.Router()
 
 
 var job = new CronJob(
-	"56 10 * * *",
+	"40 11 * * *",
 	async () =>  {
 
         let employees = await Employee.find();
@@ -54,7 +54,7 @@ var job = new CronJob(
 
             if(errors.indexOf(emp.deviceToken) === -1){
                 let today = new Date();
-                const weightToday = await Weight.findOne({ employeeId: empId,
+                const weightToday = await Weight.findOne({ employeeId: emp._id,
                     date: {
                         $eq: dateLib.format(today,'YYYY-MM-DD')
                     }
