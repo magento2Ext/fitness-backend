@@ -276,12 +276,15 @@ router.post('/detail', auth, async(req,res) => {
 		}
 
 		if(req.body.id != "0") {
+
+			var requestedUsers = req.body.chat_group_requested_users
+			var requestedUsersArray = requestedUsers.split(',');
 		
 			const chatGroupDetail = await ChatGroup.findOne({_id: req.body.id});
 
 			const existingUsers = chatGroupDetail.chat_group_requested_users;
-			let difference = req.body.chat_group_requested_users.filter(x => !existingUsers.includes(x));
-			console.log(difference, req.body.chat_group_requested_users, existingUsers)
+			let difference = requestedUsersArray.filter(x => !existingUsers.includes(x));
+			console.log(difference, requestedUsersArray, existingUsers)
 			 
 
 			if(!chatGroupDetail){
@@ -295,8 +298,7 @@ router.post('/detail', auth, async(req,res) => {
 			   userArray = users.split(',');
 			}
  
-			var requestedUsers = req.body.chat_group_requested_users
-			var requestedUsersArray = requestedUsers.split(',');
+
 			
 			chatGroupDetail.group_name= req.body.group_name,
 			chatGroupDetail.group_picture= req.body.group_picture,
