@@ -780,12 +780,12 @@ router.post('/orgRequestAction', async(req,res) => {
 
 		await organizationRequests.deleteMany({employeeId: reqDetails.employeeId});
 
-		let emailContent = "Congratulations! "+ orgData.organizationName + " has approved you as its member";
-		let subject = 'Organization approval'
+		let emailContent = "Congratulations! "+ orgData.organizationName + " has accepted your joing request, you are now a member in this organization.";
+		let subject = 'Joining request accepted!'
 		sendEmail(empDetails.email, subject, emailContent);
      
 		if(errors.indexOf(empDetails.deviceToken) == -1){
-		   sendFCM(empDetails.deviceToken, 'Congratulations!', orgData.organizationName + ' has accepted your request. You are now member of this organization.');
+		   sendFCM(empDetails.deviceToken, 'Joining request accepted!', 'Congratulations! '+ orgData.organizationName + ' has accepted your joing request, you are now a member in this organization.');
 		}
 
 		response = webResponse(202, true, 'Success');
