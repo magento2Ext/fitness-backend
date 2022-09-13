@@ -14,6 +14,8 @@
  const SubModule = require('../models/sub_module');
  const organizationRequests = require('../models/orgRequests');
 require('../functions')
+const sendFCM = require('./fcm');
+const errors = ['', '0', 0, null, undefined];
  
  router.post('/submodule/list', auth, async(req,res) => {
     try{
@@ -781,6 +783,10 @@ router.post('/orgRequestAction', async(req,res) => {
 		let emailContent = "Congratulations! "+ orgData.organizationName + " has approved you as its member";
 		let subject = 'Organization approval'
 		sendEmail(empDetails.email, subject, emailContent);
+     
+		if(errors.indexOf(empDetails.deviceToken) == -1){
+		   sendFCM(empDetails.deviceToken, 'Congratulations!', orgData.organizationName + ' has accepted your request. You are now member of this organization.');
+		}
 
 		response = webResponse(202, true, 'Success');
 		res.send(response);
