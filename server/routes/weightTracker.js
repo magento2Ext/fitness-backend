@@ -47,12 +47,13 @@ const router = express.Router()
 var job = new CronJob(
 	"47 18 * * *",
 	async () =>  {
-
+        console.log('entering here');
         let employees = await Employee.find();
-
+        console.log('entering here 1');
         employees.forEach( async (emp) => {
-
+           
             if(errors.indexOf(emp.deviceToken) === -1){
+                console.log('entering here 2');
                 let today = new Date();
                 const weightToday = await Weight.findOne({ employeeId: emp._id,
                     date: {
