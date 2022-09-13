@@ -257,9 +257,8 @@ router.post('/detail', auth, async(req,res) => {
  
  router.post('/save', auth, async(req,res) => {
 	try{ 
-
-
-	
+		
+		console.log('differencedifference', req.body);
 
 	    var empId = req.user.user_id;
 		const empDetails = await Employee.findOne({_id: empId});
