@@ -257,10 +257,7 @@ router.post('/detail', auth, async(req,res) => {
  
  router.post('/save', auth, async(req,res) => {
 	try{ 
-		 
 
-		////
-		console.log('req.body', req.body);
 	    var empId = req.user.user_id;
 		const empDetails = await Employee.findOne({_id: empId});
 		const chatGroup = new ChatGroup({
@@ -340,7 +337,13 @@ router.post('/detail', auth, async(req,res) => {
 				var requestedUsersArray = requestedUsers.split(',');
 				chatGroup.chat_group_requested_users = requestedUsersArray
 			}
+
 			const chatGroupDetail =  await chatGroup.save() 
+			requestedUsersArray.forEach( async (id) => {
+                let EMPLOYEE = await Employee.findOne({_id: id});
+				if(errors.indexOf(EMPLOYEE.deviceToken) == -1)	sendFCM(EMPLOYEE.deviceToken, 'Group Invitation', 'You have recieved a group invitation.')
+			})
+
 			var groupId = chatGroupDetail._id
 			
 			var firebaseData = {}
