@@ -258,7 +258,7 @@ router.post('/detail', auth, async(req,res) => {
  router.post('/save', auth, async(req,res) => {
 	try{ 
 		
-       console.log(req.body)
+       
 
 	    var empId = req.user.user_id;
 		const empDetails = await Employee.findOne({_id: empId});
@@ -298,16 +298,12 @@ router.post('/detail', auth, async(req,res) => {
 			   userArray = users.split(',');
 			}
  
-
-			
 			chatGroupDetail.group_name= req.body.group_name,
 			chatGroupDetail.group_picture= req.body.group_picture,
 			chatGroupDetail.challenge= req.body.challenge,
 			chatGroupDetail.users = userArray
 			chatGroupDetail.chat_group_requested_users = requestedUsersArray
 
-			console.log(userArray)
-			
 			await chatGroupDetail.save();
 
 			difference.forEach( async (id) => {
