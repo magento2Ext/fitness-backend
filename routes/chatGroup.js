@@ -276,11 +276,12 @@ router.post('/detail', auth, async(req,res) => {
 		}
 
 		if(req.body.id != "0") {
+			console.log('differencedifference', req.body.chat_group_requested_users);
 			const chatGroupDetail = await ChatGroup.findById(req.body.id);
 			const existingUsers = chatGroupDetail.chat_group_requested_users;
 			let difference = req.body.chat_group_requested_users.filter(x => !existingUsers.includes(x));
 
-			console.log('differencedifference', difference, req.body.chat_group_requested_users, existingUsers);
+			 
 
 			if(!chatGroupDetail){
 				response = webResponse(404, false, "ChatGroup not found")  
