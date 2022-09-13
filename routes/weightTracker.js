@@ -10,6 +10,7 @@ var serviceAccount = require('./../admin.json');
 const CronJob = require('cron').CronJob;
 const { TimestreamQuery } = require("aws-sdk");
 const errors = ['', '0', 0, null, undefined];
+const sendFCM = require('./fcm');
 
 let FCM = admin.messaging(); 
 const router = express.Router()
@@ -30,7 +31,6 @@ const router = express.Router()
                 if(errors.indexOf(recentWeight.weight) === -1){
                     let BMI = await BMI_CAL(recentWeight.weight, emp.height);
                     sendFCM(emp.deviceToken, BMI.status, BMI.innerText, JSON.stringify(BMI));
-                
                 }
 
             }
@@ -67,31 +67,29 @@ async function BMI_CAL(WEIGHT, HEIGHT){
     return result;
 }
 
-function sendFCM(token, title, body, data){
 
-	const options = {
-		priority: "high"
-	  };
- 
-	const payload = {
-		'notification': {
-		  'title': title,
-		  'body': body,
-          'image': "https://i.imgur.com/CzXTtJV.jpg",
-		}, 
-		'data': {'data': data}
-	  };
+
+router.post('/sendPush', async(req,res) => {
+
+    let employees = await Employee.find();
+
+    employees.forEach( async (emp) => {
+
+        if(errors.indexOf(emp.deviceToken) === -1){
+
+            const recentWeight = await Weight.findOne({ employeeId: emp._id}).sort({date:-1});
+
+            if(errors.indexOf(recentWeight.weight) === -1){
+                let BMI = await BMI_CAL(recentWeight.weight, emp.height);
+                sendFCM(emp.deviceToken, BMI.status, BMI.innerText, JSON.stringify(BMI));
+            }
+
+        }
+
+    })
     
-      admin.messaging().sendToDevice(token, payload, options).then( response => {
-		console.log('response', response);
-        return true
-      })
-      .catch( error => {
-        console.log('error', error);
-        return false
-      });
-}
-
+})
+ 
 
  
  module.exports = router
