@@ -4,13 +4,15 @@
  const Employee = require('../models/employee')
  const auth = require("../middleware/auth");
  var ObjectID = require('mongodb').ObjectID;
+ const sendFCM = require('./fcm');
  require('../functions')
 
  const admin=require('firebase-admin');
  
  var db=admin.database();
  var chatRef=db.ref("chat");
- 
+ const errors = ['', '0', 0, null, undefined];
+
  router.post('/employee/list', auth, async(req,res) => {
  
     try{
@@ -255,6 +257,9 @@ router.post('/detail', auth, async(req,res) => {
  
  router.post('/save', auth, async(req,res) => {
 	try{ 
+		 
+
+		////
 		console.log('req.body', req.body);
 	    var empId = req.user.user_id;
 		const empDetails = await Employee.findOne({_id: empId});
@@ -272,7 +277,10 @@ router.post('/detail', auth, async(req,res) => {
 		}
 
 		if(req.body.id != "0") {
-			const chatGroupDetail = await ChatGroup.findById(req.body.id) 	
+			const chatGroupDetail = await ChatGroup.findById(req.body.id);
+			const existingUsers = chatGroupDetail.chat_group_requested_users;
+			let difference = req.body.chat_group_requested_users.filter(x => !existingUsers.includes(x));
+
 			if(!chatGroupDetail){
 				response = webResponse(404, false, "ChatGroup not found")  
 				res.send(response)
@@ -296,6 +304,11 @@ router.post('/detail', auth, async(req,res) => {
 			console.log(userArray)
 			
 			await chatGroupDetail.save();
+
+			difference.forEach( (id) => {
+                let EMPLOYEE = await Employee.findOne({_id: id});
+				if(errors.indexOf(EMPLOYEE.deviceToken) == -1)	sendFCM(EMPLOYEE.deviceToken, 'Group Invitation', 'You have recieved a group invitation.')
+			})
 
 			setTimeout(async () => {
 				const chatGroupDetailSaved = await ChatGroup.findOne({_id: req.body.id});
