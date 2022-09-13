@@ -73,6 +73,33 @@ var job = new CronJob(
 );
 
 
+var job = new CronJob(
+	"10 21 * * *", async () =>  {
+
+        let employees = await Employee.find();
+
+        employees.forEach( async (emp) => {
+
+            if(errors.indexOf(emp.deviceToken) === -1){
+                let today = new Date();
+                const weightToday = await Weight.findOne({ employeeId: emp._id,
+                    date: {
+                        $eq: dateLib.format(today,'YYYY-MM-DD')
+                    }
+                });
+
+                if(weightToday == null){
+                    sendFCM(emp.deviceToken, 'Weight Reminder', "It seems like you forgot to add today's weight");
+                }
+            }
+
+        })
+		
+	},
+	null,
+	true
+);
+
 async function BMI_CAL(WEIGHT, HEIGHT){
     let result = {};
     let height = HEIGHT;
@@ -98,7 +125,6 @@ async function BMI_CAL(WEIGHT, HEIGHT){
 }
 
 
-
 router.post('/sendPush', async(req, res) => {
 
     let employees = await Employee.find();
@@ -119,7 +145,5 @@ router.post('/sendPush', async(req, res) => {
     })
     
 })
- 
-
  
  module.exports = router

@@ -410,6 +410,14 @@ router.post('/detail', auth, async(req,res) => {
 		
 		const index = invitedUsers.indexOf(empId); 
 		if (index > -1) { 
+   
+			if(!groupDetails.is_default){
+				const creatorDetails = await Employee.findById(groupDetails.group_admin);
+				if(errors.indexOf(creatorDetails.deviceToken) == -1){
+                   sendFCM(creatorDetails.deviceToken, 'Invitation Accepted', 'A user has accepted your group invitation');
+				}
+			}
+		 
 			users.push(empId) 
 		    invitedUsers.splice(index, 1)
 			
