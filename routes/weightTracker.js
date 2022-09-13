@@ -45,7 +45,7 @@ const router = express.Router()
 
 
 var job = new CronJob(
-	"41 11 * * *",
+	"45 11 * * *",
 	async () =>  {
 
         let employees = await Employee.find();
@@ -61,7 +61,7 @@ var job = new CronJob(
                 });
 
                 if(weightToday == null){
-                    sendFCM(emp.deviceToken, 'Weight Reminder', "It seems like you forget to add today's weight", '');
+                    sendFCM(emp.deviceToken, 'Weight Reminder', "It seems like you forget to add today's weight", JSON.stringify({data: 0}));
                 }
             }
 
