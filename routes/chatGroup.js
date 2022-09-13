@@ -422,7 +422,7 @@ router.post('/detail', auth, async(req,res) => {
 			if(!groupDetails.is_default){
 				const creatorDetails = await Employee.findById(groupDetails.group_admin);
 				if(errors.indexOf(creatorDetails.deviceToken) == -1){
-					let fullName = employeeDetails.firstName[0].toUpperCase() + employeeDetails.firstName.slice(1)
+					let fullName = employeeDetails.firstName[0].toUpperCase() + employeeDetails.firstName.slice(1) +' '+ employeeDetails.lastName[0].toUpperCase() + employeeDetails.lastName.slice(1)
                    sendFCM(creatorDetails.deviceToken, 'Invitation Accepted', fullName +' has accepted your invitation for the group '+ groupDetails.group_name);
 				}
 			}
