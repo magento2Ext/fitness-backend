@@ -259,7 +259,7 @@ router.post('/detail', auth, async(req,res) => {
 	try{ 
 
 
-		console.log('req.body.chat_group_requested_users', req.body.chat_group_requested_users);
+	
 
 	    var empId = req.user.user_id;
 		const empDetails = await Employee.findOne({_id: empId});
@@ -280,6 +280,8 @@ router.post('/detail', auth, async(req,res) => {
 			const chatGroupDetail = await ChatGroup.findById(req.body.id);
 			const existingUsers = chatGroupDetail.chat_group_requested_users;
 			let difference = req.body.chat_group_requested_users.filter(x => !existingUsers.includes(x));
+
+			console.log('differencedifference', difference, req.body.chat_group_requested_users, existingUsers);
 
 			if(!chatGroupDetail){
 				response = webResponse(404, false, "ChatGroup not found")  
