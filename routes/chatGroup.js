@@ -383,6 +383,7 @@ router.post('/detail', auth, async(req,res) => {
 		
 
 	}catch(err){  
+		console.log(err)
 		response = webResponse(403, false, err)  
 	    res.send(response)
 		return;
