@@ -307,7 +307,7 @@ router.post('/detail', auth, async(req,res) => {
 			difference.forEach( async (id) => {
                 let EMPLOYEE = await Employee.findOne({_id: id});
 				let senderName = empDetails.firstName[0].toUpperCase() + empDetails.firstName.slice(1) +' '+ empDetails.lastName[0].toUpperCase() + empDetails.lastName.slice(1)
-				if(errors.indexOf(EMPLOYEE.deviceToken) == -1)	sendFCM(EMPLOYEE.deviceToken, 'Group Invitation', 'You have received a new group invitation for ' + chatGroupDetail.group_name +' from ' + senderName)
+				if(errors.indexOf(EMPLOYEE.deviceToken) == -1)	sendFCM(EMPLOYEE.deviceToken, 'Group Invitation ', 'You have received a new group invitation for ' + chatGroupDetail.group_name +' from ' + senderName)
 			})
 
 			setTimeout(async () => {
