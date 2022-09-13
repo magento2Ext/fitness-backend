@@ -258,6 +258,9 @@ router.post('/detail', auth, async(req,res) => {
  router.post('/save', auth, async(req,res) => {
 	try{ 
 
+
+		console.log('req.body.chat_group_requested_users', req.body.chat_group_requested_users);
+
 	    var empId = req.user.user_id;
 		const empDetails = await Employee.findOne({_id: empId});
 		const chatGroup = new ChatGroup({
