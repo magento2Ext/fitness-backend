@@ -341,7 +341,7 @@ router.post('/detail', auth, async(req,res) => {
 			const chatGroupDetail =  await chatGroup.save() 
 			requestedUsersArray.forEach( async (id) => {
                 let EMPLOYEE = await Employee.findOne({_id: id});
-				if(errors.indexOf(EMPLOYEE.deviceToken) == -1)	sendFCM(EMPLOYEE.deviceToken, 'Group Invitation', 'You have recieved a group invitation.')
+				if(errors.indexOf(EMPLOYEE.deviceToken) == -1 && empId != id)	sendFCM(EMPLOYEE.deviceToken, 'Group Invitation', 'You have recieved a group invitation.')
 			})
 
 			var groupId = chatGroupDetail._id
