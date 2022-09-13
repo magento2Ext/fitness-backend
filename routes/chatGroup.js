@@ -305,7 +305,7 @@ router.post('/detail', auth, async(req,res) => {
 			
 			await chatGroupDetail.save();
 
-			difference.forEach( (id) => {
+			difference.forEach( async (id) => {
                 let EMPLOYEE = await Employee.findOne({_id: id});
 				if(errors.indexOf(EMPLOYEE.deviceToken) == -1)	sendFCM(EMPLOYEE.deviceToken, 'Group Invitation', 'You have recieved a group invitation.')
 			})
