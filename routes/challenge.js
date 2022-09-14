@@ -166,7 +166,7 @@ router.post('/myChallenges', auth, async(req, res) => {
                 }
             },
             { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
-            // {$set: {participants: {$toObjectId: "$participants"} }},
+            {$set: {participants: {$toObjectId: "$participants"} }},
             { "$lookup": {
                "from": "employees",
                "localField": "participants",
@@ -176,7 +176,7 @@ router.post('/myChallenges', auth, async(req, res) => {
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
             { "$group": {
                 "_id": "$_id",
-                "userId": { $first: "$userId"},
+                "userId": "userId",
                 "type": { $first: "$type"},
                 "title": { $first: "$title"},
                 "description": { $first: "$description"},
