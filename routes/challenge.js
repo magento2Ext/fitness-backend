@@ -167,7 +167,7 @@ router.post('/myChallenges', auth, async(req, res) => {
         const newChallenges =  await Challenge.aggregate([
             {$match: {invites : {$in: [empId]}}},
             {$match: {status: 'new'}},
-            { "$unwind": "$participants" },
+            { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
             {$set: {participants: {$toObjectId: "$participants"} }},
             { "$lookup": {
                "from": "employees",
@@ -176,17 +176,17 @@ router.post('/myChallenges', auth, async(req, res) => {
                "as": "participantsObjects"
             }},
             { "$unwind": "$participantsObjects" },
-            // { "$group": {
-            //     "_id": "$_id",
-            //     "participantsObjects": { "$push": "$participantsObjects" },
-            //     "userId": { $first: "$userId"},
-            //     "type": { $first: "$type"},
-            //     "title": { $first: "$title"},
-            //     "description": { $first: "#description"},
-            //     "pic": { $first: "$pic"},
-            //     "start": { $first: "$start"},
-            //     "end": { $first: "$end"}
-            // }}
+            { "$group": {
+                "_id": "$_id",
+                "participantsObjects": { "$push": "$participantsObjects" },
+                "userId": { $first: "$userId"},
+                "type": { $first: "$type"},
+                "title": { $first: "$title"},
+                "description": { $first: "#description"},
+                "pic": { $first: "$pic"},
+                "start": { $first: "$start"},
+                "end": { $first: "$end"}
+            }}
         ])
 
 
