@@ -166,7 +166,7 @@ router.post('/myChallenges', auth, async(req, res) => {
 
         const newChallenges =  await Challenge.aggregate([
             {$match: {invites : {$in: [empId]}}},
-            // {$match: {status: 'new'}},
+            {$match: {status: 'new'}},
             { "$unwind": "$participants" },
             {$set: {participants: {$toObjectId: "$participants"} }},
             { "$lookup": {
