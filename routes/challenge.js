@@ -280,7 +280,7 @@ router.post('/myChallenges', auth, async(req, res) => {
 
 
 var job = new CronJob(
-	"25 17 * * *",
+	"44 17 * * *",
 	async () =>  {
 
         let challenges = await Challenge.find();
