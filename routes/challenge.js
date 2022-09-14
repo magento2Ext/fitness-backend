@@ -13,7 +13,7 @@ const Employee = require('../models/employee')
 router.post('/create', async(req, res) => {
    try{ 
 
-       let {userId, type, title, description, pic, participants, start, end, orgType, invites} = req.body;
+       let {userId, type, title, description, pic, participants, start, end, orgType} = req.body;
        let data = {
                 userId: userId,
                 type: type,
@@ -23,8 +23,7 @@ router.post('/create', async(req, res) => {
                 participants: participants,
                 start: start,
                 end: end,
-                orgType: orgType,
-                invites: invites
+                orgType: orgType
        }
 
        let newChallenge = new Challenge(data);
@@ -54,8 +53,7 @@ router.post('/update', async(req, res) => {
                  pic: pic,
                  participants: participants,
                  start: start,
-                 end: end,
-                 invites: invites
+                 end: end
         }
  
         let result = await Challenge.updateOne({_id: id}, {$set: data}, {new: true});
@@ -91,24 +89,6 @@ router.post('/update', async(req, res) => {
     }
  });
 
- router.post('/invite', async(req,res) => {
-    try{ 
-
-        let {id, userId} = req.body;
-        const result = await Challenge.updateOne({_id: id}, {$push: {invites: userId}}, {new: true}); 	 
-       
-        if(result){
-            response = webResponse(202, true, result)  
-            res.send(response)
-           }else{
-            response = webResponse(202, false, 'Error saving challenge')  
-            res.send(response)
-           }
-    }catch(err){ console.log(err)
-        res.send(err)
-        //res.json(err)
-    }
- });
 
  router.post('/accept', async(req,res) => {
     try{ 
@@ -186,7 +166,7 @@ router.post('/myChallenges', auth, async(req, res) => {
                 }
             },
             { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
-            {$set: {participants: {$toObjectId: "$participants"} }},
+            // {$set: {participants: {$toObjectId: "$participants"} }},
             { "$lookup": {
                "from": "employees",
                "localField": "participants",
@@ -199,7 +179,7 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "userId": { $first: "$userId"},
                 "type": { $first: "$type"},
                 "title": { $first: "$title"},
-                "description": { $first: "#description"},
+                "description": { $first: "$description"},
                 "pic": { $first: "$pic"},
                 "start": { $first: "$start"},
                 "end": { $first: "$end"},
@@ -236,7 +216,7 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "userId": { $first: "$userId"},
                 "type": { $first: "$type"},
                 "title": { $first: "$title"},
-                "description": { $first: "#description"},
+                "description": { $first: "$description"},
                 "pic": { $first: "$pic"},
                 "start": { $first: "$start"},
                 "end": { $first: "$end"},
@@ -275,7 +255,7 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "userId": { $first: "$userId"},
                 "type": { $first: "$type"},
                 "title": { $first: "$title"},
-                "description": { $first: "#description"},
+                "description": { $first: "$description"},
                 "pic": { $first: "$pic"},
                 "start": { $first: "$start"},
                 "end": { $first: "$end"},

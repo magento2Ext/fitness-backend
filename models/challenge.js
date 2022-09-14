@@ -36,10 +36,6 @@ const challengeSchema = new mongoose.Schema({
         type: [],
         default: []
     },
-    invites: {
-        type: [],
-        default: []
-    },
     start: {
         type: Date,
         required: true
