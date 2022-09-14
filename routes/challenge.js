@@ -241,16 +241,18 @@ router.post('/myChallenges', auth, async(req, res) => {
                "as": "participantsObjects"
             }},
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
-            {
-                "$project": {            
-                  "date_diff": { "$subtract": ["$end", "$start"] }
-                }
-            },
-            {
-                "$project": {             
-                  "duration": { "$divide": ["$date_diff", 1000 * 60 * 60 * 24] }
-                }
-            },
+
+            {"$set": {"duration": { "$subtract": ["$end", "$start"] }}}
+            // {
+            //     "$project": {            
+            //       "date_diff": { "$subtract": ["$end", "$start"] }
+            //     }
+            // },
+            // {
+            //     "$project": {             
+            //       "duration": { "$divide": ["$date_diff", 1000 * 60 * 60 * 24] }
+            //     }
+            // },
             { "$group": {
                 "_id": "$_id",
                 "userId": { $first: "$userId"},
@@ -261,6 +263,7 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "start": { $first: "$start"},
                 "end": { $first: "$end"},
                 "participantsObjects": { "$push": "$participantsObjects" },
+                "duration": {:first : "$duration"}
 
 
             }}
