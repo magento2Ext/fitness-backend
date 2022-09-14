@@ -160,10 +160,12 @@ router.post('/listAll', async(req, res) => {
 router.post('/myChallenges', auth, async(req, res) => {
     try{ 
         
-        var empId = req.user.user_id;
+        // var empId = req.user.user_id;
+        var empId = '630d986ca92160343d25d644';
         const _userId = new ObjectID(req.body.empId);
-        const result =  await Challenge.aggregate([
-            {$match: {participants : {$in: [empId]}}},
+
+        const newChallenges =  await Challenge.aggregate([
+            {$match: {invites : {$in: [empId]}}},
             {$match: {status: 'new'}},
             { "$unwind": "$participants" },
             {$set: {participants: {$toObjectId: "$participants"} }},
@@ -188,13 +190,75 @@ router.post('/myChallenges', auth, async(req, res) => {
             }}
         ])
 
-        if(result){
-            response = webResponse(202, true, result)  
-            res.send(response)
-           }else{
-            response = webResponse(202, false, 'Error saving challenge')  
-            res.send(response)
-           }
+
+        const onGoingChallenges =  await Challenge.aggregate([
+            {$match: {participants : {$in: [empId]}}},
+            {$match: {status: 'ongoing'}},
+            { "$unwind": "$participants" },
+            {$set: {participants: {$toObjectId: "$participants"} }},
+            { "$lookup": {
+               "from": "employees",
+               "localField": "participants",
+               "foreignField": "_id",
+               "as": "participantsObjects"
+            }},
+            { "$unwind": "$participantsObjects" },
+            { "$group": {
+                "_id": "$_id",
+                "participantsObjects": { "$push": "$participantsObjects" },
+                "userId": { $first: "$userId"},
+                "type": { $first: "$type"},
+                "title": { $first: "$title"},
+                "description": { $first: "#description"},
+                "pic": { $first: "$pic"},
+                "start": { $first: "$start"},
+                "end": { $first: "$end"}
+
+            }}
+        ])
+
+
+        const completedChallanges =  await Challenge.aggregate([
+            {$match: {participants : {$in: [empId]}}},
+            {$match: {status: 'completed'}},
+            { "$unwind": "$participants" },
+            {$set: {participants: {$toObjectId: "$participants"} }},
+            { "$lookup": {
+               "from": "employees",
+               "localField": "participants",
+               "foreignField": "_id",
+               "as": "participantsObjects"
+            }},
+            { "$unwind": "$participantsObjects" },
+            { "$group": {
+                "_id": "$_id",
+                "participantsObjects": { "$push": "$participantsObjects" },
+                "userId": { $first: "$userId"},
+                "type": { $first: "$type"},
+                "title": { $first: "$title"},
+                "description": { $first: "#description"},
+                "pic": { $first: "$pic"},
+                "start": { $first: "$start"},
+                "end": { $first: "$end"}
+
+            }}
+        ]);
+
+        setTimeout(() => {
+
+            let allChallenges = {
+                newChallenges: newChallenges,
+                onGoingChallenges: onGoingChallenges,
+                completedChallanges: completedChallange
+            }
+    
+                response = webResponse(202, true, allChallenges)  
+                res.send(response)
+            
+        }, 200);
+
+
+ 
     }catch(err){ console.log(err)
         res.send(err)
         //res.json(err)
