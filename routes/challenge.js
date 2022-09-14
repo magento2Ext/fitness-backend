@@ -263,7 +263,7 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "start": { $first: "$start"},
                 "end": { $first: "$end"},
                 "participantsObjects": { "$push": "$participantsObjects" },
-                "duration": {:first : "$duration"}
+                "duration": {$first : "$duration"}
 
 
             }}
