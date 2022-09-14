@@ -183,8 +183,9 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "pic": { $first: "$pic"},
                 "start": { $first: "$start"},
                 "end": { $first: "$end"},
-                "participantsObjects": { "$push": "$participantsObjects" },
                 "duration": { $first: "$duration"},
+                "participantsObjects": { "$push": "$participantsObjects" }
+              
             }}
         ])
 
@@ -220,8 +221,8 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "pic": { $first: "$pic"},
                 "start": { $first: "$start"},
                 "end": { $first: "$end"},
-                "participantsObjects": { "$push": "$participantsObjects" },
                 "duration": { $first: "$duration"},
+                "participantsObjects": { "$push": "$participantsObjects" }
 
             }}
         ])
@@ -259,8 +260,8 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "pic": { $first: "$pic"},
                 "start": { $first: "$start"},
                 "end": { $first: "$end"},
-                "participantsObjects": { "$push": "$participantsObjects" },
                 "duration": { $first: "$duration"},
+                "participantsObjects": { "$push": "$participantsObjects" }
 
             }}
         ]);
