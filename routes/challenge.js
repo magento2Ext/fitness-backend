@@ -204,14 +204,14 @@ router.post('/myChallenges', auth, async(req, res) => {
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
             { "$group": {
                 "_id": "$_id",
-                "participantsObjects": { "$push": "$participantsObjects" },
                 "userId": { $first: "$userId"},
                 "type": { $first: "$type"},
                 "title": { $first: "$title"},
                 "description": { $first: "#description"},
                 "pic": { $first: "$pic"},
                 "start": { $first: "$start"},
-                "end": { $first: "$end"}
+                "end": { $first: "$end"},
+                "participantsObjects": { "$push": "$participantsObjects" },
 
             }}
         ])
@@ -231,14 +231,14 @@ router.post('/myChallenges', auth, async(req, res) => {
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
             { "$group": {
                 "_id": "$_id",
-                "participantsObjects": { "$push": "$participantsObjects" },
                 "userId": { $first: "$userId"},
                 "type": { $first: "$type"},
                 "title": { $first: "$title"},
                 "description": { $first: "#description"},
                 "pic": { $first: "$pic"},
                 "start": { $first: "$start"},
-                "end": { $first: "$end"}
+                "end": { $first: "$end"},
+                "participantsObjects": { "$push": "$participantsObjects" },
 
             }}
         ]);
