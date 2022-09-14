@@ -279,33 +279,30 @@ router.post('/myChallenges', auth, async(req, res) => {
 });
 
 
-// var job = new CronJob(
-// 	"57 18 * * *",
-// 	async () =>  {
+var job = new CronJob(
+	"07 17 * * *",
+	async () =>  {
 
-//         let employees = await Employee.find();
+        let challenges = await Challenge.find();
 
-//         employees.forEach( async (emp) => {
+        challenges.forEach( async (challenge) => {
 
-//             if(errors.indexOf(emp.deviceToken) === -1){
-//                 let today = new Date();
-//                 const weightToday = await Weight.findOne({ employeeId: emp._id,
-//                     date: {
-//                         $eq: dateLib.format(today,'YYYY-MM-DD')
-//                     }
-//                 });
+            const recentDate = new Date();
 
-//                 if(weightToday == null){
-//                     sendFCM(emp.deviceToken, 'Weight Reminder', "It seems like you forgot to add today's weight");
-//                 }
-//             }
+            if(recentDate == challenge.start){
+               await Challenge.updateOne({_id: id}, {$set: {status: 'ongoing'}}, {new: true}); 
+            }
 
-//         })
+            if(recentDate > challenge.end){
+                await Challenge.updateOne({_id: id}, {$set: {status: 'completed'}}, {new: true}); 
+             }
+    
+        })
 		
-// 	},
-// 	null,
-// 	true
-// );
+	},
+	null,
+	true
+);
 
 
 module.exports = router
