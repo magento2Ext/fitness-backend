@@ -76,7 +76,7 @@ router.post('/update', async(req, res) => {
  router.post('/delete', async(req,res) => {
     try{ 
 
-        let result = await Challenge.updateOne({_id: req.body.id}, {$set: {status: '0'}}, {new: true});
+        let result = await Challenge.deleteOne({_id: req.body.id});
  
         if(result){
          response = webResponse(202, true, result)  
