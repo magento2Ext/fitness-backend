@@ -203,7 +203,7 @@ router.post('/myChallenges', auth, async(req, res) => {
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
             {
                 "$project": {            
-                  "date_diff": { "$subtract": [{ $first: "$end"}, { $first: "$start"}] }
+                  "date_diff": { "$subtract": ["$end", "$start"] }
                 }
             },
             {
@@ -221,7 +221,7 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "start": { $first: "$start"},
                 "end": { $first: "$end"},
                 "participantsObjects": { "$push": "$participantsObjects" },
-                "duration": { $first: "$duration"},
+                "duration": "$duration",
             }}
         ]);
 
