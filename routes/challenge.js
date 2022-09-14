@@ -99,7 +99,7 @@ router.post('/update', async(req, res) => {
 
         const alreadyJoined = await Challenge.findOne({_id: id, participants: {$in: [empId]}}); 
 
-        if()
+        // if()
 
         if(alreadyJoined!=null){
             response = webResponse(202, false, 'Already Joined')  
