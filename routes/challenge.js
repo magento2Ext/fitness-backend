@@ -8,6 +8,7 @@ const Organization = require('../models/organization')
 const Challenge = require('../models/challenge')
 const auth = require("../middleware/auth");
 var ObjectID = require('mongodb').ObjectID;
+const Employee = require('../models/employee')
 
 router.post('/create', async(req, res) => {
    try{ 
