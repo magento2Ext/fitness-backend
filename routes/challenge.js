@@ -193,14 +193,6 @@ router.post('/myChallenges', auth, async(req, res) => {
            
             {$match: {status: 'completed'}},
             { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
-            {$set: {participants: {$toObjectId: "$participants"} }},
-            { "$lookup": {
-               "from": "employees",
-               "localField": "participants",
-               "foreignField": "_id",
-               "as": "participantsObjects"
-            }},
-            { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
             {
                 "$project": {            
                   "date_diff": { "$subtract": ["$end", "$start"] }
@@ -211,19 +203,70 @@ router.post('/myChallenges', auth, async(req, res) => {
                   "duration": { "$divide": ["$date_diff", 1000 * 60 * 60 * 24] }
                 }
             },
-            { "$group": {
-                "_id": "$_id",
-                "userId": { $first: "$userId"},
-                "type": { $first: "$type"},
-                "title": { $first: "$title"},
-                "description": { $first: "#description"},
-                "pic": { $first: "$pic"},
-                "start": { $first: "$start"},
-                "end": { $first: "$end"},
-                "duration": { $first: "$duration"},
-                "participantsObjects": { "$push": "$participantsObjects" }
+
+            { 
+                $group: {
+                  _id: {
+                    "userId": "$userId",
+                    "duration": "$duration",
+                    "participants": "$participants"
+                  },
+                  count: {'$sum': 1}
+                }
+            },
+
+            {
+                $group: {
+                    _id: {
+                        userId: "$_id.userId",
+                        duration: "$_id.duration",
+                    },
+                    participants: {
+                        $push: {
+                            participantsId: "$_id.participants",
+                            count: "$count"
+                        }
+                    }        
+                }
+            },
+            {
+                $project: {
+                    _id: 1,
+                    userId: "$_id.userId",
+                    duration: "$_id.duration",
+                    participants: "$_id.participants",
+                    goals: 1
+                }
+            }
+
+
+
+
+
+
+
+            // {$set: {participants: {$toObjectId: "$participants"} }},
+            // { "$lookup": {
+            //    "from": "employees",
+            //    "localField": "participants",
+            //    "foreignField": "_id",
+            //    "as": "participantsObjects"
+            // }},
+            // { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
+
+            // { "$group": {
+            //     "_id": "$_id",
+            //     "userId": { $first: "$userId"},
+            //     "type": { $first: "$type"},
+            //     "title": { $first: "$title"},
+            //     "description": { $first: "#description"},
+            //     "pic": { $first: "$pic"},
+            //     "start": { $first: "$start"},
+            //     "end": { $first: "$end"},
+            //     "duration": { $first: "$duration"},
+            //     "participantsObjects": { "$push": "$participantsObjects" }
                
-            }}
+            // }}
         ]);
 
 
