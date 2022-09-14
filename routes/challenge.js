@@ -162,9 +162,16 @@ router.post('/myChallenges', auth, async(req, res) => {
     try{ 
         
         var empId = req.user.user_id;
-        const newChallenges =  await Challenge.aggregate([
-            {$match: {invites : {$in: [empId]}}},
-            {$match: {status: 'new'}},
+        const employeeDetails = await Employee.findById(empId);
+        let query = {}
+        if(employeeDetails.userOrganizations.length !=0 ){
+			query = {orgType: 'org', userId: String(employeeDetails.organizationId)}
+		}else{
+			query = {orgType: 'admin'}
+		}
+
+        let finalQuery = [
+            query,
             {
                 "$project": {            
                   "date_diff": { "$subtract": ["$end", "$start"] }
@@ -196,84 +203,18 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "participantsObjects": { "$push": "$participantsObjects" },
                 "duration": { $first: "$duration"},
             }}
-        ])
+        ]
 
+        let newChallengesQuery = finalQuery
+        newChallengesQuery.push( {$match: {status: 'new'}});
+        let onGoingChallengesQuery = finalQuery;
+        onGoingChallengesQuery.push( {$match: {status: 'ongoing'}});
+        let completedChallangesQuery = finalQuery;
+        completedChallangesQuery.push( {$match: {status: 'ongoing'}});
 
-        const onGoingChallenges =  await Challenge.aggregate([
-            {$match: {participants : {$in: [empId]}}},
-            {$match: {status: 'ongoing'}},
-            {
-                "$project": {            
-                  "date_diff": { "$subtract": ["$end", "$start"] }
-                }
-            },
-            {
-                "$project": {             
-                  "duration": { "$divide": ["$date_diff", 1000 * 60 * 60 * 24] }
-                }
-            },
-            { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
-            {$set: {participants: {$toObjectId: "$participants"} }},
-            { "$lookup": {
-               "from": "employees",
-               "localField": "participants",
-               "foreignField": "_id",
-               "as": "participantsObjects"
-            }},
-            { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
-            { "$group": {
-                "_id": "$_id",
-                "userId": { $first: "$userId"},
-                "type": { $first: "$type"},
-                "title": { $first: "$title"},
-                "description": { $first: "#description"},
-                "pic": { $first: "$pic"},
-                "start": { $first: "$start"},
-                "end": { $first: "$end"},
-                "participantsObjects": { "$push": "$participantsObjects" },
-                "duration": { $first: "$duration"},
-
-            }}
-        ])
-
-        console.log(onGoingChallenges)
-
-        const completedChallanges =  await Challenge.aggregate([
-            {$match: {participants : {$in: [empId]}}},
-            {$match: {status: 'completed'}},
-            {
-                "$project": {            
-                  "date_diff": { "$subtract": ["$end", "$start"] }
-                }
-            },
-            {
-                "$project": {             
-                  "duration": { "$divide": ["$date_diff", 1000 * 60 * 60 * 24] }
-                }
-            },
-            { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
-            {$set: {participants: {$toObjectId: "$participants"} }},
-            { "$lookup": {
-               "from": "employees",
-               "localField": "participants",
-               "foreignField": "_id",
-               "as": "participantsObjects"
-            }},
-            { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
-            { "$group": {
-                "_id": "$_id",
-                "userId": { $first: "$userId"},
-                "type": { $first: "$type"},
-                "title": { $first: "$title"},
-                "description": { $first: "#description"},
-                "pic": { $first: "$pic"},
-                "start": { $first: "$start"},
-                "end": { $first: "$end"},
-                "participantsObjects": { "$push": "$participantsObjects" },
-                "duration": { $first: "$duration"},
-
-            }}
-        ]);
+        const newChallenges =  await Challenge.aggregate(newChallengesQuery)
+        const onGoingChallenges =  await Challenge.aggregate(onGoingChallengesQuery)
+        const completedChallanges =  await Challenge.aggregate(completedChallangesQuery);
 
         setTimeout(() => {
 
