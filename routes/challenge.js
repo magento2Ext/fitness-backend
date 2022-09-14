@@ -215,7 +215,7 @@ router.post('/myChallenges', auth, async(req, res) => {
         // completedChallangesQuery.unshift({$match: {status: 'completed'}})
 
 
-        // console.log('newChallengesQuery', newChallengesQuery, onGoingChallengesQuery, completedChallangesQuery)
+        console.log('newChallengesQuery', newChallengesQuery)
 
         const newChallenges =  await Challenge.aggregate(newChallengesQuery)
         const onGoingChallenges =  await Challenge.aggregate(onGoingChallengesQuery)
