@@ -12,7 +12,7 @@ var ObjectID = require('mongodb').ObjectID;
 router.post('/create', async(req, res) => {
    try{ 
 
-       let {userId, type, title, description, pic, participants, start, end} = req.body;
+       let {userId, type, title, description, pic, participants, start, end, orgType} = req.body;
        let data = {
                 userId: userId,
                 type: type,
@@ -21,7 +21,8 @@ router.post('/create', async(req, res) => {
                 pic: pic,
                 participants: participants,
                 start: start,
-                end: end
+                end: end,
+                orgType: orgType
        }
 
        let newChallenge = new Challenge(data);
@@ -43,9 +44,8 @@ router.post('/create', async(req, res) => {
 router.post('/update', async(req, res) => {
     try{ 
 
-        let {id, userId, type, title, description, pic, participants, start, end} = req.body;
+        let {id, type, title, description, pic, participants, start, end} = req.body;
         let data = {
-                 userId: userId,
                  type: type,
                  title: title,
                  description: description,
@@ -176,18 +176,17 @@ router.post('/myChallenges', auth, async(req, res) => {
                "as": "participantsObjects"
             }},
             { "$unwind": "$participantsObjects" },
-            { "$group": {
-                "_id": "$_id",
-                "participantsObjects": { "$push": "$participantsObjects" },
-                "userId": { $first: "$userId"},
-                "type": { $first: "$type"},
-                "title": { $first: "$title"},
-                "description": { $first: "#description"},
-                "pic": { $first: "$pic"},
-                "start": { $first: "$start"},
-                "end": { $first: "$end"}
-
-            }}
+            // { "$group": {
+            //     "_id": "$_id",
+            //     "participantsObjects": { "$push": "$participantsObjects" },
+            //     "userId": { $first: "$userId"},
+            //     "type": { $first: "$type"},
+            //     "title": { $first: "$title"},
+            //     "description": { $first: "#description"},
+            //     "pic": { $first: "$pic"},
+            //     "start": { $first: "$start"},
+            //     "end": { $first: "$end"}
+            // }}
         ])
 
 

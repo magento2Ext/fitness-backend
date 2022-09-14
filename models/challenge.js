@@ -12,6 +12,11 @@ const challengeSchema = new mongoose.Schema({
         required: true,
         default: null
     },
+    orgType:  {
+        type: String,
+        required: true,
+        default: null
+    },
     title: {
         type: String,
         required: true,
