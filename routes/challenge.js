@@ -97,9 +97,9 @@ router.post('/update', async(req, res) => {
         let {id} = req.body;
         let empId = req.user.user_id;
 
-        const challengeDetails = await Challenge.findOne({_id: id, participants: {$in: [empId]}}); 
+        const challengeDetails = await Challenge.findOne({_id: id}); 
 
-        if(challengeDetails!=null){
+        if(challengeDetails.participants.indexOf(empId) >=0){
             response = webResponse(202, false, 'Already Joined')  
             res.send(response);
             return;
@@ -113,7 +113,7 @@ router.post('/update', async(req, res) => {
             res.send(response);
             return;
         }
-        
+
         const result = await Challenge.updateOne({_id: id}, {$push: {'participants': empId}}, {new: true}); 	 
        
         if(result){
