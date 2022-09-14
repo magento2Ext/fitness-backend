@@ -8,7 +8,6 @@ const Organization = require('../models/organization')
 const Challenge = require('../models/challenge')
 const auth = require("../middleware/auth");
 var ObjectID = require('mongodb').ObjectID;
-const Employee = require('../models/employee')
 
 router.post('/create', async(req, res) => {
    try{ 
@@ -170,9 +169,11 @@ router.post('/myChallenges', auth, async(req, res) => {
 		}else{
 			query = {orgType: 'admin'}
 		}
+        
 
-        let finalQuery = [
+        const newChallenges =  await Challenge.aggregate([
             query,
+            {$match: {status: 'new'}},
             {
                 "$project": {            
                   "date_diff": { "$subtract": ["$end", "$start"] }
@@ -204,22 +205,84 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "participantsObjects": { "$push": "$participantsObjects" },
                 "duration": { $first: "$duration"},
             }}
-        ]
-
-        let newChallengesQuery = finalQuery
-        let onGoingChallengesQuery = finalQuery;
-        let completedChallangesQuery = finalQuery;
-
-        newChallengesQuery.unshift({$match: {status: 'new'}})
-        // onGoingChallengesQuery.unshift({$match: {status: 'ongoing'}})
-        // completedChallangesQuery.unshift({$match: {status: 'completed'}})
+        ])
 
 
-        console.log('newChallengesQuery', newChallengesQuery)
+        const onGoingChallenges =  await Challenge.aggregate([
+            query,
+            {$match: {status: 'ongoing'}},
+            {
+                "$project": {            
+                  "date_diff": { "$subtract": ["$end", "$start"] }
+                }
+            },
+            {
+                "$project": {             
+                  "duration": { "$divide": ["$date_diff", 1000 * 60 * 60 * 24] }
+                }
+            },
+            { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
+            {$set: {participants: {$toObjectId: "$participants"} }},
+            { "$lookup": {
+               "from": "employees",
+               "localField": "participants",
+               "foreignField": "_id",
+               "as": "participantsObjects"
+            }},
+            { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
+            { "$group": {
+                "_id": "$_id",
+                "userId": { $first: "$userId"},
+                "type": { $first: "$type"},
+                "title": { $first: "$title"},
+                "description": { $first: "#description"},
+                "pic": { $first: "$pic"},
+                "start": { $first: "$start"},
+                "end": { $first: "$end"},
+                "participantsObjects": { "$push": "$participantsObjects" },
+                "duration": { $first: "$duration"},
 
-        const newChallenges =  await Challenge.aggregate(newChallengesQuery)
-        const onGoingChallenges =  await Challenge.aggregate(onGoingChallengesQuery)
-        const completedChallanges =  await Challenge.aggregate(completedChallangesQuery);
+            }}
+        ])
+
+        console.log(onGoingChallenges)
+
+        const completedChallanges =  await Challenge.aggregate([
+            query,
+            {$match: {status: 'completed'}},
+            {
+                "$project": {            
+                  "date_diff": { "$subtract": ["$end", "$start"] }
+                }
+            },
+            {
+                "$project": {             
+                  "duration": { "$divide": ["$date_diff", 1000 * 60 * 60 * 24] }
+                }
+            },
+            { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
+            {$set: {participants: {$toObjectId: "$participants"} }},
+            { "$lookup": {
+               "from": "employees",
+               "localField": "participants",
+               "foreignField": "_id",
+               "as": "participantsObjects"
+            }},
+            { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
+            { "$group": {
+                "_id": "$_id",
+                "userId": { $first: "$userId"},
+                "type": { $first: "$type"},
+                "title": { $first: "$title"},
+                "description": { $first: "#description"},
+                "pic": { $first: "$pic"},
+                "start": { $first: "$start"},
+                "end": { $first: "$end"},
+                "participantsObjects": { "$push": "$participantsObjects" },
+                "duration": { $first: "$duration"},
+
+            }}
+        ]);
 
         setTimeout(() => {
 
