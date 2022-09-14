@@ -213,6 +213,9 @@ router.post('/myChallenges', auth, async(req, res) => {
         let completedChallangesQuery = finalQuery;
         completedChallangesQuery.push( {$match: {status: 'ongoing'}});
 
+
+        console.log('newChallengesQuery', newChallengesQuery)
+
         const newChallenges =  await Challenge.aggregate(newChallengesQuery)
         const onGoingChallenges =  await Challenge.aggregate(onGoingChallengesQuery)
         const completedChallanges =  await Challenge.aggregate(completedChallangesQuery);
