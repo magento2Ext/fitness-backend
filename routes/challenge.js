@@ -175,7 +175,7 @@ router.post('/myChallenges', auth, async(req, res) => {
                "foreignField": "_id",
                "as": "participantsObjects"
             }},
-            { "$unwind": "$participantsObjects" },
+            { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
             { "$group": {
                 "_id": "$_id",
                 "participantsObjects": { "$push": "$participantsObjects" },
