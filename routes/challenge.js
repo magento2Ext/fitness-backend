@@ -220,8 +220,9 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "pic": { $first: "$pic"},
                 "start": { $first: "$start"},
                 "end": { $first: "$end"},
-                "participantsObjects": { "$push": "$participantsObjects" },
-                "duration": { $duration: 1},
+                "duration": { $first: "$duration"},
+                "participantsObjects": { "$push": "$participantsObjects" }
+               
             }}
         ]);
 
