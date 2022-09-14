@@ -190,8 +190,8 @@ router.post('/myChallenges', auth, async(req, res) => {
         ])
 
 
-        const onGoingChallenges =   Challenge.aggregate([
-            {$match: {participants : {$in: [empId]}}},
+        const onGoingChallenges =  await Challenge.aggregate([
+            // {$match: {participants : {$in: [empId]}}},
             {$match: {status: 'ongoing'}},
             { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
             {$set: {participants: {$toObjectId: "$participants"} }},
