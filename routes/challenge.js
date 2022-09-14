@@ -165,8 +165,9 @@ router.post('/myChallenges', auth, async(req, res) => {
                   "duration": { "$divide": ["$date_diff", 1000 * 60 * 60 * 24] }
                 }
             },
-            { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
             {$set: {participants: {$toObjectId: "$participants"} }},
+            { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
+         
             { "$lookup": {
                "from": "employees",
                "localField": "participants",
