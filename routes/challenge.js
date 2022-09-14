@@ -90,10 +90,19 @@ router.post('/update', async(req, res) => {
  });
 
 
- router.post('/accept', async(req,res) => {
+ router.post('/join', auth, async(req,res) => {
     try{ 
-        let {id, userId} = req.body;
-        const result = await Challenge.updateOne({_id: id}, {$pull: {'invites': userId}, $push: {'participants': userId}}, {new: true}); 	 
+        let {id} = req.body;
+        let empId = req.user.user_id;
+
+        const alreadyJoined = await Challenge.findOne({_id: id, participants: {$in: [empId]}}); 
+        if(alreadyJoined!=null){
+            response = webResponse(202, false, 'Already Joined')  
+            res.send(response);
+            return;
+        }
+
+        const result = await Challenge.updateOne({_id: id}, {$push: {'participants': empId}}, {new: true}); 	 
        
         if(result){
             response = webResponse(202, true, result)  
