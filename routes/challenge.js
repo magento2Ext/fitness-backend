@@ -207,10 +207,11 @@ router.post('/myChallenges', auth, async(req, res) => {
         ]
 
         let newChallengesQuery = finalQuery
-        newChallengesQuery.unshift({$match: {status: 'new'}})
         let onGoingChallengesQuery = finalQuery;
-        onGoingChallengesQuery.unshift({$match: {status: 'ongoing'}})
         let completedChallangesQuery = finalQuery;
+
+        newChallengesQuery.unshift({$match: {status: 'new'}})
+        onGoingChallengesQuery.unshift({$match: {status: 'ongoing'}})
         completedChallangesQuery.unshift({$match: {status: 'completed'}})
 
 
