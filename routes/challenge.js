@@ -160,10 +160,7 @@ router.post('/listAll', async(req, res) => {
 router.post('/myChallenges', auth, async(req, res) => {
     try{ 
         
-        // var empId = req.user.user_id;
-        var empId = '62f39dafe7f0ba65a2fe60a8';
-        const _userId = new ObjectID(req.body.empId);
-
+        var empId = req.user.user_id;
         const newChallenges =  await Challenge.aggregate([
             {$match: {invites : {$in: [empId]}}},
             {$match: {status: 'new'}},
