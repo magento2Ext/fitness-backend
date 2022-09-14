@@ -176,7 +176,7 @@ router.post('/myChallenges', auth, async(req, res) => {
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
             { "$group": {
                 "_id": "$_id",
-                "userId": { "$userId": 1 },
+                "userId": { $first: "$userId"},
                 "type": { $first: "$type"},
                 "title": { $first: "$title"},
                 "description": { $first: "$description"},
