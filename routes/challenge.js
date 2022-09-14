@@ -216,6 +216,8 @@ router.post('/myChallenges', auth, async(req, res) => {
             }}
         ])
 
+        console.log('onGoingChallenges', onGoingChallenges);
+
 
         const completedChallanges =  await Challenge.aggregate([
             {$match: {participants : {$in: [empId]}}},
