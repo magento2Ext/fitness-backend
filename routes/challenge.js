@@ -280,7 +280,7 @@ router.post('/myChallenges', auth, async(req, res) => {
 
 
 var job = new CronJob(
-	"07 17 * * *",
+	"25 17 * * *",
 	async () =>  {
 
         let challenges = await Challenge.find();
@@ -290,11 +290,11 @@ var job = new CronJob(
             const recentDate = new Date();
 
             if(recentDate == challenge.start){
-               await Challenge.updateOne({_id: id}, {$set: {status: 'ongoing'}}, {new: true}); 
+               await Challenge.updateOne({_id: challenge._id}, {$set: {status: 'ongoing'}}, {new: true}); 
             }
 
             if(recentDate > challenge.end){
-                await Challenge.updateOne({_id: id}, {$set: {status: 'completed'}}, {new: true}); 
+                await Challenge.updateOne({_id: challenge._id}, {$set: {status: 'completed'}}, {new: true}); 
              }
     
         })
