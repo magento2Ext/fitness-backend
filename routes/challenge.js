@@ -161,7 +161,7 @@ router.post('/myChallenges', auth, async(req, res) => {
     try{ 
         
         // var empId = req.user.user_id;
-        var empId = '630d986ca92160343d25d644';
+        var empId = '62f39dafe7f0ba65a2fe60a8';
         const _userId = new ObjectID(req.body.empId);
 
         const newChallenges =  await Challenge.aggregate([
@@ -191,7 +191,7 @@ router.post('/myChallenges', auth, async(req, res) => {
 
 
         const onGoingChallenges =  await Challenge.aggregate([
-            // {$match: {participants : {$in: [empId]}}},
+            {$match: {participants : {$in: [empId]}}},
             {$match: {status: 'ongoing'}},
             { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
             {$set: {participants: {$toObjectId: "$participants"} }},
