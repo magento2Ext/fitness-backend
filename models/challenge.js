@@ -47,7 +47,7 @@ const challengeSchema = new mongoose.Schema({
     status: {
         type: String,
         required: true,
-        default: '1'
+        default: 'new'
     }
 })
 
