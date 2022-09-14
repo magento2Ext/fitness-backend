@@ -192,6 +192,15 @@ router.post('/myChallenges', auth, async(req, res) => {
         const completedChallanges =  await Challenge.aggregate([
            
             {$match: {status: 'completed'}},
+            { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
+            {$set: {participants: {$toObjectId: "$participants"} }},
+            { "$lookup": {
+               "from": "employees",
+               "localField": "participants",
+               "foreignField": "_id",
+               "as": "participantsObjects"
+            }},
+            { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
             {
                 "$project": {            
                   "date_diff": { "$subtract": ["$end", "$start"] }
@@ -202,15 +211,6 @@ router.post('/myChallenges', auth, async(req, res) => {
                   "duration": { "$divide": ["$date_diff", 1000 * 60 * 60 * 24] }
                 }
             },
-            { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
-            {$set: {participants: {$toObjectId: "$participants"} }},
-            { "$lookup": {
-               "from": "employees",
-               "localField": "participants",
-               "foreignField": "_id",
-               "as": "participantsObjects"
-            }},
-            { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
             { "$group": {
                 "_id": "$_id",
                 "userId": { $first: "$userId"},
