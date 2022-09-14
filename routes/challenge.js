@@ -173,7 +173,7 @@ router.post('/myChallenges', auth, async(req, res) => {
         
 
         const newChallenges =  await Challenge.aggregate([
-            query,
+            {$match: query},
             {$match: {status: 'new'}},
             {
                 "$project": {            
@@ -210,7 +210,7 @@ router.post('/myChallenges', auth, async(req, res) => {
 
 
         const onGoingChallenges =  await Challenge.aggregate([
-            query,
+            {$match: query},
             {$match: {status: 'ongoing'}},
             {
                 "$project": {            
@@ -249,7 +249,7 @@ router.post('/myChallenges', auth, async(req, res) => {
         console.log(onGoingChallenges)
 
         const completedChallanges =  await Challenge.aggregate([
-            query,
+            {$match: query},
             {$match: {status: 'completed'}},
             {
                 "$project": {            
