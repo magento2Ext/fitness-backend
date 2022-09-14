@@ -8,7 +8,9 @@ const Organization = require('../models/organization')
 const Challenge = require('../models/challenge')
 const auth = require("../middleware/auth");
 var ObjectID = require('mongodb').ObjectID;
-const Employee = require('../models/employee')
+const Employee = require('../models/employee');
+const sendFCM = require('./fcm');
+const CronJob = require('cron').CronJob;
 
 router.post('/create', async(req, res) => {
    try{ 
@@ -96,6 +98,9 @@ router.post('/update', async(req, res) => {
         let empId = req.user.user_id;
 
         const alreadyJoined = await Challenge.findOne({_id: id, participants: {$in: [empId]}}); 
+
+        if()
+
         if(alreadyJoined!=null){
             response = webResponse(202, false, 'Already Joined')  
             res.send(response);
@@ -123,6 +128,7 @@ router.post('/listAll', async(req, res) => {
     try{ 
         
         const result = await Challenge.aggregate([
+            {$match: {userId: req.body.id}},
             {$set: {userId: {$toObjectId: "$userId"} }},
             {
                 $lookup: {
@@ -264,6 +270,35 @@ router.post('/myChallenges', auth, async(req, res) => {
         //res.json(err)
     };
 });
+
+
+// var job = new CronJob(
+// 	"57 18 * * *",
+// 	async () =>  {
+
+//         let employees = await Employee.find();
+
+//         employees.forEach( async (emp) => {
+
+//             if(errors.indexOf(emp.deviceToken) === -1){
+//                 let today = new Date();
+//                 const weightToday = await Weight.findOne({ employeeId: emp._id,
+//                     date: {
+//                         $eq: dateLib.format(today,'YYYY-MM-DD')
+//                     }
+//                 });
+
+//                 if(weightToday == null){
+//                     sendFCM(emp.deviceToken, 'Weight Reminder', "It seems like you forgot to add today's weight");
+//                 }
+//             }
+
+//         })
+		
+// 	},
+// 	null,
+// 	true
+// );
 
 
 module.exports = router
