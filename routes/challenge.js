@@ -242,7 +242,7 @@ router.post('/myChallenges', auth, async(req, res) => {
             }},
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
 
-            {"$set": {"duration": { "$subtract": ["$end", "$start"] } / 1000 * 60 * 60 * 24}},
+            {"$set": {"duration": {"$divide": [{ "$subtract": ["$end", "$start"] }, 1000 * 60 * 60 * 24]}}},
             // {
             //     "$project": {            
             //       "date_diff": { "$subtract": ["$end", "$start"] }
