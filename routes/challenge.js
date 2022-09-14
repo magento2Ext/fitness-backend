@@ -12,7 +12,7 @@ var ObjectID = require('mongodb').ObjectID;
 router.post('/create', async(req, res) => {
    try{ 
 
-       let {userId, type, title, description, pic, participants, start, end, orgType} = req.body;
+       let {userId, type, title, description, pic, participants, start, end, orgType, invites} = req.body;
        let data = {
                 userId: userId,
                 type: type,
@@ -22,7 +22,8 @@ router.post('/create', async(req, res) => {
                 participants: participants,
                 start: start,
                 end: end,
-                orgType: orgType
+                orgType: orgType,
+                invites: invites
        }
 
        let newChallenge = new Challenge(data);
@@ -52,9 +53,9 @@ router.post('/update', async(req, res) => {
                  pic: pic,
                  participants: participants,
                  start: start,
-                 end: end
+                 end: end,
+                 invites: invites
         }
- 
  
         let result = await Challenge.updateOne({_id: id}, {$set: data}, {new: true});
  
