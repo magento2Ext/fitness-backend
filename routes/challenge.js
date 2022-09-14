@@ -155,16 +155,6 @@ router.post('/myChallenges', auth, async(req, res) => {
         const newChallenges =  await Challenge.aggregate([
             {$match: query},
             {$match: {status: 'new'}},
-            {
-                "$project": {            
-                  "date_diff": { "$subtract": ["$end", "$start"] }
-                }
-            },
-            {
-                "$project": {             
-                  "duration": { "$divide": ["$date_diff", 1000 * 60 * 60 * 24] }
-                }
-            },
             { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
             {$set: {participants: {$toObjectId: "$participants"} }},
             { "$lookup": {
@@ -174,85 +164,7 @@ router.post('/myChallenges', auth, async(req, res) => {
                "as": "participantsObjects"
             }},
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
-            { "$group": {
-                "_id": "$_id",
-                "userId": { $first: "$userId"},
-                "type": { $first: "$type"},
-                "title": { $first: "$title"},
-                "description": { $first: "$description"},
-                "pic": { $first: "$pic"},
-                "start": { $first: "$start"},
-                "end": { $first: "$end"},
-                "participantsObjects": { "$push": "$participantsObjects" },
-                "duration": { $first: "$duration"},
-            }}
-        ])
-
-        const onGoingChallenges =  await Challenge.aggregate([
-            {$match: query},
-            {$match: {status: 'ongoing'}},
-            {
-                "$project": {            
-                  "date_diff": { "$subtract": ["$end", "$start"] }
-                }
-            },
-            {
-                "$project": {             
-                  "duration": { "$divide": ["$date_diff", 1000 * 60 * 60 * 24] }
-                }
-            },
-            { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
-            {$set: {participants: {$toObjectId: "$participants"} }},
-            { "$lookup": {
-               "from": "employees",
-               "localField": "participants",
-               "foreignField": "_id",
-               "as": "participantsObjects"
-            }},
-            { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
-            { "$group": {
-                "_id": "$_id",
-                "userId": { $first: "$userId"},
-                "type": { $first: "$type"},
-                "title": { $first: "$title"},
-                "description": { $first: "description"},
-                "pic": { $first: "$pic"},
-                "start": { $first: "$start"},
-                "end": { $first: "$end"},
-                "participantsObjects": { "$push": "$participantsObjects" },
-                "duration": { $first: "$duration"},
-
-            }}
-        ])
-
-        console.log(onGoingChallenges)
-
-        const completedChallanges =  await Challenge.aggregate([
-            {$match: query},
-            {$match: {status: 'completed'}},
-
-            { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
-
-            {$set: {participants: {$toObjectId: "$participants"} }},
-            { "$lookup": {
-               "from": "employees",
-               "localField": "participants",
-               "foreignField": "_id",
-               "as": "participantsObjects"
-            }},
-            { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
-
             {"$set": {"duration": {"$divide": [{ "$subtract": ["$end", "$start"] }, 1000 * 60 * 60 * 24]}}},
-            // {
-            //     "$project": {            
-            //       "date_diff": { "$subtract": ["$end", "$start"] }
-            //     }
-            // },
-            // {
-            //     "$project": {             
-            //       "duration": { "$divide": ["$date_diff", 1000 * 60 * 60 * 24] }
-            //     }
-            // },
             { "$group": {
                 "_id": "$_id",
                 "userId": { $first: "$userId"},
@@ -262,10 +174,64 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "pic": { $first: "$pic"},
                 "start": { $first: "$start"},
                 "end": { $first: "$end"},
-                "participantsObjects": { "$push": "$participantsObjects" },
-                "duration": {$first : "$duration"}
+                "duration": {$first : "$duration"},
+                "participantsObjects": { "$push": "$participantsObjects" }
+            }}
+        ])
 
+        const onGoingChallenges =  await Challenge.aggregate([
+            {$match: query},
+            {$match: {status: 'ongoing'}},
+            { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
+            {$set: {participants: {$toObjectId: "$participants"} }},
+            { "$lookup": {
+               "from": "employees",
+               "localField": "participants",
+               "foreignField": "_id",
+               "as": "participantsObjects"
+            }},
+            { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
+            {"$set": {"duration": {"$divide": [{ "$subtract": ["$end", "$start"] }, 1000 * 60 * 60 * 24]}}},
+            { "$group": {
+                "_id": "$_id",
+                "userId": { $first: "$userId"},
+                "type": { $first: "$type"},
+                "title": { $first: "$title"},
+                "description": { $first: "#description"},
+                "pic": { $first: "$pic"},
+                "start": { $first: "$start"},
+                "end": { $first: "$end"},
+                "duration": {$first : "$duration"},
+                "participantsObjects": { "$push": "$participantsObjects" }
+            }}
+        ])
 
+       
+
+        const completedChallanges =  await Challenge.aggregate([
+            {$match: query},
+            {$match: {status: 'completed'}},
+            { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
+            {$set: {participants: {$toObjectId: "$participants"} }},
+            { "$lookup": {
+               "from": "employees",
+               "localField": "participants",
+               "foreignField": "_id",
+               "as": "participantsObjects"
+            }},
+            { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
+            {"$set": {"duration": {"$divide": [{ "$subtract": ["$end", "$start"] }, 1000 * 60 * 60 * 24]}}},
+            { "$group": {
+                "_id": "$_id",
+                "userId": { $first: "$userId"},
+                "type": { $first: "$type"},
+                "title": { $first: "$title"},
+                "description": { $first: "#description"},
+                "pic": { $first: "$pic"},
+                "start": { $first: "$start"},
+                "end": { $first: "$end"},
+                "duration": {$first : "$duration"},
+                "participantsObjects": { "$push": "$participantsObjects" }
             }}
         ]);
 
