@@ -249,7 +249,7 @@ router.post('/myChallenges', auth, async(req, res) => {
             let allChallenges = {
                 newChallenges: newChallenges,
                 onGoingChallenges: onGoingChallenges,
-                completedChallanges: completedChallange
+                completedChallanges: completedChallanges
             }
     
                 response = webResponse(202, true, allChallenges)  
