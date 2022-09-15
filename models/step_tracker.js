@@ -31,6 +31,15 @@ const stepTrackerSchema = new mongoose.Schema({
         type: String,
         required: false,
         default: null
+    },
+    isChallenge: {
+        type: Boolean,
+        default: false
+    },
+    challengeId: {
+        type: String,
+        required: false,
+        default: null
     }
    
 })

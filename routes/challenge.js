@@ -99,7 +99,7 @@ router.post('/update', async(req, res) => {
         const challengeDetails = await Challenge.findOne({_id: id}); 
 
         if(challengeDetails.participants.indexOf(empId) >=0){
-            response = webResponse(202, false, 'Already Joined')  
+            response = webResponse(200, false, 'Already Joined')  
             res.send(response);
             return;
         }
@@ -108,7 +108,7 @@ router.post('/update', async(req, res) => {
         console.log('recentDate', recentDate);
 
         if(recentDate >= challengeDetails.start){
-            response = webResponse(202, false, 'Challenge has been already started')  
+            response = webResponse(200, false, 'Challenge has been already started')  
             res.send(response);
             return;
         }
@@ -119,7 +119,7 @@ router.post('/update', async(req, res) => {
             response = webResponse(202, true, result)  
             res.send(response)
            }else{
-            response = webResponse(202, false, 'Error saving challenge')  
+            response = webResponse(200, false, 'Error saving challenge')  
             res.send(response)
            }
     }catch(err){ console.log(err)
@@ -127,8 +127,6 @@ router.post('/update', async(req, res) => {
         //res.json(err)
     };
 });
-
-
 
 router.post('/listAll', async(req, res) => {
     try{ 
@@ -172,7 +170,6 @@ router.post('/myChallenges', auth, async(req, res) => {
 			query = {orgType: 'admin'}
 		}
         
-
         const newChallenges =  await Challenge.aggregate([
             {$match: query},
             {$match: {status: 'new'}},
@@ -227,8 +224,6 @@ router.post('/myChallenges', auth, async(req, res) => {
             }}
         ])
 
-       
-
         const completedChallanges =  await Challenge.aggregate([
             {$match: query},
             {$match: {status: 'completed'}},
@@ -269,8 +264,6 @@ router.post('/myChallenges', auth, async(req, res) => {
             
         }, 200);
 
-
- 
     }catch(err){ console.log(err)
         res.send(err)
         //res.json(err)
