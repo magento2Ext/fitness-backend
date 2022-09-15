@@ -15,14 +15,13 @@ const CronJob = require('cron').CronJob;
 router.post('/create', async(req, res) => {
    try{ 
 
-       let {userId, type, title, description, pic, participants, start, end, orgType} = req.body;
+       let {userId, type, title, description, pic, start, end, orgType} = req.body;
        let data = {
                 userId: userId,
                 type: type,
                 title: title,
                 description: description,
                 pic: pic,
-                participants: participants,
                 start: start,
                 end: end,
                 orgType: orgType
