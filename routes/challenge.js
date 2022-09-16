@@ -1,10 +1,5 @@
 const express = require("express");
 const router = express.Router()
-const Admin = require('../models/admin')
-const Theme = require('../models/theme_setting')
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const Organization = require('../models/organization')
 const Challenge = require('../models/challenge')
 const auth = require("../middleware/auth");
 var ObjectID = require('mongodb').ObjectID;
@@ -12,12 +7,14 @@ const Employee = require('../models/employee');
 const sendFCM = require('./fcm');
 const CronJob = require('cron').CronJob;
 
-router.post('/create', async(req, res) => {
+router.post('/create', auth, async(req, res) => {
    try{ 
+
+       let empId = req.user.user_id;
 
        let {userId, type, title, description, pic, start, end, orgType} = req.body;
        let data = {
-                userId: userId,
+                userId: orgType == 'employee' ? empId : userId,
                 type: type,
                 title: title,
                 description: description,
@@ -266,7 +263,6 @@ router.post('/myChallenges', auth, async(req, res) => {
 
     }catch(err){ console.log(err)
         res.send(err)
-        //res.json(err)
     };
 });
 
