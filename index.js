@@ -21,7 +21,7 @@ var serviceAccount = require('./admin.json');
 	authDomain: process.env.AUTH_DOMAIN,
  });
 
-const whitelist = [process.env.REACT_APP_URL]
+const whitelist = [process.env.REACT_APP_URL, 'http://localhost']
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || whitelist.indexOf(origin) !== -1) {

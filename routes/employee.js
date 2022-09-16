@@ -60,7 +60,6 @@ const errors = ['', '0', 0, null, undefined];
 			var subModules = await SubModule.find({"moduleId":req.body.moduleId})
 		} 
 
-		
 		response = webResponse(201, true, subModules)  
 		res.send(response)		
 		return;
@@ -523,7 +522,6 @@ router.delete('/delete', async(req,res) => {
 			return "";
 		}
 		
-		
 		const employee = await Employee.findById(req.body.id)
 		if(!employee) {
 			response = webResponse(404, false, "Employee not found") 
@@ -560,7 +558,7 @@ router.post('/profile', async(req,res) => {
 
 router.post('/login', async(req,res) => {
 	try { 
-	 //res.json(req)
+	    //res.json(req)
 		const email = req.body.email.toLowerCase()
 		const password = req.body.password
 		
@@ -586,6 +584,7 @@ router.post('/login', async(req,res) => {
 		  res.send(response)
 		  return;
 		}
+
 	   const employee = await Employee.findOne({ email });
 
 	   if(employee == null){
@@ -593,7 +592,6 @@ router.post('/login', async(req,res) => {
 				res.send(response)
 				return;
 	   }
-
 
 		if (await bcrypt.compare(password, employee.password)) {
 			 
