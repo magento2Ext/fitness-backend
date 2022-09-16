@@ -36,6 +36,10 @@ const challengeSchema = new mongoose.Schema({
         type: [],
         default: []
     },
+    invites: {
+        type: [],
+        default: []
+    },
     start: {
         type: Date,
         required: true
@@ -49,6 +53,10 @@ const challengeSchema = new mongoose.Schema({
         type: String,
         required: true,
         default: 'new'
+    },
+    winners: {
+        type: String,
+        required: true,
     }
 })
 

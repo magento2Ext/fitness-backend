@@ -12,7 +12,7 @@ router.post('/create', auth, async(req, res) => {
 
        let empId = req.user.user_id;
 
-       let {userId, type, title, description, pic, start, end, orgType} = req.body;
+       let {userId, type, title, description, pic, start, end, orgType, winners, invites} = req.body;
        let data = {
                 userId: orgType == 'employee' ? empId : userId,
                 type: type,
@@ -21,7 +21,9 @@ router.post('/create', auth, async(req, res) => {
                 pic: pic,
                 start: start,
                 end: end,
-                orgType: orgType
+                orgType: orgType,
+                winners: winners,
+                invites: invites
        }
 
        let newChallenge = new Challenge(data);
@@ -43,7 +45,7 @@ router.post('/create', auth, async(req, res) => {
 router.post('/update', async(req, res) => {
     try{ 
 
-        let {id, type, title, description, pic, participants, start, end} = req.body;
+        let {id, type, title, description, pic, participants, start, end, winners, invites} = req.body;
         let data = {
                  type: type,
                  title: title,
@@ -51,7 +53,9 @@ router.post('/update', async(req, res) => {
                  pic: pic,
                  participants: participants,
                  start: start,
-                 end: end
+                 end: end,
+                 winners: winners,
+                 invites: invites
         }
  
         let result = await Challenge.updateOne({_id: id}, {$set: data}, {new: true});
@@ -110,7 +114,7 @@ router.post('/update', async(req, res) => {
             return;
         }
 
-        const result = await Challenge.updateOne({_id: id}, {$push: {'participants': empId}}, {new: true}); 	 
+        const result = await Challenge.updateOne({_id: id}, {$push: {'participants': empId}, $pull: {'participants': empId}}, {new: true}); 	 
        
         if(result){
             response = webResponse(202, true, result)  
@@ -161,12 +165,13 @@ router.post('/myChallenges', auth, async(req, res) => {
         var empId = req.user.user_id;
         const employeeDetails = await Employee.findById(empId);
         let query = {}
+
         if(employeeDetails.userOrganizations.length !=0 ){
-			query = {orgType: 'org', userId: String(employeeDetails.organizationId)}
+			query = {orgType: {$ne: 'admin'}, $or: [{userId: String(employeeDetails.organizationId)}, {userId: String(empId)}]}
 		}else{
-			query = {orgType: 'admin'}
+			query = {orgType: {$ne: 'org'}}
 		}
-        
+
         const newChallenges =  await Challenge.aggregate([
             {$match: query},
             {$match: {status: 'new'}},
@@ -266,6 +271,58 @@ router.post('/myChallenges', auth, async(req, res) => {
     };
 });
 
+
+
+router.post('/invitations', auth, async(req, res) => {
+    try{ 
+        
+        var empId = req.user.user_id;
+        const employeeDetails = await Employee.findById(empId);
+        let query = {}
+        if(employeeDetails.userOrganizations.length !=0 ){
+			query = {orgType: {$ne: 'admin'}, $or: [{userId: String(employeeDetails.organizationId)}, {userId: String(empId)}], invites: {$in: [empId]}}
+		}else{
+			query = {orgType: {$ne: 'org'}, invites: {$in: [empId]}}
+		}
+        
+        const newChallenges =  await Challenge.aggregate([
+            {$match: query},
+            {$match: {status: 'new'}},
+            { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
+            {$set: {participants: {$toObjectId: "$participants"} }},
+            { "$lookup": {
+               "from": "employees",
+               "localField": "participants",
+               "foreignField": "_id",
+               "as": "participantsObjects"
+            }},
+            { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
+            {"$set": {"duration": {"$divide": [{ "$subtract": ["$end", "$start"] }, 1000 * 60 * 60 * 24]}}},
+            { "$group": {
+                "_id": "$_id",
+                "userId": { $first: "$userId"},
+                "type": { $first: "$type"},
+                "title": { $first: "$title"},
+                "description": { $first: "#description"},
+                "pic": { $first: "$pic"},
+                "start": { $first: "$start"},
+                "end": { $first: "$end"},
+                "duration": {$first : "$duration"},
+                "participantsObjects": { "$push": "$participantsObjects" }
+            }}
+        ])
+
+    
+        setTimeout(() => {
+                response = webResponse(202, true, newChallenges)  
+                res.send(response)
+            
+        }, 200);
+
+    }catch(err){ console.log(err)
+        res.send(err)
+    };
+});
 
 var job = new CronJob(
 	"44 17 * * *",
