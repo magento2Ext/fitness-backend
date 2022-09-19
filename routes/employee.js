@@ -127,7 +127,14 @@ router.post('/list', auth, async(req,res) => {
 
 router.post('/web/list', async(req,res) => { 
     try{
-		const employee = await Employee.find()
+		const type = req.body.type;
+		const query = {};
+		if(type === 'nonOrg'){
+			query = { userOrganizations: { $exists: true, $eq: [] } }
+		}
+
+		const employee = await Employee.find(query);
+		
 		if(employee)
 		{
 			var employeeList = [];
@@ -183,6 +190,8 @@ router.post('/web/list', async(req,res) => {
 		return;
     }
 })
+
+ 
 
 router.get('/list/:id/:type', async(req,res) => { 
     try{

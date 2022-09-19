@@ -80,7 +80,6 @@ router.post('/update', async(req, res) => {
 
         let {id, type, title, description, pic, participants, start, end, winners, invites} = req.body;
         let data = {
-                 type: type,
                  title: title,
                  description: description,
                  pic: pic,
@@ -208,7 +207,7 @@ router.post('/myChallenges', auth, async(req, res) => {
         const newChallenges =  await Challenge.aggregate([
             {$match: query},
             {$match: {status: 'new'}},
-            { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
+            {"$unwind": {path: "$participants", preserveNullAndEmptyArrays:true}},
             {$set: {participants: {$toObjectId: "$participants"} }},
             { "$lookup": {
                "from": "employees",
