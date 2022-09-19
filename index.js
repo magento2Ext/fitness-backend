@@ -13,7 +13,7 @@ const EmpStepTarget = require('./models/employee_step_target')
 const dateLib = require('date-and-time')
 const Employee = require('./models/employee')
 
-const admin=require('firebase-admin');
+const admin = require('firebase-admin');
 var serviceAccount = require('./admin.json');
  admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
@@ -33,8 +33,6 @@ const corsOptions = {
   credentials: true,
 } 
 app.use(cors(corsOptions)) 
-
-
 
 const url = process.env.MONGO_URI;
 mongoose.connect(url, {useNewUrlParser:true})

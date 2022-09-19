@@ -6,9 +6,8 @@
  const bcrypt = require('bcryptjs');
  const jwt = require('jsonwebtoken');
  const Organization = require('../models/organization')
-require('../functions')
+ require('../functions')
  
-
 router.put('/organization/update/:id', async(req,res) => {
     try{ 
         const organization = await Organization.findById(req.params.id) 	 

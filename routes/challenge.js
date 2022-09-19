@@ -11,7 +11,6 @@ router.post('/create', auth, async(req, res) => {
    try{ 
 
        let empId = req.user.user_id;
-
        let {userId, type, title, description, pic, start, end, orgType, winners, invites} = req.body;
        let data = {
                 userId: orgType == 'employee' ? empId : userId,
@@ -195,11 +194,12 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "start": { $first: "$start"},
                 "end": { $first: "$end"},
                 "duration": {$first : "$duration"},
+                "winners": {$first: "$winners"},
                 "participantsObjects": { "$push": "$participantsObjects" }
             }}
         ])
 
-        const onGoingChallenges =  await Challenge.aggregate([
+        const onGoingChallenges =  await Challenge.aggregate([  
             {$match: query},
             {$match: {status: 'ongoing'}},
             { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
@@ -222,6 +222,7 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "start": { $first: "$start"},
                 "end": { $first: "$end"},
                 "duration": {$first : "$duration"},
+                "winners": {$first: "$winners"},
                 "participantsObjects": { "$push": "$participantsObjects" }
             }}
         ])
@@ -249,6 +250,7 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "start": { $first: "$start"},
                 "end": { $first: "$end"},
                 "duration": {$first : "$duration"},
+                "winners": {$first: "$winners"},
                 "participantsObjects": { "$push": "$participantsObjects" }
             }}
         ]);
@@ -308,6 +310,7 @@ router.post('/invitations', auth, async(req, res) => {
                 "start": { $first: "$start"},
                 "end": { $first: "$end"},
                 "duration": {$first : "$duration"},
+                "winners": {$first: "$winners"},
                 "participantsObjects": { "$push": "$participantsObjects" }
             }}
         ])
@@ -316,7 +319,6 @@ router.post('/invitations', auth, async(req, res) => {
         setTimeout(() => {
                 response = webResponse(202, true, newChallenges)  
                 res.send(response)
-            
         }, 200);
 
     }catch(err){ console.log(err)
