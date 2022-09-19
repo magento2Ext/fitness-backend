@@ -95,7 +95,8 @@ app.post("/weight/save", auth, async(req, res) => {
 		const weight = new Weight({
 			employeeId: req.user.user_id,
 			weight: req.body.weight,
-			date: req.body.date
+			date: req.body.date,
+			type: req.body.type
 		})
 
 		if(req.body.height){
@@ -158,8 +159,6 @@ app.post("/weight", auth, async(req, res) => {
 			data.BMI = {}
 			return data;
 		}
-
-		
 
 		if(recentWeight == null || recentWeight.weight == '0' || recentWeight.weight == null || recentWeight.weight == undefined){
 			response = webResponse(202, true, await noData())  
@@ -385,16 +384,8 @@ app.post("/weight", auth, async(req, res) => {
 			response = webResponse(202, true, data)  
 			res.send(response);
 			return;
-
-		// }else{
-		// 	response = webResponse(202, true, await noData())  
-		// 	res.send(response);
-		// 	return;
-		// }     
+   
 }
-
-
-
 
 ); 
 

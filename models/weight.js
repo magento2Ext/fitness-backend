@@ -16,6 +16,16 @@ const weightSchema = new mongoose.Schema({
         type: String,
         required: true,
         default: null
+    },
+    type: {
+        type: String,
+        required: true,
+        default: null
+    },
+    challengeId: {
+        type: String,
+        required: true,
+        default: null
     }
 });
 
