@@ -62,7 +62,7 @@ const challengeSchema = new mongoose.Schema({
         type: Number,
     },
     weightType : {
-        type: Number,
+        type: String,
     },
     targetWeight: {
         type: Number,
