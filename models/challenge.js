@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const challengeSchema = new mongoose.Schema({
 
@@ -57,7 +57,24 @@ const challengeSchema = new mongoose.Schema({
     winners: {
         type: String,
         required: true,
-    }
+    },
+    dailyStepLimit : {
+        type: Number,
+    },
+    weightType : {
+        type: Number,
+    },
+    targetWeight: {
+        type: Number,
+    },
+    targetBMI: {
+        type: Number,
+    },
+    activities: []
 })
 
-module.exports = mongoose.model('Challenge', challengeSchema)
+module.exports = mongoose.model('Challenge', challengeSchema);
+
+// type = steps | weight | mind
+// orgType = admin | org | employee
+// 

@@ -11,7 +11,8 @@ router.post('/create', auth, async(req, res) => {
    try{ 
 
        let empId = req.user.user_id;
-       let {userId, type, title, description, pic, start, end, orgType, winners, invites} = req.body;
+       let {userId, type, title, description, pic, start, end, orgType, winners, invites, dailyStepLimit, weightType, targetWeight, targetBMI, activities} = req.body;
+
        let data = {
                 userId: orgType == 'employee' ? empId : userId,
                 type: type,
@@ -23,7 +24,22 @@ router.post('/create', auth, async(req, res) => {
                 orgType: orgType,
                 winners: winners,
                 invites: invites
+        }
+   
+
+       if(type === 'steps'){
+        data['dailyStepLimit'] = dailyStepLimit;
        }
+
+       if(type === 'weight'){
+          data['weightType'] = weightType;
+          if(weightType === 'healthy')   data['targetBMI'] = targetBMI;
+          else data['targetWeight'] = targetWeight;
+       }
+
+        if(type === 'mind'){
+            data['activities'] = activities;
+        }
 
        let newChallenge = new Challenge(data);
        let result = await newChallenge.save();
