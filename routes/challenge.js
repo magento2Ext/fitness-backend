@@ -13,13 +13,15 @@ router.post('/create', auth, async(req, res) => {
        let empId = req.user.user_id;
        const employee = await Employee.findById(empId);
 
+       let {userId, type, title, description, pic, start, end, orgType, winners, invites, dailyStepLimit, weightType, targetWeight, targetBMI, activities} = req.body;
+       
        if(orgType === 'employee' && !employee.organizationId){
         response = webResponse(202, false, 'Error saving challenge')  
         res.send(response)
         return;
        }
 
-       let {userId, type, title, description, pic, start, end, orgType, winners, invites, dailyStepLimit, weightType, targetWeight, targetBMI, activities} = req.body;
+       
 
        let data = {
                 userId: orgType === 'employee' ? employee.organizationId : userId,
