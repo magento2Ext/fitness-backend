@@ -13,7 +13,7 @@ router.post('/create', auth, async(req, res) => {
        let empId = req.user.user_id;
        const employee = await Employee.findById(empId);
 
-       let {userId, type, title, description, pic, start, end, orgType, winners, invites, dailyStepLimit, weightType, targetWeight, targetBMI, activities} = req.body;
+       let {id, userId, type, title, description, pic, start, end, orgType, winners, invites, dailyStepLimit, weightType, targetWeight, targetBMI, activities} = req.body;
 
        if(orgType === 'employee' && !employee.organizationId){
         response = webResponse(202, false, 'Error saving challenge')  
@@ -49,8 +49,14 @@ router.post('/create', auth, async(req, res) => {
             data['activities'] = activities;
         }
 
-       let newChallenge = new Challenge(data);
-       let result = await newChallenge.save();
+        if(errors.indexOf(id) === -1){
+ 
+            let result = await Challenge.updateOne({_id: id}, {$set: data}, {new: true});
+        }else{
+            let newChallenge = new Challenge(data);
+            let result = await newChallenge.save();
+        }
+
 
        if(result){
         response = webResponse(202, true, result)  
@@ -64,6 +70,7 @@ router.post('/create', auth, async(req, res) => {
        res.send(err)
    }
 });
+
 
 
 router.post('/admin/create', async(req, res) => {
