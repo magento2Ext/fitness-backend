@@ -77,4 +77,4 @@ module.exports = mongoose.model('Challenge', challengeSchema);
 
 // type = steps | weight | mind
 // orgType = admin | org | employee
-// 
+// weightType = gain | loss | healthy 
