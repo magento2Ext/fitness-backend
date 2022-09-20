@@ -53,6 +53,7 @@ router.post('/create', auth, async(req, res) => {
         if(errors.indexOf(id) === -1){
  
             let result = await Challenge.updateOne({_id: id}, {$set: data}, {new: true});
+
         }else{
             let newChallenge = new Challenge(data);
             let result = await newChallenge.save();
@@ -254,7 +255,7 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "userId": { $first: "$userId"},
                 "type": { $first: "$type"},
                 "title": { $first: "$title"},
-                "description": { $first: "#description"},
+                "description": { $first: "$description"},
                 "pic": { $first: "$pic"},
                 "start": { $first: "$start"},
                 "end": { $first: "$end"},
@@ -288,7 +289,7 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "userId": { $first: "$userId"},
                 "type": { $first: "$type"},
                 "title": { $first: "$title"},
-                "description": { $first: "#description"},
+                "description": { $first: "$description"},
                 "pic": { $first: "$pic"},
                 "start": { $first: "$start"},
                 "end": { $first: "$end"},
@@ -322,7 +323,7 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "userId": { $first: "$userId"},
                 "type": { $first: "$type"},
                 "title": { $first: "$title"},
-                "description": { $first: "#description"},
+                "description": { $first: "$description"},
                 "pic": { $first: "$pic"},
                 "start": { $first: "$start"},
                 "end": { $first: "$end"},
@@ -388,7 +389,7 @@ router.post('/invitations', auth, async(req, res) => {
                 "userId": { $first: "$userId"},
                 "type": { $first: "$type"},
                 "title": { $first: "$title"},
-                "description": { $first: "#description"},
+                "description": { $first: "$description"},
                 "pic": { $first: "$pic"},
                 "start": { $first: "$start"},
                 "end": { $first: "$end"},
@@ -445,7 +446,7 @@ router.post('/challengeDetail', async(req, res) => {
                 "userId": { $first: "$userId"},
                 "type": { $first: "$type"},
                 "title": { $first: "$title"},
-                "description": { $first: "#description"},
+                "description": { $first: "$description"},
                 "pic": { $first: "$pic"},
                 "start": { $first: "$start"},
                 "end": { $first: "$end"},
