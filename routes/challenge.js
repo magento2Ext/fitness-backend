@@ -6,6 +6,7 @@ var ObjectID = require('mongodb').ObjectID;
 const Employee = require('../models/employee');
 const sendFCM = require('./fcm');
 const CronJob = require('cron').CronJob;
+const errors = ['', '0', 0, null, undefined];
 
 router.post('/create', auth, async(req, res) => {
    try{ 
