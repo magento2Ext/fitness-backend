@@ -16,7 +16,7 @@ router.post('/create', auth, async(req, res) => {
        let {userId, type, title, description, pic, start, end, orgType, winners, invites, dailyStepLimit, weightType, targetWeight, targetBMI, activities} = req.body;
 
        let data = {
-                userId: orgType == 'employee' ? empId : userId,
+                userId: orgType === 'employee' ? employee.organizationId : userId,
                 type: type,
                 title: title,
                 description: description,
@@ -26,7 +26,7 @@ router.post('/create', auth, async(req, res) => {
                 orgType: orgType,
                 winners: winners,
                 invites: invites,
-                employeeId: orgType === 'employee' ? employee.organizationId : null,
+                employeeId: orgType == 'employee' ? empId : null, 
         }
    
        if(type === 'steps'){
