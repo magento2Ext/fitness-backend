@@ -414,14 +414,23 @@ router.post('/challengeDetail', async(req, res) => {
         const challengeDetail =  await Challenge.aggregate([
             {$match: {_id: new ObjectID(req.body.id)}},
             { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
+            { "$invites": {path: "$invites", preserveNullAndEmptyArrays:true} },
             {$set: {participants: {$toObjectId: "$participants"} }},
+            {$set: {invites: {$toObjectId: "$invites"} }},
             { "$lookup": {
                "from": "employees",
                "localField": "participants",
                "foreignField": "_id",
                "as": "participantsObjects"
             }},
+            { "$lookup": {
+                "from": "employees",
+                "localField": "invites",
+                "foreignField": "_id",
+                "as": "invitesObjects"
+             }},
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
+            { "$unwind": {path: "$invitesObjects", preserveNullAndEmptyArrays:true}},
             {"$set": {"duration": {"$divide": [{ "$subtract": ["$end", "$start"] }, 1000 * 60 * 60 * 24]}}},
             { "$group": {
                 "_id": "$_id",
@@ -440,7 +449,8 @@ router.post('/challengeDetail', async(req, res) => {
                 "targetWeight": {$first: "$targetWeight"},
                 "targetBMI": {$first: "$targetBMI"},
                 "activities": {$first: "$activities"},
-                "participantsObjects": { "$push": "$participantsObjects" }
+                "participantsObjects": { "$push": "$participantsObjects" },
+                "invitesObjects": { "$push": "$invitesObjects" }
             }}
         ])
 
