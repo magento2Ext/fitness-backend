@@ -7,6 +7,10 @@ const challengeSchema = new mongoose.Schema({
         required: true,
 		default: null
     },
+    employeeId: {
+        type: String,
+		default: null
+    },
     type: {
         type: String,
         required: true,

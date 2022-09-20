@@ -11,6 +11,8 @@ router.post('/create', auth, async(req, res) => {
    try{ 
 
        let empId = req.user.user_id;
+       const employee = await Employee.findById(empId);
+
        let {userId, type, title, description, pic, start, end, orgType, winners, invites, dailyStepLimit, weightType, targetWeight, targetBMI, activities} = req.body;
 
        let data = {
@@ -23,10 +25,10 @@ router.post('/create', auth, async(req, res) => {
                 end: end,
                 orgType: orgType,
                 winners: winners,
-                invites: invites
+                invites: invites,
+                employeeId: orgType === 'employee' ? employee.organizationId : null,
         }
    
-
        if(type === 'steps'){
         data['dailyStepLimit'] = dailyStepLimit;
        }
