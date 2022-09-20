@@ -414,7 +414,7 @@ router.post('/challengeDetail', async(req, res) => {
         const challengeDetail =  await Challenge.aggregate([
             {$match: {_id: new ObjectID(req.body.id)}},
             { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
-            { "$invites": {path: "$invites", preserveNullAndEmptyArrays:true} },
+            { "$unwind": {path: "$invites", preserveNullAndEmptyArrays:true} },
             {$set: {participants: {$toObjectId: "$participants"} }},
             {$set: {invites: {$toObjectId: "$invites"} }},
             { "$lookup": {
