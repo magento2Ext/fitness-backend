@@ -70,7 +70,9 @@ const challengeSchema = new mongoose.Schema({
     targetBMI: {
         type: Number,
     },
-    activities: []
+    activities: {
+        type: Array,
+    }
 })
 
 module.exports = mongoose.model('Challenge', challengeSchema);
