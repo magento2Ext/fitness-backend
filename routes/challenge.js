@@ -408,11 +408,11 @@ router.post('/invitations', auth, async(req, res) => {
 });
 
 
-router.post('/challengeDetail', auth, async(req, res) => {
+router.post('/challengeDetail', async(req, res) => {
     try{ 
 
         const challengeDetail =  await Challenge.aggregate([
-            {$match: {_id: req.body.id}},
+            {$match: {_id: new ObjectID(req.body.id)}},
             { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
             {$set: {participants: {$toObjectId: "$participants"} }},
             { "$lookup": {
@@ -450,7 +450,8 @@ router.post('/challengeDetail', auth, async(req, res) => {
                 res.send(response)
         }, 200);
 
-    }catch(err){ console.log(err)
+    }catch(err){
+         console.log(err)
         res.send(err)
     };
 });
