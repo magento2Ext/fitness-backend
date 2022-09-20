@@ -72,6 +72,7 @@ const challengeSchema = new mongoose.Schema({
     },
     activities: {
         type: Array,
+        default: null
     }
 })
 
