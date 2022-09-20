@@ -14,14 +14,12 @@ router.post('/create', auth, async(req, res) => {
        const employee = await Employee.findById(empId);
 
        let {userId, type, title, description, pic, start, end, orgType, winners, invites, dailyStepLimit, weightType, targetWeight, targetBMI, activities} = req.body;
-       
+
        if(orgType === 'employee' && !employee.organizationId){
         response = webResponse(202, false, 'Error saving challenge')  
         res.send(response)
         return;
        }
-
-       
 
        let data = {
                 userId: orgType === 'employee' ? employee.organizationId : userId,
@@ -254,6 +252,12 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "end": { $first: "$end"},
                 "duration": {$first : "$duration"},
                 "winners": {$first: "$winners"},
+                "employeeId": {$first: "$employeeId"},
+                "dailyStepLimit": {$first: "$dailyStepLimit"},
+                "weightType": {$first: "$weightType"},
+                "targetWeight": {$first: "$targetWeight"},
+                "targetBMI": {$first: "$targetBMI"},
+                "activities": {$first: "$activities"},
                 "participantsObjects": { "$push": "$participantsObjects" }
             }}
         ])
@@ -282,6 +286,12 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "end": { $first: "$end"},
                 "duration": {$first : "$duration"},
                 "winners": {$first: "$winners"},
+                "employeeId": {$first: "$employeeId"},
+                "dailyStepLimit": {$first: "$dailyStepLimit"},
+                "weightType": {$first: "$weightType"},
+                "targetWeight": {$first: "$targetWeight"},
+                "targetBMI": {$first: "$targetBMI"},
+                "activities": {$first: "$activities"},
                 "participantsObjects": { "$push": "$participantsObjects" }
             }}
         ])
@@ -310,6 +320,12 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "end": { $first: "$end"},
                 "duration": {$first : "$duration"},
                 "winners": {$first: "$winners"},
+                "employeeId": {$first: "$employeeId"},
+                "dailyStepLimit": {$first: "$dailyStepLimit"},
+                "weightType": {$first: "$weightType"},
+                "targetWeight": {$first: "$targetWeight"},
+                "targetBMI": {$first: "$targetBMI"},
+                "activities": {$first: "$activities"},
                 "participantsObjects": { "$push": "$participantsObjects" }
             }}
         ]);
@@ -370,6 +386,12 @@ router.post('/invitations', auth, async(req, res) => {
                 "end": { $first: "$end"},
                 "duration": {$first : "$duration"},
                 "winners": {$first: "$winners"},
+                "employeeId": {$first: "$employeeId"},
+                "dailyStepLimit": {$first: "$dailyStepLimit"},
+                "weightType": {$first: "$weightType"},
+                "targetWeight": {$first: "$targetWeight"},
+                "targetBMI": {$first: "$targetBMI"},
+                "activities": {$first: "$activities"},
                 "participantsObjects": { "$push": "$participantsObjects" }
             }}
         ])
@@ -377,6 +399,54 @@ router.post('/invitations', auth, async(req, res) => {
     
         setTimeout(() => {
                 response = webResponse(202, true, newChallenges)  
+                res.send(response)
+        }, 200);
+
+    }catch(err){ console.log(err)
+        res.send(err)
+    };
+});
+
+
+router.post('/challengeDetail', auth, async(req, res) => {
+    try{ 
+
+        const challengeDetail =  await Challenge.aggregate([
+            {$match: {_id: req.body.id}},
+            { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
+            {$set: {participants: {$toObjectId: "$participants"} }},
+            { "$lookup": {
+               "from": "employees",
+               "localField": "participants",
+               "foreignField": "_id",
+               "as": "participantsObjects"
+            }},
+            { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
+            {"$set": {"duration": {"$divide": [{ "$subtract": ["$end", "$start"] }, 1000 * 60 * 60 * 24]}}},
+            { "$group": {
+                "_id": "$_id",
+                "userId": { $first: "$userId"},
+                "type": { $first: "$type"},
+                "title": { $first: "$title"},
+                "description": { $first: "#description"},
+                "pic": { $first: "$pic"},
+                "start": { $first: "$start"},
+                "end": { $first: "$end"},
+                "duration": {$first : "$duration"},
+                "winners": {$first: "$winners"},
+                "employeeId": {$first: "$employeeId"},
+                "dailyStepLimit": {$first: "$dailyStepLimit"},
+                "weightType": {$first: "$weightType"},
+                "targetWeight": {$first: "$targetWeight"},
+                "targetBMI": {$first: "$targetBMI"},
+                "activities": {$first: "$activities"},
+                "participantsObjects": { "$push": "$participantsObjects" }
+            }}
+        ])
+
+    
+        setTimeout(() => {
+                response = webResponse(202, true, challengeDetail)  
                 res.send(response)
         }, 200);
 
