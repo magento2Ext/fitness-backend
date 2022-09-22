@@ -76,9 +76,10 @@ router.post('/educationList', auth, async(req,res) => {
 			query = {userType: 'admin', module_id: req.body.module_id}
 		}
 
-		var education = await EducationModule.find(query);
-		console.log(employeeDetails, query, education)
+		console.log(query);
 
+		var education = await EducationModule.find(query);
+		 
 		var educationArray = [];
 
 		if(education.length!= 0){
