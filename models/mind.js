@@ -14,11 +14,6 @@ const mindSchema = new mongoose.Schema({
         type: String,
         required: true,
         default: null
-    },
-    type: {
-        type: String,
-        required: true,
-        default: null
     }
 
 }, {timestamps: true});

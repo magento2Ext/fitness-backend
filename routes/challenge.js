@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router()
 const Challenge = require('../models/challenge')
 const Activity = require('../models/activities')
+const Mind = require('../models/mind')
 const auth = require("../middleware/auth");
 const ObjectID = require('mongodb').ObjectID;
 const Employee = require('../models/employee');
@@ -609,5 +610,36 @@ var job = new CronJob(
 	true
 );
 
+
+router.post('/markActivity', auth, async(req, res) => {
+    try{ 
+ 
+        let empId = req.user.user_id;
+        const employee = await Employee.findById(empId);
+        let {activityId} = req.body;
+
+        let activityDetails = await Activity.findOne({_id: activityId})
+ 
+        if(activityDetails === null){
+         response = webResponse(202, false, 'Activity not found')  
+         res.send(response)
+         return;
+        }
+
+        let newMind = new Mind({
+            employeeId: empId,
+            activityId: activityId,
+            challengeId: activityDetails.challengeId
+        })
+
+        let result = await newMind.save();
+
+        response = webResponse(202, true, result)  
+        res.send(response)
+
+    }catch(err){ console.log(err)
+        res.send(err)
+    }
+ });
 
 module.exports = router
