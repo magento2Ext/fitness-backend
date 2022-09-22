@@ -642,4 +642,33 @@ router.post('/markActivity', auth, async(req, res) => {
     }
  });
 
+
+
+ router.post('/mindLeaderboard', auth, async(req, res) => {
+    try{ 
+
+        let empId = req.user.user_id;
+        const employee = await Employee.findById(empId);
+        let {challegeId} = req.body;
+
+        const challengeDetail =  await Challenge.aggregate([
+            {$match: {_id: new ObjectID(challegeId)}},
+
+
+        ]);
+
+        console.log('challengeDetail', challengeDetail);
+
+        setTimeout(() => {
+                response = webResponse(202, true, challengeDetail)  
+                res.send(response)
+        }, 200);
+
+    }catch(err){
+         console.log(err)
+        res.send(err)
+    };
+});
+
+
 module.exports = router
