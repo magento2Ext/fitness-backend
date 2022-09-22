@@ -476,16 +476,15 @@ router.post('/challengeDetail', async(req, res) => {
              }},
              { "$lookup": {
  
-                'from': 'activities',
-                //setting variable [searchId] where your string converted to ObjectId
-                'let': {"searchId": {$toObjectId: "$challengeId"}}, 
-                //search query with our [searchId] value
-                "pipeline":[
-                  //searching [searchId] value equals your field [_id]
-                  {"$match": {"$expr":[ {"_id": "$$searchId"}]}}
-                ],
+     
 
-                'as': 'activitiesObj'
+                "from": "activities",
+                "let": { "challengeId": "$_id" },
+                "pipeline": [
+                  { "$addFields": { "challengeId": { "$toObjectId": "$challengeId" }}},
+                  { "$match": { "$expr": { "$eq": [ "$challengeId", "$$challengeId" ] } } }
+                ],
+                "as": "activitiesObj"
 
              }},
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
