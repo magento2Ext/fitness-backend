@@ -19,16 +19,16 @@ const weightSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        required: true,
+        
         default: null
         // personal | challenge
     },
     challengeId: {
         type: String,
-        required: true,
+   
         default: null
     }
-});
+});s
 
 module.exports = mongoose.model('Weight', weightSchema)
 
