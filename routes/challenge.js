@@ -629,6 +629,13 @@ router.post('/mindLeaderboard', auth, async(req, res) => {
                "from": "minds",
                "localField": "participants",
                "foreignField": "employeeId",
+
+               pipeline: [
+                { $match: {
+                    $expr: {$eq: [ "$challengeId", challegeId]}
+                } }
+              ],
+              
                "as": "participantsObjects"
             }},
             {
