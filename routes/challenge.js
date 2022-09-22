@@ -477,7 +477,7 @@ router.post('/challengeDetail', async(req, res) => {
              { "$lookup": {
                 "from": "activities",
                 "localField": "_id",
-                "foreignField": "challengeId",
+                "foreignField": {$toObjectId: "challengeId"},
                 "as": "activitiesObj"
              }},
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
