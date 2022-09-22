@@ -68,6 +68,14 @@ router.post('/create', auth, async(req, res) => {
                 })
             }
 
+            if(result){
+                response = webResponse(202, true, result)  
+                res.send(response)
+               }else{
+                response = webResponse(202, false, 'Error saving challenge')  
+                res.send(response)
+               }
+
 
         }else{
             let newChallenge = new Challenge(data);
@@ -84,17 +92,17 @@ router.post('/create', auth, async(req, res) => {
                 newActivity.save();
             })
 
+            if(result){
+                response = webResponse(202, true, result)  
+                res.send(response)
+               }else{
+                response = webResponse(202, false, 'Error saving challenge')  
+                res.send(response)
+               }
+
         }
 
 
-       if(result){
-        response = webResponse(202, true, result)  
-        res.send(response)
-       }else{
-        response = webResponse(202, false, 'Error saving challenge')  
-        res.send(response)
-       }
- 
    }catch(err){ console.log(err)
        res.send(err)
    }
