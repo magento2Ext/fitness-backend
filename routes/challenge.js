@@ -636,12 +636,12 @@ router.post('/mindLeaderboard', auth, async(req, res) => {
                    "participantsObjects.challengeId": challegeId
                 }
              },
-
-             { "$group": {
+             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
+             {
+                "$group": {
                 "_id": "$_id",
-                "activities": {$first: "$activitiesObj"},
+                "participantsObjects": { "$push": "$participantsObjects" },
             }}
-        
         ]);
 
         console.log('challengeDetail', challengeDetail);
