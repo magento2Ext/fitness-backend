@@ -637,10 +637,18 @@ router.post('/mindLeaderboard', auth, async(req, res) => {
               
                "as": "participantsObjects"
             }},
+            
+            { "$lookup": {
+                "from": "employees",
+                "localField": "participants",
+                "foreignField": "_id",
+                "as": "employeeObjects"
+             }},
+
              { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
              {
                 "$group": {
-                "_id": "$participants",
+                "_id": "$employeeObjects",
                 "participantsObjects": { "$push": "$participantsObjects" },
                
             }},
