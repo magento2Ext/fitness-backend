@@ -73,10 +73,6 @@ const challengeSchema = new mongoose.Schema({
     },
     targetBMI: {
         type: Number,
-    },
-    activities: {
-        type: Array,
-        default: null
     }
 })
 

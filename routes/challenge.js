@@ -46,10 +46,6 @@ router.post('/create', auth, async(req, res) => {
           else data['targetWeight'] = targetWeight;
        }
 
-        if(type === 'mind'){
-            data['activities'] = activities;
-        }
-
         if(errors.indexOf(id) === -1){
  
             let result = await Challenge.updateOne({_id: id}, {$set: data}, {new: true});
