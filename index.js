@@ -12,7 +12,6 @@ const StepTracker = require('./models/step_tracker')
 const EmpStepTarget = require('./models/employee_step_target')
 const dateLib = require('date-and-time')
 const Employee = require('./models/employee')
-
 const admin = require('firebase-admin');
 var serviceAccount = require('./admin.json');
  admin.initializeApp({
@@ -32,6 +31,7 @@ const corsOptions = {
   },
   credentials: true,
 } 
+
 app.use(cors(corsOptions)) 
 
 const url = process.env.MONGO_URI;
@@ -95,9 +95,9 @@ app.post("/weight/save", auth, async(req, res) => {
 		const weight = new Weight({
 			employeeId: req.user.user_id,
 			weight: req.body.weight,
-			date: req.body.date,
-			type: req.body.type
+			date: req.body.date
 		})
+
 
 		if(req.body.height){
 	     	await Employee.updateOne({_id: empId}, {$set: {height: req.body.height, heightType: req.body.heightType}}, {new: true});
@@ -378,9 +378,7 @@ app.post("/weight", auth, async(req, res) => {
 			data.weightLastDay = weightLastDay != null ? weightLastDay.weight : 'Not added'
 
 			data.weightLastWeek = weightLastWeek !=null ? weightLastWeek.weight : 'Not added'
-	
 
-			
 			response = webResponse(202, true, data)  
 			res.send(response);
 			return;

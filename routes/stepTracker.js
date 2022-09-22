@@ -7,7 +7,7 @@
  require('../functions')
  const auth = require("../middleware/auth");
  
- router.post('/save', auth, async(req,res) => {
+ router.post('/save', auth, async(req, res) => {
 	try{ 
 
 	    var empId = req.user.user_id;
@@ -45,7 +45,7 @@
     }
 })
 
-router.post('/resetTarget', auth, async(req,res) => {
+router.post('/resetTarget', auth, async(req, res) => {
 	try{ 
 
 		var empId = req.user.user_id;
@@ -62,7 +62,7 @@ router.post('/resetTarget', auth, async(req,res) => {
     }
 });
 
- router.post('/list', auth, async(req,res) => {
+ router.post('/list', auth, async(req, res) => {
  
 	var empId = req.user.user_id;
 	const employeeDetails = await Employee.findById(empId);
@@ -199,7 +199,7 @@ router.post('/resetTarget', auth, async(req,res) => {
 		  
 						allSteps.forEach( (key) => {
 	
-						
+		
 							console.log('allSteps[count]', allSteps[count])
 							
 							if(allSteps[count] != null && allSteps[count] != undefined){

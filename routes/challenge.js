@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router()
 const Challenge = require('../models/challenge')
+const Activity = require('../models/activities')
 const auth = require("../middleware/auth");
-var ObjectID = require('mongodb').ObjectID;
+const ObjectID = require('mongodb').ObjectID;
 const Employee = require('../models/employee');
 const sendFCM = require('./fcm');
 const CronJob = require('cron').CronJob;
@@ -13,7 +14,6 @@ router.post('/create', auth, async(req, res) => {
 
        let empId = req.user.user_id;
        const employee = await Employee.findById(empId);
-
        let {id, userId, type, title, description, pic, start, end, orgType, winners, invites, dailyStepLimit, weightType, targetWeight, targetBMI, activities} = req.body;
 
        if(orgType === 'employee' && !employee.organizationId){
@@ -54,9 +54,36 @@ router.post('/create', auth, async(req, res) => {
  
             let result = await Challenge.updateOne({_id: id}, {$set: data}, {new: true});
 
+            if(type === 'mind'){
+                 
+                activities.forEach( (key) => {
+                    let activityData =  {
+                            challengeId: id,
+                            title:  key.title,
+                            description:  key.description,
+                            attachement:  key.attachment
+                       }
+                    Activity.updateOne({_id: key.id}, {$set: activityData}, {new: true});
+                    
+                })
+            }
+
+
         }else{
             let newChallenge = new Challenge(data);
             let result = await newChallenge.save();
+
+            activities.forEach( (key) => {
+                let activityData =  {
+                        challengeId: result._id,
+                        title:  key.title,
+                        description:  key.description,
+                        attachement:  key.attachment
+                   }
+                let newActivity =  new Activity(activityData);
+                newActivity.save();
+            })
+
         }
 
 
@@ -356,7 +383,6 @@ router.post('/myChallenges', auth, async(req, res) => {
         res.send(err)
     };
 });
-
 
 
 router.post('/invitations', auth, async(req, res) => {

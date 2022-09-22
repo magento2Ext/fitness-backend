@@ -82,6 +82,6 @@ const challengeSchema = new mongoose.Schema({
 
 module.exports = mongoose.model('Challenge', challengeSchema);
 
-// type = steps | weight | mind
+// type = steps | weight | mind | yoga | meditation | mood | routine | fitness 
 // orgType = admin | org | employee
 // weightType = gain | loss | healthy 
