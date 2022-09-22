@@ -642,7 +642,7 @@ router.post('/mindLeaderboard', auth, async(req, res) => {
                 "$group": {
                 "_id": "$participantsObjects",
                 "total": {$sum: 1}
-            },
+            }},
              {
                 "$group": {
                 "_id": "$participants",
