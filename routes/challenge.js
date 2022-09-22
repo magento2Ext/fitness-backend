@@ -626,7 +626,7 @@ router.post('/mindLeaderboard', auth, async(req, res) => {
             { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
             { "$lookup": {
 
-                "from": "activities",
+                "from": "minds",
                 "let": { "challengeId": "$_id" },
                 "pipeline": [
                   { "$addFields": { "challengeId": { "$toObjectId": "$challengeId" }}},
