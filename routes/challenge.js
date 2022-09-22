@@ -476,8 +476,17 @@ router.post('/challengeDetail', async(req, res) => {
              }},
              { "$lookup": {
                 "from": "activities",
-                "localField": "_id",
-                "foreignField": {$toObjectId: "challengeId"},
+
+                  //setting variable [searchId] where your string converted to ObjectId
+                  'let': {"challengeId": {$toObjectId: "$challengeId"}}, 
+                  //search query with our [searchId] value
+                  "pipeline":[
+                    //searching [searchId] value equals your field [_id]
+                    {"$match": {"$expr":[ {"_id": "$$challengeId"}]}},
+                    //projecting only fields you reaaly need, otherwise you will store all - huge data loads
+                    {"$project":{"_id": 1}}
+
+                  ],
                 "as": "activitiesObj"
              }},
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
