@@ -652,7 +652,7 @@ router.post('/markActivity', auth, async(req, res) => {
         let {challegeId} = req.body;
 
         const challengeDetail =  await Challenge.aggregate([
-            {$match: {_id: new ObjectID(challegeId)}},
+            {$match: {_id: challegeId}},
 
 
         ]);
