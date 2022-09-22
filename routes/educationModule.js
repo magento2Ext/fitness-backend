@@ -76,8 +76,7 @@ router.post('/educationList', auth, async(req,res) => {
 			query = {userType: 'admin', module_id: req.body.module_id}
 		}
 
-		console.log(query);
-
+	
 		var education = await EducationModule.find(query);
 		 
 		var educationArray = [];
@@ -105,6 +104,7 @@ router.post('/educationList', auth, async(req,res) => {
 				if(count == education.length){
 					response = webResponse(202, true, educationArray)  
 					res.send(response)
+					console.log('response', response);
 					return "";
 				}
 			})
