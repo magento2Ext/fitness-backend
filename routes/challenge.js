@@ -279,6 +279,12 @@ router.post('/myChallenges', auth, async(req, res) => {
                "foreignField": "_id",
                "as": "participantsObjects"
             }},
+            { "$lookup": {
+                "from": "activities",
+                "localField": "_id",
+                "foreignField": "challengeId",
+                "as": "activitiesObj"
+             }},
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
             {"$set": {"duration": {"$divide": [{ "$subtract": ["$end", "$start"] }, 1000 * 60 * 60 * 24]}}},
             { "$group": {
@@ -297,7 +303,7 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "weightType": {$first: "$weightType"},
                 "targetWeight": {$first: "$targetWeight"},
                 "targetBMI": {$first: "$targetBMI"},
-                "activities": {$first: "$activities"},
+                "activities": {$first: "$activitiesObj"},
                 "participantsObjects": { "$push": "$participantsObjects" }
             }}
         ])
@@ -468,6 +474,12 @@ router.post('/challengeDetail', async(req, res) => {
                 "foreignField": "_id",
                 "as": "invitesObjects"
              }},
+             { "$lookup": {
+                "from": "activities",
+                "localField": "_id",
+                "foreignField": "challengeId",
+                "as": "activitiesObj"
+             }},
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
             { "$unwind": {path: "$invitesObjects", preserveNullAndEmptyArrays:true}},
             {"$set": {"duration": {"$divide": [{ "$subtract": ["$end", "$start"] }, 1000 * 60 * 60 * 24]}}},
@@ -487,7 +499,7 @@ router.post('/challengeDetail', async(req, res) => {
                 "weightType": {$first: "$weightType"},
                 "targetWeight": {$first: "$targetWeight"},
                 "targetBMI": {$first: "$targetBMI"},
-                "activities": {$first: "$activities"},
+                "activities": {$first: "$activitiesObj"},
                 "participantsObjects": { "$push": "$participantsObjects" },
                 "invitesObjects": { "$push": "$invitesObjects" }
             }}
