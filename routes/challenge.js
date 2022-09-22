@@ -619,21 +619,24 @@ router.post('/mindLeaderboard', auth, async(req, res) => {
 
         let empId = req.user.user_id;
         const employee = await Employee.findById(empId);
+
         let {challegeId} = req.body;
 
         const challengeDetail =  await Challenge.aggregate([
             {$match: {_id: new ObjectID(challegeId)}},
             { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
             { "$lookup": {
+               "from": "minds",
+               "localField": "participants",
+               "foreignField": "employeeId",
+               "as": "participantsObjects"
+            }},
+            {
+                $match:{
+                   "participantsObjects.challengeId": challegeId
+                }
+             },
 
-                "from": "minds",
-                "let": { "challengeId": "$_id" },
-                "pipeline": [
-                  { "$addFields": { "challengeId": { "$toObjectId": "$challengeId" }}},
-                  { "$match": { "$expr": { "$eq": [ "$challengeId", "$$challengeId" ] } } }
-                ],
-                "as": "activitiesObj"
-             }},
              { "$group": {
                 "_id": "$_id",
                 "activities": {$first: "$activitiesObj"},
