@@ -280,10 +280,21 @@ router.post('/myChallenges', auth, async(req, res) => {
                "as": "participantsObjects"
             }},
             { "$lookup": {
+                "from": "employees",
+                "localField": "invites",
+                "foreignField": "_id",
+                "as": "invitesObjects"
+             }},
+             { "$lookup": {
+
                 "from": "activities",
-                "localField": "_id",
-                "foreignField": "challengeId",
+                "let": { "challengeId": "$_id" },
+                "pipeline": [
+                  { "$addFields": { "challengeId": { "$toObjectId": "$challengeId" }}},
+                  { "$match": { "$expr": { "$eq": [ "$challengeId", "$$challengeId" ] } } }
+                ],
                 "as": "activitiesObj"
+
              }},
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
             {"$set": {"duration": {"$divide": [{ "$subtract": ["$end", "$start"] }, 1000 * 60 * 60 * 24]}}},
@@ -319,6 +330,23 @@ router.post('/myChallenges', auth, async(req, res) => {
                "foreignField": "_id",
                "as": "participantsObjects"
             }},
+            { "$lookup": {
+                "from": "employees",
+                "localField": "invites",
+                "foreignField": "_id",
+                "as": "invitesObjects"
+             }},
+             { "$lookup": {
+
+                "from": "activities",
+                "let": { "challengeId": "$_id" },
+                "pipeline": [
+                  { "$addFields": { "challengeId": { "$toObjectId": "$challengeId" }}},
+                  { "$match": { "$expr": { "$eq": [ "$challengeId", "$$challengeId" ] } } }
+                ],
+                "as": "activitiesObj"
+
+             }},
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
             {"$set": {"duration": {"$divide": [{ "$subtract": ["$end", "$start"] }, 1000 * 60 * 60 * 24]}}},
             { "$group": {
@@ -353,6 +381,23 @@ router.post('/myChallenges', auth, async(req, res) => {
                "foreignField": "_id",
                "as": "participantsObjects"
             }},
+            { "$lookup": {
+                "from": "employees",
+                "localField": "invites",
+                "foreignField": "_id",
+                "as": "invitesObjects"
+             }},
+             { "$lookup": {
+
+                "from": "activities",
+                "let": { "challengeId": "$_id" },
+                "pipeline": [
+                  { "$addFields": { "challengeId": { "$toObjectId": "$challengeId" }}},
+                  { "$match": { "$expr": { "$eq": [ "$challengeId", "$$challengeId" ] } } }
+                ],
+                "as": "activitiesObj"
+
+             }},
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
             {"$set": {"duration": {"$divide": [{ "$subtract": ["$end", "$start"] }, 1000 * 60 * 60 * 24]}}},
             { "$group": {
@@ -418,6 +463,23 @@ router.post('/invitations', auth, async(req, res) => {
                "foreignField": "_id",
                "as": "participantsObjects"
             }},
+            { "$lookup": {
+                "from": "employees",
+                "localField": "invites",
+                "foreignField": "_id",
+                "as": "invitesObjects"
+             }},
+             { "$lookup": {
+
+                "from": "activities",
+                "let": { "challengeId": "$_id" },
+                "pipeline": [
+                  { "$addFields": { "challengeId": { "$toObjectId": "$challengeId" }}},
+                  { "$match": { "$expr": { "$eq": [ "$challengeId", "$$challengeId" ] } } }
+                ],
+                "as": "activitiesObj"
+
+             }},
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
             {"$set": {"duration": {"$divide": [{ "$subtract": ["$end", "$start"] }, 1000 * 60 * 60 * 24]}}},
             { "$group": {
@@ -475,8 +537,6 @@ router.post('/challengeDetail', async(req, res) => {
                 "as": "invitesObjects"
              }},
              { "$lookup": {
- 
-     
 
                 "from": "activities",
                 "let": { "challengeId": "$_id" },
