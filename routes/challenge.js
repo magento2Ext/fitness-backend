@@ -646,7 +646,8 @@ router.post('/mindLeaderboard', auth, async(req, res) => {
              { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
              {
                 "$group": {
-                "_id": "employeeObjects",
+                "_id": null,
+                "employee": "$employeeObjects",
                 "participantsObjects": { "$push": "$participantsObjects" },
                
             }},
