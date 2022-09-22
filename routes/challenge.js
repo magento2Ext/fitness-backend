@@ -641,7 +641,7 @@ router.post('/mindLeaderboard', auth, async(req, res) => {
              {
                 "$group": {
                 "_id": "$participants",
-                "participantsObjects": { "$push": "$participantsObject" },
+                "participantsObjects": { "$push": "$participantsObjects" },
             }}
         ]);
 
