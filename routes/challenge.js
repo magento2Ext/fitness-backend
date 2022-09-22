@@ -10,6 +10,34 @@ const sendFCM = require('./fcm');
 const CronJob = require('cron').CronJob;
 const errors = ['', '0', 0, null, undefined];
 
+
+var job = new CronJob(
+	"44 17 * * *",
+	async () =>  {
+
+        let challenges = await Challenge.find();
+
+        challenges.forEach( async (challenge) => {
+
+            const recentDate = new Date();
+
+            if(recentDate == challenge.start){
+               await Challenge.updateOne({_id: challenge._id}, {$set: {status: 'ongoing'}}, {new: true}); 
+            }
+
+            if(recentDate > challenge.end){
+                await Challenge.updateOne({_id: challenge._id}, {$set: {status: 'completed'}}, {new: true}); 
+             }
+    
+        })
+		
+	},
+	null,
+	true
+);
+
+
+
 router.post('/create', auth, async(req, res) => {
    try{ 
 
@@ -585,31 +613,45 @@ router.post('/challengeDetail', async(req, res) => {
     };
 });
 
-var job = new CronJob(
-	"44 17 * * *",
-	async () =>  {
 
-        let challenges = await Challenge.find();
+router.post('/mindLeaderboard', auth, async(req, res) => {
+    try{ 
 
-        challenges.forEach( async (challenge) => {
+        let empId = req.user.user_id;
+        const employee = await Employee.findById(empId);
+        let {challegeId} = req.body;
 
-            const recentDate = new Date();
+        const challengeDetail =  await Challenge.aggregate([
+            {$match: {_id: new ObjectID(challegeId)}},
+            { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
+            { "$lookup": {
 
-            if(recentDate == challenge.start){
-               await Challenge.updateOne({_id: challenge._id}, {$set: {status: 'ongoing'}}, {new: true}); 
-            }
+                "from": "activities",
+                "let": { "challengeId": "$_id" },
+                "pipeline": [
+                  { "$addFields": { "challengeId": { "$toObjectId": "$challengeId" }}},
+                  { "$match": { "$expr": { "$eq": [ "$challengeId", "$$challengeId" ] } } }
+                ],
+                "as": "activitiesObj"
+             }},
+             { "$group": {
+                "activities": {$first: "$activitiesObj"},
+            }}
+        
+        ]);
 
-            if(recentDate > challenge.end){
-                await Challenge.updateOne({_id: challenge._id}, {$set: {status: 'completed'}}, {new: true}); 
-             }
-    
-        })
-		
-	},
-	null,
-	true
-);
+        console.log('challengeDetail', challengeDetail);
 
+        setTimeout(() => {
+                response = webResponse(202, true, challengeDetail)  
+                res.send(response)
+        }, 200);
+
+    }catch(err){
+         console.log(err)
+        res.send(err)
+    };
+});
 
 router.post('/markActivity', auth, async(req, res) => {
     try{ 
@@ -641,34 +683,5 @@ router.post('/markActivity', auth, async(req, res) => {
         res.send(err)
     }
  });
-
-
-
- router.post('/mindLeaderboard', auth, async(req, res) => {
-    try{ 
-
-        let empId = req.user.user_id;
-        const employee = await Employee.findById(empId);
-        let {challegeId} = req.body;
-
-        const challengeDetail =  await Challenge.aggregate([
-            {$match: {_id: challegeId}},
-
-
-        ]);
-
-        console.log('challengeDetail', challengeDetail);
-
-        setTimeout(() => {
-                response = webResponse(202, true, challengeDetail)  
-                res.send(response)
-        }, 200);
-
-    }catch(err){
-         console.log(err)
-        res.send(err)
-    };
-});
-
 
 module.exports = router
