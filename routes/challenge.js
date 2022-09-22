@@ -629,7 +629,6 @@ router.post('/mindLeaderboard', auth, async(req, res) => {
                "from": "minds",
                "localField": "participants",
                "foreignField": "employeeId",
-
                pipeline: [
                 { $match: {
                     $expr: {$eq: [ "$challengeId", challegeId]}
@@ -638,16 +637,17 @@ router.post('/mindLeaderboard', auth, async(req, res) => {
               
                "as": "participantsObjects"
             }},
-            {
-                $match:{
-                   "participantsObjects.challengeId": challegeId
-                }
-             },
              { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
+             {
+                "let": { "activityObj": {
+                    userId: "participants",
+                    activities: "$participantsObjects"
+                } },
+             },
              {
                 "$group": {
                 "_id": "$_id",
-                "participantsObjects": { "$push": "$participantsObjects" },
+                "participantsObjects": { "$push": "$activityObj" },
             }}
         ]);
 
