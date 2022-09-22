@@ -625,9 +625,10 @@ router.post('/mindLeaderboard', auth, async(req, res) => {
         const challengeDetail =  await Challenge.aggregate([
             {$match: {_id: new ObjectID(challegeId)}},
             { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
+            {"let": {"empId": {$toObjectId: "$participants"} }},
             { "$lookup": {
                 "from": "employees",
-                "localField": "participants",
+                "localField": "$empId",
                 "foreignField": "_id",
                 "as": "employeeObjects"
              }},
