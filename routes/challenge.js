@@ -482,9 +482,8 @@ router.post('/challengeDetail', async(req, res) => {
                 //search query with our [searchId] value
                 "pipeline":[
                   //searching [searchId] value equals your field [_id]
-                  {"$match": {"_id": "$$searchId"}}
-                  //projecting only fields you reaaly need, otherwise you will store all - huge data loads
-          
+                  {"$match": {"$expr":[ {"_id": "$$searchId"}, {"$$searchId": "_id"}]}}
+      
 
                 ],
 
