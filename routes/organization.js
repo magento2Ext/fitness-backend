@@ -106,6 +106,7 @@ router.post("/module/list", auth, async(req, res) => {
   try{ 
 		var empId = req.user.user_id;
 		const employee = await Employee.findById(empId)
+		console.log('employee', employee);
 		if(!employee){
 			response = webResponse(404, false, "Employee not found.")  
 			res.send(response)
@@ -128,6 +129,7 @@ router.post("/module/list", auth, async(req, res) => {
 				return;
 			}
 		} else{
+			console.log('if(org) {');
 			const modulesAvailable = await Module.find()
 			response = webResponse(201, true, modulesAvailable)  
 			res.send(response)		
