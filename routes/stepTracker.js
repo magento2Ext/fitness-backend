@@ -127,6 +127,7 @@ router.post('/resetTarget', auth, async(req, res) => {
 		if(stepTarget) {
 			emptStepTarget['step_target'] = stepTarget.step_target;
 			emptStepTarget['targetType'] = stepTarget.type;
+			emptStepTarget['targetSteps'] = stepTarget.steps;
 			target = true;
 		}else{
 			emptStepTarget['step_target'] = '0';
