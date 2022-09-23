@@ -111,11 +111,9 @@ router.post("/module/list", auth, async(req, res) => {
 			res.send(response)
 			return;
 		}
-		if(employee.employeeType == "Coorporate") {
+		if(employee.userOrganizations.length > 0) {
 			const org = await Organization.findById(employee.organizationId)
 			if(org) {
-				
-
 				var modules = org.modules; 
 				var ids = modules.split(",")
 				var ModuleList = await Module.find({ _id : { $in : ids } })
