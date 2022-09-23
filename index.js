@@ -20,7 +20,7 @@ var serviceAccount = require('./admin.json');
 	authDomain: process.env.AUTH_DOMAIN,
  });
 
-const whitelist = [process.env.REACT_APP_URL, 'http://localhost:3000']
+const whitelist = [process.env.REACT_APP_URL, 'http://localhost:3000', 'http://localhost:3001']
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || whitelist.indexOf(origin) !== -1) {
