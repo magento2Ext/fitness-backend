@@ -107,7 +107,7 @@ router.post('/educationList', auth, async(req,res) => {
 				count++;
 				if(count == education.length){
 					console.log('response 222', response);
-					response = webResponse(202, true, educationArray)  
+					response = webResponse(201, true, educationArray)  
 					res.send(response)
 					return "";
 				}
