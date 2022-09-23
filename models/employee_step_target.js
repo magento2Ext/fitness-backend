@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 
-
 const employeeStepTargetSchema = new mongoose.Schema({
 
     employeeId: {
@@ -20,6 +19,10 @@ const employeeStepTargetSchema = new mongoose.Schema({
     type: {
         type: String,
         required: true,
+    },
+    steps: {
+        type: number,
+        default: 0
     }
 })
 

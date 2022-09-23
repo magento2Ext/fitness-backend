@@ -10,7 +10,14 @@
  router.post('/save', auth, async(req, res) => {
 	try{ 
 
+		var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
+
+		let stepTargetSteps = stepTarget.step_target <= (stepTarget.steps + req.body.steps) ?  (stepTarget.steps + req.body.steps) : stepTarget.step_target;
+
+		await EmpStepTarget.updateOne({ employeeId: req.user.user_id}, {$set: {steps: stepTargetSteps}}, {new: true});
+
 	    var empId = req.user.user_id;
+
 		var today =  dateLib.format(new Date(),'YYYY-MM-DD');
 
 		const stepTracker = new StepTracker({
@@ -23,9 +30,10 @@
 		})
 		
 		const stepTrackerDetails = await StepTracker.findOne({ date: today,  employeeId: req.user.user_id});
+
 		if (stepTrackerDetails) {  
 			stepTrackerDetails.km =  req.body.km
-			stepTrackerDetails.steps =  req.body.steps
+			stepTrackerDetails.steps =  stepTrackerDetails.steps + req.body.steps
 			stepTrackerDetails.calories =  req.body.calories
 			stepTrackerDetails.duration =  req.body.duration
 			const a1 = await stepTrackerDetails.save()
