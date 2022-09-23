@@ -15,7 +15,7 @@
 		let stepTargetSteps = (stepTarget.steps + 1) <= stepTarget.step_target ?  (stepTarget.steps + 1) : stepTarget.step_target;
 
 		console.log('stepTargetSteps', stepTargetSteps);
-		
+
 		await EmpStepTarget.updateOne({_id: stepTarget._id}, {$set: {steps: stepTargetSteps}}, {new: true});
 
 	    var empId = req.user.user_id;
@@ -24,7 +24,7 @@
 
 		const stepTracker = new StepTracker({
 			employeeId: empId,
-			steps: req.body.steps,
+			steps: req.body.steps + 1,
 			km: req.body.km,
 			calories: req.body.calories,
 			duration: req.body.duration,

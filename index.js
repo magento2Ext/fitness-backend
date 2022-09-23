@@ -253,9 +253,6 @@ app.post("/weight", auth, async(req, res) => {
 				}
 			}).sort({date:-1});
 
-		
-
-		
 			async function lastWeekWeight(){
 
 				let promise = new Promise( async (resolve, reject) => {
@@ -369,7 +366,7 @@ app.post("/weight", auth, async(req, res) => {
 				data.weightLastMonth = weightLastMonth_1.weight
 			} 
 			// data.lastOneWeekWeight = weightArray
-			data.weightLastMonthArray = weightLastMonth;
+			data.weightLastMonthArray = weightLastMonth.reverse();
 			data.BMI = await BMI_CAL(recentWeight.weight);
 			
 			data.recentWeight = recentWeight.weight
