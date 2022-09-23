@@ -359,7 +359,7 @@ app.post("/weight", auth, async(req, res) => {
 			var data = {}; 
 			let weeklyResult = await lastWeekWeight();
 		 
-			data.weight_diff = weeklyResult;
+			data.weight_diff = weeklyResult.reverse();
 
 			data.weightLastMonth = 'Not added';
 			if(weightLastMonth_1 != null) {
