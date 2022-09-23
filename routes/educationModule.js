@@ -8,8 +8,6 @@ const auth = require("../middleware/auth");
 var ObjectID = require('mongodb').ObjectID;
 require('../functions')
  
- 
- 
  router.post('/list', async(req,res) => {
     try{
 
@@ -46,6 +44,7 @@ require('../functions')
 				"created_at": col.created_at,
 				"timeSinc":timeAgo(col.created_at) + "ago"
 			}
+
 			educationArray.push(newEdu)
 			count++;
 
@@ -81,11 +80,11 @@ router.post('/educationList', auth, async(req,res) => {
 		 
 		var educationArray = [];
 
-		if(education.length!= 0){
+		if(education.length != 0){
 			let count = 0;
 			education.forEach( async (col) => {
 				let moduleName = await  ModuleAdded.findById(col.module_id);
-				console.log('moduleName', moduleName)
+		 
 				newEdu = {
 					'id' :  col._id,
 					"title": col.title,
@@ -102,13 +101,14 @@ router.post('/educationList', auth, async(req,res) => {
 				educationArray.push(newEdu); 
 				count++;
 				if(count == education.length){
+					console.log('response 222', response);
 					response = webResponse(202, true, educationArray)  
 					res.send(response)
-					console.log('response', response);
 					return "";
 				}
 			})
 		}else{
+			console.log('response 111');
 			response = webResponse(201, true, educationArray)  
 			res.send(response)
 			return "";
