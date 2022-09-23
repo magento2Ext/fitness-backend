@@ -114,6 +114,8 @@ router.post("/module/list", auth, async(req, res) => {
 		if(employee.employeeType == "Coorporate") {
 			const org = await Organization.findById(employee.organizationId)
 			if(org) {
+				console.log('if(org) {', org);
+				
 				var modules = org.modules; 
 				var ids = modules.split(",")
 				var ModuleList = await Module.find({ _id : { $in : ids } })
@@ -535,7 +537,6 @@ router.put('/update/:id',async(req,res)=> {
 							"module_id":a1.module_id,
 							"subModule_id":a1.subModule_id
 						}
-		
 		
         response = webResponse(202, true, orgDetail)  
 	    res.send(response)

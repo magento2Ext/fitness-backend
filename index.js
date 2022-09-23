@@ -71,7 +71,6 @@ app.use('/chat_group',chatGroup)
 const chat = require('./routes/chat')
 app.use('/chat',chat)
 
-
 const teacherCategories = require('./routes/teacherCategories')
 app.use('/categories',teacherCategories)
 
@@ -174,16 +173,16 @@ app.post("/weight", auth, async(req, res) => {
 				result.BMI = BMI;
 
 				if(BMI < 18.5){
-					result.status = 'underweight'
+					result.status = 'Underweight'
 					result.innerText = "BMI indicates that you are underweight, so you may need to put on some weight. You are recommended to ask your doctor or a dietitian for advice";    
 				}else if((BMI > 18.5) && (BMI < 24.9)){
-					result.status = 'normal'
+					result.status = 'Healthy Weight'
 					result.innerText = "Your BMI falls within the normal or healthy weight range";
 				}else if((BMI > 25) && (BMI < 29.9 )){
-					result.status = 'overweight'
+					result.status = 'Overweight'
 					result.innerText = "Your BMI falls within the overweight, so you may need to loose some weight. You are recommended to ask your doctor or a dietitian for advice";
 				}else{
-					result.status = 'obese'
+					result.status = 'Obese'
 					result.innerText = "Your BMI falls within the obese range, so you may need to loose weight. You are recommended to ask your doctor or a dietitian for advice";
 				}
 
