@@ -366,7 +366,7 @@ app.post("/weight", auth, async(req, res) => {
 				data.weightLastMonth = weightLastMonth_1.weight
 			} 
 			// data.lastOneWeekWeight = weightArray
-			data.weightLastMonthArray = weightLastMonth.sortBy(function(o){ return o.date }); 
+			data.weightLastMonthArray = weightLastMonth;
 			data.BMI = await BMI_CAL(recentWeight.weight);
 			
 			data.recentWeight = recentWeight.weight
