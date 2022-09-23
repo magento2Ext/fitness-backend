@@ -505,9 +505,9 @@ router.put('/update/:id',async(req,res)=> {
 		organization.modules = req.body.modules,
 		organization.module_id = req.body.module_id
 		organization.subModule_id = req.body.subModule_id
-		
 		organization.logo = req.body.logo
         organization.themecode = req.body.themecode
+
         const a1 = await organization.save()
 		
 		var modules = a1.modules; 
@@ -526,17 +526,18 @@ router.put('/update/:id',async(req,res)=> {
 		})
 		
 		var orgDetail = {
-							'_id' :  a1._id,
+							'_id': a1._id,
 							"organizationName": a1.organizationName,
 							"email": a1.email,
 							"password": a1.password,
-							"zipCode":a1.zipCode,
-							"referCode":a1.referCode,
-							"logo":a1.logo,
-							"themecode":a1.themecode,
-							"modules":moduleNames,
-							"module_id":a1.module_id,
-							"subModule_id":a1.subModule_id
+							"zipCode": a1.zipCode,
+							"referCode": a1.referCode,
+							"logo": a1.logo,
+							"themecode": a1.themecode,
+							"modules": moduleNames,
+							"module_id": a1.module_id,
+							"subModule_id": a1.subModule_id,
+							"status": a1.status,
 						}
 		
         response = webResponse(202, true, orgDetail)  
