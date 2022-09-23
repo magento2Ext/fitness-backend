@@ -69,7 +69,7 @@ router.post('/educationList', auth, async(req,res) => {
 		var empId = req.user.user_id;
 		const employeeDetails = await Employee.findById(empId);
 
-		console.log('response 111', employeeDetails);
+	
 
         let query = {};
 		if(employeeDetails.userOrganizations.length !=0 ){
@@ -78,6 +78,8 @@ router.post('/educationList', auth, async(req,res) => {
 			query = {userType: 'admin', module_id: req.body.module_id}
 		}
 
+
+		console.log('query 111', query);
 	
 		var education = await EducationModule.find(query);
 		 
