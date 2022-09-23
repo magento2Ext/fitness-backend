@@ -114,8 +114,8 @@ router.post("/module/list", auth, async(req, res) => {
 		if(employee.employeeType == "Coorporate") {
 			const org = await Organization.findById(employee.organizationId)
 			if(org) {
-				console.log('if(org) {', org);
 				
+
 				var modules = org.modules; 
 				var ids = modules.split(",")
 				var ModuleList = await Module.find({ _id : { $in : ids } })
@@ -124,6 +124,7 @@ router.post("/module/list", auth, async(req, res) => {
 				res.send(response)		
 				return;
 			} else{
+				console.log('if(org) {', org);
 				response = webResponse(404, false, "Organization not found")  
 				res.send(response)
 				return;
