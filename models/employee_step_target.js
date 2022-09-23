@@ -21,7 +21,7 @@ const employeeStepTargetSchema = new mongoose.Schema({
         required: true,
     },
     steps: {
-        type: number,
+        type: Number,
         default: 0
     }
 })
