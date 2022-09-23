@@ -14,7 +14,9 @@
 
 		let stepTargetSteps = (stepTarget.steps + 1) <= stepTarget.step_target ?  (stepTarget.steps + 1) : stepTarget.step_target;
 
-		await EmpStepTarget.updateOne({ employeeId: req.user.user_id}, {$set: {steps: stepTargetSteps}}, {new: true});
+		console.log('stepTargetSteps', stepTargetSteps);
+		
+		await EmpStepTarget.updateOne({_id: stepTarget._id}, {$set: {steps: stepTargetSteps}}, {new: true});
 
 	    var empId = req.user.user_id;
 
