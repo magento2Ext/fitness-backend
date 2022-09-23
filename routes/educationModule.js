@@ -68,6 +68,9 @@ router.post('/educationList', auth, async(req,res) => {
 
 		var empId = req.user.user_id;
 		const employeeDetails = await Employee.findById(empId);
+
+		console.log('response 111', employeeDetails);
+
         let query = {};
 		if(employeeDetails.userOrganizations.length !=0 ){
 			query = {userType: 'org', auth_user_id: String(employeeDetails.organizationId), module_id: req.body.module_id}
@@ -108,7 +111,7 @@ router.post('/educationList', auth, async(req,res) => {
 				}
 			})
 		}else{
-			console.log('response 111');
+		
 			response = webResponse(201, true, educationArray)  
 			res.send(response)
 			return "";
