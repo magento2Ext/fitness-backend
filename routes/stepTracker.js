@@ -32,9 +32,9 @@
 		const stepTrackerDetails = await StepTracker.findOne({ date: today,  employeeId: req.user.user_id});
 
 		if (stepTrackerDetails) {  
-			stepTrackerDetails.km = stepTrackerDetails.km + req.body.km
-			stepTrackerDetails.steps = stepTrackerDetails.steps + req.body.steps
-			stepTrackerDetails.calories = stepTrackerDetails.calories + req.body.calories
+			stepTrackerDetails.km = Number(stepTrackerDetails.km) + req.body.km
+			stepTrackerDetails.steps = Number(stepTrackerDetails.steps) + req.body.steps
+			stepTrackerDetails.calories = Number(stepTrackerDetails.calories) + req.body.calories
 			stepTrackerDetails.duration = req.body.duration
 			const a1 = await stepTrackerDetails.save()
 			response = webResponse(202, true, a1)  
