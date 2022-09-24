@@ -14,17 +14,15 @@
 
 		let stepTargetSteps = (stepTarget.steps + 1) <= stepTarget.step_target ?  (stepTarget.steps + 1) : stepTarget.step_target;
 
-		console.log('stepTargetSteps', stepTargetSteps);
-
 		await EmpStepTarget.updateOne({_id: stepTarget._id}, {$set: {steps: stepTargetSteps}}, {new: true});
 
 	    var empId = req.user.user_id;
 
-		var today =  dateLib.format(new Date(),'YYYY-MM-DD');
+		var today =  dateLib.format(new Date(), 'YYYY-MM-DD');
 
 		const stepTracker = new StepTracker({
 			employeeId: empId,
-			steps: req.body.steps + 1,
+			steps: req.body.steps,
 			km: req.body.km,
 			calories: req.body.calories,
 			duration: req.body.duration,
@@ -34,10 +32,10 @@
 		const stepTrackerDetails = await StepTracker.findOne({ date: today,  employeeId: req.user.user_id});
 
 		if (stepTrackerDetails) {  
-			stepTrackerDetails.km =  Number(stepTrackerDetails.km) +  Number(req.body.km)
-			stepTrackerDetails.steps =   Number(stepTrackerDetails.steps) + 1
-			stepTrackerDetails.calories =   Number(stepTrackerDetails.calories) +  Number(req.body.calories)
-			stepTrackerDetails.duration =  stepTrackerDetails.duration
+			stepTrackerDetails.km = stepTrackerDetails.km + req.body.km
+			stepTrackerDetails.steps = stepTrackerDetails.steps + req.body.steps
+			stepTrackerDetails.calories = stepTrackerDetails.calories + req.body.calories
+			stepTrackerDetails.duration = req.body.duration
 			const a1 = await stepTrackerDetails.save()
 			response = webResponse(202, true, a1)  
 			res.send(response);
