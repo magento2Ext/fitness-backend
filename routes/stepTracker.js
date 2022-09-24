@@ -36,7 +36,7 @@
 			stepTrackerDetails.km = Number(stepTrackerDetails.km) + Number(req.body.km)
 			stepTrackerDetails.steps = Number(stepTrackerDetails.steps) + Number(req.body.steps)
 			stepTrackerDetails.calories = Number(stepTrackerDetails.calories) + Number(req.body.calories)
-			stepTrackerDetails.duration = req.body.duration
+			stepTrackerDetails.duration = Number(stepTrackerDetails.duration) + Number(req.body.duration)
 			const a1 = await stepTrackerDetails.save()
 			response = webResponse(202, true, a1)  
 			res.send(response);

@@ -37,7 +37,7 @@ const errors = ['', '0', 0, null, undefined];
 		var empId = req.user.user_id;
 		const employeeDetails = await Employee.findById(empId)
 		
-		if(employeeDetails.employeeType && employeeDetails.employeeType == "Coorporate") {
+		if(employeeDetails.userOrganizations.length > 0) {
 			const orgDetails = await Organization.findById(employeeDetails.organizationId);
 			if (orgDetails) {  
 				var subModuleIds = orgDetails.subModule_id
