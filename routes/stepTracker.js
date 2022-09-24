@@ -10,10 +10,7 @@
  router.post('/save', auth, async(req, res) => {
 	try{ 
 
-
-        console.log('bodyyyyy', req.body)
-		return;
-
+ 
 		var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
 
 		let stepTargetSteps = (stepTarget.steps + 1) <= stepTarget.step_target ?  (stepTarget.steps + 1) : stepTarget.step_target;
@@ -36,9 +33,9 @@
 		const stepTrackerDetails = await StepTracker.findOne({ date: today,  employeeId: req.user.user_id});
 
 		if (stepTrackerDetails) {  
-			stepTrackerDetails.km = Number(stepTrackerDetails.km) + req.body.km
-			stepTrackerDetails.steps = Number(stepTrackerDetails.steps) + req.body.steps
-			stepTrackerDetails.calories = Number(stepTrackerDetails.calories) + req.body.calories
+			stepTrackerDetails.km = Number(stepTrackerDetails.km) + Number(req.body.km)
+			stepTrackerDetails.steps = Number(stepTrackerDetails.steps) + Number(req.body.steps)
+			stepTrackerDetails.calories = Number(stepTrackerDetails.calories) + Number(req.body.calories)
 			stepTrackerDetails.duration = req.body.duration
 			const a1 = await stepTrackerDetails.save()
 			response = webResponse(202, true, a1)  
