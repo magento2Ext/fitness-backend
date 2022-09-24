@@ -10,6 +10,10 @@
  router.post('/save', auth, async(req, res) => {
 	try{ 
 
+
+        console.log('bodyyyyy', req.body)
+		return;
+
 		var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
 
 		let stepTargetSteps = (stepTarget.steps + 1) <= stepTarget.step_target ?  (stepTarget.steps + 1) : stepTarget.step_target;
