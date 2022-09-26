@@ -130,10 +130,13 @@ router.post('/resetTarget', auth, async(req, res) => {
 			emptStepTarget['step_target'] = stepTarget.step_target;
 			emptStepTarget['targetType'] = stepTarget.type;
 			emptStepTarget['targetSteps'] = stepTarget.steps;
+			emptStepTarget['duration'] = stepTarget.duration;
 			target = true;
 		}else{
 			emptStepTarget['step_target'] = '0';
 			emptStepTarget['targetType'] = "";
+			emptStepTarget['targetSteps'] = "0";
+			emptStepTarget['duration'] = "0";
 		}
 		
 		var stepTrackerDetailsToday = await StepTracker.findOne({ date: dateLib.format(endDate,'YYYY-MM-DD'),  employeeId: req.user.user_id});
