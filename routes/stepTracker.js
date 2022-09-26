@@ -23,9 +23,6 @@
 		}
 
 
- 
-		 
-
 		await EmpStepTarget.updateOne({_id: stepTarget._id}, {$set: {steps: stepTargetSteps, duration: await hhmmss(targetDuration, 'hms')}}, {new: true});
  
 	    var empId = req.user.user_id;
@@ -465,6 +462,14 @@ router.post('/app_analytics', auth, async(req,res) => {
 
 return promise
 }
+
+
+router.post('/test', auth, async(req,res) => {
+
+console.log(new Date( 140 * 1000).toISOString())
+})
+
+
 
  
 
