@@ -435,9 +435,14 @@ router.post('/app_analytics', auth, async(req,res) => {
 			const time = new Date( Number(val) * 1000).toISOString().substring(11, 16);
 		    resolve(time)
 		}else{
-			var a = val.split(':');  
-			var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]); 
-			resolve(seconds)
+			if(val == '0'){
+				resolve(0)
+			}else{
+				var a = val.split(':');  
+				var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]); 
+			}
+
+			
 		}
 	})
 
