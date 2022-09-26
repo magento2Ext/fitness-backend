@@ -53,7 +53,8 @@
 
 		} else{
 			const a1 = await stepTracker.save()
-			response = webResponse(202, true, a1)  
+			response = webResponse(202, true, a1) ;
+			console.log('response', response) 
 			res.send(response);
 			return;
 		}		
