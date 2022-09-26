@@ -423,7 +423,7 @@ router.post('/app_analytics', auth, async(req,res) => {
 
 
 router.post('/StepTrackerTest', auth, async(req,res) => {
-	const time = new Date(1000 * 1000).toISOString().substring(11, 16)
+	const time = new Date(1000 * 1000).toISOString()
 	console.log('time', time);
 });
 
