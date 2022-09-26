@@ -720,7 +720,7 @@ app.post("/analytics", auth, async(req, res) => {
 			data.stepsMonthly = stepFinalArrayMonthly
 			data.stepsWeekly = stepFinalArrayWeekly
 
-			if(employeeDetails.userOrganizations.length !== 0){
+			if(employeeDetails.userOrganizations.length === 0){
 				data.isWeight = true
 				data.isSteps = true
 			}
