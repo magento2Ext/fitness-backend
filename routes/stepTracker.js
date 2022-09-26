@@ -21,6 +21,9 @@
 		}else{
 			targetDuration = await  hhmmss(req.body.duration, 'seconds')
 		}
+
+
+ 
 		 
 
 		await EmpStepTarget.updateOne({_id: stepTarget._id}, {$set: {steps: stepTargetSteps, duration: await hhmmss(targetDuration, 'hms')}}, {new: true});
@@ -451,6 +454,7 @@ router.post('/app_analytics', auth, async(req,res) => {
 	const promise = new Promise( (resolve, reject) => {
 		if(type === 'hms'){
 			const time = new Date( Number(val) * 1000).toISOString().substring(11, 16);
+			console.log('resolve(time)', time)
 		    resolve(time)
 		}else{
 			var a = val.split(':');  
