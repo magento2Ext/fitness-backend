@@ -36,6 +36,8 @@
 
 		if (stepTrackerDetails) {  
 			let newDuration = await hhmmss(stepTrackerDetails.duration, 'seconds') + await hhmmss(req.body.duration, 'seconds');
+			console.log('newDuration', newDuration)
+			console.log('await hhmmss(newDuration,)', await hhmmss(newDuration, 'hms'))
 			stepTrackerDetails.km = Number(stepTrackerDetails.km) + Number(req.body.km);
 			stepTrackerDetails.steps = Number(stepTrackerDetails.steps) + Number(req.body.steps);
 			stepTrackerDetails.calories = Number(stepTrackerDetails.calories) + Number(req.body.calories);
