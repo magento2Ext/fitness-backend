@@ -10,11 +10,13 @@
  router.post('/save', auth, async(req, res) => {
 	try{ 
 
- 
+		var a = req.body.duration.split(':');  
+		var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]); 
+
 		var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
 
 		let stepTargetSteps = (stepTarget.steps + req.body.steps) <= stepTarget.step_target ?  (stepTarget.steps + req.body.steps) : stepTarget.step_target;
-		let targetDuration = stepTarget.duration + req.body.duration;
+		let targetDuration = Number(stepTarget.duration) + Number(seconds);
 
 		await EmpStepTarget.updateOne({_id: stepTarget._id}, {$set: {steps: stepTargetSteps, duration: targetDuration}}, {new: true});
 
@@ -27,21 +29,23 @@
 			steps: req.body.steps,
 			km: req.body.km,
 			calories: req.body.calories,
-			duration: req.body.duration,
+			duration: seconds,
 			date: today
 		})
 		
 		const stepTrackerDetails = await StepTracker.findOne({ date: today,  employeeId: req.user.user_id});
 
 		if (stepTrackerDetails) {  
-			stepTrackerDetails.km = Number(stepTrackerDetails.km) + Number(req.body.km)
-			stepTrackerDetails.steps = Number(stepTrackerDetails.steps) + Number(req.body.steps)
-			stepTrackerDetails.calories = Number(stepTrackerDetails.calories) + Number(req.body.calories)
-			stepTrackerDetails.duration = Number(stepTrackerDetails.duration) + Number(req.body.duration)
+			stepTrackerDetails.km = Number(stepTrackerDetails.km) + Number(req.body.km);
+			stepTrackerDetails.steps = Number(stepTrackerDetails.steps) + Number(req.body.steps);
+			stepTrackerDetails.calories = Number(stepTrackerDetails.calories) + Number(req.body.calories);
+			stepTrackerDetails.duration = Number(stepTrackerDetails.duration) + Number(seconds);
+
 			const a1 = await stepTrackerDetails.save()
 			response = webResponse(202, true, a1)  
 			res.send(response);
 			return;
+
 		} else{
 			const a1 = await stepTracker.save()
 			response = webResponse(202, true, a1)  
@@ -415,5 +419,12 @@ router.post('/app_analytics', auth, async(req,res) => {
 		res.send(response);
 		return;
 })
+
+
+
+router.post('/StepTrackerTest', auth, async(req,res) => {
+	const time = new Date(120 * 1000).toISOString().substring(11, 16)
+	console.log('time', time);
+});
 
  module.exports = router
