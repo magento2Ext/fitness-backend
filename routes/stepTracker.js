@@ -10,12 +10,16 @@
  router.post('/save', auth, async(req, res) => {
 	try{ 
 
-		console.log(req.body);
 		var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
 
 		let stepTargetSteps = (stepTarget.steps + req.body.steps) <= stepTarget.step_target ?  (stepTarget.steps + req.body.steps) : stepTarget.step_target;
-		let targetDuration = stepTarget.duration != '00:00:00' ? (await hhmmss(stepTarget.duration, 'seconds') + await  hhmmss(req.body.duration, 'seconds')) : await  hhmmss(req.body.duration, 'seconds')
-  
+		let targetDuration = 0;
+		if(stepTarget.duration != '00:00:00'){
+			targetDuration = await hhmmss(stepTarget.duration, 'seconds') + await  hhmmss(req.body.duration, 'seconds');
+		}else{
+			targetDuration = await  hhmmss(req.body.duration, 'seconds')
+		}
+		 
 		console.log('22', '19', 'hms', targetDuration);
 		await EmpStepTarget.updateOne({_id: stepTarget._id}, {$set: {steps: stepTargetSteps, duration: await hhmmss(targetDuration, 'hms')}}, {new: true});
  
