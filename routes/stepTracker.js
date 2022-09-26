@@ -10,15 +10,14 @@
  router.post('/save', auth, async(req, res) => {
 	try{ 
 
-		var a = req.body.duration.split(':');  
-		var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]); 
-
 		var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
 
 		let stepTargetSteps = (stepTarget.steps + req.body.steps) <= stepTarget.step_target ?  (stepTarget.steps + req.body.steps) : stepTarget.step_target;
-		let targetDuration = Number(stepTarget.duration) + Number(seconds);
+		let targetDuration = hhmmss(stepTarget.duration, 'seconds') + hhmmss(req.body.duration, 'seconds');
 
-		await EmpStepTarget.updateOne({_id: stepTarget._id}, {$set: {steps: stepTargetSteps, duration: targetDuration}}, {new: true});
+		
+
+		await EmpStepTarget.updateOne({_id: stepTarget._id}, {$set: {steps: stepTargetSteps, duration: hhmmss(targetDuration, 'hms')}}, {new: true});
 
 	    var empId = req.user.user_id;
 
@@ -29,17 +28,18 @@
 			steps: req.body.steps,
 			km: req.body.km,
 			calories: req.body.calories,
-			duration: seconds,
+			duration: req.body.duration,
 			date: today
 		})
 		
 		const stepTrackerDetails = await StepTracker.findOne({ date: today,  employeeId: req.user.user_id});
 
 		if (stepTrackerDetails) {  
+			let newDuration = hhmmss(stepTrackerDetails.duration, 'seconds') + hhmmss(req.body.duration, 'seconds');
 			stepTrackerDetails.km = Number(stepTrackerDetails.km) + Number(req.body.km);
 			stepTrackerDetails.steps = Number(stepTrackerDetails.steps) + Number(req.body.steps);
 			stepTrackerDetails.calories = Number(stepTrackerDetails.calories) + Number(req.body.calories);
-			stepTrackerDetails.duration = Number(stepTrackerDetails.duration) + Number(seconds);
+			stepTrackerDetails.duration = hhmmss(newDuration, 'hms');
 
 			const a1 = await stepTrackerDetails.save()
 			response = webResponse(202, true, a1)  
@@ -78,95 +78,95 @@ router.post('/resetTarget', auth, async(req, res) => {
 
  router.post('/list', auth, async(req, res) => {
  
-	var empId = req.user.user_id;
-	const employeeDetails = await Employee.findById(empId);
-	console.log(employeeDetails)
+			var empId = req.user.user_id;
+			const employeeDetails = await Employee.findById(empId);
+			console.log(employeeDetails)
 
-	let nowDate = new Date();
-	nowDate.setDate(nowDate.getDate() - 29);
+			let nowDate = new Date();
+			nowDate.setDate(nowDate.getDate() - 29);
 
-	let date_2 = dateLib.format(nowDate,'YYYY-MM-DD');
+			let date_2 = dateLib.format(nowDate,'YYYY-MM-DD');
 
-	let date1 = new Date(employeeDetails.date.replace(/-/g, "/"));
-	let date2 = new Date(date_2.replace(/-/g, "/"));
- 
-	let difference =  date1.getTime() - date2.getTime()
+			let date1 = new Date(employeeDetails.date.replace(/-/g, "/"));
+			let date2 = new Date(date_2.replace(/-/g, "/"));
+		
+			let difference =  date1.getTime() - date2.getTime()
 
-	let days = Math.ceil(difference / (1000 * 3600 * 24));
+			let days = Math.ceil(difference / (1000 * 3600 * 24));
 
-	// let userTotalDistance = await StepTracker.aggregate([
-	// 	{ $group: {
-	// 		_id: '$employeeId',
-	// 		stepAvg: { $avg: '$km'}
-	// 	}}
-	// ]);
+			// let userTotalDistance = await StepTracker.aggregate([
+			// 	{ $group: {
+			// 		_id: '$employeeId',
+			// 		stepAvg: { $avg: '$km'}
+			// 	}}
+			// ]);
 
-	// let userTotalSteps = await StepTracker.aggregate([
-	// 	{ $group: {
-	// 		_id: '$employeeId',
-	// 		stepAvg: { $avg: '$steps'}
-	// 	}}
-	// ]);
+			// let userTotalSteps = await StepTracker.aggregate([
+			// 	{ $group: {
+			// 		_id: '$employeeId',
+			// 		stepAvg: { $avg: '$steps'}
+			// 	}}
+			// ]);
 	
 
 	if(29 > days){
-		let getDays = days < 0 ? 29 : 29 - days;
-
-		console.log('getDays', getDays)
-
-		var endDate = new Date(); 
-	
-		var startDate = new Date();
-		startDate.setDate(startDate.getDate() - getDays);
+			let getDays = days < 0 ? 29 : 29 - days;
+			var endDate = new Date(); 
 		
-		var emptStepTarget = {};
-		var target = false;
-		
-		const stepTrackerList = await StepTracker.find({  employeeId: req.user.user_id,
-				date: {
-					$gte: dateLib.format(startDate,'YYYY-MM-DD'),
-					$lte: dateLib.format(endDate,'YYYY-MM-DD')
-				}
-			}).sort({date:1})
+			var startDate = new Date();
+			startDate.setDate(startDate.getDate() - getDays);
 			
-		var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
-		if(stepTarget) {
-			emptStepTarget['step_target'] = stepTarget.step_target;
-			emptStepTarget['targetType'] = stepTarget.type;
-			emptStepTarget['targetSteps'] = stepTarget.steps;
-			emptStepTarget['duration'] = stepTarget.duration;
-			target = true;
-		}else{
-			emptStepTarget['step_target'] = '0';
-			emptStepTarget['targetType'] = "";
-			emptStepTarget['targetSteps'] = "0";
-			emptStepTarget['duration'] = "0";
-		}
+			var emptStepTarget = {};
+			var target = false;
 		
-		var stepTrackerDetailsToday = await StepTracker.findOne({ date: dateLib.format(endDate,'YYYY-MM-DD'),  employeeId: req.user.user_id});
-		if(!stepTrackerDetailsToday) {
-			stepTrackerDetailsToday = {
-				'date' : dateLib.format(endDate,'YYYY-MM-DD'),
-				'steps' : "0",
-				'km' : "0",
-				'calories':"0",
-				'duration':'00:00:00'
+			const stepTrackerList = await StepTracker.find({  employeeId: req.user.user_id,
+					date: {
+						$gte: dateLib.format(startDate,'YYYY-MM-DD'),
+						$lte: dateLib.format(endDate,'YYYY-MM-DD')
+					}
+				}).sort({date:1})
+				
+			var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
+		 
+
+			if(stepTarget) {
+				emptStepTarget['step_target'] = stepTarget.step_target;
+				emptStepTarget['targetType'] = stepTarget.type;
+				emptStepTarget['targetSteps'] = stepTarget.steps;
+				emptStepTarget['duration'] = stepTarget.duration;
+				target = true;
+			}else{
+				emptStepTarget['step_target'] = '0';
+				emptStepTarget['targetType'] = "";
+				emptStepTarget['targetSteps'] = "0";
+				emptStepTarget['duration'] = "0";
 			}
-		}
 		
-		var tracker = await StepTracker.aggregate([
-				{ $group: {
-					_id: '$employeeId',
-					stepAvg: { $avg: '$steps'}
-				}}
-			], function (err, results) {
-				if (err) {
-					console.error(err);
-				} else {
-					console.log(results);
+			var stepTrackerDetailsToday = await StepTracker.findOne({ date: dateLib.format(endDate,'YYYY-MM-DD'),  employeeId: req.user.user_id});
+			
+			if(!stepTrackerDetailsToday) {
+				stepTrackerDetailsToday = {
+					'date' : dateLib.format(endDate,'YYYY-MM-DD'),
+					'steps' : "0",
+					'km' : "0",
+					'calories':"0",
+					'duration':'00:00:00'
 				}
 			}
-		);
+		
+			var tracker = await StepTracker.aggregate([
+					{ $group: {
+						_id: '$employeeId',
+						stepAvg: { $avg: '$steps'}
+					}}
+				], function (err, results) {
+					if (err) {
+						console.error(err);
+					} else {
+						console.log(results);
+					}
+				}
+			);
 		
 			var stepFinalArray = [];
 			var steps = 0;	
@@ -421,10 +421,19 @@ router.post('/app_analytics', auth, async(req,res) => {
 })
 
 
+function hhmmss(val, type){
 
-router.post('/StepTrackerTest', auth, async(req,res) => {
-	const time = new Date(960 * 1000).toISOString().substring(11, 19)
-	console.log('time', time);
-});
+	if(type === 'hms'){
+		const time = new Date( Number(val) * 1000).toISOString().substring(11, 16);
+		return time
+	}else{
+		var a = val.split(':');  
+		var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]); 
+		return seconds
+	}
+return
+}
+
+ 
 
  module.exports = router
