@@ -129,7 +129,6 @@ router.post("/module/list", auth, async(req, res) => {
 				return;
 			}
 		} else{
-			console.log('if(org) {');
 			const modulesAvailable = await Module.find()
 			response = webResponse(201, true, modulesAvailable)  
 			res.send(response)		
@@ -236,9 +235,8 @@ router.post("/module/list", auth, async(req, res) => {
 		firebaseData.message =  ""
 		firebaseData.isMyMessage = 0
 		firebaseData.appTempId = ""
-		
-		
 		var group = chatRef.child( groupId.toString());
+		
 		group.update(firebaseData,(err)=>{
 			if(err){
 				resMessage = "Something went wrong" + err;

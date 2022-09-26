@@ -386,7 +386,50 @@ app.post("/weight", auth, async(req, res) => {
 
 app.post("/analytics", auth, async(req, res) => { 
 	try{ 
-  
+
+		var empId = req.user.user_id;
+		const employeeDetails = await Employee.findById(empId);
+		let subModules = [];
+
+		if(employeeDetails.userOrganizations.length !== 0){
+
+			const org = await Organization.findById(employeeDetails.organizationId)
+		
+			var subModuleIds = orgDetails.subModule_id
+			var subIds = []
+			if(subModuleIds != "") {
+				subIds = subModuleIds.split(",")
+			}  
+
+			const subModuless = await SubModule.find({'moduleId': moduleId,'_id':{'$in': subIds}})
+
+			subModuless.forEach( (module) => {
+				subModules.push(module.name.toLowerCase())
+			})
+
+
+			var modules = org.modules; 
+			var ids = modules.split(",")
+			var ModuleList = await Module.find({ _id : { $in : ids } })
+   
+			let moduless = [];
+   
+			ModuleList.forEach( (module) => {
+				moduless.push(module.name.toLowerCase())
+			})
+   
+			if(moduless.indexOf('body') == -1){
+			   response = webResponse(201, false, "Body module is disabled")  
+			   res.send(response)
+			   return;
+			}
+
+		}
+
+
+
+         console.log('ModuleList', ModuleList);
+
 		  var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 		  
 		  var oneWeekAgo = new Date();
@@ -683,6 +726,9 @@ app.post("/analytics", auth, async(req, res) => {
 			data.weightMonthly = weightFinalArray1
 			data.stepsMonthly = stepFinalArrayMonthly
 			data.stepsWeekly = stepFinalArrayWeekly
+
+			data.isWeight = subModules.indexOf('weight Tracker') >= 0 ? true: false
+			data.isSteps = subModules.indexOf('step Tracker') >= 0 ? true: false
 		
 			response = webResponse(202, true, data)  
 			res.send(response);
