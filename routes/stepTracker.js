@@ -13,9 +13,10 @@
  
 		var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
 
-		let stepTargetSteps = (stepTarget.steps + 1) <= stepTarget.step_target ?  (stepTarget.steps + 1) : stepTarget.step_target;
+		let stepTargetSteps = (stepTarget.steps + req.body.steps) <= stepTarget.step_target ?  (stepTarget.steps + req.body.steps) : stepTarget.step_target;
+		let targetDuration = stepTarget.duration + req.body.duration;
 
-		await EmpStepTarget.updateOne({_id: stepTarget._id}, {$set: {steps: stepTargetSteps}}, {new: true});
+		await EmpStepTarget.updateOne({_id: stepTarget._id}, {$set: {steps: stepTargetSteps, duration: targetDuration}}, {new: true});
 
 	    var empId = req.user.user_id;
 
