@@ -26,7 +26,7 @@ const employeeStepTargetSchema = new mongoose.Schema({
     },
     duration: {
         type: String,
-        default: 0
+        default: "00:00:00"
     }
 })
 
