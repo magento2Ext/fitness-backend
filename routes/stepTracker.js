@@ -43,7 +43,13 @@
 		if (stepTrackerDetails) {  
 			console.log('41', await hhmmss(stepTrackerDetails.duration));
 			console.log('42', await hhmmss(req.body.duration, 'seconds'));
-			let newDuration = await hhmmss(stepTrackerDetails.duration, 'seconds') + await hhmmss(req.body.duration, 'seconds');
+			let newDuration = 0
+
+			if(stepTrackerDetails.duration != '00:00:00' && stepTrackerDetails.duration != '00:00'){
+				newDuration = newDurationawait hhmmss(stepTrackerDetails.duration, 'seconds') + await hhmmss(req.body.duration, 'seconds');
+			}else{
+				newDuration = await hhmmss(req.body.duration, 'seconds');
+			}
  
 			stepTrackerDetails.km = Number(stepTrackerDetails.km) + Number(req.body.km);
 			stepTrackerDetails.steps = Number(stepTrackerDetails.steps) + Number(req.body.steps);
