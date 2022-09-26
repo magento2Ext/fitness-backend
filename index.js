@@ -731,8 +731,8 @@ app.post("/analytics", auth, async(req, res) => {
 			data.stepsMonthly = stepFinalArrayMonthly
 			data.stepsWeekly = stepFinalArrayWeekly
 
-			data.isWeight = subModules.indexOf('weight Tracker') >= 0 ? true: false
-			data.isSteps = subModules.indexOf('step Tracker') >= 0 ? true: false
+			data.isWeight = subModules.indexOf('weight tracker') >= 0 ? true: false
+			data.isSteps = subModules.indexOf('step tracker') >= 0 ? true: false
 
 			console.log('subModules', subModules)
 		
