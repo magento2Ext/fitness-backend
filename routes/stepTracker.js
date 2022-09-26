@@ -13,6 +13,7 @@
 		console.log('body', req.body)
 		var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
 
+		console.log('stepTarget', stepTarget)
 		let stepTargetSteps = (stepTarget.steps + req.body.steps) <= stepTarget.step_target ?  (stepTarget.steps + req.body.steps) : stepTarget.step_target;
 		let targetDuration = 0;
 		if(stepTarget.duration != '00:00:00'){
