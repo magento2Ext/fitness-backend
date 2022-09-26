@@ -13,11 +13,11 @@
 		var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
 
 		let stepTargetSteps = (stepTarget.steps + req.body.steps) <= stepTarget.step_target ?  (stepTarget.steps + req.body.steps) : stepTarget.step_target;
-		let targetDuration = hhmmss(stepTarget.duration, 'seconds') + hhmmss(req.body.duration, 'seconds');
+		let targetDuration = await hhmmss(stepTarget.duration, 'seconds') + await  hhmmss(req.body.duration, 'seconds');
 
 		
 
-		await EmpStepTarget.updateOne({_id: stepTarget._id}, {$set: {steps: stepTargetSteps, duration: hhmmss(targetDuration, 'hms')}}, {new: true});
+		await EmpStepTarget.updateOne({_id: stepTarget._id}, {$set: {steps: stepTargetSteps, duration: await hhmmss(targetDuration, 'hms')}}, {new: true});
 
 	    var empId = req.user.user_id;
 
@@ -35,11 +35,11 @@
 		const stepTrackerDetails = await StepTracker.findOne({ date: today,  employeeId: req.user.user_id});
 
 		if (stepTrackerDetails) {  
-			let newDuration = hhmmss(stepTrackerDetails.duration, 'seconds') + hhmmss(req.body.duration, 'seconds');
+			let newDuration = await hhmmss(stepTrackerDetails.duration, 'seconds') + await hhmmss(req.body.duration, 'seconds');
 			stepTrackerDetails.km = Number(stepTrackerDetails.km) + Number(req.body.km);
 			stepTrackerDetails.steps = Number(stepTrackerDetails.steps) + Number(req.body.steps);
 			stepTrackerDetails.calories = Number(stepTrackerDetails.calories) + Number(req.body.calories);
-			stepTrackerDetails.duration = hhmmss(newDuration, 'hms');
+			stepTrackerDetails.duration = await hhmmss(newDuration, 'hms');
 
 			const a1 = await stepTrackerDetails.save()
 			response = webResponse(202, true, a1)  
@@ -421,17 +421,20 @@ router.post('/app_analytics', auth, async(req,res) => {
 })
 
 
-function hhmmss(val, type){
+ function hhmmss(val, type){
 
-	if(type === 'hms'){
-		const time = new Date( Number(val) * 1000).toISOString().substring(11, 16);
-		return time
-	}else{
-		var a = val.split(':');  
-		var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]); 
-		return seconds
-	}
-return
+	const promise = new Promise( (resolve, reject) => {
+		if(type === 'hms'){
+			const time = new Date( Number(val) * 1000).toISOString().substring(11, 16);
+		    resolve(time)
+		}else{
+			var a = val.split(':');  
+			var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]); 
+			resolve(seconds)
+		}
+	})
+
+return promise
 }
 
  
