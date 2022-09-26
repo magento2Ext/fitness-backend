@@ -16,7 +16,7 @@
 		var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
 
 		let stepTargetSteps = (stepTarget.steps + req.body.steps) <= stepTarget.step_target ?  (stepTarget.steps + req.body.steps) : stepTarget.step_target;
-		let targetDuration = await hhmmss(stepTarget.duration, 'seconds') + await  hhmmss(req.body.duration, 'seconds');
+		let targetDuration = stepTarget.duration != '0' ? (await hhmmss(stepTarget.duration, 'seconds') + await  hhmmss(req.body.duration, 'seconds')) : await  hhmmss(req.body.duration, 'seconds')
 
 		
 
@@ -435,14 +435,9 @@ router.post('/app_analytics', auth, async(req,res) => {
 			const time = new Date( Number(val) * 1000).toISOString().substring(11, 16);
 		    resolve(time)
 		}else{
-			if(val == '0'){
-				resolve(0)
-			}else{
-				var a = val.split(':');  
-				var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]); 
-			}
-
-			
+			var a = val.split(':');  
+			var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]); 
+			resolve(seconds)
 		}
 	})
 
