@@ -432,7 +432,7 @@ app.post("/analytics", auth, async(req, res) => {
 
 
 
-         console.log('ModuleList', ModuleList);
+        
 
 		  var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 		  
@@ -563,7 +563,7 @@ app.post("/analytics", auth, async(req, res) => {
 				for( var j = 0, len = weightArray1.length; j < len; j++ ) { 
 					var weightData = '';
 				    let spliDate = String(dateLib.format(i,'YYYY-MM-DD')).split('T')[0];
-					console.log('date', weightArray1[j]['date'], 'spliDate', spliDate)
+				 
 					if( weightArray1[j]['date'] == spliDate) {
 						found = 1;
 						weightData = weightArray1[j];
@@ -733,6 +733,8 @@ app.post("/analytics", auth, async(req, res) => {
 
 			data.isWeight = subModules.indexOf('weight Tracker') >= 0 ? true: false
 			data.isSteps = subModules.indexOf('step Tracker') >= 0 ? true: false
+
+			console.log('subModules', subModules)
 		
 			response = webResponse(202, true, data)  
 			res.send(response);
