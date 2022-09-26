@@ -18,11 +18,9 @@
 		let stepTargetSteps = (stepTarget.steps + req.body.steps) <= stepTarget.step_target ?  (stepTarget.steps + req.body.steps) : stepTarget.step_target;
 		let targetDuration = stepTarget.duration != '0' ? (await hhmmss(stepTarget.duration, 'seconds') + await  hhmmss(req.body.duration, 'seconds')) : await  hhmmss(req.body.duration, 'seconds')
   
-
+     
 		
-
 		await EmpStepTarget.updateOne({_id: stepTarget._id}, {$set: {steps: stepTargetSteps, duration: await hhmmss(targetDuration, 'hms')}}, {new: true});
-
  
 	    var empId = req.user.user_id;
 
@@ -41,8 +39,7 @@
 
 		if (stepTrackerDetails) {  
 			let newDuration = await hhmmss(stepTrackerDetails.duration, 'seconds') + await hhmmss(req.body.duration, 'seconds');
-			console.log('newDuration', newDuration)
-			console.log('await hhmmss(newDuration,)', await hhmmss(newDuration, 'hms'))
+ 
 			stepTrackerDetails.km = Number(stepTrackerDetails.km) + Number(req.body.km);
 			stepTrackerDetails.steps = Number(stepTrackerDetails.steps) + Number(req.body.steps);
 			stepTrackerDetails.calories = Number(stepTrackerDetails.calories) + Number(req.body.calories);
@@ -432,6 +429,7 @@ router.post('/app_analytics', auth, async(req,res) => {
 
  function hhmmss(val, type){
 
+	console.log(val, type)
 	const promise = new Promise( (resolve, reject) => {
 		if(type === 'hms'){
 			const time = new Date( Number(val) * 1000).toISOString().substring(11, 16);
