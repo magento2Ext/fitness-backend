@@ -15,6 +15,7 @@ const Employee = require('./models/employee')
 const admin = require('firebase-admin');
 var serviceAccount = require('./admin.json');
 const Organization = require('./models/organization')
+const SubModule = require('./models/sub_module');
 
  admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
