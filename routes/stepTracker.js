@@ -450,9 +450,8 @@ router.post('/app_analytics', auth, async(req,res) => {
 	console.log(val, type)
 	const promise = new Promise( (resolve, reject) => {
 		if(type === 'hms'){
-			const time = new Date( Number(val) * 1000).toISOString().substring(11, 16);
-			console.log('resolve(time)', time)
-		    resolve(time)
+			const time = new Date( Number(val) * 1000).toISOString().split("T")
+		    resolve(time[1].split(".")[0]) 
 		}else{
 			var a = val.split(':');  
 			var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]); 
@@ -465,9 +464,7 @@ return promise
 
 
 router.post('/test', auth, async(req,res) => {
-	let a = new Date( 140 * 1000).toISOString().split("T")
 
-     console.log(a[1].split(".")[0])
 })
 
 
