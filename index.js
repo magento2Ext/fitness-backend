@@ -397,7 +397,7 @@ app.post("/analytics", auth, async(req, res) => {
 
 			const org = await Organization.findById(employeeDetails.organizationId)
 		
-			var subModuleIds = orgDetails.subModule_id
+			var subModuleIds = org.subModule_id
 			var subIds = []
 			if(subModuleIds != "") {
 				subIds = subModuleIds.split(",")
