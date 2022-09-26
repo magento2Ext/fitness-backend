@@ -18,12 +18,13 @@
 		let stepTargetSteps = (stepTarget.steps + req.body.steps) <= stepTarget.step_target ?  (stepTarget.steps + req.body.steps) : stepTarget.step_target;
 		let targetDuration = stepTarget.duration != '0' ? (await hhmmss(stepTarget.duration, 'seconds') + await  hhmmss(req.body.duration, 'seconds')) : await  hhmmss(req.body.duration, 'seconds')
   
-		console.log('targetDuration', targetDuration);
-		return;
+
 		
 
 		await EmpStepTarget.updateOne({_id: stepTarget._id}, {$set: {steps: stepTargetSteps, duration: await hhmmss(targetDuration, 'hms')}}, {new: true});
 
+	 
+		return;
 	    var empId = req.user.user_id;
 
 		var today =  dateLib.format(new Date(), 'YYYY-MM-DD');
