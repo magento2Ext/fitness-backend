@@ -407,6 +407,7 @@ app.post("/analytics", auth, async(req, res) => {
 			const subModuless = await SubModule.find({'_id':{'$in': subIds}})
 
 			subModuless.forEach( (module) => {
+				console.log('module', module)
 				subModules.push(module.name.toLowerCase())
 			})
 
