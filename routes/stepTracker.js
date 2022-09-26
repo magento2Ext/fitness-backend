@@ -22,7 +22,7 @@
 			targetDuration = await  hhmmss(req.body.duration, 'seconds')
 		}
 		 
-		console.log('22', '19', 'hms', targetDuration);
+
 		await EmpStepTarget.updateOne({_id: stepTarget._id}, {$set: {steps: stepTargetSteps, duration: await hhmmss(targetDuration, 'hms')}}, {new: true});
  
 	    var empId = req.user.user_id;
@@ -39,7 +39,7 @@
 		})
 		
 		const stepTrackerDetails = await StepTracker.findOne({ date: today,  employeeId: req.user.user_id});
-
+		console.log('stepTrackerDetails', stepTrackerDetails);
 		if (stepTrackerDetails) {  
 			console.log('41', await hhmmss(stepTrackerDetails.duration));
 			console.log('42', await hhmmss(req.body.duration, 'seconds'));
