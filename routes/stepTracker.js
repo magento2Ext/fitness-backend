@@ -466,7 +466,7 @@ return promise
 
 router.post('/test', auth, async(req,res) => {
 
-console.log(new Date( 140 * 1000).toISOString())
+console.log(new Date( 140 * 1000).toISOString().substring(11, 16))
 })
 
 
