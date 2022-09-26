@@ -393,6 +393,7 @@ app.post("/analytics", auth, async(req, res) => {
 		var empId = req.user.user_id;
 		const employeeDetails = await Employee.findById(empId);
 		let subModules = [];
+		let moduless = [];
 
 		if(employeeDetails.userOrganizations.length !== 0){
 
@@ -404,7 +405,7 @@ app.post("/analytics", auth, async(req, res) => {
 				subIds = subModuleIds.split(",")
 			}  
 
-			const subModuless = await SubModule.find({'_id':{'$in': subIds}})
+			const subModuless = await SubModule.find({'_id': {'$in': subIds}})
 
 			subModuless.forEach( (module) => {
 				console.log('module', module)
@@ -416,23 +417,11 @@ app.post("/analytics", auth, async(req, res) => {
 			var ids = modules.split(",")
 			var ModuleList = await Module.find({ _id : { $in : ids } })
    
-			let moduless = [];
-   
 			ModuleList.forEach( (module) => {
 				moduless.push(module.name.toLowerCase())
 			})
    
-			if(moduless.indexOf('body') == -1){
-			   response = webResponse(201, false, "Body module is disabled")  
-			   res.send(response)
-			   return;
-			}
-
 		}
-
-
-
-        
 
 		  var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 		  
@@ -731,11 +720,15 @@ app.post("/analytics", auth, async(req, res) => {
 			data.stepsMonthly = stepFinalArrayMonthly
 			data.stepsWeekly = stepFinalArrayWeekly
 
-			data.isWeight = subModules.indexOf('weight tracker') >= 0 ? true: false
-			data.isSteps = subModules.indexOf('step tracker') >= 0 ? true: false
+			if(moduless.indexOf('body') >= 0){
+				data.isWeight = subModules.indexOf('weight tracker') >= 0 ? true: false
+				data.isSteps = subModules.indexOf('step tracker') >= 0 ? true: false
 
-			console.log('subModules', subModules)
-		
+			}else{
+				data.isWeight = false
+				data.isSteps = false
+			}
+
 			response = webResponse(202, true, data)  
 			res.send(response);
 			return;
