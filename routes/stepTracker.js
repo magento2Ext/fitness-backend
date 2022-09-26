@@ -23,8 +23,7 @@
 
 		await EmpStepTarget.updateOne({_id: stepTarget._id}, {$set: {steps: stepTargetSteps, duration: await hhmmss(targetDuration, 'hms')}}, {new: true});
 
-	 
-		return;
+ 
 	    var empId = req.user.user_id;
 
 		var today =  dateLib.format(new Date(), 'YYYY-MM-DD');
