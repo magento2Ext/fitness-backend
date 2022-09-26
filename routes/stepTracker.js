@@ -19,7 +19,7 @@
 		let targetDuration = stepTarget.duration != '0' ? (await hhmmss(stepTarget.duration, 'seconds') + await  hhmmss(req.body.duration, 'seconds')) : await  hhmmss(req.body.duration, 'seconds')
   
      
-		
+		console.log('22', await hhmmss(targetDuration, 'hms'));
 		await EmpStepTarget.updateOne({_id: stepTarget._id}, {$set: {steps: stepTargetSteps, duration: await hhmmss(targetDuration, 'hms')}}, {new: true});
  
 	    var empId = req.user.user_id;
@@ -38,6 +38,8 @@
 		const stepTrackerDetails = await StepTracker.findOne({ date: today,  employeeId: req.user.user_id});
 
 		if (stepTrackerDetails) {  
+			console.log('41', await hhmmss(stepTrackerDetails.duration));
+			console.log('42', await hhmmss(req.body.duration, 'seconds'));
 			let newDuration = await hhmmss(stepTrackerDetails.duration, 'seconds') + await hhmmss(req.body.duration, 'seconds');
  
 			stepTrackerDetails.km = Number(stepTrackerDetails.km) + Number(req.body.km);
