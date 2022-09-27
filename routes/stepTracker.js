@@ -112,9 +112,10 @@ router.post('/resetTarget', auth, async(req, res) => {
 			let days = Math.ceil(difference / (1000 * 3600 * 24));
 
 			let bestSTREAK = await StepTracker.aggregate(
-
+			
 				// Pipeline
 				[
+					{$match: {employeeId: req.user.user_id}},
 					// Stage 1
 					{
 						$group: {
