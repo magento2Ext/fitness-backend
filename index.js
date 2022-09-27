@@ -433,14 +433,12 @@ app.post("/analytics", auth, async(req, res) => {
   
 		  var date = new Date();
  
-   
 		  const weightLastMonth = await Weight.find({ employeeId: req.user.user_id,
 			  date: {
 				  $gte: dateLib.format(oneMonthAgo,'YYYY-MM-DD')
 			  }
 		  }).sort({date:-1});
   
-	  
 		  const weightList = await Weight.find({  employeeId: req.user.user_id,
 			  date: {
 				  $gte: dateLib.format(oneWeekAgo,'YYYY-MM-DD'),
@@ -459,7 +457,6 @@ app.post("/analytics", auth, async(req, res) => {
 					  'day' :  days[col.date.getDay()],
 					  'difference': "0",
 					  'weightLine':''
-					  
 				  }
 			  } else{
 				  var difference = col.weight - weightList[i-1].weight;
@@ -546,7 +543,6 @@ app.post("/analytics", auth, async(req, res) => {
 			let latestWeight = 0;
 			for(i=oneMonthAgo; i<=date;  i.setDate(i.getDate() + 1)) { 
 
-				
 				var found = 0; 
 				
 				for( var j = 0, len = weightArray1.length; j < len; j++ ) { 
@@ -580,7 +576,6 @@ app.post("/analytics", auth, async(req, res) => {
 		  let stepFinalArrayWeekly = [];
 		  var stepFinalArrayMonthly = [];
 		  steps();
-
 
 		  async function  steps(){
 			var endDate = new Date(); 
@@ -639,7 +634,6 @@ app.post("/analytics", auth, async(req, res) => {
 				}
 			);
 			
-			   
 				var steps = 0;	
 				var noOfFound = 0;
 				for(i=startDate; i<=endDate;  i.setDate(i.getDate() + 1)) { 
@@ -736,7 +730,7 @@ app.post("/analytics", auth, async(req, res) => {
 			response = webResponse(202, true, data)  
 			res.send(response);
 			return;
-		  }, 3000);
+		  }, 5000);
 	  } catch(err){ 
 		  console.log(err)  
 		  response = webResponse(403, false, err)  
@@ -749,13 +743,13 @@ app.post("/analytics", auth, async(req, res) => {
   ); 
 
 
-  function convertIntoTwoDecimal(num){
+function convertIntoTwoDecimal(num){
 	let toNumber = Number(num);
 	let n;
 	if(toNumber % 1 !== 0) n = toNumber.toFixed(2);
 	else n = toNumber;
 	return n;
-  }
+}
 
 const otherApiRouter = require('./routes/otherapi');
 const { LEGAL_TCP_SOCKET_OPTIONS } = require("mongodb");
