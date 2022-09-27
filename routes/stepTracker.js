@@ -111,38 +111,38 @@ router.post('/resetTarget', auth, async(req, res) => {
 
 			let days = Math.ceil(difference / (1000 * 3600 * 24));
 
-			let bestSTREAK = await StepTracker.aggregate([
+			// let bestSTREAK = await StepTracker.aggregate([
 
-					{$match: {employeeId: req.user.user_id}},
-					{
-						$group: {
-							_id: '$steps',
-							count: {
-								$sum: 1
-							},
-							date: {
-								$last: '$date'
-							}
+			// 		{$match: {employeeId: req.user.user_id}},
+			// 		{
+			// 			$group: {
+			// 				_id: '$steps',
+			// 				count: {
+			// 					$sum: 1
+			// 				},
+			// 				date: {
+			// 					$last: '$date'
+			// 				}
 			
-						}
-					},
+			// 			}
+			// 		},
 			
-					{
-						$project: {
-							steps: '$_id',
-							count: 1,
-							date: 1,
-							_id: 0
-						}
-					},
+			// 		{
+			// 			$project: {
+			// 				steps: '$_id',
+			// 				count: 1,
+			// 				date: 1,
+			// 				_id: 0
+			// 			}
+			// 		},
 			
-				]
+			// 	]
 			
 			
 			
-			);
+			// );
 
-			console.log('bestSTREAK', bestSTREAK)
+			// console.log('bestSTREAK', bestSTREAK)
 			// let userTotalDistance = await StepTracker.aggregate([
 			// 	{ $group: {
 			// 		_id: '$employeeId',
@@ -161,7 +161,7 @@ router.post('/resetTarget', auth, async(req, res) => {
 			var endDate = new Date(); 
 		
 			var startDate = new Date();
-			startDate.setDate(startDate.getDate() - 29);
+			startDate.setDate(startDate.getDate() - getDays);
 			
 			var emptStepTarget = {};
 			var target = false;
@@ -172,6 +172,8 @@ router.post('/resetTarget', auth, async(req, res) => {
 						$lte: dateLib.format(endDate,'YYYY-MM-DD')
 					}
 				}).sort({date:1})
+
+			console.log('stepTrackerList', stepTrackerList)
 				
 			var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
 		 

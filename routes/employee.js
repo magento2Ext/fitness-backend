@@ -775,7 +775,6 @@ router.post('/orgRequestAction', async(req,res) => {
 
 	   if(req.body.status == '1') {
 		
-
 		let data = {
 			is_exclusive: true,
 			isVerified: req.body.status,
@@ -822,7 +821,7 @@ router.post('/orgRequestAction', async(req,res) => {
 })
 
 
-router.post('/updateVisit', auth, async(req,res)=> {
+router.post('/updateVisit', auth, async(req, res)=> {
 
 	try{
 		
