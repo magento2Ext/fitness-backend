@@ -598,7 +598,6 @@ app.post("/analytics", auth, async(req, res) => {
 
 			const stepTrackerListWeekly = await StepTracker.find({  employeeId: req.user.user_id,
 				date: {
-					$lte: dateLib.format(startDate,'YYYY-MM-DD'),
 					$gte: dateLib.format(startWeeklyDate,'YYYY-MM-DD')
 				}
 			}).sort({date:1})
