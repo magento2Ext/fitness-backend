@@ -708,16 +708,8 @@ app.post("/analytics", auth, async(req, res) => {
 						}   else{
 							noOfFound = Number(noOfFound)+ 1
 							steps = Number(stepTrackerData.steps) + Number(steps)
-							let stepTrackerData1  = {
-								'date' : stepTrackerData[j].date,
-								'day': days[i.getDay()],
-								'steps' : stepTrackerData[j].steps,
-								'km' : stepTrackerData[j].km,
-								'calories': stepTrackerData[j].calories,
-								'duration': stepTrackerData[j].duration,
-							}
-
-							stepFinalArrayWeekly.push(stepTrackerData1);
+							console.log('stepTrackerData', stepTrackerData)
+							stepFinalArrayWeekly.push(stepTrackerData);
 						}
 					}
 				}
