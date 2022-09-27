@@ -648,7 +648,16 @@ app.post("/analytics", auth, async(req, res) => {
 					   var stepTrackerData = '';
 						if( stepTrackerList[j]['date'] == dateLib.format(i,'YYYY-MM-DD')) {
 							found = 1;
-							stepTrackerData = stepTrackerList[j];
+							stepTrackerData = 
+							{
+								'date' : stepTrackerList[j].date,
+								'day': days[i.getDay()],
+								'steps' : stepTrackerList[j].steps,
+								'km' : stepTrackerList[j].km,
+								'calories': stepTrackerList[j].calories,
+								'duration': stepTrackerList[j].duration,
+							}
+						 
 							break;
 						} 
 					}
@@ -708,7 +717,6 @@ app.post("/analytics", auth, async(req, res) => {
 						}   else{
 							noOfFound = Number(noOfFound)+ 1
 							steps = Number(stepTrackerData.steps) + Number(steps)
-							console.log('stepTrackerData', stepTrackerData)
 							stepFinalArrayWeekly.push(stepTrackerData);
 						}
 					}
