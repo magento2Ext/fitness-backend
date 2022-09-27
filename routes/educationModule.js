@@ -26,10 +26,13 @@ require('../functions')
 		let count = 0;
 
 		if(education.length == 0){
+			console.log('education', education)
 			response = webResponse(201, true, [])  
 			res.send(response)
 			return;
 		}
+
+		
 
 		education.forEach( async function(col){
 			const module = await  ModuleAdded.findById(col.module_id)	 
@@ -53,7 +56,7 @@ require('../functions')
 
 			educationArray.push(newEdu)
 			count++;
-
+			console.log('education', count, education.length)
 			if(count === education.length){
 				response = webResponse(201, true, educationArray)  
 				res.send(response)
