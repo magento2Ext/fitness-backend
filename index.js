@@ -602,6 +602,13 @@ app.post("/analytics", auth, async(req, res) => {
 					$lte: dateLib.format(startWeeklyDate,'YYYY-MM-DD')
 				}
 			}).sort({date:1})
+
+			console.log({employeeId: req.user.user_id,
+				date: {
+					$gte: dateLib.format(startDate,'YYYY-MM-DD'),
+					$lte: dateLib.format(startWeeklyDate,'YYYY-MM-DD')
+				}
+			})
 				
 			var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
 			if(stepTarget) {
