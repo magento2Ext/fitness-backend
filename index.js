@@ -634,9 +634,9 @@ app.post("/analytics", auth, async(req, res) => {
 					}}
 				], function (err, results) {
 					if (err) {
-						console.error(err);
+						 
 					} else {
-						console.log(results);
+						 
 					}
 				}
 			);
