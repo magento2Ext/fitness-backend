@@ -111,6 +111,41 @@ router.post('/resetTarget', auth, async(req, res) => {
 
 			let days = Math.ceil(difference / (1000 * 3600 * 24));
 
+			let bestSTREAK = await StepTracker.aggregate(
+
+				// Pipeline
+				[
+					// Stage 1
+					{
+						$group: {
+							_id: '$steps',
+							count: {
+								$sum: 1
+							},
+							date: {
+								$last: '$date'
+							}
+			
+						}
+					},
+			
+					// Stage 2
+					{
+						$project: {
+							steps: '$_id',
+							count: 1,
+							date: 1,
+							_id: 0
+						}
+					},
+			
+				]
+			
+			
+			
+			);
+
+			console.log('bestSTREAK', bestSTREAK)
 			// let userTotalDistance = await StepTracker.aggregate([
 			// 	{ $group: {
 			// 		_id: '$employeeId',
