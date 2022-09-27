@@ -28,7 +28,7 @@ require('../functions')
 		if(education.length == 0){
 			response = webResponse(201, true, [])  
 			res.send(response)
-			return "";
+			return;
 		}
 
 		education.forEach( async function(col){
