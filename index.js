@@ -408,7 +408,7 @@ app.post("/analytics", auth, async(req, res) => {
 			const subModuless = await SubModule.find({'_id': {'$in': subIds}})
 
 			subModuless.forEach( (module) => {
-				console.log('module', module)
+	 
 				subModules.push(module.name.toLowerCase())
 			})
 
@@ -667,6 +667,8 @@ app.post("/analytics", auth, async(req, res) => {
 				getMonthlySteps();
 
 				function getMonthlySteps(){
+
+					console.log('stepTrackerListWeekly', stepTrackerListWeekly)
 					
 					var steps = 0;	
 					var noOfFound = 0;
@@ -730,7 +732,7 @@ app.post("/analytics", auth, async(req, res) => {
 			response = webResponse(202, true, data)  
 			res.send(response);
 			return;
-		  }, 9000);
+		  }, 3000);
 	  } catch(err){ 
 		  console.log(err)  
 		  response = webResponse(403, false, err)  
