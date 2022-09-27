@@ -124,14 +124,12 @@ router.post('/resetTarget', auth, async(req, res) => {
 			// 		stepAvg: { $avg: '$steps'}
 			// 	}}
 			// ]);
-	
 
-	if(29 > days){
 			let getDays = days < 0 ? 29 : 29 - days;
 			var endDate = new Date(); 
 		
 			var startDate = new Date();
-			startDate.setDate(startDate.getDate() - getDays);
+			startDate.setDate(startDate.getDate() - 29);
 			
 			var emptStepTarget = {};
 			var target = false;
@@ -160,7 +158,7 @@ router.post('/resetTarget', auth, async(req, res) => {
 			}
 		
 			var stepTrackerDetailsToday = await StepTracker.findOne({ date: dateLib.format(endDate,'YYYY-MM-DD'),  employeeId: req.user.user_id});
-			console.log('stepTrackerDetailsToday', stepTrackerDetailsToday, { date: dateLib.format(endDate,'YYYY-MM-DD'),  employeeId: req.user.user_id});
+		 
 			if(!stepTrackerDetailsToday) {
 				stepTrackerDetailsToday = {
 					'date' : dateLib.format(endDate,'YYYY-MM-DD'),
@@ -293,29 +291,7 @@ router.post('/resetTarget', auth, async(req, res) => {
 			res.send(response);
 			return;
 
-	}else{
-		var data = {}; 
-		let nowDate = new Date();
-		data.totalSteps = "0";
-		data.avgStep = 0;
-		data.todayData = {
-			'date' : dateLib.format(nowDate,'YYYY-MM-DD'),
-			'steps' : "0",
-			'km' : "0",
-			'calories':"0",
-			'duration':'00:00:00'
-		}
-		data.step_target = {step_target: "0"}
-		data.target = false
-		data.activity = []
-		data.best_streak = 0
-		data.avg_pace = 0
-		data.targetType = ""
-		
-		response = webResponse(201, true, data)  
-		res.send(response);
-		return;
-	}
+ 
 })
 
 router.post('/app_analytics', auth, async(req,res) => {
