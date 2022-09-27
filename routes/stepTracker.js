@@ -113,11 +113,11 @@ router.post('/resetTarget', auth, async(req, res) => {
 
 			let bestSTREAK = await StepTracker.aggregate([
                {$match: {employeeId: empId }},
-			   { "let": {"date": {"$toDate": "$date"}} },
-			  {
+			   { "$addFields": {"date1": {"$toDate": "$date"}} },
+			   {
 					"$addFields": {
 					  "date": {
-						"$toLong": "$$date"
+						"$toLong": "$date1"
 					  }
 					}
 				  },
