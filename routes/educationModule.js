@@ -26,8 +26,7 @@ require('../functions')
 		let count = 0;
 
 		if(education.length == 0){
-			console.log('education', education)
-			response = webResponse(201, true, [])  
+			response = webResponse(200, false, "Something went wrong, please try again.")  
 			res.send(response)
 			return;
 		}
