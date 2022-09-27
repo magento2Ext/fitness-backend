@@ -603,10 +603,10 @@ app.post("/analytics", auth, async(req, res) => {
 				}
 			}).sort({date:1})
 
-			console.log({employeeId: req.user.user_id,
+			console.log({  employeeId: req.user.user_id,
 				date: {
-					$gte: dateLib.format(startDate,'YYYY-MM-DD'),
-					$lte: dateLib.format(startWeeklyDate,'YYYY-MM-DD')
+					$lte: dateLib.format(startDate,'YYYY-MM-DD'),
+					$gte: dateLib.format(startWeeklyDate,'YYYY-MM-DD')
 				}
 			})
 				
