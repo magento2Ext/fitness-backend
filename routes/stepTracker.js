@@ -160,7 +160,7 @@ router.post('/resetTarget', auth, async(req, res) => {
 			}
 		
 			var stepTrackerDetailsToday = await StepTracker.findOne({ date: dateLib.format(endDate,'YYYY-MM-DD'),  employeeId: req.user.user_id});
-			
+			console.log('stepTrackerDetailsToday', stepTrackerDetailsToday, { date: dateLib.format(endDate,'YYYY-MM-DD'),  employeeId: req.user.user_id});
 			if(!stepTrackerDetailsToday) {
 				stepTrackerDetailsToday = {
 					'date' : dateLib.format(endDate,'YYYY-MM-DD'),
