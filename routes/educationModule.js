@@ -17,22 +17,15 @@ require('../functions')
 			var education = await EducationModule.find({auth_user_id:req.body.auth_user_id})
 		}
 
-        if(education.length == 0){
-			console.log('education', [])
-			return
-		}
-
-		var educationArray = [];
-		let count = 0;
-
 		if(education.length == 0){
 			response = webResponse(200, false, "Something went wrong, please try again.")  
 			res.send(response)
 			return;
 		}
 
+		var educationArray = [];
+		let count = 0;
 		
-
 		education.forEach( async function(col){
 			const module = await  ModuleAdded.findById(col.module_id)	 
 			let moduleName = '';
