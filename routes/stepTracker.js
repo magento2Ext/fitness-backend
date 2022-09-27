@@ -13,7 +13,6 @@
 		console.log('body', req.body)
 		var stepTarget = await EmpStepTarget.findOne({ employeeId: req.user.user_id}).sort({date:-1});
 
-		console.log('stepTarget', stepTarget)
 		let stepTargetSteps = (stepTarget.steps + req.body.steps) <= stepTarget.step_target ?  (stepTarget.steps + req.body.steps) : stepTarget.step_target;
 		let targetDuration = 0;
 		if(stepTarget.duration != '00:00:00' && stepTarget.duration != '00:00'){
@@ -39,13 +38,10 @@
 		})
 		
 		const stepTrackerDetails = await StepTracker.findOne({ date: today,  employeeId: req.user.user_id});
-		console.log('stepTrackerDetails', stepTrackerDetails);
-
-		if(req.body.steps != 0){
+ 
 
 			if (stepTrackerDetails) {  
-				console.log('41', await hhmmss(stepTrackerDetails.duration));
-				console.log('42', await hhmmss(req.body.duration, 'seconds'));
+ 
 				let newDuration = 0
 	
 				if(stepTrackerDetails.duration != '00:00:00' && stepTrackerDetails.duration != '00:00'){
@@ -71,8 +67,6 @@
 				res.send(response);
 				return;
 			}	
-
-		}
 
 	
     }catch(err){ 
@@ -466,9 +460,5 @@ return promise
 router.post('/test', auth, async(req,res) => {
 
 })
-
-
-
- 
 
  module.exports = router
