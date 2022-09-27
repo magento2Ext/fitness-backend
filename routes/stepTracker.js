@@ -116,7 +116,7 @@ router.post('/resetTarget', auth, async(req, res) => {
 				{
 					"$addFields": {
 					  "date": {
-						"$toLong": "$date"
+						"$convert": "$date"
 					  }
 					}
 				  },
