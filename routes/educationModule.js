@@ -25,6 +25,12 @@ require('../functions')
 		var educationArray = [];
 		let count = 0;
 
+		if(education.length == 0){
+			response = webResponse(201, true, [])  
+			res.send(response)
+			return "";
+		}
+
 		education.forEach( async function(col){
 			const module = await  ModuleAdded.findById(col.module_id)	 
 			let moduleName = '';
@@ -69,8 +75,6 @@ router.post('/educationList', auth, async(req,res) => {
 		var empId = req.user.user_id;
 		const employeeDetails = await Employee.findById(empId);
 
-	
-
         let query = {};
 		if(employeeDetails.userOrganizations.length !=0 ){
 			query = {userType: 'org', auth_user_id: String(employeeDetails.organizationId), module_id: req.body.module_id}
@@ -78,9 +82,6 @@ router.post('/educationList', auth, async(req,res) => {
 			query = {userType: 'admin', module_id: req.body.module_id}
 		}
 
-
-		console.log('query 111', query);
-	
 		var education = await EducationModule.find(query);
 		 
 		var educationArray = [];
@@ -88,6 +89,7 @@ router.post('/educationList', auth, async(req,res) => {
 		if(education.length != 0){
 			let count = 0;
 			education.forEach( async (col) => {
+
 				let moduleName = await  ModuleAdded.findById(col.module_id);
 		 
 				newEdu = {
