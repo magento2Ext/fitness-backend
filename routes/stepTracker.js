@@ -111,114 +111,6 @@ router.post('/resetTarget', auth, async(req, res) => {
 
 			let days = Math.ceil(difference / (1000 * 3600 * 24));
 
-			let bestSTREAK = await StepTracker.aggregate([
-               {$match: {employeeId: empId }},
-			   { "$addFields": {"date1": {"$toDate": "$date"}} },
-			   {
-					"$addFields": {
-					  "date": {
-						"$toLong": "$date1"
-					  }
-					}
-				  },
-				  {
-					$setWindowFields: {
-					  partitionBy: "$employeeId",
-					  sortBy: {
-						date: 1
-					  },
-					  output: {
-						days: {
-						  $push: "$date",
-						  window: {
-							range: [
-							  -86400000,
-							  // one day in millisecond
-							  0
-							]
-						  }
-						}
-					  }
-					}
-				  },
-				  {
-					"$set": {
-					  "days": {
-						"$cond": [
-						  {
-							"$gt": [
-							  {
-								"$size": "$days"
-							  },
-							  1
-							]
-						  },
-						  0,
-						  1
-						]
-					  }
-					}
-				  },
-				  {
-					$setWindowFields: {
-					  partitionBy: "$employeeId",
-					  sortBy: {
-						date: 1
-					  },
-					  output: {
-						count: {
-						  $sum: "$days",
-						  window: {
-							documents: [
-							  "unbounded",
-							  "current"
-							]
-						  }
-						}
-					  }
-					}
-				  },
-				  {
-					"$group": {
-					  "_id": {
-						employeeId: "$employeeId",
-						count: "$count",
-						
-					  },
-					  "active_days": {
-						$sum: 1
-					  },
-					  "to": {
-						"$max": "$date"
-					  },
-					  "from": {
-						"$min": "$date"
-					  }
-					}
-				  },
-				  {
-					"$sort": {
-					  to: -1
-					}
-				  },
-				  {
-					"$group": {
-					  "_id": "$_id.employeeId",
-					  "streak": {
-						"$max": "$active_days"
-					  }
-					}
-				  }
-			
-				]);
-
-			if(bestSTREAK.length > 0){
-				bestSTREAK = bestSTREAK.streak
-			}else{
-				bestSTREAK = 0
-			}
-			 
-
 			let getDays = days < 0 ? 29 : 29 - days;
 			var endDate = new Date(); 
 		
@@ -308,7 +200,123 @@ router.post('/resetTarget', auth, async(req, res) => {
 				}
 			}
 		 
-		   
+		   let bestStreakK = await bestStreak();
+	
+			async function bestStreak(){
+				
+				const promise = new Promise( async (resolve, reject) => {
+
+					let bestSTREAK = await StepTracker.aggregate([
+						{$match: {employeeId: empId }},
+						{ "$addFields": {"date1": {"$toDate": "$date"}} },
+						{
+							 "$addFields": {
+							   "date": {
+								 "$toLong": "$date1"
+							   }
+							 }
+						   },
+						   {
+							 $setWindowFields: {
+							   partitionBy: "$employeeId",
+							   sortBy: {
+								 date: 1
+							   },
+							   output: {
+								 days: {
+								   $push: "$date",
+								   window: {
+									 range: [
+									   -86400000,
+									   // one day in millisecond
+									   0
+									 ]
+								   }
+								 }
+							   }
+							 }
+						   },
+						   {
+							 "$set": {
+							   "days": {
+								 "$cond": [
+								   {
+									 "$gt": [
+									   {
+										 "$size": "$days"
+									   },
+									   1
+									 ]
+								   },
+								   0,
+								   1
+								 ]
+							   }
+							 }
+						   },
+						   {
+							 $setWindowFields: {
+							   partitionBy: "$employeeId",
+							   sortBy: {
+								 date: 1
+							   },
+							   output: {
+								 count: {
+								   $sum: "$days",
+								   window: {
+									 documents: [
+									   "unbounded",
+									   "current"
+									 ]
+								   }
+								 }
+							   }
+							 }
+						   },
+						   {
+							 "$group": {
+							   "_id": {
+								 employeeId: "$employeeId",
+								 count: "$count",
+								 
+							   },
+							   "active_days": {
+								 $sum: 1
+							   },
+							   "to": {
+								 "$max": "$date"
+							   },
+							   "from": {
+								 "$min": "$date"
+							   }
+							 }
+						   },
+						   {
+							 "$sort": {
+							   to: -1
+							 }
+						   },
+						   {
+							 "$group": {
+							   "_id": "$_id.employeeId",
+							   "streak": {
+								 "$max": "$active_days"
+							   }
+							 }
+						   }
+					 
+						 ]);
+	
+					if(bestSTREAK.length > 0){
+						 resolve(bestSTREAK.streak)
+					}else{
+						resolve(0)
+					}
+	
+				});
+	
+				return promise;
+			}
 
 			var data = {}; 
 			var avg = steps/noOfFound;
@@ -318,7 +326,7 @@ router.post('/resetTarget', auth, async(req, res) => {
 			data.step_target = emptStepTarget
 			data.target = target
 			data.activity = stepFinalArray.reverse()
-			data.best_streak = Number(bestSTREAK)
+			data.best_streak = Number(bestStreakK)
 			data.avg_pace = "100",
 			data.targetType = emptStepTarget.targetType
 	
