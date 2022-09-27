@@ -97,7 +97,7 @@ router.post('/resetTarget', auth, async(req, res) => {
  
 			var empId = req.user.user_id;
 			const employeeDetails = await Employee.findById(empId);
-			console.log(employeeDetails)
+		 
 
 			let nowDate = new Date();
 			nowDate.setDate(nowDate.getDate() - 29);
@@ -111,12 +111,9 @@ router.post('/resetTarget', auth, async(req, res) => {
 
 			let days = Math.ceil(difference / (1000 * 3600 * 24));
 
-			let bestSTREAK = await StepTracker.aggregate(
-			
-				// Pipeline
-				[
+			let bestSTREAK = await StepTracker.aggregate([
+
 					{$match: {employeeId: req.user.user_id}},
-					// Stage 1
 					{
 						$group: {
 							_id: '$steps',
@@ -130,7 +127,6 @@ router.post('/resetTarget', auth, async(req, res) => {
 						}
 					},
 			
-					// Stage 2
 					{
 						$project: {
 							steps: '$_id',
@@ -212,9 +208,9 @@ router.post('/resetTarget', auth, async(req, res) => {
 					}}
 				], function (err, results) {
 					if (err) {
-						console.error(err);
+					 
 					} else {
-						console.log(results);
+						 
 					}
 				}
 			);
@@ -269,7 +265,7 @@ router.post('/resetTarget', auth, async(req, res) => {
 						allSteps.forEach( (key) => {
 	
 		
-							console.log('allSteps[count]', allSteps[count])
+						 
 							
 							if(allSteps[count] != null && allSteps[count] != undefined){
 	
