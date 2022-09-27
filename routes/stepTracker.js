@@ -308,7 +308,7 @@ router.post('/resetTarget', auth, async(req, res) => {
 						 ]);
 	
 					if(bestSTREAK.length > 0){
-						 resolve(bestSTREAK.streak)
+						 resolve(bestSTREAK[0].streak)
 					}else{
 						resolve(0)
 					}
