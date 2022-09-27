@@ -117,7 +117,7 @@ router.post('/resetTarget', auth, async(req, res) => {
 			   {
 					"$addFields": {
 					  "date": {
-						"$toLong": "$date"
+						"$toLong": "$$date"
 					  }
 					}
 				  },
@@ -129,7 +129,7 @@ router.post('/resetTarget', auth, async(req, res) => {
 					  },
 					  output: {
 						days: {
-						  $push: "$date",
+						  $push: "$$date",
 						  window: {
 							range: [
 							  -86400000,
@@ -189,10 +189,10 @@ router.post('/resetTarget', auth, async(req, res) => {
 						$sum: 1
 					  },
 					  "to": {
-						"$max": "$date"
+						"$max": "$$date"
 					  },
 					  "from": {
-						"$min": "$date"
+						"$min": "$$date"
 					  }
 					}
 				  },
