@@ -37,9 +37,8 @@
 			date: today
 		})
 		
-		const stepTrackerDetails = await StepTracker.findOne({ date: today,  employeeId: req.user.user_id});
+	    	const stepTrackerDetails = await StepTracker.findOne({ date: today,  employeeId: req.user.user_id});
  
-
 			if (stepTrackerDetails) {  
  
 				let newDuration = 0
