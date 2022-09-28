@@ -217,16 +217,10 @@ router.post('/update', async(req, res) => {
 
  router.post('/join', auth, async(req,res) => {
     try{ 
-        let {id} = req.body;
+        let {id, action} = req.body;
         let empId = req.user.user_id;
 
         const challengeDetails = await Challenge.findOne({_id: id}); 
-
-        if(challengeDetails.participants.indexOf(empId) >=0){
-            response = webResponse(200, false, 'Already Joined')  
-            res.send(response);
-            return;
-        }
 
         const recentDate = new Date();
 
@@ -236,9 +230,22 @@ router.post('/update', async(req, res) => {
             return;
         }
 
-        const result = await Challenge.updateOne({_id: id}, {$push: {'participants': empId}, $pull: {'invites': empId}}, {new: true}); 
-        
-        console.log('result', result)
+        const result = {};
+        if(action === 'accept'){
+
+            if(challengeDetails.participants.indexOf(empId) >=0){
+                response = webResponse(200, false, 'Already Joined')  
+                res.send(response);
+                return;
+            }else{
+                 result = await Challenge.updateOne({_id: id}, {$push: {'participants': empId}, $pull: {'invites': empId}}, {new: true}); 
+            }
+
+           
+        }else{
+             result = await Challenge.updateOne({_id: id}, {$pull: {'invites': empId}}, {new: true}); 
+        }
+
        
         if(result){
             response = webResponse(202, true, result)  
