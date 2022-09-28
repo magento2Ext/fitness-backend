@@ -445,6 +445,8 @@ app.post("/analytics", auth, async(req, res) => {
 				  $lte: dateLib.format(date,'YYYY-MM-DD')
 			  }
 		  }).sort({date:1})
+
+		  console.log('weightList', weightList);
 		  
 		  var weightArray = [];		
 		  var i=0;
@@ -661,6 +663,7 @@ app.post("/analytics", auth, async(req, res) => {
 							break;
 						} 
 					}
+					
 					if(found == 0) {
 						step = {
 							'date' : dateLib.format(i,'YYYY-MM-DD'),
