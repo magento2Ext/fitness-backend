@@ -127,7 +127,8 @@ router.post('/create', auth, async(req, res) => {
         }
 
 
-   }catch(err){ console.log(err)
+   }catch(err){ 
+       console.log(err)
        res.send(err)
    }
 });
@@ -230,7 +231,6 @@ router.post('/update', async(req, res) => {
         }
 
         const recentDate = new Date();
-        console.log('recentDate', recentDate);
 
         if(recentDate >= challengeDetails.start){
             response = webResponse(200, false, 'Challenge has been already started')  
@@ -402,12 +402,15 @@ router.post('/myChallenges', auth, async(req, res) => {
             { "$group": {
                 "_id": "$_id",
                 "userId": { $first: "$userId"},
+                "employeeId": { $first: "$employeeId"},
                 "type": { $first: "$type"},
+                "orgType": { $first: "$orgType"},
                 "title": { $first: "$title"},
                 "description": { $first: "$description"},
                 "pic": { $first: "$pic"},
                 "start": { $first: "$start"},
                 "end": { $first: "$end"},
+                "status": { $first: "$status"},
                 "duration": {$first : "$duration"},
                 "winners": {$first: "$winners"},
                 "employeeId": {$first: "$employeeId"},
@@ -415,7 +418,7 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "weightType": {$first: "$weightType"},
                 "targetWeight": {$first: "$targetWeight"},
                 "targetBMI": {$first: "$targetBMI"},
-                "activities": {$first: "$activities"},
+                "activities": {$first: "$activitiesObj"},
                 "participantsObjects": { "$push": "$participantsObjects" },
                 "invitesObjects": { "$push": "$invitesObjects" }
             }}
@@ -457,12 +460,15 @@ router.post('/myChallenges', auth, async(req, res) => {
             { "$group": {
                 "_id": "$_id",
                 "userId": { $first: "$userId"},
+                "employeeId": { $first: "$employeeId"},
                 "type": { $first: "$type"},
+                "orgType": { $first: "$orgType"},
                 "title": { $first: "$title"},
                 "description": { $first: "$description"},
                 "pic": { $first: "$pic"},
                 "start": { $first: "$start"},
                 "end": { $first: "$end"},
+                "status": { $first: "$status"},
                 "duration": {$first : "$duration"},
                 "winners": {$first: "$winners"},
                 "employeeId": {$first: "$employeeId"},
@@ -470,7 +476,7 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "weightType": {$first: "$weightType"},
                 "targetWeight": {$first: "$targetWeight"},
                 "targetBMI": {$first: "$targetBMI"},
-                "activities": {$first: "$activities"},
+                "activities": {$first: "$activitiesObj"},
                 "participantsObjects": { "$push": "$participantsObjects" },
                 "invitesObjects": { "$push": "$invitesObjects" }
             }}
@@ -489,7 +495,8 @@ router.post('/myChallenges', auth, async(req, res) => {
             
         }, 200);
 
-    }catch(err){ console.log(err)
+    }catch(err){
+         console.log(err)
         res.send(err)
     };
 });
