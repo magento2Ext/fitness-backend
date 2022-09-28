@@ -238,7 +238,9 @@ router.post('/update', async(req, res) => {
             return;
         }
 
-        const result = await Challenge.updateOne({_id: id}, {$push: {'participants': empId}, $pull: {'participants': empId}}, {new: true}); 	 
+        const result = await Challenge.updateOne({_id: id}, {$push: {'participants': empId}, $pull: {'participants': empId}}, {new: true}); 
+        
+        console.log('result', result)
        
         if(result){
             response = webResponse(202, true, result)  
