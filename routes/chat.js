@@ -16,10 +16,14 @@ var chatRef = db.ref("chat");
 
 const notification_options = {
     priority: "high"
-  };
+};
 
 router.post('/save', auth, async(req,res) => {
 	try { 
+
+
+		console.log('req.body', req.body);
+		return
 		var empId = req.user.user_id;
 		const message = new Chat({
 			//groupId: req.body.groupId,
@@ -84,7 +88,7 @@ router.post('/save', auth, async(req,res) => {
 		}
 		
        
-		oneUser.update(firebaseData,(err)=>{
+		oneUser.update(firebaseData, (err) => {
 			if(err){
 				resMessage = "Something went wrong" + err;
 				response = webResponse(200, true, resMessage)  
@@ -109,7 +113,7 @@ router.post('/save', auth, async(req,res) => {
 				
 			}
 		})
-		//firebase end
+		 
 		
 		
 	} catch (err) {  console.log(err)
@@ -135,6 +139,7 @@ router.post('/list', auth, async(req,res) => {
 			res.send(response)
 			return "";
 		}
+
 		var empId = req.user.user_id;
 		const chat = await Chat.find({ groupId: groupId, }).sort({dateTime:1}).populate('employeeId')
 		var chatList = [];
@@ -145,9 +150,9 @@ router.post('/list', auth, async(req,res) => {
 			}
 			
 			var asiaDate =  convertTZ(new Date(col.dateTime), 'Asia/Kolkata');
+
 			chatDetail = {
 				'id' :  col._id,
-				//"dateTime1": dateLib.format(new Date(col.dateTime),'YYYY-MM-DD')+' '+date[4],
 				"dateTime": dateLib.format(new Date(asiaDate),'YYYY-MM-DD HH:mm:ss'),
 				"dateTimeSaved": col.dateTime,
 				"profile_picture": col.employeeId.picture,
@@ -156,8 +161,8 @@ router.post('/list', auth, async(req,res) => {
 				"message": col.message,
 				"appTempId": col.appTempId,
 				"isMyMessage":isMyMessage,
-				
 			}
+
 			chatList.push(chatDetail);
 		})
 
