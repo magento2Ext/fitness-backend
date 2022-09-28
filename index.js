@@ -445,9 +445,7 @@ app.post("/analytics", auth, async(req, res) => {
 				  $lte: dateLib.format(date,'YYYY-MM-DD')
 			  }
 		  }).sort({date:1})
-
-		  console.log('weightList', weightList);
-		  
+ 
 		  var weightArray = [];		
 		  var i=0;
 		  weightList.forEach(function(col) {
@@ -523,7 +521,7 @@ app.post("/analytics", auth, async(req, res) => {
 					}
 					
 				} else{
-					var difference = col.weight - weightList[i-1].weight;
+					var difference = col.weight - weightLastMonth[i-1].weight;
 					if(difference > 0) {
 						var line = difference+" kilogram over weight."
 					} else {
