@@ -11,7 +11,7 @@ const CronJob = require('cron').CronJob;
 const errors = ['', '0', 0, null, undefined];
 
 var job = new CronJob(
-	"05 * * * * *",
+	"1/2 * * * * *",
 	async () =>  {
         console.log('/10 * * * * *');
         let challenges = await Challenge.find();
