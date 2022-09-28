@@ -296,19 +296,25 @@ router.post('/myChallenges', auth, async(req, res) => {
 			query = {orgType: {$ne: 'org'}}
 		}
 
-        console.log('query', query);
-
         const newChallenges =  await Challenge.aggregate([
             {$match: query},
             {$match: {status: 'new'}},
             {"$unwind": {path: "$participants", preserveNullAndEmptyArrays:true}},
+            { "$unwind": {path: "$invites", preserveNullAndEmptyArrays:true} },
             {$set: {participants: {$toObjectId: "$participants"} }},
+            {$set: {invites: {$toObjectId: "$invites"} }},
             { "$lookup": {
                "from": "employees",
                "localField": "participants",
                "foreignField": "_id",
                "as": "participantsObjects"
             }},
+            { "$lookup": {
+                "from": "employees",
+                "localField": "invites",
+                "foreignField": "_id",
+                "as": "invitesObjects"
+             }},
             { "$lookup": {
                 "from": "employees",
                 "localField": "invites",
@@ -327,16 +333,20 @@ router.post('/myChallenges', auth, async(req, res) => {
 
              }},
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
+            { "$unwind": {path: "$invitesObjects", preserveNullAndEmptyArrays:true}},
             {"$set": {"duration": {"$divide": [{ "$subtract": ["$end", "$start"] }, 1000 * 60 * 60 * 24]}}},
             { "$group": {
                 "_id": "$_id",
                 "userId": { $first: "$userId"},
+                "employeeId": { $first: "$employeeId"},
                 "type": { $first: "$type"},
+                "orgType": { $first: "$orgType"},
                 "title": { $first: "$title"},
                 "description": { $first: "$description"},
                 "pic": { $first: "$pic"},
                 "start": { $first: "$start"},
                 "end": { $first: "$end"},
+                "status": { $first: "$status"},
                 "duration": {$first : "$duration"},
                 "winners": {$first: "$winners"},
                 "employeeId": {$first: "$employeeId"},
@@ -345,7 +355,8 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "targetWeight": {$first: "$targetWeight"},
                 "targetBMI": {$first: "$targetBMI"},
                 "activities": {$first: "$activitiesObj"},
-                "participantsObjects": { "$push": "$participantsObjects" }
+                "participantsObjects": { "$push": "$participantsObjects" },
+                "invitesObjects": { "$push": "$invitesObjects" }
             }}
         ])
 
@@ -353,13 +364,21 @@ router.post('/myChallenges', auth, async(req, res) => {
             {$match: query},
             {$match: {status: 'ongoing'}},
             { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
+            { "$unwind": {path: "$invites", preserveNullAndEmptyArrays:true} },
             {$set: {participants: {$toObjectId: "$participants"} }},
+            {$set: {invites: {$toObjectId: "$invites"} }},
             { "$lookup": {
                "from": "employees",
                "localField": "participants",
                "foreignField": "_id",
                "as": "participantsObjects"
             }},
+            { "$lookup": {
+                "from": "employees",
+                "localField": "invites",
+                "foreignField": "_id",
+                "as": "invitesObjects"
+             }},
             { "$lookup": {
                 "from": "employees",
                 "localField": "invites",
@@ -378,6 +397,7 @@ router.post('/myChallenges', auth, async(req, res) => {
 
              }},
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
+            { "$unwind": {path: "$invitesObjects", preserveNullAndEmptyArrays:true}},
             {"$set": {"duration": {"$divide": [{ "$subtract": ["$end", "$start"] }, 1000 * 60 * 60 * 24]}}},
             { "$group": {
                 "_id": "$_id",
@@ -396,7 +416,8 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "targetWeight": {$first: "$targetWeight"},
                 "targetBMI": {$first: "$targetBMI"},
                 "activities": {$first: "$activities"},
-                "participantsObjects": { "$push": "$participantsObjects" }
+                "participantsObjects": { "$push": "$participantsObjects" },
+                "invitesObjects": { "$push": "$invitesObjects" }
             }}
         ])
 
@@ -404,7 +425,9 @@ router.post('/myChallenges', auth, async(req, res) => {
             {$match: query},
             {$match: {status: 'completed'}},
             { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
+            { "$unwind": {path: "$invites", preserveNullAndEmptyArrays:true} },
             {$set: {participants: {$toObjectId: "$participants"} }},
+            {$set: {invites: {$toObjectId: "$invites"} }},
             { "$lookup": {
                "from": "employees",
                "localField": "participants",
@@ -429,6 +452,7 @@ router.post('/myChallenges', auth, async(req, res) => {
 
              }},
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
+            { "$unwind": {path: "$invitesObjects", preserveNullAndEmptyArrays:true}},
             {"$set": {"duration": {"$divide": [{ "$subtract": ["$end", "$start"] }, 1000 * 60 * 60 * 24]}}},
             { "$group": {
                 "_id": "$_id",
@@ -447,7 +471,8 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "targetWeight": {$first: "$targetWeight"},
                 "targetBMI": {$first: "$targetBMI"},
                 "activities": {$first: "$activities"},
-                "participantsObjects": { "$push": "$participantsObjects" }
+                "participantsObjects": { "$push": "$participantsObjects" },
+                "invitesObjects": { "$push": "$invitesObjects" }
             }}
         ]);
 
@@ -486,7 +511,9 @@ router.post('/invitations', auth, async(req, res) => {
             {$match: query},
             {$match: {status: 'new'}},
             { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
+            { "$unwind": {path: "$invites", preserveNullAndEmptyArrays:true} },
             {$set: {participants: {$toObjectId: "$participants"} }},
+            {$set: {invites: {$toObjectId: "$invites"} }},
             { "$lookup": {
                "from": "employees",
                "localField": "participants",
@@ -511,6 +538,7 @@ router.post('/invitations', auth, async(req, res) => {
 
              }},
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
+            { "$unwind": {path: "$invitesObjects", preserveNullAndEmptyArrays:true}},
             {"$set": {"duration": {"$divide": [{ "$subtract": ["$end", "$start"] }, 1000 * 60 * 60 * 24]}}},
             { "$group": {
                 "_id": "$_id",
@@ -529,7 +557,8 @@ router.post('/invitations', auth, async(req, res) => {
                 "targetWeight": {$first: "$targetWeight"},
                 "targetBMI": {$first: "$targetBMI"},
                 "activities": {$first: "$activities"},
-                "participantsObjects": { "$push": "$participantsObjects" }
+                "participantsObjects": { "$push": "$participantsObjects" },
+                "invitesObjects": { "$push": "$invitesObjects" }
             }}
         ])
 
