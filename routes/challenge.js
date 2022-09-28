@@ -10,7 +10,6 @@ const sendFCM = require('./fcm');
 const CronJob = require('cron').CronJob;
 const errors = ['', '0', 0, null, undefined];
 
-
 var job = new CronJob(
 	"44 17 * * *",
 	async () =>  {
@@ -296,6 +295,8 @@ router.post('/myChallenges', auth, async(req, res) => {
 		}else{
 			query = {orgType: {$ne: 'org'}}
 		}
+
+        console.log('query', query);
 
         const newChallenges =  await Challenge.aggregate([
             {$match: query},
@@ -628,7 +629,13 @@ router.post('/mindLeaderboard', auth, async(req, res) => {
             {"let": {"empId": {$toObjectId: "$participants"} }},
             { "$lookup": {
                 "from": "employees",
-                "localField": "$empId",
+                "let": { "empId": "$_id" },
+                "pipeline": [
+                  { "$addFields": { "challengeId": { "$toObjectId": "$challengeId" }}},
+                  { "$match": { "$expr": { "$eq": [ "$challengeId", "$$challengeId" ] } } }
+                ],
+                
+                "localField": "empId",
                 "foreignField": "_id",
                 "as": "employeeObjects"
              }},
