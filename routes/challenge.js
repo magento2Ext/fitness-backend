@@ -230,7 +230,7 @@ router.post('/update', async(req, res) => {
             return;
         }
 
-        const result = {};
+        let result = {};
         if(action === 'accept'){
 
             if(challengeDetails.participants.indexOf(empId) >=0){
