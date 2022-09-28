@@ -21,10 +21,8 @@ const notification_options = {
 router.post('/save', auth, async(req,res) => {
 	try { 
 
-
-		console.log('req.body', req.body);
-		return
 		var empId = req.user.user_id;
+
 		const message = new Chat({
 			//groupId: req.body.groupId,
 			employeeId: empId,
