@@ -481,18 +481,26 @@ router.post('/test', auth, async(req, res) => {
 	const employeeDetails = await Employee.findById(empId);
 
 	const data = await StepTracker.aggregate([
-		
 		{$match: {employeeId: empId }},
-
 		{ "$addFields": {"date1": {"$toDate": "$date"}} },
-
 		{$match: {
 			$expr: {
 			  $and: [
 				{ $eq: [{ $month: '$date1' }, { $month: new Date() }] },
 			  ],
 			},
-		  }},
+		}},
+		{
+			$group: {
+			  _id: "$employeeId",
+			  allSteps: {
+				$push: {
+				  name: "$steps",
+				  score: "$date"
+				}
+			  }
+			}
+		},
 
 		// { $match: { date: { $gt: moment().startOf('day').subtract(30, 'day').toDate() } } },
 		// {
