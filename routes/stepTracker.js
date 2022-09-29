@@ -501,6 +501,32 @@ router.post('/test', auth, async(req, res) => {
 			  }
 			}
 		},
+		{ $unwind: "$allSteps"},
+
+		{ // stage 2 - create an additional field to hold the tag data
+			$set: {
+			  ["new"]:
+				{
+				  $function:
+				  {
+					body: function () {
+					 
+					  const newSteps = []
+					  for (let i = 1; i < new Date({ $year: new Date() }, { $month: new Date() }, 0).getDate(); i++) { // ignore first element as it is the text preceding tag
+					   
+						newSteps.push(i)
+						  
+					  }
+					  return tags
+					}
+				  }
+				}
+			}
+		  }
+
+ 
+
+
 
 		// { $match: { date: { $gt: moment().startOf('day').subtract(30, 'day').toDate() } } },
 		// {
