@@ -493,8 +493,9 @@ router.post('/test', auth, async(req, res) => {
 	 ])
 
 
-	 const monthLength =   new Date(new Date.getFullYear(), new Date.getMonth()+1, 0);
-	 console.log( monthLength.getDate());
+	 var now = new Date();
+   const days =  new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+	 console.log(days);
 
 
 	 res.send(data)
