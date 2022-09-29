@@ -493,9 +493,12 @@ router.post('/test', auth, async(req, res) => {
 	 ])
 
 
-	 var now = new Date();
-   const days =  new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
-	 console.log(days);
+	var now = new Date();
+	const days =  new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+		
+	for(i <= days; i = 0; i++){
+		console.log(i);
+	}
 
 
 	 res.send(data)
