@@ -494,10 +494,21 @@ router.post('/test', auth, async(req, res) => {
 
 
 	var now = new Date();
+
+ 
+	var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+
+	console.log('1', firstDay);
+
+	console.log('2', firstDay.setDate(firstDay.getDate() + 1))
+
 	const days =  new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+
+
 		
-	for(i = 0; i <= days; i++){
-		console.log(i);
+	for(i = 1; i <= days; i++){
+
+		 
 	}
 
 
