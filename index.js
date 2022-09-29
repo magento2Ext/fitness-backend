@@ -428,8 +428,11 @@ app.post("/analytics", auth, async(req, res) => {
 		  var oneWeekAgo = new Date();
 		  oneWeekAgo.setDate(oneWeekAgo.getDate() - 6);
 		  
-		  var now = new Date();
-		  var oneMonthAgo = new Date(now.getFullYear(), now.getMonth(), 1)
+
+		var now = new Date(), y = now.getFullYear(), m = now.getMonth();
+		var oneMonthAgo = new Date(y, m, 1);
+
+ 
 
 		  var date = new Date();
 
