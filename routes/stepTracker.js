@@ -475,7 +475,33 @@ return promise
 }
 
 
-router.post('/test', auth, async(req,res) => {
+router.post('/test', auth, async(req, res) => {
+
+	var empId = req.user.user_id;
+	const employeeDetails = await Employee.findById(empId);
+
+	const data = await StepTracker.aggregate([
+		{$match: {employeeId: empId }},
+		{ $match: { date: { $gt: moment().startOf('day').subtract(30, 'day').toDate() } } },
+		{
+		   $group: {
+			  _id: {
+				 day: { $dateTrunc: { date: "$date", unit: "day" } },
+				 class: "$meta.class"
+			  },
+			  total: { $count: {} }
+		   }
+		},
+		{
+		   $group: {
+			  _id: "$_id.day",
+			  count: { $push: { total: "$total", class: "$_id.class" } }
+		   }
+		}
+	 ])
+
+
+	 res.send(data)
 
 })
 
