@@ -265,7 +265,7 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
  
 	
 		
-		let messages = await Chat.find(query).sort({dateTime: -1});
+		let messages = await Chat.find(query);
 
 		var data = [];
 
