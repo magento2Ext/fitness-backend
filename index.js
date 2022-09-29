@@ -428,16 +428,32 @@ app.post("/analytics", auth, async(req, res) => {
 		  var oneWeekAgo = new Date();
 		  oneWeekAgo.setDate(oneWeekAgo.getDate() - 6);
 		  
-		  var oneMonthAgo = new Date();
-		  oneMonthAgo.setDate(oneMonthAgo.getDate() - 30);
+		  var oneMonthAgo = new Date(now.getFullYear(), now.getMonth(), 1)
+
+		  
   
 		  var date = new Date();
+
+		  const weightLastMonth = await Weight.aggregate([
+			{$match: {employeeId: req.user.user_id}},
+			{ "$addFields": {"date1": {"$toDate": "$date"}} },
+			{$match: {
+				$expr: {
+				  $and: [
+					{ $eq: [{ $month: '$date1' }, { $month: new Date() }] },
+				  ],
+				},
+			}},
+			{$sort: {date: -1}}
+		 ])
+
+
  
-		  const weightLastMonth = await Weight.find({ employeeId: req.user.user_id,
-			  date: {
-				  $gte: dateLib.format(oneMonthAgo,'YYYY-MM-DD')
-			  }
-		  }).sort({date:-1});
+		//   const weightLastMonth = await Weight.find({ employeeId: req.user.user_id,
+		// 	  date: {
+		// 		  $gte: dateLib.format(oneMonthAgo,'YYYY-MM-DD')
+		// 	  }
+		//   }).sort({date:-1});
   
 		  const weightList = await Weight.find({  employeeId: req.user.user_id,
 			  date: {
