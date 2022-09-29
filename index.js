@@ -428,10 +428,9 @@ app.post("/analytics", auth, async(req, res) => {
 		  var oneWeekAgo = new Date();
 		  oneWeekAgo.setDate(oneWeekAgo.getDate() - 6);
 		  
+		  var now = new Date();
 		  var oneMonthAgo = new Date(now.getFullYear(), now.getMonth(), 1)
 
-		  
-  
 		  var date = new Date();
 
 		  const weightLastMonth = await Weight.aggregate([
