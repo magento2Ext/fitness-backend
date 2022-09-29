@@ -267,7 +267,7 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 		
 		Chat.find(query, null, {sort: {'dateTime': -1}}, async function(err, messages){
 
-			console.log('messages', query)
+			
 
 			var data = [];
 			if(messages.length!=0){
@@ -276,7 +276,9 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 				var i = 0;
 	   
 				 for(let key of messages){
-	   
+
+					console.log('messages', key);
+					
 					var other_person_id =  key.deliveredTo[0] == empId ? String(key.employeeId)  : (key.deliveredTo[0]);
 			 
 				   if(ids.indexOf(other_person_id)== -1){
