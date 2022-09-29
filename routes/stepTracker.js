@@ -519,7 +519,8 @@ router.post('/test', auth, async(req, res) => {
 					  }
 					  return tags
 					}
-				  }
+				  },
+				  lang: 'js'
 				}
 			}
 		  }
