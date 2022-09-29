@@ -103,16 +103,20 @@ router.post('/create', auth, async(req, res) => {
             let newChallenge = new Challenge(data);
             let result = await newChallenge.save();
 
-            activities.forEach( (key) => {
-                let activityData =  {
-                        challengeId: result._id,
-                        title:  key.title,
-                        description:  key.description,
-                        attachement:  key.attachment
-                   }
-                let newActivity =  new Activity(activityData);
-                newActivity.save();
-            })
+
+            if(type === 'mind'){
+                 
+                activities.forEach( (key) => {
+                    let activityData =  {
+                            challengeId: result._id,
+                            title:  key.title,
+                            description:  key.description,
+                            attachement:  key.attachment
+                       }
+                    let newActivity =  new Activity(activityData);
+                    newActivity.save();
+                })
+            }
 
             if(result){
                 response = webResponse(202, true, result)  
