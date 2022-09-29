@@ -263,14 +263,14 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 				]
 			}
  
-	
-		
-		let messages = await Chat.find(query);
+		let messagess = await Chat.find(query);
 
+	
+        
 		var data = [];
 
-		if(messages.length!=0){
-
+		if(messagess.length!=0){
+			let messages = messagess.reverse()
 			var ids = [];
 			var i = 0;
    
