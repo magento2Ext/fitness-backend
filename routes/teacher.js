@@ -398,14 +398,11 @@ router.post('/saveTeacherPost', async(req,res) => {
 });
 
 
-
-
-
 router.post('/getAdminPosts', async(req,res) => {
 	
 	try{ 
 
-      let {userId} = req.body;
+      let {userId, postType} = req.body;
 
 	  if(!(userId)){
 		jsonObj = []
@@ -424,7 +421,7 @@ router.post('/getAdminPosts', async(req,res) => {
  
 
 	let result = await Audio.aggregate([
-		{$match: {userId: userId}},
+		{$match: {userId: userId, $in: {postType: postType}}},
 		{$set: {catId: {$toObjectId: "$catId"} }},
 		{$lookup: {
 				from: "teacher_categories",
@@ -433,12 +430,7 @@ router.post('/getAdminPosts', async(req,res) => {
 				as: "category"
 			}
 	    },
-		{$unwind: '$category'},
-		// {
-		//   $project: {
-		// 	title: 1, category: "$category"
-		//   }
-		// }
+		{$unwind: '$category'}
 
 ])
 
