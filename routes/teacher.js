@@ -402,7 +402,7 @@ router.post('/getAdminPosts', async(req,res) => {
 	
 	try{ 
 
-      let {userId, postType} = req.body;
+      let {userId, postTypes} = req.body;
 
 	  if(!(userId)){
 		jsonObj = []
@@ -421,7 +421,7 @@ router.post('/getAdminPosts', async(req,res) => {
  
 
 	let result = await Audio.aggregate([
-		{$match: {userId: userId, postType: {$in: postType}}},
+		{$match: {userId: userId, postType: {$in: postTypes}}},
 		{$set: {catId: {$toObjectId: "$catId"} }},
 		{$lookup: {
 				from: "teacher_categories",
