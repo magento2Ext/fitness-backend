@@ -421,7 +421,7 @@ router.post('/getAdminPosts', async(req,res) => {
  
 
 	let result = await Audio.aggregate([
-		{$match: {userId: userId, $in: {postType: postType}}},
+		{$match: {userId: userId, postType: {$in: postType}}},
 		{$set: {catId: {$toObjectId: "$catId"} }},
 		{$lookup: {
 				from: "teacher_categories",
