@@ -522,9 +522,9 @@ router.post('/myChallenges', auth, async(req, res) => {
         setTimeout(() => {
 
             let allChallenges = {
-                newChallenges: newChallenges.reverse(),
-                onGoingChallenges: onGoingChallenges.reverse(),
-                completedChallanges: completedChallanges.reverse()
+                newChallenges: newChallenges,
+                onGoingChallenges: onGoingChallenges,
+                completedChallanges: completedChallanges
             }
     
                 response = webResponse(202, true, allChallenges)  
