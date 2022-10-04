@@ -321,21 +321,9 @@ router.post('/myChallenges', auth, async(req, res) => {
         const newChallenges =  await Challenge.aggregate([
             {$match: query},
             {$match: {status: 'new'}},
-            {$project:{
-                "isJoined":{$cond:
-                               [{$gt:[
-                                {$size:
-                                  {$setIntersection:[empId,
-                                          "$participants"]}}
-                               ,0]},
-                               true,false]}}},
-
-            {$project:{
-            "participants1": "$participants"}
-            },
-            {"$unwind": {path: "$participants1", preserveNullAndEmptyArrays:true}},
+            {"$unwind": {path: "$participants", preserveNullAndEmptyArrays:true}},
             { "$unwind": {path: "$invites", preserveNullAndEmptyArrays:true} },
-            {$set: {participants: {$toObjectId: "$participants1"} }},
+            {$set: {participants: {$toObjectId: "$participants"} }},
             {$set: {invites: {$toObjectId: "$invites"} }},
             { "$lookup": {
                "from": "employees",
@@ -389,8 +377,7 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "targetBMI": {$first: "$targetBMI"},
                 "activities": {$first: "$activitiesObj"},
                 "participantsObjects": { "$push": "$participantsObjects" },
-                "invitesObjects": { "$push": "$invitesObjects" },
-                "isJoined": { "$push": "$isJoined" },
+                "invitesObjects": { "$push": "$invitesObjects" }
             }}
         ])
 
