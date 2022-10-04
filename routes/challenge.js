@@ -321,6 +321,14 @@ router.post('/myChallenges', auth, async(req, res) => {
         const newChallenges =  await Challenge.aggregate([
             {$match: query},
             {$match: {status: 'new'}},
+            {$project:{
+                "isJoined":{$cond:
+                               [{$gt:[
+                                {$size:
+                                  {$setIntersection:[empId,
+                                          "$participants"]}}
+                               ,0]},
+                               true,false]}}},
             {"$unwind": {path: "$participants", preserveNullAndEmptyArrays:true}},
             { "$unwind": {path: "$invites", preserveNullAndEmptyArrays:true} },
             {$set: {participants: {$toObjectId: "$participants"} }},
@@ -356,14 +364,6 @@ router.post('/myChallenges', auth, async(req, res) => {
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
             { "$unwind": {path: "$invitesObjects", preserveNullAndEmptyArrays:true}},
             {"$set": {"duration": {"$divide": [{ "$subtract": ["$end", "$start"] }, 1000 * 60 * 60 * 24]}}},
-            {$project:{
-           "isJoined":{$cond:
-                          [{$gt:[
-                           {$size:
-                             {$setIntersection:[empId,
-                                     "$participants"]}}
-                          ,0]},
-                          true,false]}}},
             { "$group": {
                 "_id": "$_id",
                 "userId": { $first: "$userId"},
