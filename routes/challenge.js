@@ -228,7 +228,7 @@ router.post('/update', async(req, res) => {
 
         const recentDate = new Date();
 
-        let breakDate = recentDate.split('T')[0] + 'T00:00:00.000Z'
+        let breakDate = String(recentDate).split('T')[0] + 'T00:00:00.000Z'
 
         console.log(breakDate, challengeDetails.start);
 
