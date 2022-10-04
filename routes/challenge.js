@@ -105,6 +105,7 @@ router.post('/create', auth, async(req, res) => {
 
 
         }else{
+            data["createdOn"] = new Date();
             let newChallenge = new Challenge(data);
             let result = await newChallenge.save();
 
