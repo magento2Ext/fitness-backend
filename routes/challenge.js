@@ -382,7 +382,7 @@ router.post('/myChallenges', auth, async(req, res) => {
             }},
             {
                 "$sort": {
-                  date: -1
+                  createdOn: -1
                 }
               }
         ])
@@ -448,7 +448,12 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "activities": {$first: "$activitiesObj"},
                 "participantsObjects": { "$push": "$participantsObjects" },
                 "invitesObjects": { "$push": "$invitesObjects" }
-            }}
+            }},
+            {
+                "$sort": {
+                  createdOn: -1
+                }
+              }
         ])
 
         const completedChallanges =  await Challenge.aggregate([
@@ -506,7 +511,12 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "activities": {$first: "$activitiesObj"},
                 "participantsObjects": { "$push": "$participantsObjects" },
                 "invitesObjects": { "$push": "$invitesObjects" }
-            }}
+            }},
+            {
+                "$sort": {
+                  createdOn: -1
+                }
+              }
         ]);
 
         setTimeout(() => {
