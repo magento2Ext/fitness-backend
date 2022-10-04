@@ -18,11 +18,16 @@ var job = new CronJob(
 
             const recentDate = new Date();
 
-            if(recentDate == challenge.start){
+            const strDate = dateLib.format(recentDate,'YYYY-MM-DD')
+    
+            const recentDateYMD =  strDate+ 'T00:00:00.000Z'
+    
+    
+            if(recentDateYMD == challenge.start){
                await Challenge.updateOne({_id: challenge._id}, {$set: {status: 'ongoing'}}, {new: true}); 
             }
 
-            if(recentDate > challenge.end){
+            if(recentDateYMD > challenge.end){
                 await Challenge.updateOne({_id: challenge._id}, {$set: {status: 'completed'}}, {new: true}); 
              }
     
