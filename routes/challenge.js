@@ -352,11 +352,18 @@ router.post('/myChallenges', auth, async(req, res) => {
                   { "$match": { "$expr": { "$eq": [ "$challengeId", "$$challengeId" ] } } }
                 ],
                 "as": "activitiesObj"
-
              }},
             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
             { "$unwind": {path: "$invitesObjects", preserveNullAndEmptyArrays:true}},
             {"$set": {"duration": {"$divide": [{ "$subtract": ["$end", "$start"] }, 1000 * 60 * 60 * 24]}}},
+            {$project:{
+           "isJoined":{$cond:
+                          [{$gt:[
+                           {$size:
+                             {$setIntersection:[empId,
+                                     "$participants"]}}
+                          ,0]},
+                          true,false]}}},
             { "$group": {
                 "_id": "$_id",
                 "userId": { $first: "$userId"},
@@ -378,7 +385,8 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "targetBMI": {$first: "$targetBMI"},
                 "activities": {$first: "$activitiesObj"},
                 "participantsObjects": { "$push": "$participantsObjects" },
-                "invitesObjects": { "$push": "$invitesObjects" }
+                "invitesObjects": { "$push": "$invitesObjects" },
+                "isJoined": { "$push": "$isJoined" },
             }}
         ])
 
