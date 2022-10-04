@@ -329,9 +329,13 @@ router.post('/myChallenges', auth, async(req, res) => {
                                           "$participants"]}}
                                ,0]},
                                true,false]}}},
-            {"$unwind": {path: "$participants", preserveNullAndEmptyArrays:true}},
+
+            {$project:{
+            "participants1": $participants}
+            },
+            {"$unwind": {path: "$participants1", preserveNullAndEmptyArrays:true}},
             { "$unwind": {path: "$invites", preserveNullAndEmptyArrays:true} },
-            {$set: {participants: {$toObjectId: "$participants"} }},
+            {$set: {participants: {$toObjectId: "$participants1"} }},
             {$set: {invites: {$toObjectId: "$invites"} }},
             { "$lookup": {
                "from": "employees",
