@@ -382,7 +382,7 @@ router.post('/myChallenges', auth, async(req, res) => {
             }},
             {
                 "$sort": {
-                  createdOn: 1
+                    _id: 1
                 }
               }
         ])
@@ -451,7 +451,7 @@ router.post('/myChallenges', auth, async(req, res) => {
             }},
             {
                 "$sort": {
-                  createdOn: 1
+                    _id: 1
                 }
               }
         ])
@@ -514,7 +514,7 @@ router.post('/myChallenges', auth, async(req, res) => {
             }},
             {
                 "$sort": {
-                  createdOn: 1
+                    _id: 1
                 }
               }
         ]);
