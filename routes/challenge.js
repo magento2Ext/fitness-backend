@@ -331,7 +331,7 @@ router.post('/myChallenges', auth, async(req, res) => {
                                true,false]}}},
 
             {$project:{
-            "participants1": $participants}
+            "participants1": "$participants"}
             },
             {"$unwind": {path: "$participants1", preserveNullAndEmptyArrays:true}},
             { "$unwind": {path: "$invites", preserveNullAndEmptyArrays:true} },
