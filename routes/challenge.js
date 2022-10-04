@@ -378,7 +378,12 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "activities": {$first: "$activitiesObj"},
                 "participantsObjects": { "$push": "$participantsObjects" },
                 "invitesObjects": { "$push": "$invitesObjects" }
-            }}
+            }},
+            {
+                "$sort": {
+                  date: -1
+                }
+              }
         ])
 
         const onGoingChallenges =  await Challenge.aggregate([  
@@ -506,9 +511,9 @@ router.post('/myChallenges', auth, async(req, res) => {
         setTimeout(() => {
 
             let allChallenges = {
-                newChallenges: newChallenges,
-                onGoingChallenges: onGoingChallenges,
-                completedChallanges: completedChallanges
+                newChallenges: newChallenges.reverse(),
+                onGoingChallenges: onGoingChallenges.reverse(),
+                completedChallanges: completedChallanges.reverse()
             }
     
                 response = webResponse(202, true, allChallenges)  
