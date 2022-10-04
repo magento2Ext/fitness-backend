@@ -603,7 +603,12 @@ router.post('/invitations', auth, async(req, res) => {
                 "activities": {$first: "$activities"},
                 "participantsObjects": { "$push": "$participantsObjects" },
                 "invitesObjects": { "$push": "$invitesObjects" }
-            }}
+            }},
+            {
+                "$sort": {
+                    _id: -1
+                }
+              }
         ])
 
     
