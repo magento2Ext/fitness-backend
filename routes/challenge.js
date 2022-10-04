@@ -321,14 +321,14 @@ router.post('/myChallenges', auth, async(req, res) => {
         const newChallenges =  await Challenge.aggregate([
             {$match: query},
             {$match: {status: 'new'}},
-            {$project:{
-                "isJoined":{$cond:
-                               [{$gt:[
-                                {$size:
-                                  {$setIntersection:[empId,
-                                          "$participants"]}}
-                               ,0]},
-                               true,false]}}},
+            // {$project:{
+            //     "isJoined":{$cond:
+            //                    [{$gt:[
+            //                     {$size:
+            //                       {$setIntersection:[empId,
+            //                               "$participants"]}}
+            //                    ,0]},
+            //                    true,false]}}},
             {"$unwind": {path: "$participants", preserveNullAndEmptyArrays:true}},
             { "$unwind": {path: "$invites", preserveNullAndEmptyArrays:true} },
             {$set: {participants: {$toObjectId: "$participants"} }},
