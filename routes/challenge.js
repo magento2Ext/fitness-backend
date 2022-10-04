@@ -228,9 +228,9 @@ router.post('/update', async(req, res) => {
 
         const recentDate = new Date();
 
-        const strDate = String(recentDate);
+        const strDate = dateLib.format(recentDate,'YYYY-MM-DD')
 
-        console.log(strDate);
+        console.log(strDate, challengeDetails.start);
 
         const splitStrDate = strDate.split(")")[1]
  
