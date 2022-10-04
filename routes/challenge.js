@@ -230,7 +230,7 @@ router.post('/update', async(req, res) => {
 
         let breakDate = String(recentDate).split('T')[0] + 'T00:00:00.000Z'
 
-        console.log(breakDate, challengeDetails.start);
+        console.log(String(recentDate), challengeDetails.start);
 
         if(breakDate >= challengeDetails.start){
             response = webResponse(200, false, 'Challenge has been already started')  
