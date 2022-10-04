@@ -230,9 +230,9 @@ router.post('/update', async(req, res) => {
 
         const strDate = String(recentDate);
 
-        const splitStrDate = strDate.split(")")[1]
+        const splitStrDate  
 
-        console.log(splitStrDate);
+        console.log(strDate);
 
 
         const trimStrDate = splitStrDate.split('T')[0]
