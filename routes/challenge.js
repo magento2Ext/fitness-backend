@@ -378,7 +378,7 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "targetWeight": {$first: "$targetWeight"},
                 "targetBMI": {$first: "$targetBMI"},
                 "activities": {$first: "$activitiesObj"},
-                "participantsObjects": { "$push": "$participantsObjects" },
+                "participantsObjects": { "$addToSet": "$participantsObjects" },
                 "invitesObjects": { "$push": "$invitesObjects" }
             }},
             {
