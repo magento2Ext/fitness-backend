@@ -379,7 +379,7 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "targetBMI": {$first: "$targetBMI"},
                 "activities": {$first: "$activitiesObj"},
                 "participantsObjects": { "$addToSet": "$participantsObjects" },
-                "invitesObjects": { "$push": "$invitesObjects" }
+                "invitesObjects": { "$addToSet": "$invitesObjects" }
             }},
             {
                 "$sort": {
@@ -447,8 +447,8 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "targetWeight": {$first: "$targetWeight"},
                 "targetBMI": {$first: "$targetBMI"},
                 "activities": {$first: "$activitiesObj"},
-                "participantsObjects": { "$push": "$participantsObjects" },
-                "invitesObjects": { "$push": "$invitesObjects" }
+                "participantsObjects": { "$addToSet": "$participantsObjects" },
+                "invitesObjects": { "$addToSet": "$invitesObjects" }
             }},
             {
                 "$sort": {
@@ -510,8 +510,8 @@ router.post('/myChallenges', auth, async(req, res) => {
                 "targetWeight": {$first: "$targetWeight"},
                 "targetBMI": {$first: "$targetBMI"},
                 "activities": {$first: "$activitiesObj"},
-                "participantsObjects": { "$push": "$participantsObjects" },
-                "invitesObjects": { "$push": "$invitesObjects" }
+                "participantsObjects": { "$addToSet": "$participantsObjects" },
+                "invitesObjects": { "$addToSet": "$invitesObjects" }
             }},
             {
                 "$sort": {
@@ -602,8 +602,8 @@ router.post('/invitations', auth, async(req, res) => {
                 "targetWeight": {$first: "$targetWeight"},
                 "targetBMI": {$first: "$targetBMI"},
                 "activities": {$first: "$activities"},
-                "participantsObjects": { "$push": "$participantsObjects" },
-                "invitesObjects": { "$push": "$invitesObjects" }
+                "participantsObjects": { "$addToSet": "$participantsObjects" },
+                "invitesObjects": { "$addToSet": "$invitesObjects" }
             }},
             {
                 "$sort": {
@@ -676,8 +676,8 @@ router.post('/challengeDetail', async(req, res) => {
                 "targetWeight": {$first: "$targetWeight"},
                 "targetBMI": {$first: "$targetBMI"},
                 "activities": {$first: "$activitiesObj"},
-                "participantsObjects": { "$push": "$participantsObjects" },
-                "invitesObjects": { "$push": "$invitesObjects" }
+                "participantsObjects": { "$addToSet": "$participantsObjects" },
+                "invitesObjects": { "$addToSet": "$invitesObjects" }
             }}
         ])
 
@@ -735,7 +735,7 @@ router.post('/mindLeaderboard', auth, async(req, res) => {
                 "$group": {
                 "_id": null,
                 "employee": {$first: "$employeeObjects"},
-                "participantsObjects": { "$push": "$participantsObjects" },
+                "participantsObjects": { "$addToSet": "$participantsObjects" },
                
             }},
             {$sort: {participantsObjects: 1}}
