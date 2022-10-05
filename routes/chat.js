@@ -292,7 +292,7 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 					 var dist = {
 					   picture: user.picture,
 					   name : user.firstName[0].toUpperCase()+user.firstName.slice(1)+ ' '+user.lastName[0].toUpperCase()+user.lastName.slice(1),
-					   dateTime : date.getDate()+
+					   dateTime : date.getDate().padStart(2, '0')+
 					   "-"+String(date.getMonth()+1).padStart(2, '0')+
 					   "-"+date.getFullYear()+
 					   " "+date.getHours()+
