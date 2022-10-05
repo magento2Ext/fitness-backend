@@ -42,7 +42,7 @@ var job = new CronJob(
 
 router.post('/create', auth, async(req, res) => {
    try{ 
-
+       let mindTypes = ['yoga', 'meditation', 'mood', 'routine', 'fitness', 'mind'];
        let empId = req.user.user_id;
        const employee = await Employee.findById(empId);
        let {id, userId, type, title, description, pic, start, end, orgType, winners, invites, dailyStepLimit, weightType, targetWeight, targetBMI, activities} = req.body;
@@ -65,6 +65,7 @@ router.post('/create', auth, async(req, res) => {
                 winners: winners,
                 invites: invites,
                 employeeId: orgType == 'employee' ? empId : null, 
+
         }
    
        if(type === 'steps'){
@@ -81,7 +82,7 @@ router.post('/create', auth, async(req, res) => {
  
             let result = await Challenge.updateOne({_id: id}, {$set: data}, {new: true});
 
-            if(type === 'mind'){
+            if(mindTypes.indexOf(type) >=0 ){
                  
                 activities.forEach( (key) => {
                     let activityData =  {
@@ -110,7 +111,7 @@ router.post('/create', auth, async(req, res) => {
             let result = await newChallenge.save();
 
 
-            if(type === 'mind'){
+            if(mindTypes.indexOf(type) >=0){
                  
                 activities.forEach( (key) => {
                     let activityData =  {
