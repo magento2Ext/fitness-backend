@@ -683,7 +683,7 @@ router.post('/challengeDetail', async(req, res) => {
 
     
         setTimeout(() => {
-                response = webResponse(202, true, challengeDetail)  
+                response = webResponse(202, true, challengeDetail.length > 0 ? challengeDetail[0]: {})  
                 res.send(response)
         }, 200);
 
