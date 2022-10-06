@@ -42,6 +42,7 @@ var job = new CronJob(
 
 router.post('/create', auth, async(req, res) => {
    try{ 
+       console.log('create')
        let mindTypes = ['yoga', 'meditation', 'mood', 'routine', 'fitness', 'mind'];
        let empId = req.user.user_id;
        const employee = await Employee.findById(empId);
