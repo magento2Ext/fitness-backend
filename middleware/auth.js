@@ -2,6 +2,8 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const config = process.env;
 const Employee = require('../models/employee')
+const Organization = require('../models/organization')
+const Admin = require('../models/admin')
 
 const verifyToken = (req, res, next) => {
   const token = req.body.token || req.query.token || req.headers["authorization"];
@@ -13,9 +15,16 @@ const verifyToken = (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
 	var empId = req.user.user_id;
-	const employee = Employee.findById(empId)
-	if(!employee){
-			response = webResponse(404, false, "Employee not found.")  
+	let type =  req.user.type;
+	let table = {};
+
+	if(type === 'admin') table = Admin;
+	if(type === 'org') table = Organization;
+	if(type === 'employee') table = Employee;
+
+	const USER = table.findById(empId)
+	if(!USER){
+			response = webResponse(404, false, "USER not found.")  
 			res.send(response)
 			return;
 	}
