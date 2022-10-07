@@ -612,7 +612,7 @@ router.post('/login', async(req,res) => {
 			
 		  // Create token
 		  const token = jwt.sign(
-			{ user_id: employee._id, email },
+			{ user_id: employee._id, email, type: 'employee' },
 			process.env.JWT_SECRET,
 			{
 			  expiresIn: "9999 years",

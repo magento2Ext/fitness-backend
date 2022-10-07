@@ -61,7 +61,7 @@ router.post('/login', async(req,res) => {
 		if (await bcrypt.compare(password, admin.password)) {
 		  // Create token
 		  const token = jwt.sign(
-			{ user_id: admin._id, email },
+			{ user_id: admin._id, email, type: 'admin' },
 			process.env.JWT_SECRET,
 			{
 			  expiresIn: "9999 years",
@@ -239,7 +239,7 @@ router.post('/getProfile', async(req,res) => {
 		if(organization != null){
 
 			const token = jwt.sign(
-				{ user_id: organization._id, email: organization.email},
+				{ user_id: organization._id, email: organization.email, type: req.body.type === 'admin' ? 'admin': 'org'},
 				process.env.JWT_SECRET,
 				{
 				  expiresIn: "9999 years",

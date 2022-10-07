@@ -123,7 +123,6 @@ router.post("/module/list", auth, async(req, res) => {
 				res.send(response)		
 				return;
 			} else{
-				console.log('if(org) {', org);
 				response = webResponse(404, false, "Organization not found")  
 				res.send(response)
 				return;
@@ -236,7 +235,7 @@ router.post("/module/list", auth, async(req, res) => {
 		firebaseData.isMyMessage = 0
 		firebaseData.appTempId = ""
 		var group = chatRef.child( groupId.toString());
-		
+
 		group.update(firebaseData,(err)=>{
 			if(err){
 				resMessage = "Something went wrong" + err;
@@ -310,7 +309,7 @@ router.post('/login', async(req,res) => {
 		if (await bcrypt.compare(password, organization.password)) {
 		  // Create token
 		  const token = jwt.sign(
-			{ user_id: organization._id, email },
+			{ user_id: organization._id, email, type: 'org'},
 			process.env.JWT_SECRET,
 			{
 			  expiresIn: "9999 years",
