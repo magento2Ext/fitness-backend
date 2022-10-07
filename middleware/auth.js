@@ -11,6 +11,8 @@ const verifyToken = (req, res, next) => {
 	response = webResponse(401, false, "A token is required for authentication")  
 	res.send(response)
   }
+
+  console.log('token', token);
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
