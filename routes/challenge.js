@@ -39,7 +39,6 @@ var job = new CronJob(
 );
 
 
-
 router.post('/create', auth, async(req, res) => {
    try{ 
        
@@ -57,19 +56,18 @@ router.post('/create', auth, async(req, res) => {
        }
 
        let data = {
-                userId: orgType === 'employee' ? employee.organizationId : userId,
-                type: type,
-                title: title,
-                description: description,
-                pic: pic,
-                start: start,
-                end: end,
-                orgType: orgType,
-                winners: winners,
-                invites: invites,
-                employeeId: orgType == 'employee' ? empId : null, 
-
-        }
+                    userId: orgType === 'employee' ? employee.organizationId : userId,
+                    type: type,
+                    title: title,
+                    description: description,
+                    pic: pic,
+                    start: start,
+                    end: end,
+                    orgType: orgType,
+                    winners: winners,
+                    invites: invites,
+                    employeeId: orgType == 'employee' ? empId : null
+               }
    
        if(type === 'steps'){
         data['dailyStepLimit'] = dailyStepLimit;
@@ -77,7 +75,7 @@ router.post('/create', auth, async(req, res) => {
 
        if(type === 'weight'){
           data['weightType'] = weightType;
-          if(weightType === 'healthy')   data['targetBMI'] = targetBMI;
+          if(weightType === 'healthy')  data['targetBMI'] = targetBMI;
           else data['targetWeight'] = targetWeight;
        }
 
@@ -781,7 +779,7 @@ router.post('/markActivity', auth, async(req, res) => {
 
         let result = await newMind.save();
 
-        response = webResponse(202, true, result)  
+        response = webResponse(202, true, 'Activity has been added successfully.')  
         res.send(response)
 
     }catch(err){ console.log(err)
