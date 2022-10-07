@@ -42,11 +42,13 @@ var job = new CronJob(
 
 router.post('/create', auth, async(req, res) => {
    try{ 
-       console.log('create')
+       
        let mindTypes = ['yoga', 'meditation', 'mood', 'routine', 'fitness', 'mind'];
        let empId = req.user.user_id;
        const employee = await Employee.findById(empId);
        let {id, userId, type, title, description, pic, start, end, orgType, winners, invites, dailyStepLimit, weightType, targetWeight, targetBMI, activities} = req.body;
+
+       console.log('req.body', req.body)
 
        if(orgType === 'employee' && !employee.organizationId){
         response = webResponse(202, false, 'Error saving challenge')  
