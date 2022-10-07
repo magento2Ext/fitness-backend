@@ -779,7 +779,7 @@ router.post('/markActivity', auth, async(req, res) => {
 
         let result = await newMind.save();
 
-        response = webResponse(202, true, 'Activity has been added successfully.')  
+        response = webResponse(207, true, 'Activity has been added successfully.')  
         res.send(response)
 
     }catch(err){ console.log(err)
