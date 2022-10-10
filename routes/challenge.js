@@ -627,9 +627,9 @@ router.post('/invitations', auth, async(req, res) => {
 
 router.post('/challengeDetail', auth, async(req, res) => {
     try{ 
-        let {challegeId} = req.body;
+        let {id} = req.body;
         let empId = req.user.user_id;
-        const challenge = await Challenge.findOne({_id: new ObjectID(challegeId)})
+        const challenge = await Challenge.findOne({_id: new ObjectID(id)})
 
         if(challenge !== null){
 
@@ -646,12 +646,12 @@ router.post('/challengeDetail', auth, async(req, res) => {
             })
 
 
-            const activitesList = await Activity.find({challengeId: challegeId});
+            const activitesList = await Activity.find({challengeId: id});
             const userActivities = [];
  
             if(activitesList.length > 0){
                 activitesList.forEach( async (key) => {
-                 let activityDone = await Mind.findOne({employeeId: empId, activityId: key._id, challengeId: challegeId});
+                 let activityDone = await Mind.findOne({employeeId: empId, activityId: key._id, challengeId: id});
                  let activityDict =  {
                     "_id": key._id,
                     "challengeId": key.challengeId,
