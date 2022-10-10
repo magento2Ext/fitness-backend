@@ -769,7 +769,7 @@ router.post('/stepsLeaderboard', auth, async(req, res) => {
                  console.log('stepsList', stepsList)
                  let stepsCount = 0;
                  stepsList.forEach( (key) => {
-                    stepsCount = stepsCount + Number(key)
+                    stepsCount = stepsCount + Number(key.steps)
                  })
                
                  const employeeDetails = await Employee.findOne({_id: key});
