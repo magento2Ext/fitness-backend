@@ -924,7 +924,7 @@ router.post('/markActivity', auth, async(req, res) => {
             return;
 
         } else{
-            const stepTracker = new StepTracker({
+            const stepTracker = new challengeStepTracker({
                 employeeId: empId,
                 steps: steps,
                 km: km,
