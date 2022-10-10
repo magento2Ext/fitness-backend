@@ -756,7 +756,6 @@ router.post('/stepsLeaderboard', auth, async(req, res) => {
     try{ 
 
         let {id} = req.body;
-        let empId = req.user.user_id;
         const challenge = await Challenge.findOne({_id: new ObjectID(id)})
         const participants = challenge.participants;
 
@@ -765,15 +764,19 @@ router.post('/stepsLeaderboard', auth, async(req, res) => {
             let participantsScores = [];
     
             participants.forEach( async (key) => {
-                 let activityDone = await Mind.find({employeeId: key, challengeId: id});
-                 console.log('activityDone', activityDone)
+                 let stepsList = await challengeStepTracker.find({employeeId: key, challengeId: id});
+                 let stepsCount = 0;
+                 stepsList.forEach( (key) => {
+                    stepsCount = stepsCount + Number(key)
+                 })
+               
                  const employeeDetails = await Employee.findOne({_id: key});
                  let activityDict =  {
                     firstName: employeeDetails.firstName,
                     lastName: employeeDetails.lastName,
                     picture: employeeDetails.picture,
                     userId: employeeDetails._id,
-                    totalActivities: activityDone.length
+                    steps: stepsCount
                 }
 
                 participantsScores.push(activityDict)
@@ -781,7 +784,7 @@ router.post('/stepsLeaderboard', auth, async(req, res) => {
         
             setTimeout(() => {
                    let final =  participantsScores.sort(function(a, b) {
-                        return parseFloat(a.totalActivities) - parseFloat(b.totalActivities);
+                        return parseFloat(a.steps) - parseFloat(b.steps);
                     });
                     response = webResponse(202, true, final.reverse())  
                     res.send(response)
