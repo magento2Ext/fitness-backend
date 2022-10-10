@@ -712,17 +712,23 @@ router.post('/mindLeaderboard', auth, async(req, res) => {
             let participantsScores = [];
     
             participants.forEach( async (key) => {
-                 let activityDone = await Mind.findOne({employeeId: empId, challengeId: id});
+                 let activityDone = await Mind.findOne({employeeId: key, challengeId: id});
                  const employeeDetails = await Employee.findOne({_id: key});
                  let activityDict =  {
-
+                    firstName: employeeDetails.firstName,
+                    lastName: employeeDetails.lastName,
+                    userId: employeeDetails._id,
+                    totalActivities: activityDone.length
                 }
 
                 participantsScores.push(activityDict)
                 })
         
             setTimeout(() => {
-                    response = webResponse(202, true, challengeDetails)  
+                   let final =  activityDict.sort(function(a, b) {
+                        return parseFloat(a.totalActivities) - parseFloat(b.totalActivities);
+                    });
+                    response = webResponse(202, true, final)  
                     res.send(response)
             }, 200);
 
