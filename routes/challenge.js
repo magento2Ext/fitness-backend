@@ -765,6 +765,8 @@ router.post('/stepsLeaderboard', auth, async(req, res) => {
     
             participants.forEach( async (key) => {
                  let stepsList = await challengeStepTracker.find({employeeId: key, challengeId: id});
+
+                 console.log('stepsList', stepsList)
                  let stepsCount = 0;
                  stepsList.forEach( (key) => {
                     stepsCount = stepsCount + Number(key)
