@@ -652,8 +652,8 @@ router.post('/challengeDetail', auth, async(req, res) => {
             if(activitesList.length > 0){
                 activitesList.forEach( async (key) => {
                  let activityDone = await Mind.findOne({employeeId: empId, activityId: key._id, challengeId: challegeId});
-                if(activityDone !== null) key.completed = true
-                if(activityDone === null) key.completed = false
+                if(activityDone !== null) key["completed"] = true
+                if(activityDone === null) key["completed"] = false
                 userActivities.push(key)
                 })
             }
