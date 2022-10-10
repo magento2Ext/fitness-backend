@@ -713,10 +713,12 @@ router.post('/mindLeaderboard', auth, async(req, res) => {
     
             participants.forEach( async (key) => {
                  let activityDone = await Mind.find({employeeId: key, challengeId: id});
+                 console.log('activityDone', activityDone)
                  const employeeDetails = await Employee.findOne({_id: key});
                  let activityDict =  {
                     firstName: employeeDetails.firstName,
                     lastName: employeeDetails.lastName,
+                    picture: employeeDetails.picture,
                     userId: employeeDetails._id,
                     totalActivities: activityDone.length
                 }
@@ -725,10 +727,11 @@ router.post('/mindLeaderboard', auth, async(req, res) => {
                 })
         
             setTimeout(() => {
+                cons
                    let final =  participantsScores.sort(function(a, b) {
                         return parseFloat(a.totalActivities) - parseFloat(b.totalActivities);
                     });
-                    response = webResponse(202, true, final)  
+                    response = webResponse(202, true, final.reverse())  
                     res.send(response)
             }, 200);
 
