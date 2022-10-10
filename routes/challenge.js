@@ -725,7 +725,7 @@ router.post('/mindLeaderboard', auth, async(req, res) => {
                 })
         
             setTimeout(() => {
-                   let final =  activityDict.sort(function(a, b) {
+                   let final =  participantsScores.sort(function(a, b) {
                         return parseFloat(a.totalActivities) - parseFloat(b.totalActivities);
                     });
                     response = webResponse(202, true, final)  
