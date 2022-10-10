@@ -680,15 +680,17 @@ router.post('/challengeDetail', auth, async(req, res) => {
                 "invitesObjects": invites
             }
 
+            setTimeout(() => {
+                response = webResponse(202, true, challengeDetails)  
+                res.send(response)
+        }, 200);
+
 
         }else{
 
         }
 
-        setTimeout(() => {
-                response = webResponse(202, true, challengeDetails)  
-                res.send(response)
-        }, 200);
+
 
     }catch(err){
          console.log(err)
