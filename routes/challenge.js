@@ -625,66 +625,68 @@ router.post('/invitations', auth, async(req, res) => {
 });
 
 
-router.post('/challengeDetail', async(req, res) => {
+router.post('/challengeDetail', auth, async(req, res) => {
     try{ 
+        let {challegeId} = req.body;
+        let empId = req.user.user_id;
+        const challenge = await Challenge.findOne({_id: new ObjectID(challegeId)})
 
-        const challengeDetail =  await Challenge.aggregate([
-            {$match: {_id: new ObjectID(req.body.id)}},
-            { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
-            { "$unwind": {path: "$invites", preserveNullAndEmptyArrays:true} },
-            {$set: {participants: {$toObjectId: "$participants"} }},
-            {$set: {invites: {$toObjectId: "$invites"} }},
-            { "$lookup": {
-               "from": "employees",
-               "localField": "participants",
-               "foreignField": "_id",
-               "as": "participantsObjects"
-            }},
-            { "$lookup": {
-                "from": "employees",
-                "localField": "invites",
-                "foreignField": "_id",
-                "as": "invitesObjects"
-             }},
-             { "$lookup": {
+        if(challenge !== null){
 
-                "from": "activities",
-                "let": { "challengeId": "$_id" },
-                "pipeline": [
-                  { "$addFields": { "challengeId": { "$toObjectId": "$challengeId" }}},
-                  { "$match": { "$expr": { "$eq": [ "$challengeId", "$$challengeId" ] } } }
-                ],
-                "as": "activitiesObj"
+            let participants = [];
+            challenge.participants.forEach( (key) => {
+                const employee = await Employee.findOne({_id: key});
+                participants.push(employee);
+            })
 
-             }},
-            { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
-            { "$unwind": {path: "$invitesObjects", preserveNullAndEmptyArrays:true}},
-            {"$set": {"duration": {"$divide": [{ "$subtract": ["$end", "$start"] }, 1000 * 60 * 60 * 24]}}},
-            { "$group": {
-                "_id": "$_id",
-                "userId": { $first: "$userId"},
-                "type": { $first: "$type"},
-                "title": { $first: "$title"},
-                "description": { $first: "$description"},
-                "pic": { $first: "$pic"},
-                "start": { $first: "$start"},
-                "end": { $first: "$end"},
-                "duration": {$first : "$duration"},
-                "winners": {$first: "$winners"},
-                "employeeId": {$first: "$employeeId"},
-                "dailyStepLimit": {$first: "$dailyStepLimit"},
-                "weightType": {$first: "$weightType"},
-                "targetWeight": {$first: "$targetWeight"},
-                "targetBMI": {$first: "$targetBMI"},
-                "activities": {$first: "$activitiesObj"},
-                "participantsObjects": { "$addToSet": "$participantsObjects" },
-                "invitesObjects": { "$addToSet": "$invitesObjects" }
-            }}
-        ])
+            let invites = [];
+            challenge.invites.forEach( (key) => {
+                const employee = await Employee.findOne({_id: key});
+                invites.push(employee);
+            })
+
+
+            const activitesList = await Activity.find({challengeId: challegeId});
+            const userActivities = [];
+ 
+            if(activitesList.length > 0){
+                activitesList.forEach( (key) => {
+                 let activityDone = await Mind.findOne({employeeId: empId, activityId: key._id, challengeId: challegeId});
+                if(activityDone !== null) key.completed = true
+                if(activityDone === null) key.completed = false
+                userActivities.push(key)
+                })
+            }
 
     
+            let challengeDetails = {
+                "_id": challenge._id,
+                "userId": challenge.weightType,
+                "type": challenge.weightType,
+                "title": challenge.weightType,
+                "description": challenge.weightType,
+                "pic": challenge.weightType,
+                "start": challenge.weightType,
+                "end": challenge.weightType,
+                "duration": challenge.weightType,
+                "winners": challenge.weightType,
+                "employeeId": challenge.weightType,
+                "dailyStepLimit": challenge.weightType,
+                "weightType": challenge.weightType,
+                "targetWeight": challenge.targetWeight,
+                "targetBMI": challenge.targetBMI,
+                "activities": userActivities,
+                "participantsObjects": participants,
+                "invitesObjects": invites
+            }
+
+
+        }else{
+
+        }
+
         setTimeout(() => {
-                response = webResponse(202, true, challengeDetail.length > 0 ? challengeDetail[0]: {})  
+                response = webResponse(202, true, challengeDetails)  
                 res.send(response)
         }, 200);
 
@@ -700,9 +702,7 @@ router.post('/mindLeaderboard', auth, async(req, res) => {
 
         let empId = req.user.user_id;
         const employee = await Employee.findById(empId);
-
         let {challegeId} = req.body;
-
         const challengeDetail =  await Challenge.aggregate([
             {$match: {_id: new ObjectID(challegeId)}},
             { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
