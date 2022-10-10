@@ -634,13 +634,13 @@ router.post('/challengeDetail', auth, async(req, res) => {
         if(challenge !== null){
 
             let participants = [];
-            challenge.participants.forEach( (key) => {
+            challenge.participants.forEach( async (key) => {
                 const employee = await Employee.findOne({_id: key});
                 participants.push(employee);
             })
 
             let invites = [];
-            challenge.invites.forEach( (key) => {
+            challenge.invites.forEach( async (key) => {
                 const employee = await Employee.findOne({_id: key});
                 invites.push(employee);
             })
