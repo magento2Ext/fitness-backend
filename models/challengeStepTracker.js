@@ -1,8 +1,10 @@
 const mongoose = require('mongoose')
+const challengeStepTrackerSchema = new mongoose.Schema({
 
-
-const stepTrackerSchema = new mongoose.Schema({
-
+    challengeId: {
+        type: String,
+       default: null
+    },
     employeeId: {
         type: String,
        default: null
@@ -32,7 +34,6 @@ const stepTrackerSchema = new mongoose.Schema({
         required: false,
         default: null
     }
-   
 })
 
-module.exports = mongoose.model('step_tracker', stepTrackerSchema)
+module.exports = mongoose.model('challengeStepTracker', challengeStepTrackerSchema)

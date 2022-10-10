@@ -13,7 +13,7 @@ const dateLib = require('date-and-time');
 const Admin = require('../models/admin')
 
 const StepTracker = require('../models/step_tracker')
-const challengeStepTracker = require('../models/step_tracker')
+const challengeStepTracker = require('../models/challengeStepTracker')
 const EmpStepTarget = require('../models/employee_step_target')
 
 
