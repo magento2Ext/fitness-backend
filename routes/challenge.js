@@ -833,7 +833,7 @@ router.post('/markActivity', auth, async(req, res) => {
  router.post('/addStep', auth, async(req, res) => {
 	try{ 
 
-        const {challengeId, steps, km, calories, duration, date} = req.body;
+        const {challengeId, steps, km, calories, duration} = req.body;
         var empId = req.user.user_id;
 		let challenge = await Challenge.findOne({_id: challengeId});
         let date = new Date();
