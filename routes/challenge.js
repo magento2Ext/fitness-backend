@@ -12,6 +12,11 @@ const errors = ['', '0', 0, null, undefined];
 const dateLib = require('date-and-time');
 const Admin = require('../models/admin')
 
+const StepTracker = require('../models/step_tracker')
+const challengeStepTracker = require('../models/step_tracker')
+const EmpStepTarget = require('../models/employee_step_target')
+
+
 var job = new CronJob(
 	"1/2 * * * * *",
 	async () =>  {
@@ -735,6 +740,54 @@ router.post('/mindLeaderboard', auth, async(req, res) => {
             }, 200);
 
         }else{
+            response = webResponse(203, false, "No Participants.")  
+            res.send(response)
+        }
+
+    }catch(err){
+         console.log(err)
+        res.send(err)
+    };
+});
+
+
+
+router.post('/stepsLeaderboard', auth, async(req, res) => {
+    try{ 
+
+        let {id} = req.body;
+        let empId = req.user.user_id;
+        const challenge = await Challenge.findOne({_id: new ObjectID(id)})
+        const participants = challenge.participants;
+
+        if(participants.length > 0){
+
+            let participantsScores = [];
+    
+            participants.forEach( async (key) => {
+                 let activityDone = await Mind.find({employeeId: key, challengeId: id});
+                 console.log('activityDone', activityDone)
+                 const employeeDetails = await Employee.findOne({_id: key});
+                 let activityDict =  {
+                    firstName: employeeDetails.firstName,
+                    lastName: employeeDetails.lastName,
+                    picture: employeeDetails.picture,
+                    userId: employeeDetails._id,
+                    totalActivities: activityDone.length
+                }
+
+                participantsScores.push(activityDict)
+                })
+        
+            setTimeout(() => {
+                   let final =  participantsScores.sort(function(a, b) {
+                        return parseFloat(a.totalActivities) - parseFloat(b.totalActivities);
+                    });
+                    response = webResponse(202, true, final.reverse())  
+                    res.send(response)
+            }, 200);
+
+        }else{
 
         }
 
@@ -774,5 +827,128 @@ router.post('/markActivity', auth, async(req, res) => {
         res.send(err)
     }
  });
+
+
+
+ router.post('/addStep', auth, async(req, res) => {
+	try{ 
+
+        const {challengeId, steps, km, calories, duration, date} = req.body;
+        var empId = req.user.user_id;
+		let challenge = await Challenge.findOne({_id: challengeId});
+        let date = new Date();
+        let userTodaySteps = await StepTracker.findOne({ date: dateLib.format(date, 'YYYY-MM-DD'),  employeeId: empId});
+        let dailyLimit = challenge.dailyStepLimit;
+
+        if(userTodaySteps.steps >= dailyLimit) {
+            response = webResponse(203, true, 'Your have reached to daily limit of steps in this challenge.')  
+            res.send(response)
+            return 
+        }
+
+
+    var stepTarget = await EmpStepTarget.findOne({ employeeId: empId}).sort({date:-1});
+
+    if(stepTarget !== null){
+
+        let stepTargetSteps = (stepTarget.steps + steps) <= stepTarget.step_target ?  (stepTarget.steps + steps) : stepTarget.step_target;
+        let targetDuration = 0;
+        if(stepTarget.duration != '00:00:00' && stepTarget.duration != '00:00'){
+            targetDuration = await hhmmss(stepTarget.duration, 'seconds') + await  hhmmss(duration, 'seconds');
+        }else{
+            targetDuration = await  hhmmss(duration, 'seconds')
+        }
+    
+        await EmpStepTarget.updateOne({_id: stepTarget._id}, {$set: {steps: stepTargetSteps, duration: await hhmmss(targetDuration, 'hms')}}, {new: true});
+    }
+
+
+        let today =  dateLib.format(new Date(), 'YYYY-MM-DD');
+        const stepTrackerDetails = await StepTracker.findOne({ date: today,  employeeId: empId});
+
+
+        if (stepTrackerDetails) {  
+
+            let newDuration = 0
+
+            if(stepTrackerDetails.duration != '00:00:00' && stepTrackerDetails.duration != '00:00'){
+                newDuration = await hhmmss(stepTrackerDetails.duration, 'seconds') + await hhmmss(duration, 'seconds');
+            }else{
+                newDuration = await hhmmss(duration, 'seconds');
+            }
+    
+            stepTrackerDetails.km = Number(stepTrackerDetails.km) + Number(km);
+            stepTrackerDetails.steps = Number(stepTrackerDetails.steps) + Number(steps);
+            stepTrackerDetails.calories = Number(stepTrackerDetails.calories) + Number(calories);
+            stepTrackerDetails.duration = await hhmmss(newDuration, 'hms');
+
+            const a1 = await stepTrackerDetails.save()
+
+        } else{
+            const stepTracker = new StepTracker({
+                employeeId: empId,
+                steps: steps,
+                km: km,
+                calories: calories,
+                duration: duration,
+                date: today
+            })
+
+            const a1 = await stepTracker.save()
+        }
+        
+
+        const challengeStepTrackerDetails = await challengeStepTracker.findOne({ date: today,  employeeId: empId, challengeId: challengeId});
+
+
+        if (challengeStepTrackerDetails) {  
+
+            let newDuration = 0
+
+            if(challengeStepTrackerDetails.duration != '00:00:00' && challengeStepTrackerDetails.duration != '00:00'){
+                newDuration = await hhmmss(challengeStepTrackerDetails.duration, 'seconds') + await hhmmss(duration, 'seconds');
+            }else{
+                newDuration = await hhmmss(duration, 'seconds');
+            }
+    
+            challengeStepTrackerDetails.km = Number(challengeStepTrackerDetails.km) + Number(km);
+            challengeStepTrackerDetails.steps = Number(challengeStepTrackerDetails.steps) + Number(steps);
+            challengeStepTrackerDetails.calories = Number(challengeStepTrackerDetails.calories) + Number(calories);
+            challengeStepTrackerDetails.duration = await hhmmss(newDuration, 'hms');
+
+            const a1 = await challengeStepTrackerDetails.save()
+            response = webResponse(202, true, a1)  
+            res.send(response);
+            return;
+
+        } else{
+            const stepTracker = new StepTracker({
+                employeeId: empId,
+                steps: steps,
+                km: km,
+                calories: calories,
+                duration: duration,
+                date: today,
+                challengeId: challengeId
+            })
+
+            const a1 = await stepTracker.save()
+            response = webResponse(202, true, a1) ;
+            console.log('response', response) 
+            res.send(response);
+            return;
+        }
+ 
+        
+        
+ 
+	
+    }catch(err){ 
+		console.log(err)
+		response = webResponse(403, false, err)  
+	    res.send(response)
+		return;
+    }
+})
 
 module.exports = router
