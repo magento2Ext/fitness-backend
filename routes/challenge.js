@@ -663,7 +663,8 @@ router.post('/challengeDetail', auth, async(req, res) => {
                 })
             }
 
-    
+            let stepsDetails = await challengeStepTracker.find({employeeId: empId, challengeId: id});
+
             let challengeDetails = {
                 "_id": challenge._id,
                 "userId": challenge.userId,
@@ -682,7 +683,8 @@ router.post('/challengeDetail', auth, async(req, res) => {
                 "targetBMI": challenge.targetBMI,
                 "activities": userActivities,
                 "participantsObjects": participants,
-                "invitesObjects": invites
+                "invitesObjects": invites,
+                "stepsData": stepsDetails
             }
 
             setTimeout(() => {
