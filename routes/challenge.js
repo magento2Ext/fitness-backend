@@ -837,13 +837,15 @@ router.post('/markActivity', auth, async(req, res) => {
         var empId = req.user.user_id;
 		let challenge = await Challenge.findOne({_id: challengeId});
         let date = new Date();
-        let userTodaySteps = await StepTracker.findOne({ date: dateLib.format(date, 'YYYY-MM-DD'),  employeeId: empId});
+        let userTodaySteps = await challengeStepTracker.findOne({ date: dateLib.format(date, 'YYYY-MM-DD'),  employeeId: empId});
         let dailyLimit = challenge.dailyStepLimit;
 
-        if(userTodaySteps.steps >= dailyLimit) {
-            response = webResponse(203, true, 'Your have reached to daily limit of steps in this challenge.')  
-            res.send(response)
-            return 
+        if(userTodaySteps !== null){
+            if(userTodaySteps.steps >= dailyLimit) {
+                response = webResponse(203, true, 'Your have reached to daily limit of steps in this challenge.')  
+                res.send(response)
+                return 
+            }
         }
 
 
@@ -938,11 +940,7 @@ router.post('/markActivity', auth, async(req, res) => {
             res.send(response);
             return;
         }
- 
-        
-        
- 
-	
+ 	
     }catch(err){ 
 		console.log(err)
 		response = webResponse(403, false, err)  
