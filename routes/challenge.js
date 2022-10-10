@@ -9,7 +9,9 @@ const Employee = require('../models/employee');
 const sendFCM = require('./fcm');
 const CronJob = require('cron').CronJob;
 const errors = ['', '0', 0, null, undefined];
-const dateLib = require('date-and-time')
+const dateLib = require('date-and-time');
+const Admin = require('../models/admin')
+
 var job = new CronJob(
 	"1/2 * * * * *",
 	async () =>  {
@@ -21,7 +23,6 @@ var job = new CronJob(
             const strDate = dateLib.format(recentDate,'YYYY-MM-DD')
     
             const recentDateYMD =  strDate+ 'T00:00:00.000Z'
-    
     
             if(recentDateYMD == challenge.start){
                await Challenge.updateOne({_id: challenge._id}, {$set: {status: 'ongoing'}}, {new: true}); 
@@ -45,18 +46,11 @@ router.post('/create', auth, async(req, res) => {
        let mindTypes = ['yoga', 'meditation', 'mood', 'routine', 'fitness', 'mind'];
        let empId = req.user.user_id;
        const employee = await Employee.findById(empId);
+       const admins = await Admin.find();
        let {id, userId, type, title, description, pic, start, end, orgType, winners, invites, dailyStepLimit, weightType, targetWeight, targetBMI, activities} = req.body;
 
-       console.log('req.body', req.body)
-
-       if(orgType === 'employee' && !employee.organizationId){
-        response = webResponse(202, false, 'Error saving challenge')  
-        res.send(response)
-        return;
-       }
-
        let data = {
-                    userId: orgType === 'employee' ? employee.organizationId : userId,
+                    userId: orgType === 'employee' ? (employee.userOrganizations.length > 0 ? employee.organizationId : admins[0]._id) : userId,
                     type: type,
                     title: title,
                     description: description,
@@ -708,55 +702,33 @@ router.post('/challengeDetail', auth, async(req, res) => {
 router.post('/mindLeaderboard', auth, async(req, res) => {
     try{ 
 
+        let {id} = req.body;
         let empId = req.user.user_id;
-        const employee = await Employee.findById(empId);
-        let {challegeId} = req.body;
-        const challengeDetail =  await Challenge.aggregate([
-            {$match: {_id: new ObjectID(challegeId)}},
-            { "$unwind": {path: "$participants", preserveNullAndEmptyArrays:true} },
-            {"let": {"empId": {$toObjectId: "$participants"} }},
-            { "$lookup": {
-                "from": "employees",
-                "let": { "empId": "$_id" },
-                "pipeline": [
-                  { "$addFields": { "challengeId": { "$toObjectId": "$challengeId" }}},
-                  { "$match": { "$expr": { "$eq": [ "$challengeId", "$$challengeId" ] } } }
-                ],
-                
-                "localField": "empId",
-                "foreignField": "_id",
-                "as": "employeeObjects"
-             }},
-            { "$lookup": {
-               "from": "minds",
-               "localField": "participants",
-               "foreignField": "employeeId",
-               pipeline: [
-                { $match: {
-                    $expr: {$eq: [ "$challengeId", challegeId]}
-                } }
-              ],
-              
-               "as": "participantsObjects"
-            }},
-             { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
-             {
-                "$group": {
-                "_id": null,
-                "employee": {$first: "$employeeObjects"},
-                "participantsObjects": { "$addToSet": "$participantsObjects" },
-               
-            }},
-            {$sort: {participantsObjects: 1}}
- 
-        ]);
+        const challenge = await Challenge.findOne({_id: new ObjectID(id)})
+        const participants = challenge.participants;
 
-        console.log('challengeDetail', challengeDetail);
+        if(participants.length > 0){
 
-        setTimeout(() => {
-                response = webResponse(202, true, challengeDetail)  
-                res.send(response)
-        }, 200);
+            let participantsScores = [];
+    
+            participants.forEach( async (key) => {
+                 let activityDone = await Mind.findOne({employeeId: empId, challengeId: id});
+                 const employeeDetails = await Employee.findOne({_id: key});
+                 let activityDict =  {
+
+                }
+
+                participantsScores.push(activityDict)
+                })
+        
+            setTimeout(() => {
+                    response = webResponse(202, true, challengeDetails)  
+                    res.send(response)
+            }, 200);
+
+        }else{
+
+        }
 
     }catch(err){
          console.log(err)
