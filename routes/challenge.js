@@ -689,7 +689,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
 			let date1 = new Date(challenge.start);
 			let date2 = new Date(challenge.end);
 		
-			let difference =  date1.getTime() - date2.getTime()
+			let difference =  date2.getTime() - date1.getTime()
 
 			let days = Math.ceil(difference / (1000 * 3600 * 24));
 
