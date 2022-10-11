@@ -672,7 +672,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
 
             function getStepData(){
 
-                const promise = new Promise(res, rej) => {
+                const promise = new Promise((res, rej) => {
 
                     if(stepsDetails.length > 0){
 
@@ -712,7 +712,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
 
 
 
-                }
+                })
 
                 return promise
 
