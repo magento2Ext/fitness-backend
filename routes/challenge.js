@@ -670,24 +670,51 @@ router.post('/challengeDetail', auth, async(req, res) => {
             let totalDuration = 0;
             let count = 0
 
-            if(stepsDetails.length > 0){
+            function getStepData(){
 
-                stepsDetails.forEach( async (key) => {
-                    totalSteps = totalSteps + Number(key.steps);
-                    totalkm = totalkm + Number(key.km);
-                    totalCalories = totalCalories + Number(key.calories);
-                    
-                    if(key.duration != '00:00:00' && key.duration != '00:00'){
-                        totalDuration = totalDuration + await hhmmss(key.duration, 'seconds')
+                const promise = (res, rej) => {
+
+                    if(stepsDetails.length > 0){
+
+                        stepsDetails.forEach( async (key) => {
+                            totalSteps = totalSteps + Number(key.steps);
+                            totalkm = totalkm + Number(key.km);
+                            totalCalories = totalCalories + Number(key.calories);
+                            
+                            if(key.duration != '00:00:00' && key.duration != '00:00'){
+                                totalDuration = totalDuration + await hhmmss(key.duration, 'seconds')
+                            }
+        
+                            count++;
+        
+                            if(count === stepsDetails.length){
+                                totalDuration = await hhmmss(totalDuration, 'hms');
+
+                                res({
+                                    totalSteps : totalSteps, 
+                                    totalkm: totalkm, 
+                                    totalCalories : totalCalories, 
+                                    totalDuration : totalDuration, 
+                                  })
+
+
+                            }
+                        })
+        
+                    }else{
+                        res({
+                            totalSteps : 0, 
+                            totalkm: 0, 
+                            totalCalories : 0, 
+                            totalDuration : 0, 
+                       })
                     }
 
-                    count++;
 
-                    if(count === stepsDetails.length){
-                        totalDuration = await hhmmss(totalDuration, 'hms');
-                        console.log(totalDuration, 'totalDuration')
-                    }
-                })
+
+                }
+
+                return promise
 
             }
 
@@ -710,12 +737,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
                 "activities": userActivities,
                 "participantsObjects": participants,
                 "invitesObjects": invites,
-                "stepsData": {
-                     totalSteps : totalSteps, 
-                     totalkm: totalkm, 
-                     totalCalories : totalCalories, 
-                     totalDuration : totalDuration, 
-                }
+                "stepsData": await getStepData();
             }
 
             setTimeout(() => {
