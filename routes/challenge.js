@@ -762,7 +762,7 @@ router.post('/mindLeaderboard', auth, async(req, res) => {
             }, 200);
 
         }else{
-            response = webResponse(203, false, "No Participants.")  
+            response = webResponse(202, true, [])  
             res.send(response)
         }
 
@@ -815,7 +815,7 @@ router.post('/stepsLeaderboard', auth, async(req, res) => {
             }, 200);
 
         }else{
-
+            response = webResponse(202, true, []) 
         }
 
     }catch(err){
