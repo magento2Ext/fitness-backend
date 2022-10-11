@@ -216,19 +216,75 @@ router.post('/create', auth, async(req, res) => {
 
 router.post('/listAll', async(req, res) => {
     try{ 
-        
-        const result = await Challenge.aggregate([
+    
+        const result =  await Challenge.aggregate([
             {$match: {userId: req.body.id}},
-            {$set: {userId: {$toObjectId: "$userId"} }},
+            {"$unwind": {path: "$participants", preserveNullAndEmptyArrays:true}},
+            { "$unwind": {path: "$invites", preserveNullAndEmptyArrays:true} },
+            {$set: {participants: {$toObjectId: "$participants"} }},
+            {$set: {invites: {$toObjectId: "$invites"} }},
+            { "$lookup": {
+               "from": "employees",
+               "localField": "participants",
+               "foreignField": "_id",
+               "as": "participantsObjects"
+            }},
+            { "$lookup": {
+                "from": "employees",
+                "localField": "invites",
+                "foreignField": "_id",
+                "as": "invitesObjects"
+             }},
+            { "$lookup": {
+                "from": "employees",
+                "localField": "invites",
+                "foreignField": "_id",
+                "as": "invitesObjects"
+             }},
+             { "$lookup": {
+
+                "from": "activities",
+                "let": { "challengeId": "$_id" },
+                "pipeline": [
+                  { "$addFields": { "challengeId": { "$toObjectId": "$challengeId" }}},
+                  { "$match": { "$expr": { "$eq": [ "$challengeId", "$$challengeId" ] } } }
+                ],
+                "as": "activitiesObj"
+             }},
+            { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
+            { "$unwind": {path: "$invitesObjects", preserveNullAndEmptyArrays:true}},
+            {"$set": {"duration": {"$divide": [{ "$subtract": ["$end", "$start"] }, 1000 * 60 * 60 * 24]}}},
+            { "$group": {
+                "_id": "$_id",
+                "userId": { $first: "$userId"},
+                "employeeId": { $first: "$employeeId"},
+                "type": { $first: "$type"},
+                "orgType": { $first: "$orgType"},
+                "title": { $first: "$title"},
+                "description": { $first: "$description"},
+                "pic": { $first: "$pic"},
+                "start": { $first: "$start"},
+                "end": { $first: "$end"},
+                "status": { $first: "$status"},
+                "duration": {$first : "$duration"},
+                "winners": {$first: "$winners"},
+                "employeeId": {$first: "$employeeId"},
+                "dailyStepLimit": {$first: "$dailyStepLimit"},
+                "weightType": {$first: "$weightType"},
+                "targetWeight": {$first: "$targetWeight"},
+                "targetBMI": {$first: "$targetBMI"},
+                "activities": {$first: "$activitiesObj"},
+                "participantsObjects": { "$addToSet": "$participantsObjects" },
+                "invitesObjects": { "$addToSet": "$invitesObjects" }
+            }},
             {
-                $lookup: {
-                    from: "employees",
-                    localField: "userId",
-                    foreignField: "_id",
-                    as: "user",
+                "$sort": {
+                    _id: -1
                 }
-            }
-        ]); 	
+              }
+        ])
+
+
 
         if(result){
             response = webResponse(202, true, result)  
