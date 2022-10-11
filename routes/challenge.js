@@ -219,28 +219,6 @@ router.post('/listAll', async(req, res) => {
     
         const result =  await Challenge.aggregate([
             {$match: {userId: req.body.id}},
-            {"$unwind": {path: "$participants", preserveNullAndEmptyArrays:true}},
-            { "$unwind": {path: "$invites", preserveNullAndEmptyArrays:true} },
-            {$set: {participants: {$toObjectId: "$participants"} }},
-            {$set: {invites: {$toObjectId: "$invites"} }},
-            { "$lookup": {
-               "from": "employees",
-               "localField": "participants",
-               "foreignField": "_id",
-               "as": "participantsObjects"
-            }},
-            { "$lookup": {
-                "from": "employees",
-                "localField": "invites",
-                "foreignField": "_id",
-                "as": "invitesObjects"
-             }},
-            { "$lookup": {
-                "from": "employees",
-                "localField": "invites",
-                "foreignField": "_id",
-                "as": "invitesObjects"
-             }},
              { "$lookup": {
 
                 "from": "activities",
@@ -251,9 +229,6 @@ router.post('/listAll', async(req, res) => {
                 ],
                 "as": "activitiesObj"
              }},
-            { "$unwind": {path: "$participantsObjects", preserveNullAndEmptyArrays:true}},
-            { "$unwind": {path: "$invitesObjects", preserveNullAndEmptyArrays:true}},
-            {"$set": {"duration": {"$divide": [{ "$subtract": ["$end", "$start"] }, 1000 * 60 * 60 * 24]}}},
             { "$group": {
                 "_id": "$_id",
                 "userId": { $first: "$userId"},
@@ -274,8 +249,8 @@ router.post('/listAll', async(req, res) => {
                 "targetWeight": {$first: "$targetWeight"},
                 "targetBMI": {$first: "$targetBMI"},
                 "activities": {$first: "$activitiesObj"},
-                "participantsObjects": { "$addToSet": "$participantsObjects" },
-                "invitesObjects": { "$addToSet": "$invitesObjects" }
+                "participants": {$first: "$participants"},
+                "invites": {$first: "$invites"}
             }},
             {
                 "$sort": {
