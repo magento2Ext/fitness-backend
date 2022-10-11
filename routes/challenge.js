@@ -718,6 +718,8 @@ router.post('/challengeDetail', auth, async(req, res) => {
 
             }
 
+            let getStepDataDetails = await getStepData()
+
             let challengeDetails = {
                 "_id": challenge._id,
                 "userId": challenge.userId,
@@ -737,7 +739,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
                 "activities": userActivities,
                 "participantsObjects": participants,
                 "invitesObjects": invites,
-                "stepsData": await getStepData()
+                "stepsData": getStepDataDetails
             }
 
             setTimeout(() => {
