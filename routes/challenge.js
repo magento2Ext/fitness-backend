@@ -107,6 +107,7 @@ router.post('/create', auth, async(req, res) => {
 
         }else{
             data["createdOn"] = new Date();
+            data["participants"] = [empId]
             let newChallenge = new Challenge(data);
             let result = await newChallenge.save();
 
@@ -142,71 +143,7 @@ router.post('/create', auth, async(req, res) => {
    }
 });
 
-
-
-router.post('/admin/create', async(req, res) => {
-    try{ 
  
-        let {userId, type, title, description, pic, start, end, orgType, winners, invites} = req.body;
-        let data = {
-                 userId: userId,
-                 type: type,
-                 title: title,
-                 description: description,
-                 pic: pic,
-                 start: start,
-                 end: end,
-                 orgType: orgType,
-                 winners: winners,
-                 invites: invites
-        }
- 
-        let newChallenge = new Challenge(data);
-        let result = await newChallenge.save();
- 
-        if(result){
-         response = webResponse(202, true, result)  
-         res.send(response)
-        }else{
-         response = webResponse(202, false, 'Error saving challenge')  
-         res.send(response)
-        }
-  
-    }catch(err){ console.log(err)
-        res.send(err)
-    }
- });
-
-router.post('/update', async(req, res) => {
-    try{ 
-
-        let {id, type, title, description, pic, participants, start, end, winners, invites} = req.body;
-        let data = {
-                 title: title,
-                 description: description,
-                 pic: pic,
-                 participants: participants,
-                 start: start,
-                 end: end,
-                 winners: winners,
-                 invites: invites
-        }
- 
-        let result = await Challenge.updateOne({_id: id}, {$set: data}, {new: true});
- 
-        if(result){
-         response = webResponse(202, true, result)  
-         res.send(response)
-        }else{
-         response = webResponse(202, false, 'Error saving challenge')  
-         res.send(response)
-        }
-  
-    }catch(err){ console.log(err)
-        res.send(err)
-    }
- });
-
  router.post('/delete', async(req,res) => {
     try{ 
 
