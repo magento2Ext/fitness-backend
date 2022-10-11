@@ -249,7 +249,6 @@ router.post('/listAll', async(req, res) => {
                 "targetWeight": {$first: "$targetWeight"},
                 "targetBMI": {$first: "$targetBMI"},
                 "activities": {$first: "$activitiesObj"},
-                "participants": {$first: "$participants"},
                 "invites": {$first: "$invites"}
             }},
             {
