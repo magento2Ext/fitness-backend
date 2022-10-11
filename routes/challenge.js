@@ -670,9 +670,9 @@ router.post('/challengeDetail', auth, async(req, res) => {
             let totalDuration = 0;
             let count = 0
 
-            async function getStepData(){
+            function getStepData(){
 
-                const promise = async (res, rej) => {
+                const promise = new Promise(res, rej) => {
 
                     if(stepsDetails.length > 0){
 
@@ -718,8 +718,6 @@ router.post('/challengeDetail', auth, async(req, res) => {
 
             }
 
-            let getStepDataDetails = await getStepData()
-
             let challengeDetails = {
                 "_id": challenge._id,
                 "userId": challenge.userId,
@@ -739,7 +737,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
                 "activities": userActivities,
                 "participantsObjects": participants,
                 "invitesObjects": invites,
-                "stepsData": getStepDataDetails
+                "stepsData": await getStepData()
             }
 
             setTimeout(() => {
