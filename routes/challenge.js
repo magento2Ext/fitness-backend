@@ -685,6 +685,15 @@ router.post('/challengeDetail', auth, async(req, res) => {
 
             }
 
+ 
+			let date1 = new Date(challenge.start);
+			let date2 = new Date(challenge.end);
+		
+			let difference =  date1.getTime() - date2.getTime()
+
+			let days = Math.ceil(difference / (1000 * 3600 * 24));
+
+
             let challengeDetails = {
                 "_id": challenge._id,
                 "userId": challenge.userId,
@@ -694,7 +703,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
                 "pic": challenge.pic,
                 "start": challenge.start,
                 "end": challenge.end,
-                "duration": challenge.duration,
+                "duration": days,
                 "winners": challenge.winners,
                 "employeeId": challenge.employeeId,
                 "dailyStepLimit": challenge.dailyStepLimit,
