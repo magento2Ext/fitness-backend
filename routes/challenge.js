@@ -679,14 +679,13 @@ router.post('/challengeDetail', auth, async(req, res) => {
                     
                     if(key.duration != '00:00:00' && key.duration != '00:00'){
                         totalDuration = totalDuration + await hhmmss(key.duration, 'seconds')
-
-                        console.log('totalDuration', totalDuration)
                     }
 
                     count++;
 
                     if(count === stepsDetails.length){
-                        totalDuration = await hhmmss(totalDuration, 'hms')
+                        totalDuration = await hhmmss(totalDuration, 'hms');
+                        console.log(totalDuration, 'totalDuration')
                     }
                 })
 
