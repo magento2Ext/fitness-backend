@@ -672,7 +672,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
 
             if(stepsDetails.length > 0){
 
-                stepsDetails.forEach( (key) => {
+                stepsDetails.forEach( async (key) => {
                     totalSteps = totalSteps + Number(key.steps);
                     totalkm = totalkm + Number(key.km);
                     totalCalories = totalCalories + Number(key.calories);
