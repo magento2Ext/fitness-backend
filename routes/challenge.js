@@ -664,6 +664,31 @@ router.post('/challengeDetail', auth, async(req, res) => {
             }
 
             let stepsDetails = await challengeStepTracker.find({employeeId: empId, challengeId: id});
+            let totalSteps = 0;
+            let totalkm = 0;
+            let totalCalories = 0;
+            let totalDuration = 0;
+            let count = 0
+
+            if(stepsDetails.length > 0){
+
+                stepsDetails.forEach( (key) => {
+                    totalSteps = totalSteps + Number(key.steps);
+                    totalkm = totalkm + Number(key.km);
+                    totalCalories = totalCalories + Number(key.calories);
+                    
+                    if(key.duration != '00:00:00' && key.duration != '00:00'){
+                        totalDuration = totalDuration + await hhmmss(key.duration, 'seconds')
+                    }
+
+                    count++;
+
+                    if(count === stepsDetails.length){
+                        totalDuration = await hhmmss(totalDuration, 'hms')
+                    }
+                })
+
+            }
 
             let challengeDetails = {
                 "_id": challenge._id,
@@ -684,7 +709,12 @@ router.post('/challengeDetail', auth, async(req, res) => {
                 "activities": userActivities,
                 "participantsObjects": participants,
                 "invitesObjects": invites,
-                "stepsData": stepsDetails
+                "stepsData": {
+                     totalSteps : totalSteps, 
+                     totalkm: totalkm, 
+                     totalCalories : totalCalories, 
+                     totalDuration : totalDuration, 
+                }
             }
 
             setTimeout(() => {
@@ -955,5 +985,23 @@ router.post('/markActivity', auth, async(req, res) => {
 		return;
     }
 })
+
+
+function hhmmss(val, type){
+
+	console.log(val, type)
+	const promise = new Promise( (resolve, reject) => {
+		if(type === 'hms'){
+			const time = new Date( Number(val) * 1000).toISOString().split("T")
+		    resolve(time[1].split(".")[0]) 
+		}else{
+			var a = val.split(':');  
+			var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]); 
+			resolve(seconds)
+		}
+	})
+
+return promise
+}
 
 module.exports = router
