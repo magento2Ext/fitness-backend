@@ -670,9 +670,9 @@ router.post('/challengeDetail', auth, async(req, res) => {
             let totalDuration = 0;
             let count = 0
 
-            function getStepData(){
+            async function getStepData(){
 
-                const promise = (res, rej) => {
+                const promise = async (res, rej) => {
 
                     if(stepsDetails.length > 0){
 
@@ -737,7 +737,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
                 "activities": userActivities,
                 "participantsObjects": participants,
                 "invitesObjects": invites,
-                "stepsData": await getStepData();
+                "stepsData": await getStepData()
             }
 
             setTimeout(() => {
