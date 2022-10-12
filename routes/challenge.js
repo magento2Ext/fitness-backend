@@ -11,7 +11,8 @@ const CronJob = require('cron').CronJob;
 const errors = ['', '0', 0, null, undefined];
 const dateLib = require('date-and-time');
 const Admin = require('../models/admin')
-
+const challengeWeight = require('../models/challengeWeight')
+const Weight = require('../models/weight')
 const StepTracker = require('../models/step_tracker')
 const challengeStepTracker = require('../models/challengeStepTracker')
 const EmpStepTarget = require('../models/employee_step_target')
@@ -1083,6 +1084,69 @@ router.post('/markActivity', auth, async(req, res) => {
 		return;
     }
 })
+
+
+
+app.post("/addWeight", auth, async(req, res) => { 
+    try{ 
+
+        const {weight, date , heightType, height, challengeId} = req.body;
+           var empId = req.user.user_id;
+    
+  
+          if(height){
+               await Employee.updateOne({_id: empId}, {$set: {height: height, heightType: heightType}}, {new: true});
+          }
+
+
+          ///// add personal weight
+  
+          const weightDetails = await Weight.findOne({ date: date,  employeeId: empId});
+
+          if (weightDetails) {  
+              weightDetails.weight =  weight
+              const a1 = await weightDetails.save()
+          } else{
+            let newWeight = new Weight({
+                employeeId: empId,
+                weight: weight,
+                date: date
+              })
+              const a1 = await newWeight.save()
+          }
+
+          ///// add personal weight
+          const challengeWeight_ = await challengeWeight.findOne({ date: date,  employeeId: empId, challengeId: challengeId});
+
+          if (challengeWeight_) {  
+            challengeWeight_.weight =  weight
+            const a1 = await challengeWeight_.save()
+            } else{
+            let newWeight = new challengeWeight({
+                employeeId: empId,
+                weight: weight,
+                date: date,
+                challengeId: challengeId
+                })
+                const a1 = await newWeight.save()
+            }
+
+          response = webResponse(200, true, "Weight saved")  
+          res.send(response);
+          return;
+      } catch(err){   console.log(err)
+          response = webResponse(403, false, err)  
+          res.send(response)
+          return;
+      }
+    
+  }); 
+
+
+
+
+
+/////=========================////////
 
 
 function hhmmss(val, type){
