@@ -799,7 +799,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
                 "invitesObjects": invites,
                 "stepsData": await getStepData(),
                 "todayStepsDetails": todayStepsDetailsObj,
-                "allStepData": allStepData
+                "allStepData": allStepData.reverse()
             }
 
             setTimeout(() => {
