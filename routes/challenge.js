@@ -726,10 +726,10 @@ router.post('/challengeDetail', auth, async(req, res) => {
 
                             if(found == 0) {
                                 step = {
-                                    totalSteps : steps, 
-                                    totalkm: km, 
-                                    totalCalories : calories, 
-                                    totalDuration : duration, 
+                                    totalSteps : 0, 
+                                    totalkm: 0, 
+                                    totalCalories : 0, 
+                                    totalDuration : '00:00:00', 
                                     'date' : dateLib.format(i,'YYYY-MM-DD')
                                 }
                                 allSteps.push(step);
