@@ -712,6 +712,8 @@ router.post('/challengeDetail', auth, async(req, res) => {
                         
                         for(i = startDate; i <= endingDate;  i.setDate(i.getDate() + 1)) { 
 
+                            console.log(i, startDate, endingDate)
+
                             let found = 0; 
                             for( let j = 0, len = stepsDetails.length; j < len; j++ ) { 
                                var stepTrackerData = {};
@@ -744,7 +746,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
                             }
 
                             if(String(i) == String(endingDate)){
-                                console.log('coming')
+                               
                                 res(allSteps)
                             }
 
