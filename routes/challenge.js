@@ -107,7 +107,8 @@ router.post('/create', auth, async(req, res) => {
 
         }else{
             data["createdOn"] = new Date();
-            data["participants"] = [empId]
+            if(orgType === 'employee') data["participants"] = [empId]
+            
             let newChallenge = new Challenge(data);
             let result = await newChallenge.save();
 
