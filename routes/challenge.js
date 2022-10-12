@@ -706,8 +706,8 @@ router.post('/challengeDetail', auth, async(req, res) => {
 
                         let startDate = new Date(challenge.start);
                         let endDate = new Date(challenge.end);
-                        let nowDate = new Date(challenge.end);
-                        let endingDate = nowDate >= startDate ? startDate : nowDate
+                        let nowDate = new Date();
+                        let endingDate = nowDate >= startDate ? endDate : nowDate
 
                         
                         for(i = startDate; i <= endingDate;  i.setDate(i.getDate() + 1)) { 
