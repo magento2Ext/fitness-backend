@@ -734,7 +734,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
                                 allSteps.push(stepTrackerData);
                             }
 
-                            if(i === endDate){
+                            if(i == endDate){
                                 res(allSteps)
                             }
 
