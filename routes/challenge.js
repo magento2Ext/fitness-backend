@@ -756,9 +756,8 @@ router.post('/challengeDetail', auth, async(req, res) => {
 
             }
 
-             let resugetAllStepData = await getAllStepData()
-             console.log('resugetAllStepData', resugetAllStepData);
-
+            let allStepData = await getAllStepData()
+            
             let today =  dateLib.format(new Date(), 'YYYY-MM-DD');
             const todayStepsDetails = await challengeStepTracker.findOne({ date: today,  employeeId: empId, challengeId: id});
             let todayStepsDetailsObj  = {
@@ -799,7 +798,8 @@ router.post('/challengeDetail', auth, async(req, res) => {
                 "participantsObjects": participants,
                 "invitesObjects": invites,
                 "stepsData": await getStepData(),
-                "todayStepsDetails": todayStepsDetailsObj
+                "todayStepsDetails": todayStepsDetailsObj,
+                "allStepData": allStepData
             }
 
             setTimeout(() => {
