@@ -714,10 +714,10 @@ router.post('/challengeDetail', auth, async(req, res) => {
 
                         let endingDate = recentDateYMD >= endDate ? endDate : recentDateYMD
 
-                        
+                        console.log(endingDate, endDate)
                         for(i = startDate; i <= endingDate;  i.setDate(i.getDate() + 1)) { 
 
-                            console.log(i, startDate, endingDate)
+                           
 
                             let found = 0; 
                             for( let j = 0, len = stepsDetails.length; j < len; j++ ) { 
