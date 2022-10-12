@@ -1087,7 +1087,7 @@ router.post('/markActivity', auth, async(req, res) => {
 
 
 
-app.post("/addWeight", auth, async(req, res) => { 
+router.post("/addWeight", auth, async(req, res) => { 
     try{ 
 
         const {weight, date , heightType, height, challengeId} = req.body;
