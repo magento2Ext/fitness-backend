@@ -686,6 +686,9 @@ router.post('/challengeDetail', auth, async(req, res) => {
 
             }
 
+
+            let today =  dateLib.format(new Date(), 'YYYY-MM-DD');
+            const todayStepsDetails = await challengeStepTracker.findOne({ date: today,  employeeId: empId, challengeId: id});
  
 			let date1 = new Date(challenge.start);
 			let date2 = new Date(challenge.end);
@@ -714,7 +717,8 @@ router.post('/challengeDetail', auth, async(req, res) => {
                 "activities": userActivities,
                 "participantsObjects": participants,
                 "invitesObjects": invites,
-                "stepsData": await getStepData()
+                "stepsData": await getStepData(),
+                "todayStepsDetails": todayStepsDetails
             }
 
             setTimeout(() => {
