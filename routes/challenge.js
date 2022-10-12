@@ -709,7 +709,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
                         let nowDate = new Date();
                         let endingDate = nowDate >= endDate ? endDate : nowDate
 
-                        console.log(i, nowDate, endDate, endingDate)
+                        console.log(nowDate, endDate, endingDate)
                         
                         for(i = startDate; i <= endingDate;  i.setDate(i.getDate() + 1)) { 
 
