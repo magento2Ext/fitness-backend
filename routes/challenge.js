@@ -704,8 +704,8 @@ router.post('/challengeDetail', auth, async(req, res) => {
                         let steps = 0;	
                         let noOfFound = 0;
 
-                        let startDate = new Date(challenge.start)
-                        let endDate = new Date(challenge.end)
+                        let startDate = new Date(challenge.start);
+                        let endDate = new Date(challenge.end);
                         for(i=startDate; i<=endDate;  i.setDate(i.getDate() + 1)) { 
 
                             let found = 0; 
@@ -732,43 +732,15 @@ router.post('/challengeDetail', auth, async(req, res) => {
                                 allSteps.push(stepTrackerData);
                             }
 
+                            if(i === endDate){
+                                res(allSteps)
+                            }
+
                         }
 
-                        stepsDetails.forEach( async (key) => {
-                            totalSteps = totalSteps + Number(key.steps);
-                            totalkm = totalkm + Number(key.km);
-                            totalCalories = totalCalories + Number(key.calories);
-                            
-                            if(key.duration != '00:00:00' && key.duration != '00:00'){
-                                totalDuration = totalDuration + await hhmmss(key.duration, 'seconds')
-                            }
-        
-                            count++;
-        
-                            if(count === stepsDetails.length){
-                                totalDuration = await hhmmss(totalDuration, 'hms');
-
-                                res({
-                                    totalSteps : totalSteps, 
-                                    totalkm: totalkm, 
-                                    totalCalories : totalCalories, 
-                                    totalDuration : totalDuration, 
-                                  })
-
-
-                            }
-                        })
-        
                     }else{
-                        res({
-                            totalSteps : 0, 
-                            totalkm: 0, 
-                            totalCalories : 0, 
-                            totalDuration : 0, 
-                       })
+                        res([])
                     }
-
-
 
                 })
 
@@ -777,7 +749,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
             }
 
              let resugetAllStepData = await getAllStepData()
-             console.log(resugetAllStepData);
+             console.log('resugetAllStepData', resugetAllStepData);
 
             let today =  dateLib.format(new Date(), 'YYYY-MM-DD');
             const todayStepsDetails = await challengeStepTracker.findOne({ date: today,  employeeId: empId, challengeId: id});
