@@ -708,29 +708,29 @@ router.post('/challengeDetail', auth, async(req, res) => {
                         let endDate = new Date(challenge.end);
                         for(i = startDate; i <= endDate;  i.setDate(i.getDate() + 1)) { 
 
-                            console.log(days, i, startDate, endDate)
-
                             let found = 0; 
                             for( let j = 0, len = stepsDetails.length; j < len; j++ ) { 
-                               var stepTrackerData = '';
-                                if( stepsDetails[j]['date'] == dateLib.format(i,'YYYY-MM-DD')) {
+                               var stepTrackerData = {};
+                                if( stepsDetails[j]['date'] == dateLib.format(i, 'YYYY-MM-DD')) {
                                     found = 1;
-                                    stepTrackerData = stepsDetails[j];
+                                    stepTrackerData = {
+                                        totalSteps : stepsDetails[j].steps, 
+                                        totalkm: stepsDetails[j].km, 
+                                        totalCalories : stepsDetails[j].calories, 
+                                        totalDuration : stepsDetails[j].duration, 
+                                        'date' : dateLib.format(i, 'YYYY-MM-DD')
+                                    };
                                     break;
                                 } 
                             }
 
-
-
-
-
                             if(found == 0) {
                                 step = {
-                                    'date' : dateLib.format(i,'YYYY-MM-DD'),
-                                    'steps' : "0",
-                                    'km' : "0",
-                                    'calories':"0",
-                                    'duration':'00:00:00'
+                                    totalSteps : steps, 
+                                    totalkm: km, 
+                                    totalCalories : calories, 
+                                    totalDuration : duration, 
+                                    'date' : dateLib.format(i,'YYYY-MM-DD')
                                 }
                                 allSteps.push(step);
                             }   else{
