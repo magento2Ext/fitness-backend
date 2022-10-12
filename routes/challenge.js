@@ -724,7 +724,8 @@ router.post('/challengeDetail', auth, async(req, res) => {
 
 
         }else{
-
+            response = webResponse(203, false, "Challenge Not Found.")  
+            res.send(response)
         }
 
 
