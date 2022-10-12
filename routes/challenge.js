@@ -599,6 +599,13 @@ router.post('/challengeDetail', auth, async(req, res) => {
         const challenge = await Challenge.findOne({_id: new ObjectID(id)})
 
         if(challenge !== null){
+            let date1 = new Date(challenge.start);
+			let date2 = new Date(challenge.end);
+		
+			let difference =  date2.getTime() - date1.getTime()
+
+			let days = Math.ceil(difference / (1000 * 3600 * 24));
+
 
             let participants = [];
             challenge.participants.forEach( async (key) => {
@@ -632,6 +639,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
             }
 
             let stepsDetails = await challengeStepTracker.find({employeeId: empId, challengeId: id});
+            let allSteps = [];
             let totalSteps = 0;
             let totalkm = 0;
             let totalCalories = 0;
@@ -687,6 +695,88 @@ router.post('/challengeDetail', auth, async(req, res) => {
             }
 
 
+
+            function getAllStepData(){
+
+                const promise = new Promise((res, rej) => {
+
+                    if(stepsDetails.length > 0){
+
+                        let startDate = new Date(challenge.start)
+                        let endDate = new Date(challenge.end)
+                        for(i=startDate; i<=endDate;  i.setDate(i.getDate() + 1)) { 
+
+                            let found = 0; 
+                            for( let j = 0, len = stepsDetails.length; j < len; j++ ) { 
+                               var stepTrackerData = '';
+                                if( stepsDetails[j]['date'] == dateLib.format(i,'YYYY-MM-DD')) {
+                                    found = 1;
+                                    stepTrackerData = stepsDetails[j];
+                                    break;
+                                } 
+                            }
+                            if(found == 0) {
+                                step = {
+                                    'date' : dateLib.format(i,'YYYY-MM-DD'),
+                                    'steps' : "0",
+                                    'km' : "0",
+                                    'calories':"0",
+                                    'duration':'00:00:00'
+                                }
+                                allSteps.push(step);
+                            }   else{
+                                noOfFound = Number(noOfFound)+ 1
+                                steps = Number(stepTrackerData.steps) + Number(steps)
+                                allSteps.push(stepTrackerData);
+                            }
+
+                        }
+
+                        stepsDetails.forEach( async (key) => {
+                            totalSteps = totalSteps + Number(key.steps);
+                            totalkm = totalkm + Number(key.km);
+                            totalCalories = totalCalories + Number(key.calories);
+                            
+                            if(key.duration != '00:00:00' && key.duration != '00:00'){
+                                totalDuration = totalDuration + await hhmmss(key.duration, 'seconds')
+                            }
+        
+                            count++;
+        
+                            if(count === stepsDetails.length){
+                                totalDuration = await hhmmss(totalDuration, 'hms');
+
+                                res({
+                                    totalSteps : totalSteps, 
+                                    totalkm: totalkm, 
+                                    totalCalories : totalCalories, 
+                                    totalDuration : totalDuration, 
+                                  })
+
+
+                            }
+                        })
+        
+                    }else{
+                        res({
+                            totalSteps : 0, 
+                            totalkm: 0, 
+                            totalCalories : 0, 
+                            totalDuration : 0, 
+                       })
+                    }
+
+
+
+                })
+
+                return promise
+
+            }
+
+             let resugetAllStepData = await getAllStepData()
+             console.log(resugetAllStepData);
+
             let today =  dateLib.format(new Date(), 'YYYY-MM-DD');
             const todayStepsDetails = await challengeStepTracker.findOne({ date: today,  employeeId: empId, challengeId: id});
             let todayStepsDetailsObj  = {
@@ -704,12 +794,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
                 }
             }
  
-			let date1 = new Date(challenge.start);
-			let date2 = new Date(challenge.end);
-		
-			let difference =  date2.getTime() - date1.getTime()
 
-			let days = Math.ceil(difference / (1000 * 3600 * 24));
 
 
             let challengeDetails = {
