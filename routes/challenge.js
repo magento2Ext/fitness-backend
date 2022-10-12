@@ -751,6 +751,8 @@ router.post('/challengeDetail', auth, async(req, res) => {
 
                             const endate__ =  endate_+ 'T00:00:00.000Z'
 
+                            console.log(String(i), String(endate__))
+
                             if(String(i) == String(endate__)){
                                
                                 res(allSteps)
