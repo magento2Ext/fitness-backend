@@ -701,6 +701,8 @@ router.post('/challengeDetail', auth, async(req, res) => {
                 const promise = new Promise((res, rej) => {
 
                     if(stepsDetails.length > 0){
+                        let steps = 0;	
+                        let noOfFound = 0;
 
                         let startDate = new Date(challenge.start)
                         let endDate = new Date(challenge.end)
