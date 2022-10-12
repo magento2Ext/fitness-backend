@@ -748,13 +748,13 @@ router.post('/challengeDetail', auth, async(req, res) => {
 
         
                             const endate_ = dateLib.format(endingDate,'YYYY-MM-DD')
-
                             const endate__ =  endate_+ 'T00:00:00.000Z'
 
-                            console.log(String(i), String(endate__))
+                            const i_ = dateLib.format(i,'YYYY-MM-DD')
+                            const i__ =  i_+ 'T00:00:00.000Z'
 
-                            if(String(i) == String(endate__)){
-                               
+                            console.log(String(i__), String(endate__))
+                            if(String(i__) == String(endate__)){
                                 res(allSteps)
                             }
 
