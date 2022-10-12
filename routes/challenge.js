@@ -706,7 +706,9 @@ router.post('/challengeDetail', auth, async(req, res) => {
 
                         let startDate = new Date(challenge.start);
                         let endDate = new Date(challenge.end);
-                        for(i=startDate; i<=endDate;  i.setDate(i.getDate() + 1)) { 
+                        for(i = startDate; i <= endDate;  i.setDate(i.getDate() + 1)) { 
+
+                            console.log(days, i, startDate, endDate)
 
                             let found = 0; 
                             for( let j = 0, len = stepsDetails.length; j < len; j++ ) { 
