@@ -746,7 +746,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
                                 allSteps.push(stepTrackerData);
                             }
 
-                            console.log('endingDate', endingDate);
+                            console.log('endingDate', String(endingDate));
                             const endate_ = dateLib.format(endingDate,'YYYY-MM-DD')
 
                             const endate__ =  endate_+ 'T00:00:00.000Z'
