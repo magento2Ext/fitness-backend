@@ -719,6 +719,11 @@ router.post('/challengeDetail', auth, async(req, res) => {
                                     break;
                                 } 
                             }
+
+
+
+
+
                             if(found == 0) {
                                 step = {
                                     'date' : dateLib.format(i,'YYYY-MM-DD'),
@@ -734,7 +739,8 @@ router.post('/challengeDetail', auth, async(req, res) => {
                                 allSteps.push(stepTrackerData);
                             }
 
-                            if(i == endDate){
+                            if(String(i) == String(endDate)){
+                                console.log('coming')
                                 res(allSteps)
                             }
 
