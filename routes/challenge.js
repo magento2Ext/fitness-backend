@@ -706,7 +706,11 @@ router.post('/challengeDetail', auth, async(req, res) => {
 
                         let startDate = new Date(challenge.start);
                         let endDate = new Date(challenge.end);
-                        for(i = startDate; i <= endDate;  i.setDate(i.getDate() + 1)) { 
+                        let nowDate = new Date(challenge.end);
+                        let endingDate = nowDate >= startDate ? startDate : nowDate
+
+                        
+                        for(i = startDate; i <= endingDate;  i.setDate(i.getDate() + 1)) { 
 
                             let found = 0; 
                             for( let j = 0, len = stepsDetails.length; j < len; j++ ) { 
@@ -739,7 +743,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
                                 allSteps.push(stepTrackerData);
                             }
 
-                            if(String(i) == String(endDate)){
+                            if(String(i) == String(endingDate)){
                                 console.log('coming')
                                 res(allSteps)
                             }
@@ -774,8 +778,6 @@ router.post('/challengeDetail', auth, async(req, res) => {
                     totalDuration : todayStepsDetails.duration, 
                 }
             }
- 
-
 
 
             let challengeDetails = {
