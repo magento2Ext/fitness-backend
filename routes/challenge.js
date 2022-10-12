@@ -689,7 +689,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
 
             let today =  dateLib.format(new Date(), 'YYYY-MM-DD');
             const todayStepsDetails = await challengeStepTracker.findOne({ date: today,  employeeId: empId, challengeId: id});
-            const todayStepsDetailsObj  = {
+            let todayStepsDetailsObj  = {
                 totalSteps : 0, 
                 totalkm: 0, 
                 totalCalories : 0, 
