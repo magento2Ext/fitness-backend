@@ -1042,7 +1042,7 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
             "targetBMI": challenge.targetBMI,
             "participantsObjects": participants,
             "invitesObjects": invites,
-            "BMI": BMI,
+            "BMI": await BMI_CAL(recentWeight.weight),
             "weightList": weeklyResult.reverse(),
             "recentWeight": recentWeight.weight
 
