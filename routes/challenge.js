@@ -955,22 +955,20 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
                             let endingDate = nowDate >= endDate ? endDate : nowDate
 
                             var weightFinalArray = [];
-                            for(i = startDate; i <= endingDate;  i.setDate(i.getDate() + 1)) { 
+                            let weight = {}
+                            for(i = startDate; i <= endingDate;  i.setDate(i.getDate() + 1)) {
                                 
-                                var found = 0; 
-                                for( var j = 0, len = weightArray.length; j < len; j++ ) { 
-                                    var weightData = '';
-                                   
-                                    console.log('weightData', weightArray[j]['day'], days[i.getDay()])
-
-                                    if( weightArray[j]['day'] == days[i.getDay()]) {
-                                       
+                            
+                                let found = 0; 
+                                for( let j = 0, len = weightArray.length; j < len; j++ ) { 
+                                   var weightData = {};
+                                    if( weightArray[j]['date'] == dateLib.format(i, 'YYYY-MM-DD')) {
                                         found = 1;
                                         weightData = weightArray[j];
-                                      
                                         break;
                                     } 
                                 }
+    
                                 if(found == 0) {
                                     weight = {
                                         'date' : dateLib.format(i,'YYYY-MM-DD'),
@@ -980,20 +978,65 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
                                         'weightLine':''
                                     }
                                     if(challenge.weightType === "healthy") weight.BMI = null
+
                                     weightFinalArray.push(weight);
                                 }   else{
                                     weightFinalArray.push(weightData);
                                 }
-                        
+    
+            
                                 const endate_ = dateLib.format(endingDate,'YYYY-MM-DD')
                                 const endate__ =  endate_+ 'T00:00:00.000Z'
     
                                 const i_ = dateLib.format(i,'YYYY-MM-DD')
                                 const i__ =  i_+ 'T00:00:00.000Z'
-
+    
+                                console.log(String(i__), String(endate__))
                                 if(String(i__) == String(endate__)){
                                     resolve(weightFinalArray)
                                 }
+
+
+
+
+                                
+                                // var found = 0; 
+                                // for( var j = 0, len = weightArray.length; j < len; j++ ) { 
+                                //     var weightData = '';
+                                   
+                                //     console.log('weightData', weightArray[j]['day'], days[i.getDay()])
+
+                                //     if( weightArray[j]['day'] == days[i.getDay()]) {
+                                       
+                                //         found = 1;
+                                //         weightData = weightArray[j];
+                                      
+                                //         break;
+                                //     } 
+                                // }
+                                // if(found == 0) {
+                                //     weight = {
+                                //         'date' : dateLib.format(i,'YYYY-MM-DD'),
+                                //         'weight' : "0",
+                                //         'day' : days[i.getDay()],
+                                //         'difference': "0",
+                                //         'weightLine':''
+                                //     }
+                                //     if(challenge.weightType === "healthy") weight.BMI = null
+                                //     weightFinalArray.push(weight);
+                                // }   else{
+                                //     weightFinalArray.push(weightData);
+                                // }
+                        
+                                // const endate_ = dateLib.format(endingDate,'YYYY-MM-DD')
+                                // const endate__ =  endate_+ 'T00:00:00.000Z'
+    
+                                // const i_ = dateLib.format(i,'YYYY-MM-DD')
+                                // const i__ =  i_+ 'T00:00:00.000Z'
+
+                                // if(String(i__) == String(endate__)){
+                                //     resolve(weightFinalArray)
+                                // }
                             }
                         }
                     });
