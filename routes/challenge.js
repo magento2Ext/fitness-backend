@@ -961,7 +961,7 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
                         
                                 for( var j = 0, len = weightArray.length; j < len; j++ ) { 
                                     var weightData = '';
-                                    console.log(weightArray[j]['day'], days[i.getDay())
+                                    console.log(weightArray[j]['day'], days[i.getDay()])
                                     if( weightArray[j]['day'] == days[i.getDay()]) {
                                         found = 1;
                                         weightData = weightArray[j];
