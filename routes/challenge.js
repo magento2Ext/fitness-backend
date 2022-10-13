@@ -916,11 +916,7 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
 
     let weightList = await challengeWeight.find({employeeId: empId, challengeId: id});
 
-    console.log('weightList', {employeeId: empId, challengeId: id})
-    
-   
     const employeeDetails = await Employee.findById(empId);
-
 
     async function noData(){
         let data = {}; 
@@ -968,7 +964,6 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
 
         let nowDate = new Date();
         nowDate.setDate(nowDate.getDate() - 6);
-
 
         var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
     
@@ -1024,45 +1019,47 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
                         weightArray.push(weight);
                         i++;
                         let count1 = 0;
+
+                        console.log('weightArray', weightArray)
                         
-                        if(i === weightList.length){
+                        // if(i === weightList.length){
                         
-                            var weightFinalArray = [];
-                            for(i = oneWeekAgo; i <= date;  i.setDate(i.getDate() + 1)) { 
+                        //     var weightFinalArray = [];
+                        //     for(i = oneWeekAgo; i <= date;  i.setDate(i.getDate() + 1)) { 
                                 
-                                var found = 0; 
+                        //         var found = 0; 
                         
-                                for( var j = 0, len = weightArray.length; j < len; j++ ) { 
-                                    var weightData = '';
-                                    if( weightArray[j]['day'] == days[i.getDay()]) {
-                                        found = 1;
-                                        weightData = weightArray[j];
-                                        break;
-                                    } 
-                                }
-                                if(found == 0) {
-                                    weight = {
-                                        'date' : dateLib.format(i,'YYYY-MM-DD'),
-                                        'weight' : "0",
-                                        'day' : days[i.getDay()],
-                                        'difference': "0",
-                                        'weightLine':''
-                                    }
-                                    if(challenge.weightType === "healthy") weight.BMI = null
-                                    weightFinalArray.push(weight);
-                                }   else{
-                                    weightFinalArray.push(weightData);
-                                }
+                        //         for( var j = 0, len = weightArray.length; j < len; j++ ) { 
+                        //             var weightData = '';
+                        //             if( weightArray[j]['day'] == days[i.getDay()]) {
+                        //                 found = 1;
+                        //                 weightData = weightArray[j];
+                        //                 break;
+                        //             } 
+                        //         }
+                        //         if(found == 0) {
+                        //             weight = {
+                        //                 'date' : dateLib.format(i,'YYYY-MM-DD'),
+                        //                 'weight' : "0",
+                        //                 'day' : days[i.getDay()],
+                        //                 'difference': "0",
+                        //                 'weightLine':''
+                        //             }
+                        //             if(challenge.weightType === "healthy") weight.BMI = null
+                        //             weightFinalArray.push(weight);
+                        //         }   else{
+                        //             weightFinalArray.push(weightData);
+                        //         }
                         
-                                count1++;
+                        //         count1++;
                              
-                                if(String(date) == String(i)){
-                                    resolve(weightFinalArray)
-                               }
+                        //         if(String(date) == String(i)){
+                        //             resolve(weightFinalArray)
+                        //        }
 
-                            }
+                        //     }
 
-                        }
+                        // }
                     });
 
                 }
