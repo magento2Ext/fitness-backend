@@ -840,6 +840,7 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
     let {id} = req.body;
     let empId = req.user.user_id;
     const challenge = await Challenge.findOne({_id: new ObjectID(id)});
+    const recentWeight = await challengeWeight.findOne({ employeeId: empId}).sort({date:-1});
 
     let weightList = await challengeWeight.find({employeeId: empId, challengeId: id});
 
@@ -848,6 +849,7 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
     async function noData(){
         let data = {}; 
         data.weightList = [];
+        data.recentWeight = 'No Data';
         if(challenge.weightType === "healthy"){
             data.BMI = {}
         }
@@ -1013,7 +1015,7 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
         if(challenge.weightType === "healthy"){
             data.BMI = await BMI_CAL(recentWeight.weight);
         }
-
+        data.recentWeight =  recentWeight.weight;
         response = webResponse(202, true, data)  
         res.send(response);
         return;
