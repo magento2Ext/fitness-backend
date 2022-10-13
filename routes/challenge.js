@@ -710,8 +710,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
                         let nowDate = new Date();
                         let endingDate = nowDate >= endDate ? endDate : nowDate
 
-                        console.log(nowDate, endDate, endingDate)
-                        
+    
                         for(i = startDate; i <= endingDate;  i.setDate(i.getDate() + 1)) { 
 
                             console.log(i, startDate, endingDate)
@@ -774,78 +773,6 @@ router.post('/challengeDetail', auth, async(req, res) => {
             let allStepData = await getAllStepData()
 
 
-            let getAllWeightDataLs = await challengeWeight.find({employeeId: empId, challengeId: id});
-            let allWeights = [];
-
-            function getAllWeightData(){
-
-                const promise = new Promise((res, rej) => {
-
-                    if(getAllWeightDataLs.length > 0){
-                        let steps = 0;	
-                        let noOfFound = 0;
-                        let startDate = new Date(challenge.start);
-                        let endDate = new Date(challenge.end);
-                        let nowDate = new Date();
-                        let endingDate = nowDate >= endDate ? endDate : nowDate
-
-                        console.log(nowDate, endDate, endingDate)
-                        
-                        for(i = startDate; i <= endingDate;  i.setDate(i.getDate() + 1)) { 
-
-                            console.log(i, startDate, endingDate)
-
-                            let found = 0; 
-                            for( let j = 0, len = getAllWeightDataLs.length; j < len; j++ ) { 
-                               var stepTrackerData = {};
-                                if( getAllWeightDataLs[j]['date'] == dateLib.format(i, 'YYYY-MM-DD')) {
-                                    found = 1;
-                                    stepTrackerData = {
-                                        'date' : dateLib.format(i,'YYYY-MM-DD'),
-                                        'weight' : weight
-                                    };
-                                    break;
-                                } 
-                            }
-
-                            if(found == 0) {
-                                step = {
-                                    totalSteps : 0, 
-                                    totalkm: 0, 
-                                    totalCalories : 0, 
-                                    totalDuration : '00:00:00', 
-                                    'date' : dateLib.format(i,'YYYY-MM-DD')
-                                }
-                                allWeights.push(step);
-                            }   else{
-                                noOfFound = Number(noOfFound)+ 1
-                                steps = Number(stepTrackerData.steps) + Number(steps)
-                                allWeights.push(stepTrackerData);
-                            }
-
-        
-                            const endate_ = dateLib.format(endingDate,'YYYY-MM-DD')
-                            const endate__ =  endate_+ 'T00:00:00.000Z'
-
-                            const i_ = dateLib.format(i,'YYYY-MM-DD')
-                            const i__ =  i_+ 'T00:00:00.000Z'
-
-                            console.log(String(i__), String(endate__))
-                            if(String(i__) == String(endate__)){
-                                res(allWeights)
-                            }
-
-                        }
-
-                    }else{
-                        res([])
-                    }
-
-                })
-
-                return promise
-            }
-            
             let today =  dateLib.format(new Date(), 'YYYY-MM-DD');
             const todayStepsDetails = await challengeStepTracker.findOne({ date: today,  employeeId: empId, challengeId: id});
             let todayStepsDetailsObj  = {
@@ -1018,48 +945,54 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
                         
                         weightArray.push(weight);
                         i++;
-                        let count1 = 0;
+         
+                        
+                        if(i === weightList.length){
+                        
+                            let startDate = new Date(challenge.start);
+                            let endDate = new Date(challenge.end);
+                            let nowDate = new Date();
+                            let endingDate = nowDate >= endDate ? endDate : nowDate
 
-                        console.log('weightArray', weightArray)
-                        
-                        // if(i === weightList.length){
-                        
-                        //     var weightFinalArray = [];
-                        //     for(i = oneWeekAgo; i <= date;  i.setDate(i.getDate() + 1)) { 
+                            var weightFinalArray = [];
+                            for(i = startDate; i <= endingDate;  i.setDate(i.getDate() + 1)) { 
                                 
-                        //         var found = 0; 
+                                var found = 0; 
                         
-                        //         for( var j = 0, len = weightArray.length; j < len; j++ ) { 
-                        //             var weightData = '';
-                        //             if( weightArray[j]['day'] == days[i.getDay()]) {
-                        //                 found = 1;
-                        //                 weightData = weightArray[j];
-                        //                 break;
-                        //             } 
-                        //         }
-                        //         if(found == 0) {
-                        //             weight = {
-                        //                 'date' : dateLib.format(i,'YYYY-MM-DD'),
-                        //                 'weight' : "0",
-                        //                 'day' : days[i.getDay()],
-                        //                 'difference': "0",
-                        //                 'weightLine':''
-                        //             }
-                        //             if(challenge.weightType === "healthy") weight.BMI = null
-                        //             weightFinalArray.push(weight);
-                        //         }   else{
-                        //             weightFinalArray.push(weightData);
-                        //         }
+                                for( var j = 0, len = weightArray.length; j < len; j++ ) { 
+                                    var weightData = '';
+                                    if( weightArray[j]['day'] == days[i.getDay()]) {
+                                        found = 1;
+                                        weightData = weightArray[j];
+                                        break;
+                                    } 
+                                }
+                                if(found == 0) {
+                                    weight = {
+                                        'date' : dateLib.format(i,'YYYY-MM-DD'),
+                                        'weight' : "0",
+                                        'day' : days[i.getDay()],
+                                        'difference': "0",
+                                        'weightLine':''
+                                    }
+                                    if(challenge.weightType === "healthy") weight.BMI = null
+                                    weightFinalArray.push(weight);
+                                }   else{
+                                    weightFinalArray.push(weightData);
+                                }
                         
-                        //         count1++;
-                             
-                        //         if(String(date) == String(i)){
-                        //             resolve(weightFinalArray)
-                        //        }
-
-                        //     }
-
-                        // }
+                                const endate_ = dateLib.format(endingDate,'YYYY-MM-DD')
+                                const endate__ =  endate_+ 'T00:00:00.000Z'
+    
+                                const i_ = dateLib.format(i,'YYYY-MM-DD')
+                                const i__ =  i_+ 'T00:00:00.000Z'
+    
+                                console.log(String(i__), String(endate__))
+                                if(String(i__) == String(endate__)){
+                                    resolve(weightFinalArray)
+                                }
+                            }
+                        }
                     });
 
                 }
