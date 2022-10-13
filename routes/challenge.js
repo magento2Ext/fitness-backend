@@ -916,7 +916,7 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
 
     let weightList = await challengeWeight.find({employeeId: empId, challengeId: id});
 
-    console.log('weightList', weightList)
+    console.log('weightList', {employeeId: empId, challengeId: id})
     
    
     const employeeDetails = await Employee.findById(empId);
