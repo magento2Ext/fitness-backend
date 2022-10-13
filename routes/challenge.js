@@ -961,6 +961,7 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
                             
                                 let found = 0; 
                                 for( let j = 0, len = weightArray.length; j < len; j++ ) { 
+                                    console.log(weightArray[j]['date'], dateLib.format(i, 'YYYY-MM-DD'))
                                    var weightData = {};
                                     if( weightArray[j]['date'] == dateLib.format(i, 'YYYY-MM-DD')) {
                                         found = 1;
@@ -997,9 +998,6 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
                                 }
 
 
-
-
-                                
                                 // var found = 0; 
                                 // for( var j = 0, len = weightArray.length; j < len; j++ ) { 
                                 //     var weightData = '';
