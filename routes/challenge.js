@@ -911,11 +911,12 @@ router.post('/challengeDetail', auth, async(req, res) => {
 router.post('/weightChallengeDetail', auth, async(req, res) => {
 
     let {id} = req.body;
+    let empId = req.user.user_id;
     const challenge = await Challenge.findOne({_id: new ObjectID(id)});
 
     let weightList = await challengeWeight.find({employeeId: empId, challengeId: id});
     
-    let empId = req.user.user_id;
+   
     const employeeDetails = await Employee.findById(empId);
     const recentWeight = await challengeWeight.findOne({ employeeId: empId, challengeId: id}).sort({date:-1});
 
