@@ -772,6 +772,79 @@ router.post('/challengeDetail', auth, async(req, res) => {
             }
 
             let allStepData = await getAllStepData()
+
+
+            let getAllWeightDataLs = await challengeWeight.find({employeeId: empId, challengeId: id});
+            let allWeights = [];
+
+            function getAllWeightData(){
+
+                const promise = new Promise((res, rej) => {
+
+                    if(getAllWeightDataLs.length > 0){
+                        let steps = 0;	
+                        let noOfFound = 0;
+                        let startDate = new Date(challenge.start);
+                        let endDate = new Date(challenge.end);
+                        let nowDate = new Date();
+                        let endingDate = nowDate >= endDate ? endDate : nowDate
+
+                        console.log(nowDate, endDate, endingDate)
+                        
+                        for(i = startDate; i <= endingDate;  i.setDate(i.getDate() + 1)) { 
+
+                            console.log(i, startDate, endingDate)
+
+                            let found = 0; 
+                            for( let j = 0, len = getAllWeightDataLs.length; j < len; j++ ) { 
+                               var stepTrackerData = {};
+                                if( getAllWeightDataLs[j]['date'] == dateLib.format(i, 'YYYY-MM-DD')) {
+                                    found = 1;
+                                    stepTrackerData = {
+                                        'date' : dateLib.format(i,'YYYY-MM-DD'),
+                                        'weight' : weight
+                                    };
+                                    break;
+                                } 
+                            }
+
+                            if(found == 0) {
+                                step = {
+                                    totalSteps : 0, 
+                                    totalkm: 0, 
+                                    totalCalories : 0, 
+                                    totalDuration : '00:00:00', 
+                                    'date' : dateLib.format(i,'YYYY-MM-DD')
+                                }
+                                allWeights.push(step);
+                            }   else{
+                                noOfFound = Number(noOfFound)+ 1
+                                steps = Number(stepTrackerData.steps) + Number(steps)
+                                allWeights.push(stepTrackerData);
+                            }
+
+        
+                            const endate_ = dateLib.format(endingDate,'YYYY-MM-DD')
+                            const endate__ =  endate_+ 'T00:00:00.000Z'
+
+                            const i_ = dateLib.format(i,'YYYY-MM-DD')
+                            const i__ =  i_+ 'T00:00:00.000Z'
+
+                            console.log(String(i__), String(endate__))
+                            if(String(i__) == String(endate__)){
+                                res(allWeights)
+                            }
+
+                        }
+
+                    }else{
+                        res([])
+                    }
+
+                })
+
+                return promise
+            }
             
             let today =  dateLib.format(new Date(), 'YYYY-MM-DD');
             const todayStepsDetails = await challengeStepTracker.findOne({ date: today,  employeeId: empId, challengeId: id});
@@ -833,6 +906,183 @@ router.post('/challengeDetail', auth, async(req, res) => {
         res.send(err)
     };
 });
+
+
+router.post('/weightChallengeDetail', auth, async(req, res) => {
+
+    let {id} = req.body;
+    const challenge = await Challenge.findOne({_id: new ObjectID(id)});
+
+    let weightList = await challengeWeight.find({employeeId: empId, challengeId: id});
+    
+    let empId = req.user.user_id;
+    const employeeDetails = await Employee.findById(empId);
+    const recentWeight = await challengeWeight.findOne({ employeeId: empId, challengeId: id}).sort({date:-1});
+
+    async function noData(){
+        let data = {}; 
+        data.weight_diff = []
+        data.lastOneWeekWeight = []
+        data.recentWeight = 'Not added'
+        data.weightLastDay = 'Not added'
+        data.weightLastWeek = 'Not added'
+        data.weightLastMonthArray = []
+        data.weightLastMonth = 'Not added';
+        data.BMI = {}
+        return data;
+    }
+
+    if(recentWeight === null){
+        response = webResponse(202, true, await noData())  
+        res.send(response);
+        return;
+    }
+
+    async function BMI_CAL(WEIGHT){
+            let result = {};
+            let height = employeeDetails.height;
+            let weight = WEIGHT * 0.45359237;
+            let BMI  = (weight / ((height * height) / 10000)).toFixed(2);
+            result.BMI = BMI;
+
+            if(BMI < 18.5){
+                result.status = 'Underweight'
+                result.innerText = "BMI indicates that you are underweight, so you may need to put on some weight. You are recommended to ask your doctor or a dietitian for advice";    
+            }else if((BMI > 18.5) && (BMI < 24.9)){
+                result.status = 'Healthy Weight'
+                result.innerText = "Your BMI falls within the normal or healthy weight range";
+            }else if((BMI > 25) && (BMI < 29.9 )){
+                result.status = 'Overweight'
+                result.innerText = "Your BMI falls within the overweight, so you may need to loose some weight. You are recommended to ask your doctor or a dietitian for advice";
+            }else{
+                result.status = 'Obese'
+                result.innerText = "Your BMI falls within the obese range, so you may need to loose weight. You are recommended to ask your doctor or a dietitian for advice";
+            }
+
+            return result;
+    }
+     
+
+        let nowDate = new Date();
+        nowDate.setDate(nowDate.getDate() - 6);
+
+
+        var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    
+        var oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 6);
+        
+        var oneMonthAgo = new Date();
+        oneMonthAgo.setDate(oneMonthAgo.getDate() - 29);
+   
+        var date = new Date();
+        
+        async function lastWeekWeight(){
+
+            let promise = new Promise( async (resolve, reject) => {
+
+                if(weightList.length === 0){
+                     resolve([])
+                }else{
+                    
+                    var weightArray = [];		
+                    var i = 0;
+        
+                    weightList.forEach(async (col) => {
+                                   
+                        if(i == 0) {
+                            let BMI = await BMI_CAL(col.weight);
+                            weight = {
+                                'date' : dateLib.format(col.date,'YYYY-MM-DD'),
+                                'weight' : col.weight,
+                                'day' :  days[col.date.getDay()],
+                                'difference': "0",
+                                'weightLine':''
+                            }
+                            if(challenge.weightType === "healthy") weight.BMI = BMI.status
+                        } else{
+                            var difference = col.weight - weightList[i-1].weight;
+                            if(difference > 0) {
+                                var line = convertIntoTwoDecimal(difference)+" kilogram over weight."
+                            } else {
+                                var line = convertIntoTwoDecimal(difference)+" kilogram under weight."
+                            }
+                            let BMI = await BMI_CAL(col.weight);
+                            weight = {
+                                'date' :  dateLib.format(col.date,'YYYY-MM-DD'),
+                                'weight' : col.weight,
+                                'day' :  days[col.date.getDay()],
+                                'difference': convertIntoTwoDecimal(difference),
+                                'weightLine': line
+                            }
+                            if(challenge.weightType === "healthy") weight.BMI = BMI.status
+                        }
+                        
+                        weightArray.push(weight);
+                        i++;
+                        let count1 = 0;
+                        
+                        if(i === weightList.length){
+                        
+                            var weightFinalArray = [];
+                            for(i = oneWeekAgo; i <= date;  i.setDate(i.getDate() + 1)) { 
+                                
+                                var found = 0; 
+                        
+                                for( var j = 0, len = weightArray.length; j < len; j++ ) { 
+                                    var weightData = '';
+                                    if( weightArray[j]['day'] == days[i.getDay()]) {
+                                        found = 1;
+                                        weightData = weightArray[j];
+                                        break;
+                                    } 
+                                }
+                                if(found == 0) {
+                                    weight = {
+                                        'date' : dateLib.format(i,'YYYY-MM-DD'),
+                                        'weight' : "0",
+                                        'day' : days[i.getDay()],
+                                        'difference': "0",
+                                        'weightLine':''
+                                    }
+                                    if(challenge.weightType === "healthy") weight.BMI = null
+                                    weightFinalArray.push(weight);
+                                }   else{
+                                    weightFinalArray.push(weightData);
+                                }
+                        
+                                count1++;
+                             
+                                if(String(date) == String(i)){
+                                    resolve(weightFinalArray)
+                               }
+
+                            }
+
+                        }
+                    });
+
+                }
+                
+            })
+
+            return promise;
+        }
+
+
+        var data = {}; 
+        let weeklyResult = await lastWeekWeight();
+     
+        data.weight_diff = weeklyResult.reverse();
+        if(challenge.weightType === "healthy"){
+            data.BMI = await BMI_CAL(recentWeight.weight);
+        }
+
+        response = webResponse(202, true, data)  
+        res.send(response);
+        return;
+
+})
 
 
 router.post('/mindLeaderboard', auth, async(req, res) => {
@@ -1000,10 +1250,8 @@ router.post('/markActivity', auth, async(req, res) => {
         await EmpStepTarget.updateOne({_id: stepTarget._id}, {$set: {steps: stepTargetSteps, duration: await hhmmss(targetDuration, 'hms')}}, {new: true});
     }
 
-
         let today =  dateLib.format(new Date(), 'YYYY-MM-DD');
         const stepTrackerDetails = await StepTracker.findOne({ date: today,  employeeId: empId});
-
 
         if (stepTrackerDetails) {  
 
