@@ -847,14 +847,11 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
 
     async function noData(){
         let data = {}; 
-        data.weight_diff = []
-        data.lastOneWeekWeight = []
-        data.recentWeight = 'Not added'
-        data.weightLastDay = 'Not added'
-        data.weightLastWeek = 'Not added'
-        data.weightLastMonthArray = []
-        data.weightLastMonth = 'Not added';
-        data.BMI = {}
+        data.weightList = [];
+        if(challenge.weightType === "healthy"){
+            data.BMI = {}
+        }
+
         return data;
     }
 
@@ -902,7 +899,7 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
    
         var date = new Date();
         
-        async function lastWeekWeight(){
+        async function weightLIST(){
 
             let promise = new Promise( async (resolve, reject) => {
 
@@ -957,7 +954,7 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
                             var weightFinalArray = [];
                             let weight = {}
                             for(i = startDate; i <= endingDate;  i.setDate(i.getDate() + 1)) {
-                                console.log('weightArray', weightArray)
+                                
                                 let found = 0; 
                                 for( let j = 0, len = weightArray.length; j < len; j++ ) { 
                                     console.log(weightArray[j]['date'], dateLib.format(i, 'YYYY-MM-DD'))
@@ -996,43 +993,7 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
                                 }
 
 
-                                // var found = 0; 
-                                // for( var j = 0, len = weightArray.length; j < len; j++ ) { 
-                                //     var weightData = '';
-                                   
-                                //     console.log('weightData', weightArray[j]['day'], days[i.getDay()])
-
-                                //     if( weightArray[j]['day'] == days[i.getDay()]) {
-                                       
-                                //         found = 1;
-                                //         weightData = weightArray[j];
-                                      
-                                //         break;
-                                //     } 
-                                // }
-                                // if(found == 0) {
-                                //     weight = {
-                                //         'date' : dateLib.format(i,'YYYY-MM-DD'),
-                                //         'weight' : "0",
-                                //         'day' : days[i.getDay()],
-                                //         'difference': "0",
-                                //         'weightLine':''
-                                //     }
-                                //     if(challenge.weightType === "healthy") weight.BMI = null
-                                //     weightFinalArray.push(weight);
-                                // }   else{
-                                //     weightFinalArray.push(weightData);
-                                // }
-                        
-                                // const endate_ = dateLib.format(endingDate,'YYYY-MM-DD')
-                                // const endate__ =  endate_+ 'T00:00:00.000Z'
-    
-                                // const i_ = dateLib.format(i,'YYYY-MM-DD')
-                                // const i__ =  i_+ 'T00:00:00.000Z'
-
-                                // if(String(i__) == String(endate__)){
-                                //     resolve(weightFinalArray)
-                                // }
+                               
                             }
                         }
                     });
@@ -1046,9 +1007,9 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
 
 
         var data = {}; 
-        let weeklyResult = await lastWeekWeight();
+        let weeklyResult = await weightLIST();
      
-        data.weight_diff = weeklyResult.reverse();
+        data.weightList = weeklyResult.reverse();
         if(challenge.weightType === "healthy"){
             data.BMI = await BMI_CAL(recentWeight.weight);
         }
