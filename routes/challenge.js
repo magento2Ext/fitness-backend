@@ -1008,7 +1008,7 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
     
         let difference =  date2.getTime() - date1.getTime()
 
-        let days = Math.ceil(difference / (1000 * 3600 * 24));
+        let totalDays = Math.ceil(difference / (1000 * 3600 * 24));
 
         let participants = [];
         challenge.participants.forEach( async (key) => {
@@ -1033,7 +1033,7 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
             "pic": challenge.pic,
             "start": challenge.start,
             "end": challenge.end,
-            "duration": days,
+            "duration": totalDays,
             "winners": challenge.winners,
             "employeeId": challenge.employeeId,
             "dailyStepLimit": challenge.dailyStepLimit,
