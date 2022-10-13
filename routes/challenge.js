@@ -961,10 +961,13 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
                                 for( var j = 0, len = weightArray.length; j < len; j++ ) { 
                                     var weightData = '';
                                    
+                                    console.log('weightData', weightArray[j]['day'], days[i.getDay())
+
                                     if( weightArray[j]['day'] == days[i.getDay()]) {
+                                       
                                         found = 1;
                                         weightData = weightArray[j];
-                                        console.log('weightData', weightData)
+                                      
                                         break;
                                     } 
                                 }
@@ -987,8 +990,7 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
     
                                 const i_ = dateLib.format(i,'YYYY-MM-DD')
                                 const i__ =  i_+ 'T00:00:00.000Z'
-    
-                                console.log(String(i__), String(endate__))
+
                                 if(String(i__) == String(endate__)){
                                     resolve(weightFinalArray)
                                 }
