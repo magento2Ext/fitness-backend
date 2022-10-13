@@ -915,10 +915,12 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
     const challenge = await Challenge.findOne({_id: new ObjectID(id)});
 
     let weightList = await challengeWeight.find({employeeId: empId, challengeId: id});
+
+    console.log('weightList', weightList)
     
    
     const employeeDetails = await Employee.findById(empId);
-    const recentWeight = await challengeWeight.findOne({ employeeId: empId, challengeId: id}).sort({date:-1});
+
 
     async function noData(){
         let data = {}; 
@@ -933,7 +935,7 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
         return data;
     }
 
-    if(recentWeight === null){
+    if(weightList.length === 0){
         response = webResponse(202, true, await noData())  
         res.send(response);
         return;
