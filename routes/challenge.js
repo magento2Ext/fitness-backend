@@ -857,35 +857,30 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
         return data;
     }
 
-    if(weightList.length === 0){
-        response = webResponse(202, true, await noData())  
-        res.send(response);
-        return;
-    }
 
-    async function BMI_CAL(WEIGHT){
-            let result = {};
-            let height = employeeDetails.height;
-            let weight = WEIGHT * 0.45359237;
-            let BMI  = (weight / ((height * height) / 10000)).toFixed(2);
-            result.BMI = BMI;
+            async function BMI_CAL(WEIGHT){
+                    let result = {};
+                    let height = employeeDetails.height;
+                    let weight = WEIGHT * 0.45359237;
+                    let BMI  = (weight / ((height * height) / 10000)).toFixed(2);
+                    result.BMI = BMI;
 
-            if(BMI < 18.5){
-                result.status = 'Underweight'
-                result.innerText = "BMI indicates that you are underweight, so you may need to put on some weight. You are recommended to ask your doctor or a dietitian for advice";    
-            }else if((BMI > 18.5) && (BMI < 24.9)){
-                result.status = 'Healthy Weight'
-                result.innerText = "Your BMI falls within the normal or healthy weight range";
-            }else if((BMI > 25) && (BMI < 29.9 )){
-                result.status = 'Overweight'
-                result.innerText = "Your BMI falls within the overweight, so you may need to loose some weight. You are recommended to ask your doctor or a dietitian for advice";
-            }else{
-                result.status = 'Obese'
-                result.innerText = "Your BMI falls within the obese range, so you may need to loose weight. You are recommended to ask your doctor or a dietitian for advice";
+                    if(BMI < 18.5){
+                        result.status = 'Underweight'
+                        result.innerText = "BMI indicates that you are underweight, so you may need to put on some weight. You are recommended to ask your doctor or a dietitian for advice";    
+                    }else if((BMI > 18.5) && (BMI < 24.9)){
+                        result.status = 'Healthy Weight'
+                        result.innerText = "Your BMI falls within the normal or healthy weight range";
+                    }else if((BMI > 25) && (BMI < 29.9 )){
+                        result.status = 'Overweight'
+                        result.innerText = "Your BMI falls within the overweight, so you may need to loose some weight. You are recommended to ask your doctor or a dietitian for advice";
+                    }else{
+                        result.status = 'Obese'
+                        result.innerText = "Your BMI falls within the obese range, so you may need to loose weight. You are recommended to ask your doctor or a dietitian for advice";
+                    }
+
+                    return result;
             }
-
-            return result;
-    }
      
 
         let nowDate = new Date();
@@ -1008,15 +1003,52 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
         }
 
 
-        var data = {}; 
+        let date1 = new Date(challenge.start);
+        let date2 = new Date(challenge.end);
+    
+        let difference =  date2.getTime() - date1.getTime()
+
+        let days = Math.ceil(difference / (1000 * 3600 * 24));
+
+        let participants = [];
+        challenge.participants.forEach( async (key) => {
+            const employee = await Employee.findOne({_id: key});
+            participants.push(employee);
+        })
+
+        let invites = [];
+        challenge.invites.forEach( async (key) => {
+            const employee = await Employee.findOne({_id: key});
+            invites.push(employee);
+        })
+
         let weeklyResult = await weightLIST();
-     
-        data.weightList = weeklyResult.reverse();
-        if(challenge.weightType === "healthy"){
-            data.BMI = await BMI_CAL(recentWeight.weight);
+
+        let challengeDetails = {
+            "_id": challenge._id,
+            "userId": challenge.userId,
+            "type": challenge.type,
+            "title": challenge.title,
+            "description": challenge.description,
+            "pic": challenge.pic,
+            "start": challenge.start,
+            "end": challenge.end,
+            "duration": days,
+            "winners": challenge.winners,
+            "employeeId": challenge.employeeId,
+            "dailyStepLimit": challenge.dailyStepLimit,
+            "weightType": challenge.weightType,
+            "targetWeight": challenge.targetWeight,
+            "targetBMI": challenge.targetBMI,
+            "participantsObjects": participants,
+            "invitesObjects": invites,
+            "BMI": BMI,
+            "weightList": weeklyResult.reverse(),
+            "recentWeight": recentWeight.weight
+
         }
-        data.recentWeight =  recentWeight.weight;
-        response = webResponse(202, true, data)  
+ 
+        response = webResponse(202, true, challengeDetails)  
         res.send(response);
         return;
 
