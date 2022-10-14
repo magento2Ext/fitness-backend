@@ -5,6 +5,7 @@ var ObjectID = require('mongodb').ObjectID;
 const auth = require("../middleware/auth");
 const Audio = require('../models/teacher_audio')
 const Employee = require('../models/employee')
+const Admin = require('../models/admin')
 require('../functions')
 
 
@@ -163,11 +164,12 @@ router.post('/catsByType', auth, async (req,res) => {
 		let {postType} = req.body;
 		var empId = req.user.user_id;
 		const employee = await Employee.findById(empId);
+		const admin = await Admin.findOne();
 
 		let query  = {};
 
 		if(employee.userOrganizations.length != 0) query = {userId: employee.organizationId, postType: postType}
-		else query = {userType: 'admin', postType: postType}
+		else query = {userType: 'admin', postType: postType, userId: admin._id}
 
 		if(!(postType)){
 		  jsonObj = []
