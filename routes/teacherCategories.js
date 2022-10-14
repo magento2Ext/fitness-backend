@@ -183,6 +183,8 @@ router.post('/catsByType', auth, async (req,res) => {
 		  }
 		}
 
+		console.log('query', query)
+
 		const posts = await Audio.find(query);
 
 		if(posts.length != 0){
