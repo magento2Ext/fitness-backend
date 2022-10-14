@@ -17,7 +17,6 @@ const StepTracker = require('../models/step_tracker')
 const challengeStepTracker = require('../models/challengeStepTracker')
 const EmpStepTarget = require('../models/employee_step_target')
 
-
 var job = new CronJob(
 	"1/2 * * * * *",
 	async () =>  {
@@ -633,7 +632,8 @@ router.post('/challengeDetail', auth, async(req, res) => {
                     "title": key.title,
                     "description": key.description,
                     "attachement": key.attachement,
-                    "completed": activityDone !== null ? true : false
+                    "completed": activityDone !== null ? true : false,
+                    "date": activityDone !== null ? dateLib.format(activityDone.createdAt,'YYYY-MM-DD')  : "",
                 }
                 userActivities.push(activityDict)
                 })
@@ -857,30 +857,29 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
         return data;
     }
 
+        async function BMI_CAL(WEIGHT){
+                let result = {};
+                let height = employeeDetails.height;
+                let weight = WEIGHT * 0.45359237;
+                let BMI  = (weight / ((height * height) / 10000)).toFixed(2);
+                result.BMI = BMI;
 
-            async function BMI_CAL(WEIGHT){
-                    let result = {};
-                    let height = employeeDetails.height;
-                    let weight = WEIGHT * 0.45359237;
-                    let BMI  = (weight / ((height * height) / 10000)).toFixed(2);
-                    result.BMI = BMI;
+                if(BMI < 18.5){
+                    result.status = 'Underweight'
+                    result.innerText = "BMI indicates that you are underweight, so you may need to put on some weight. You are recommended to ask your doctor or a dietitian for advice";    
+                }else if((BMI > 18.5) && (BMI < 24.9)){
+                    result.status = 'Healthy Weight'
+                    result.innerText = "Your BMI falls within the normal or healthy weight range";
+                }else if((BMI > 25) && (BMI < 29.9 )){
+                    result.status = 'Overweight'
+                    result.innerText = "Your BMI falls within the overweight, so you may need to loose some weight. You are recommended to ask your doctor or a dietitian for advice";
+                }else{
+                    result.status = 'Obese'
+                    result.innerText = "Your BMI falls within the obese range, so you may need to loose weight. You are recommended to ask your doctor or a dietitian for advice";
+                }
 
-                    if(BMI < 18.5){
-                        result.status = 'Underweight'
-                        result.innerText = "BMI indicates that you are underweight, so you may need to put on some weight. You are recommended to ask your doctor or a dietitian for advice";    
-                    }else if((BMI > 18.5) && (BMI < 24.9)){
-                        result.status = 'Healthy Weight'
-                        result.innerText = "Your BMI falls within the normal or healthy weight range";
-                    }else if((BMI > 25) && (BMI < 29.9 )){
-                        result.status = 'Overweight'
-                        result.innerText = "Your BMI falls within the overweight, so you may need to loose some weight. You are recommended to ask your doctor or a dietitian for advice";
-                    }else{
-                        result.status = 'Obese'
-                        result.innerText = "Your BMI falls within the obese range, so you may need to loose weight. You are recommended to ask your doctor or a dietitian for advice";
-                    }
-
-                    return result;
-            }
+                return result;
+        }
      
 
         let nowDate = new Date();
@@ -988,9 +987,7 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
                                 if(String(i__) == String(endate__)){
                                     resolve(weightFinalArray)
                                 }
-
-
-                               
+  
                             }
                         }
                     });
@@ -1045,7 +1042,6 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
             "BMI": await BMI_CAL(recentWeight.weight),
             "weightList": weeklyResult.reverse(),
             "recentWeight": recentWeight.weight
-
         }
  
         response = webResponse(202, true, challengeDetails)  
