@@ -637,12 +637,10 @@ router.post('/login', async(req,res) => {
 			    }
 			}else{
 				 logo = process.env.ORGLOGO
+				 appData = await Theme.findOne({primaryColor: "#A26A50"})
 			}
-			if(appData == null) {
-				appData = await Theme.findOne()
-			}
- 
-			
+	 
+
 			result.appData = appData
 		    result.logo = logo
 
