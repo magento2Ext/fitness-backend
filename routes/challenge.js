@@ -1384,7 +1384,7 @@ router.post("/addWeight", auth, async(req, res) => {
                     picture: employeeDetails.picture,
                     userId: employeeDetails._id,
                     weigtht: recentWeight.weight,
-                    date: recentWeight!=0 ? dateLib.format(recentWeight.date,'YYYY-MM-DD') : '' 
+                    date: recentWeight.weight!=0 ? dateLib.format(recentWeight.date,'YYYY-MM-DD') : '' 
                 }
                 participantsWeights.push(activityDict);
                 })
