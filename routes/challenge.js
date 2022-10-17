@@ -1357,6 +1357,51 @@ router.post("/addWeight", auth, async(req, res) => {
   }); 
 
 
+  router.post('/weightLeaderboard', auth, async(req, res) => {
+    try{ 
+
+        let {id} = req.body;
+        const challenge = await Challenge.findOne({_id: new ObjectID(id)})
+        const participants = challenge.participants;
+
+        if(participants.length > 0){
+
+            let participantsWeights = [];
+    
+            participants.forEach( async (key) => {
+                 let weightList = await challengeWeight.find({employeeId: key, challengeId: id}).sort({createdAt: -1});
+                 let recentWeight = weightList.length > 0 ? weightList[0] : 0;
+            
+                 const employeeDetails = await Employee.findOne({_id: key});
+                 let activityDict =  {
+                    firstName: employeeDetails.firstName,
+                    lastName: employeeDetails.lastName,
+                    picture: employeeDetails.picture,
+                    userId: employeeDetails._id,
+                    weigtht: recentWeight.weight,
+                    date: recentWeight!=0 ? dateLib.format(recentWeight.createdAt,'YYYY-MM-DD') : '' 
+                }
+                participantsWeights.push(activityDict)
+                })
+        
+            setTimeout(() => {
+                   let final =  participantsWeights.sort(function(a, b) {
+                        return parseFloat(a.weigtht) - parseFloat(b.weigtht);
+                    });
+                    response = webResponse(202, true, final)  
+                    res.send(response)
+            }, 200);
+
+        }else{
+            response = webResponse(202, true, []) 
+        }
+
+    }catch(err){
+         console.log(err)
+        res.send(err)
+    };
+});
+
 
 
 
