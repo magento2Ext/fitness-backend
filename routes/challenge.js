@@ -1430,13 +1430,12 @@ router.post("/addWeight", auth, async(req, res) => {
                             }
 
                             totalWeights.push(dist)
-                            console.log('distdist', dist)
-
-
-                        
+ 
                         let winners = [];
                         let cont__ = 0;
                         totalWeights.forEach( (key) => {
+
+                            console.log('keykey', key)
 
                             if(challenge.weightType === 'gain'){
 
