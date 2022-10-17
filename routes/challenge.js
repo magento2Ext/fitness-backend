@@ -1398,6 +1398,7 @@ router.post("/addWeight", auth, async(req, res) => {
                     const strDate = dateLib.format(recentDate,'YYYY-MM-DD')
                     const recentDateYMD =  strDate + 'T00:00:00.000Z';
  
+                    console.log('allweightsLs', allweightsLs)
                     if(challenge.status === "completed"){
                         console.log('allweightsLs', allweightsLs)
                         let totalWeights = []
@@ -1412,7 +1413,7 @@ router.post("/addWeight", auth, async(req, res) => {
                             if(key.weights.length !== 0){
 
                                 key.weights.forEach( (key) => {
-                                    let diff = weights[i + 1] -  key
+                                    let diff = key.weights[i + 1] -  key
                                     console.log(D, diff)
                                     D = D + diff
                                     i++
