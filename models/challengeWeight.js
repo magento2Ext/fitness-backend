@@ -20,7 +20,7 @@ const challengeWeightSchema = new mongoose.Schema({
         type: String,
         default: null
     }
-});
+}, {timestamps: true});
 
 module.exports = mongoose.model('challengeWeight', challengeWeightSchema)
 
