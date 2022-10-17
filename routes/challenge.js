@@ -1412,9 +1412,9 @@ router.post("/addWeight", auth, async(req, res) => {
                             let D = 0
                             if(key.weights.length !== 0){
 
-                                key.weights.forEach( (key) => {
+                                key.weights.forEach( (key_) => {
                                     if(i <= key.weights.length){
-                                        let diff = key.weights[i + 1] -  key
+                                        let diff = key.weights[i + 1].weight -  key_.weight
                                         console.log(D, diff)
                                         D = D + diff
                                     }
