@@ -1400,6 +1400,8 @@ router.post("/addWeight", auth, async(req, res) => {
  
              
                     if(challenge.status === "completed"){
+
+                        console.log('allweightsLs', allweightsLs)
                        
                         let totalWeights = []
                         allweightsLs.forEach((key) => {
@@ -1435,7 +1437,7 @@ router.post("/addWeight", auth, async(req, res) => {
                         let cont__ = 0;
                         totalWeights.forEach( (key) => {
 
-                            console.log('keykey', key)
+                          
 
                             if(challenge.weightType === 'gain'){
 
