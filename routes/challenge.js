@@ -1170,7 +1170,7 @@ router.post('/markActivity', auth, async(req, res) => {
             challengeId: activityDetails.challengeId
         })
 
-        let result = await newchallengeMind.save();
+        let result = await newMind.save();
 
         response = webResponse(207, true, 'Activity has been added successfully.')  
         res.send(response)
@@ -1370,7 +1370,7 @@ router.post("/addWeight", auth, async(req, res) => {
     
             participants.forEach( async (key) => {
                  let weightList = await challengeWeight.find({employeeId: key, challengeId: id}).sort({date: -1});
-                 let recentWeight = weightList.length > 0 ? weightList[0] : 0;
+                 let recentWeight = weightList.length > 0 ? weightList[0] : {weight: 0};
             
                  const employeeDetails = await Employee.findOne({_id: key});
                  let activityDict =  {
@@ -1381,13 +1381,39 @@ router.post("/addWeight", auth, async(req, res) => {
                     weigtht: recentWeight.weight,
                     date: recentWeight!=0 ? dateLib.format(recentWeight.date,'YYYY-MM-DD') : '' 
                 }
-                participantsWeights.push(activityDict)
+                participantsWeights.push(activityDict);
                 })
         
             setTimeout(() => {
                    let final =  participantsWeights.sort(function(a, b) {
                         return parseFloat(a.weigtht) - parseFloat(b.weigtht);
                     });
+
+                    const recentDate = new Date();
+                    const strDate = dateLib.format(recentDate,'YYYY-MM-DD')
+                    const recentDateYMD =  strDate + 'T00:00:00.000Z';
+ 
+                    if(recentDateYMD > challenge.end){
+                        let winners = [];
+                        final.forEach( (key) => {
+
+                            if(challenge.weightType === 'gain'){
+                                if(key.weight >= challenge.targetWeight){
+                                    winners.push(key)
+                                }
+                            }
+
+                            if(challenge.weightType === 'loss'){
+                                if(key.weight <= challenge.targetWeight){
+                                    winners.push(key)
+                                }
+                                
+                            }
+ 
+                        })
+
+                     }
+
                     response = webResponse(202, true, final)  
                     res.send(response)
             }, 200);
