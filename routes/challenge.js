@@ -1369,7 +1369,7 @@ router.post("/addWeight", auth, async(req, res) => {
             let participantsWeights = [];
     
             participants.forEach( async (key) => {
-                 let weightList = await challengeWeight.find({employeeId: key, challengeId: id}).sort({createdAt: -1});
+                 let weightList = await challengeWeight.find({employeeId: key, challengeId: id}).sort({date: -1});
                  let recentWeight = weightList.length > 0 ? weightList[0] : 0;
             
                  const employeeDetails = await Employee.findOne({_id: key});
@@ -1379,7 +1379,7 @@ router.post("/addWeight", auth, async(req, res) => {
                     picture: employeeDetails.picture,
                     userId: employeeDetails._id,
                     weigtht: recentWeight.weight,
-                    date: recentWeight!=0 ? dateLib.format(recentWeight.createdAt,'YYYY-MM-DD') : '' 
+                    date: recentWeight!=0 ? dateLib.format(recentWeight.date,'YYYY-MM-DD') : '' 
                 }
                 participantsWeights.push(activityDict)
                 })
