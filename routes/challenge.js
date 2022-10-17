@@ -1367,9 +1367,14 @@ router.post("/addWeight", auth, async(req, res) => {
         if(participants.length > 0){
 
             let participantsWeights = [];
-    
+            let allweightsLs = []
             participants.forEach( async (key) => {
                  let weightList = await challengeWeight.find({employeeId: key, challengeId: id}).sort({date: -1});
+                 let dict = {
+                   userId: key,
+                   weights: weightList
+                 }
+                 allweightsLs.push(dict)
                  let recentWeight = weightList.length > 0 ? weightList[0] : {weight: 0};
             
                  const employeeDetails = await Employee.findOne({_id: key});
@@ -1394,10 +1399,39 @@ router.post("/addWeight", auth, async(req, res) => {
                     const recentDateYMD =  strDate + 'T00:00:00.000Z';
  
                     if(recentDateYMD > challenge.end){
+                        let totalWeights = []
+                        allweightsLs.forEach((key) => {
+
+                            let dist = {
+                                userId: key.userId
+                            }
+                            
+                            let i = 0;
+                            let D = 0
+                            if(key.weights.length !== 0){
+
+                                key.weights.forEach( (key) => {
+                                    let diff = weights[i + 1] -  key
+                                    console.log(D, diff)
+                                    D = D + diff
+                                    i++
+                                    if(key.weights.length === i) dist.weight = D
+
+                             })
+
+                            }else{
+                                dist.weight = 0
+                            }
+
+                            totalWeights.push(dist)
+
+                        
                         let winners = [];
-                        final.forEach( (key) => {
+                        let cont__ = 0;
+                        totalWeights.forEach( (key) => {
 
                             if(challenge.weightType === 'gain'){
+
                                 if(key.weight >= challenge.targetWeight){
                                     winners.push(key)
                                 }
@@ -1409,10 +1443,15 @@ router.post("/addWeight", auth, async(req, res) => {
                                 }
                                 
                             }
+
+                            cont__++;
+                            if(cont__ === totalWeights.length) final.winners = winners;
  
                         })
 
-                     }
+                     });
+                    }
+                    
 
                     response = webResponse(202, true, final)  
                     res.send(response)
