@@ -1413,15 +1413,15 @@ router.post("/addWeight", auth, async(req, res) => {
                             if(key.weights.length !== 0){
 
                                 key.weights.forEach( (key_) => {
-                                    console.log('key_', key_)
-                                    // if(i <= key.weights.length){
-                                    //     let diff = key.weights[i + 1].weight -  key_.weight
-                                    //     console.log(D, diff)
-                                    //     D = D + diff
-                                    // }
+                                   
+                                    if(key.weights[i + 1] !== undefined && key.weights[i + 1] !== null){
+                                        let diff = key.weights[i + 1].weight -  key_.weight
+                                        console.log(D, diff)
+                                        D = D + diff
+                                    }
 
-                                    // i++
-                                    // if(key.weights.length === i) dist.weight = D
+                                    i++
+                                    if(key.weights.length === i) dist.weight = D
 
                              })
 
