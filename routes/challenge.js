@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router()
 const Challenge = require('../models/challenge')
 const Activity = require('../models/activities')
-const Mind = require('../models/mind')
+const challengeMind = require('../models/challengeMindSchema')
 const auth = require("../middleware/auth");
 const ObjectID = require('mongodb').ObjectID;
 const Employee = require('../models/employee');
@@ -625,7 +625,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
  
             if(activitesList.length > 0){
                 activitesList.forEach( async (key) => {
-                 let activityDone = await Mind.findOne({employeeId: empId, activityId: key._id, challengeId: id});
+                 let activityDone = await challengeMind.findOne({employeeId: empId, activityId: key._id, challengeId: id});
                  let activityDict =  {
                     "_id": key._id,
                     "challengeId": key.challengeId,
@@ -1064,7 +1064,7 @@ router.post('/mindLeaderboard', auth, async(req, res) => {
             let participantsScores = [];
     
             participants.forEach( async (key) => {
-                 let activityDone = await Mind.find({employeeId: key, challengeId: id});
+                 let activityDone = await challengeMind.find({employeeId: key, challengeId: id});
                  console.log('activityDone', activityDone)
                  const employeeDetails = await Employee.findOne({_id: key});
                  let activityDict =  {
@@ -1164,13 +1164,13 @@ router.post('/markActivity', auth, async(req, res) => {
          return;
         }
 
-        let newMind = new Mind({
+        let newMind = new challengeMind({
             employeeId: empId,
             activityId: activityId,
             challengeId: activityDetails.challengeId
         })
 
-        let result = await newMind.save();
+        let result = await newchallengeMind.save();
 
         response = webResponse(207, true, 'Activity has been added successfully.')  
         res.send(response)

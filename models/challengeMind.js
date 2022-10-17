@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const mindSchema = new mongoose.Schema({
+const challengeMindSchema = new mongoose.Schema({
 
     employeeId: {
         type: String,
@@ -18,5 +18,5 @@ const mindSchema = new mongoose.Schema({
 
 }, {timestamps: true});
 
-module.exports = mongoose.model('Mind', mindSchema)
+module.exports = mongoose.model('challengeMind', challengeMindSchema)
 
