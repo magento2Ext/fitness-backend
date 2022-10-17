@@ -1398,7 +1398,7 @@ router.post("/addWeight", auth, async(req, res) => {
                     const strDate = dateLib.format(recentDate,'YYYY-MM-DD')
                     const recentDateYMD =  strDate + 'T00:00:00.000Z';
  
-                    if(recentDateYMD > challenge.end){
+                    if(challenge.status === "completed"){
                         let totalWeights = []
                         allweightsLs.forEach((key) => {
 
