@@ -55,7 +55,7 @@ router.post('/addMood', auth, async(req, res) => {
     
         let empId = req.user.user_id;
 
-        const moodList = await Mind.findOne({employeeId: empId});
+        const moodList = await Mind.find({employeeId: empId});
 
         if(moodList.length !== 0){
 
