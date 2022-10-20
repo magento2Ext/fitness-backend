@@ -76,7 +76,7 @@ router.post('/addMood', auth, async(req, res) => {
                 let dict = {
                     mood: isMood !== null ? isMood.mood : "No data",
                     date: DMY,
-                    day: days[newDate.getDay()]
+                    day: days[(new Date(newDate)).getDay()]
                 }
                 moodList(dict);
                 firstDay = new Date(firstDay)
