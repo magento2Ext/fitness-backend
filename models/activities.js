@@ -21,7 +21,12 @@ const activitySchema = new mongoose.Schema({
         type: String,
         required: true,
         default: null
-    }
+    },
+    activityDate: {
+        type: String,
+        required: true,
+        default: null
+    },
 
 }, {timestamps: true});
 

@@ -52,6 +52,7 @@ router.post('/create', auth, async(req, res) => {
        let empId = req.user.user_id;
        const employee = await Employee.findById(empId);
        const admins = await Admin.find();
+       const days = daysDifference(start, end)
        let {id, userId, type, title, description, pic, start, end, orgType, winners, invites, dailyStepLimit, weightType, targetWeight, targetBMI, activities} = req.body;
 
        let data = {
@@ -83,15 +84,18 @@ router.post('/create', auth, async(req, res) => {
             let result = await Challenge.updateOne({_id: id}, {$set: data}, {new: true});
 
             if(mindTypes.indexOf(type) >=0 ){
-                 
+                let activityDate = start
                 activities.forEach( (key) => {
+                    
                     let activityData =  {
                             challengeId: id,
                             title:  key.title,
                             description:  key.description,
-                            attachement:  key.attachment
+                            attachement:  key.attachment,
+                            activityDate: activityDate
                        }
                     Activity.updateOne({_id: key.id}, {$set: activityData}, {new: true});
+                    activityDate = activityDate.setDate(activityDate.getDate() + activityDate)
                     
                 })
             }
@@ -114,16 +118,18 @@ router.post('/create', auth, async(req, res) => {
 
 
             if(mindTypes.indexOf(type) >=0){
-                 
+                let activityDate = start
                 activities.forEach( (key) => {
                     let activityData =  {
                             challengeId: result._id,
                             title:  key.title,
                             description:  key.description,
-                            attachement:  key.attachment
+                            attachement:  key.attachment,
+                            activityDate: activityDate
                        }
                     let newActivity =  new Activity(activityData);
                     newActivity.save();
+                    activityDate = activityDate.setDate(activityDate.getDate() + activityDate)
                 })
             }
 
@@ -1499,6 +1505,16 @@ function hhmmss(val, type){
 	})
 
 return promise
+}
+
+
+function daysDifference(start, end){
+    let date1 = new Date(start);
+    let date2 = new Date(end);
+
+    let difference =  date2.getTime() - date1.getTime()
+
+    return Math.ceil(difference / (1000 * 3600 * 24));
 }
 
 module.exports = router
