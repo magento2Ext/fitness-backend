@@ -106,8 +106,7 @@ router.post('/addMood', auth, async(req, res) => {
 
                     let days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
                     let month = Number(today.getMonth())
-                    let firstDay = new Date(today.getFullYear()+'-'+(month+1)+'-'+today.getDate()+'T00:00:00.000+00:00');
-
+                    let firstDay = new Date(today.getFullYear()+'-'+(month+1)+'-'+'01'+'T00:00:00.000+00:00');
 
                     let moodList = [];
                     let i = 0;
