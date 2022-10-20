@@ -769,10 +769,11 @@ router.post('/challengeDetail', auth, async(req, res) => {
                 return promise
 
             }
-
+ 
+            console.log('allStepData 773')
             let allStepData = await getAllStepData()
 
-            console.log('allStepData', allStepData)
+           
 
 
             let today =  dateLib.format(new Date(), 'YYYY-MM-DD');
