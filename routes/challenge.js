@@ -700,7 +700,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
             function getAllStepData(){
 
                 const promise = new Promise((res, rej) => {
-                    console.log('stepsDetails.length', stepsDetails.length)
+                  
                     if(stepsDetails.length > 0){
                         let steps = 0;	
                         let noOfFound = 0;
@@ -713,7 +713,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
     
                         for(i = startDate; i <= endingDate;  i.setDate(i.getDate() + 1)) { 
 
-                            console.log(i, startDate, endingDate)
+                            console.log('123')
 
                             let found = 0; 
                             for( let j = 0, len = stepsDetails.length; j < len; j++ ) { 
