@@ -7,6 +7,7 @@ const Admin = require('../models/admin')
 
 const verifyToken = (req, res, next) => {
   const token = req.body.token || req.query.token || req.headers["authorization"];
+  console.log(token)
   if (!token) {
 	response = webResponse(401, false, "A token is required for authentication")  
 	res.send(response)
