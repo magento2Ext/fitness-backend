@@ -50,7 +50,7 @@ router.post('/addMood', auth, async(req, res) => {
   }); 
 
 
-  router.post('/mindHistory', auth, async(req, res) => {
+  router.post('/mindActivity', auth, async(req, res) => {
     try{ 
     
         let empId = req.user.user_id;
