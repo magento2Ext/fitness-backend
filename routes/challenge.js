@@ -96,7 +96,7 @@ router.post('/create', auth, async(req, res) => {
                             activityDate: activityDate
                        }
                     Activity.updateOne({_id: key.id}, {$set: activityData}, {new: true});
-                    activityDate = activityDate.setDate(activityDate.getDate() + activityDate)
+                    activityDate = activityDate.setDate(activityDate.getDate() + 1)
                     
                 })
             }
@@ -130,7 +130,7 @@ router.post('/create', auth, async(req, res) => {
                        }
                     let newActivity =  new Activity(activityData);
                     newActivity.save();
-                    activityDate = activityDate.setDate(activityDate.getDate() + activityDate)
+                    activityDate = activityDate.setDate(activityDate.getDate() + 1)
                 })
             }
 
