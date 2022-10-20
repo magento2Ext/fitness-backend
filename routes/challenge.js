@@ -95,9 +95,11 @@ router.post('/create', auth, async(req, res) => {
                             attachement:  key.attachment,
                             activityDate: activityDate
                        }
+
                     Activity.updateOne({_id: key.id}, {$set: activityData}, {new: true});
-                    activityDate.setDate(activityDate.getDate() + 1)
-                    let YMD = dateLib.format(activityDate, 'YYYY-MM-DD')
+                    let newDate = new Date(activityDate)
+                    newDate.setDate(newDate.getDate() + 1)
+                    let YMD = dateLib.format(newDate, 'YYYY-MM-DD')
                     activityDate = YMD + "T00:00:00.000+00:00"
                     
                 })
@@ -132,8 +134,9 @@ router.post('/create', auth, async(req, res) => {
                        }
                     let newActivity =  new Activity(activityData);
                     newActivity.save();
-                    activityDate.setDate(activityDate.getDate() + 1)
-                    let YMD = dateLib.format(activityDate, 'YYYY-MM-DD')
+                    let newDate = new Date(activityDate)
+                    newDate.setDate(newDate.getDate() + 1)
+                    let YMD = dateLib.format(newDate, 'YYYY-MM-DD')
                     activityDate = YMD + "T00:00:00.000+00:00"
                 })
             }
