@@ -12,11 +12,16 @@ const MindSchema = new mongoose.Schema({
     mood: {
         type: String,
         required: true
+    },
+    moodScore: {
+        type: String,
+        required: true,
+        default: '0'
     }
 
 }, {timestamps: true});
 
 module.exports = mongoose.model('mind', MindSchema)
 
-//mood Types happy | sad | 
+//mood Types happy | sad | grateful | excited | bored | amused
 

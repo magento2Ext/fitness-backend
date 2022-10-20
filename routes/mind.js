@@ -13,7 +13,7 @@ const Mind = require('../models/mind')
 router.post('/addMood', auth, async(req, res) => {
     try{ 
         
-        let {mood, date} = req.body;
+        let {mood, date, moodScore} = req.body;
         let empId = req.user.user_id;
 
         const isMood = await Mind.findOne({ date: date,  employeeId: empId});
@@ -23,7 +23,8 @@ router.post('/addMood', auth, async(req, res) => {
             const weight = new Mind({
                 employeeId: empId,
                 date: date,
-                mood: mood
+                mood: mood,
+                moodScore: moodScore
                });
 
             const result =  weight.save();    
@@ -33,7 +34,7 @@ router.post('/addMood', auth, async(req, res) => {
             }
 
         }else{
-            const result = await Mind.updateOne({_id: isMood._id}, {$set: {mood: mood}}, {new: true});
+            const result = await Mind.updateOne({_id: isMood._id}, {$set: {mood: mood,  moodScore: moodScore}}, {new: true});
             if(result){
                 response = webResponse(200, true, "Mood saved")  
                 res.send(response);
@@ -75,13 +76,13 @@ router.post('/addMood', auth, async(req, res) => {
                     let firstDay = new Date(startDate)
         
                     let moodList = [];
-                    let i = 0;
                     for(let i = 1; i <= 7; i++){
                         let newDate = firstDay.setDate(firstDay.getDate() + 1)
                         let DMY = dateLib.format(new Date(newDate), 'DD-MM-YYYY');
                         let isMood = await Mind.findOne({employeeId: empId, date: DMY});
                         let dict = {
                             mood: isMood !== null ? isMood.mood : "No data",
+                            moodScore: isMood !== null ? isMood.moodScore : "No data",
                             date: DMY,
                             day: days[(new Date(newDate)).getDay()]
                         }
@@ -109,7 +110,6 @@ router.post('/addMood', auth, async(req, res) => {
                     let firstDay = new Date(today.getFullYear()+'-'+(month+1)+'-'+'01'+'T00:00:00.000+00:00');
 
                     let moodList = [];
-                    let i = 0;
                     for(let i = 1; i <= daysInMonth; i++){
                         let newDate 
                         if(i === 1) newDate = firstDay
@@ -119,6 +119,7 @@ router.post('/addMood', auth, async(req, res) => {
                         let isMood = await Mind.findOne({employeeId: empId, date: DMY});
                         let dict = {
                             mood: isMood !== null ? isMood.mood : "No data",
+                            moodScore: isMood !== null ? isMood.moodScore : "No data",
                             date: DMY,
                             day: days[(new Date(newDate)).getDay()]
                         }
@@ -134,9 +135,9 @@ router.post('/addMood', auth, async(req, res) => {
             }
 
 
-
-            res.send({getWeeklyActivity: await getWeeklyActivity(), getMonthlyActivity: await getMonthlyActivity(), allActivity: moodList})
-
+            let DATA = {getWeeklyActivity: await getWeeklyActivity(), getMonthlyActivity: await getMonthlyActivity(), allActivity: moodList}
+            response = webResponse(200, true, DATA)  
+            res.send(response);
 
     
         }else{
