@@ -120,6 +120,7 @@ router.post('/create', auth, async(req, res) => {
 
             if(mindTypes.indexOf(type) >=0){
                 let activityDate = new Date(start)
+                console.log('activityDate', activityDate)
                 activities.forEach( (key) => {
                     let activityData =  {
                             challengeId: result._id,
