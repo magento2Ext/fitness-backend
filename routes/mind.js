@@ -78,7 +78,7 @@ router.post('/addMood', auth, async(req, res) => {
                     date: DMY,
                     day: days[(new Date(newDate)).getDay()]
                 }
-                moodList(dict);
+                moodList.push(dict);
                 firstDay = new Date(firstDay)
                 if(i === 7) res.send(moodList)
                
