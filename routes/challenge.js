@@ -700,7 +700,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
             function getAllStepData(){
 
                 const promise = new Promise((res, rej) => {
-
+                    console.log('stepsDetails.length', stepsDetails.length)
                     if(stepsDetails.length > 0){
                         let steps = 0;	
                         let noOfFound = 0;
@@ -770,12 +770,10 @@ router.post('/challengeDetail', auth, async(req, res) => {
 
             }
  
-            console.log('allStepData 773')
+          
             let allStepData = await getAllStepData()
 
-           
-
-
+        
             let today =  dateLib.format(new Date(), 'YYYY-MM-DD');
             const todayStepsDetails = await challengeStepTracker.findOne({ date: today,  employeeId: empId, challengeId: id});
             let todayStepsDetailsObj  = {
