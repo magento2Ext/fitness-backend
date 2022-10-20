@@ -90,8 +90,8 @@ app.post("/testApi", async(req, res) => {
 	res.send({'status': 1})
 })
 
-const mood = require('./routes/mood')
-app.use('/mood', mood)
+const mind = require('./routes/mind')
+app.use('/mind', mind)
 
 app.post("/weight/save", auth, async(req, res) => { 
   try{ 
