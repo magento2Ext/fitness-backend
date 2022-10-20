@@ -58,35 +58,88 @@ router.post('/addMood', auth, async(req, res) => {
         const moodList = await Mind.findOne({employeeId: empId});
 
         if(moodList.length !== 0){
-            let days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-            let date = new Date();
-            
-            let dayOfWeek = date.getDay();
-            
-            let startDate = date.setDate(date.getDate() - (dayOfWeek + 1) )
-            
-            let firstDay = new Date(startDate)
 
-            let moodList = [];
-            let i = 0;
-            for(let i = 1; i <= 7; i++){
-                let newDate = firstDay.setDate(firstDay.getDate() + 1)
-                let DMY = dateLib.format(new Date(newDate), 'DD-MM-YYYY');
-                let isMood = await Mind.findOne({employeeId: empId, date: DMY});
-                let dict = {
-                    mood: isMood !== null ? isMood.mood : "No data",
-                    date: DMY,
-                    day: days[(new Date(newDate)).getDay()]
-                }
-                moodList.push(dict);
-                firstDay = new Date(firstDay)
-                if(i === 7) res.send(moodList)
-               
+            function getWeeklyActivity(){
+
+
+                let promise = new Promise( (res, rej) => {
+
+
+                    let days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+                    let date = new Date();
+                    
+                    let dayOfWeek = date.getDay();
+                    
+                    let startDate = date.setDate(date.getDate() - (dayOfWeek + 1) )
+                    
+                    let firstDay = new Date(startDate)
+        
+                    let moodList = [];
+                    let i = 0;
+                    for(let i = 1; i <= 7; i++){
+                        let newDate = firstDay.setDate(firstDay.getDate() + 1)
+                        let DMY = dateLib.format(new Date(newDate), 'DD-MM-YYYY');
+                        let isMood = await Mind.findOne({employeeId: empId, date: DMY});
+                        let dict = {
+                            mood: isMood !== null ? isMood.mood : "No data",
+                            date: DMY,
+                            day: days[(new Date(newDate)).getDay()]
+                        }
+                        moodList.push(dict);
+                        firstDay = new Date(firstDay)
+                        if(i === 7) res(moodList)
+                       
+                    }
+
+                })
+
+                return promise;
             }
+
+
+            function getMonthlyActivity(){
+
+                let promise = new Promise( (res, rej) => {
+
+                    let today = new Date();
+                    let daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+
+                    let days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+                    let month = Number(today.getMonth())
+                    let firstDay = new Date(today.getFullYear()+'-'+(month+1)+'-'+today.getDate()+'T00:00:00.000+00:00');
+
+
+                    let moodList = [];
+                    let i = 0;
+                    for(let i = 1; i <= daysInMonth; i++){
+                        let newDate = firstDay.setDate(firstDay.getDate() + 1)
+                        let DMY = dateLib.format(new Date(newDate), 'DD-MM-YYYY');
+                        let isMood = await Mind.findOne({employeeId: empId, date: DMY});
+                        let dict = {
+                            mood: isMood !== null ? isMood.mood : "No data",
+                            date: DMY,
+                            day: days[(new Date(newDate)).getDay()]
+                        }
+                        moodList.push(dict);
+                        firstDay = new Date(firstDay)
+                        if(i === daysInMonth) res(moodList)
+                       
+                    }
+
+                })
+
+                return promise;
+            }
+
+
+
+            res.send({getWeeklyActivity: await getWeeklyActivity(), getMonthlyActivity: await getMonthlyActivity()})
+
 
     
         }else{
-  
+            response = webResponse(200, true, {allActivity: [], weeklyActivity: [], monthlyActivity: []})  
+            res.send(response);
         }
 
       } catch(err){   console.log(err)
