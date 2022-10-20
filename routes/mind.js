@@ -78,7 +78,7 @@ router.post('/addMood', auth, async(req, res) => {
                     let moodList = [];
                     for(let i = 1; i <= 7; i++){
                         let newDate = firstDay.setDate(firstDay.getDate() + 1)
-                        let DMY = dateLib.format(new Date(newDate), 'DD-MM-YYYY');
+                        let DMY = dateLib.format(new Date(newDate), 'MM-DD-YYYY');
                         let isMood = await Mind.findOne({employeeId: empId, date: DMY});
                         let dict = {
                             mood: isMood !== null ? isMood.mood : "No data",
@@ -115,7 +115,7 @@ router.post('/addMood', auth, async(req, res) => {
                         if(i === 1) newDate = firstDay
                         else newDate = firstDay.setDate(firstDay.getDate() + 1)
                         
-                        let DMY = dateLib.format(new Date(newDate), 'DD-MM-YYYY');
+                        let DMY = dateLib.format(new Date(newDate), 'MM-DD-YYYY');
                         let isMood = await Mind.findOne({employeeId: empId, date: DMY});
                         let dict = {
                             mood: isMood !== null ? isMood.mood : "No data",
