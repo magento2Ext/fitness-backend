@@ -135,13 +135,13 @@ router.post('/addMood', auth, async(req, res) => {
             }
 
 
-            let DATA = {getWeeklyActivity: await getWeeklyActivity(), getMonthlyActivity: await getMonthlyActivity(), allActivity: moodList}
-            response = webResponse(200, true, DATA)  
+            let DATA = {weeklyActivity: await getWeeklyActivity(), monthlyActivity: await getMonthlyActivity(), allActivity: moodList}
+            response = webResponse(202, true, DATA)  
             res.send(response);
 
     
         }else{
-            response = webResponse(200, true, {allActivity: [], weeklyActivity: [], monthlyActivity: []})  
+            response = webResponse(202, true, {allActivity: [], weeklyActivity: [], monthlyActivity: []})  
             res.send(response);
         }
 
