@@ -111,8 +111,9 @@ router.post('/addMood', auth, async(req, res) => {
                     let moodList = [];
                     let i = 0;
                     for(let i = 1; i <= daysInMonth; i++){
-                        if(i === 1) let newDate = firstDay
-                        else let newDate = firstDay.setDate(firstDay.getDate() + 1)
+                        let newDate 
+                        if(i === 1) newDate = firstDay
+                        else firstDay.setDate(firstDay.getDate() + 1)
                         
                         let DMY = dateLib.format(new Date(newDate), 'DD-MM-YYYY');
                         let isMood = await Mind.findOne({employeeId: empId, date: DMY});
