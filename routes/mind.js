@@ -34,7 +34,7 @@ router.post('/addMood', auth, async(req, res) => {
             }
 
         }else{
-            const result = await Mind.updateOne({_id: empId}, {$set: {mood: mood}}, {new: true});
+            const result = await Mind.updateOne({employeeId: isMood._id}, {$set: {mood: mood}}, {new: true});
             if(result){
                 response = webResponse(200, true, "Weight saved")  
                 res.send(response);
