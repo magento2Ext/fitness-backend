@@ -82,7 +82,7 @@ router.post('/addMood', auth, async(req, res) => {
                         let isMood = await Mind.findOne({employeeId: empId, date: DMY});
                         let dict = {
                             mood: isMood !== null ? isMood.mood : "No data",
-                            moodScore: isMood !== null ? isMood.moodScore : "No data",
+                            moodScore: isMood !== null ? isMood.moodScore : "0",
                             date: DMY,
                             day: days[(new Date(newDate)).getDay()]
                         }
@@ -119,7 +119,7 @@ router.post('/addMood', auth, async(req, res) => {
                         let isMood = await Mind.findOne({employeeId: empId, date: DMY});
                         let dict = {
                             mood: isMood !== null ? isMood.mood : "No data",
-                            moodScore: isMood !== null ? isMood.moodScore : "No data",
+                            moodScore: isMood !== null ? isMood.moodScore : "0",
                             date: DMY,
                             day: days[(new Date(newDate)).getDay()]
                         }
