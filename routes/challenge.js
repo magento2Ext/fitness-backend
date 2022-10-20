@@ -772,6 +772,8 @@ router.post('/challengeDetail', auth, async(req, res) => {
 
             let allStepData = await getAllStepData()
 
+            console.log('allStepData', allStepData)
+
 
             let today =  dateLib.format(new Date(), 'YYYY-MM-DD');
             const todayStepsDetails = await challengeStepTracker.findOne({ date: today,  employeeId: empId, challengeId: id});
@@ -1398,7 +1400,6 @@ router.post("/addWeight", auth, async(req, res) => {
                     const strDate = dateLib.format(recentDate,'YYYY-MM-DD')
                     const recentDateYMD =  strDate + 'T00:00:00.000Z';
  
-             
                     if(challenge.status === "completed"){
 
                         console.log('allweightsLs', allweightsLs)
@@ -1435,6 +1436,7 @@ router.post("/addWeight", auth, async(req, res) => {
  
                         let winners = [];
                         let cont__ = 0;
+                        
                         totalWeights.forEach( (key) => {
 
                           
