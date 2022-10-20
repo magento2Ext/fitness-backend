@@ -59,10 +59,10 @@ router.post('/addMood', auth, async(req, res) => {
 
         if(moodList.length !== 0){
 
-            function getWeeklyActivity(){
+            async  function getWeeklyActivity(){
 
 
-                let promise = new Promise( (res, rej) => {
+                let promise = new Promise( async (res, rej) => {
 
 
                     let days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -97,9 +97,9 @@ router.post('/addMood', auth, async(req, res) => {
             }
 
 
-            function getMonthlyActivity(){
+           async function getMonthlyActivity(){
 
-                let promise = new Promise( (res, rej) => {
+                let promise = new Promise(async (res, rej) => {
 
                     let today = new Date();
                     let daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
