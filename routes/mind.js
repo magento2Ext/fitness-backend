@@ -49,3 +49,5 @@ router.post('/addMood', auth, async(req, res) => {
       }
     
   }); 
+
+  module.exports = router
