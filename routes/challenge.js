@@ -85,7 +85,7 @@ router.post('/create', auth, async(req, res) => {
             let result = await Challenge.updateOne({_id: id}, {$set: data}, {new: true});
 
             if(mindTypes.indexOf(type) >=0 ){
-                let activityDate = new Date(start)
+                let activityDate = start
                 activities.forEach( (key) => {
                     
                     let activityData =  {
@@ -121,9 +121,8 @@ router.post('/create', auth, async(req, res) => {
             let newChallenge = new Challenge(data);
             let result = await newChallenge.save();
 
-
+            let activityDate = start
             if(mindTypes.indexOf(type) >=0){
-                let activityDate = new Date(start)
                 activities.forEach( (key) => {
                     let activityData =  {
                             challengeId: result._id,
