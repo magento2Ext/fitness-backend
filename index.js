@@ -90,6 +90,9 @@ app.post("/testApi", async(req, res) => {
 	res.send({'status': 1})
 })
 
+const mood = require('./routes/mood')
+app.use('/mood', mood)
+
 app.post("/weight/save", auth, async(req, res) => { 
   try{ 
      	var empId = req.user.user_id;

@@ -5,11 +5,11 @@ const MindSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    activityId: {
+    date: {
         type: String,
         required: true
     },
-    reaction: {
+    mood: {
         type: String,
         required: true
     }
@@ -17,4 +17,6 @@ const MindSchema = new mongoose.Schema({
 }, {timestamps: true});
 
 module.exports = mongoose.model('mind', MindSchema)
+
+//mood Types happy | sad | 
 
