@@ -21,10 +21,8 @@ var job = new CronJob(
 	"1/2 * * * * *",
 	async () =>  {
         let challenges = await Challenge.find();
+        console.log('challenge 111', challenges)
         challenges.forEach( async (challenge) => {
-
-          
-
             const recentDate = new Date();
 
             const strDate = dateLib.format(recentDate,'YYYY-MM-DD')
@@ -32,7 +30,7 @@ var job = new CronJob(
             const recentDateYMD =  strDate+ 'T00:00:00.000Z'
     
             if(recentDateYMD == challenge.start){
-               console.log('challenge 111')
+              
                await Challenge.updateOne({_id: challenge._id}, {$set: {status: 'ongoing'}}, {new: true}); 
             }
 
