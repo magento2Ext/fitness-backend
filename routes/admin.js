@@ -122,14 +122,18 @@ router.post('/forgot', async(req,res) => {
 			result = await admin.save()
 			let emailContent = "Your new password is "+password;
 			let subject = 'Admin Forgot Password'
-			sendEmail(req.body.email, subject, emailContent)
+			sendEmail(req.body.email, subject, emailContent);
+
+			response = webResponse(202, true, result)  
+			res.send(response)
 		}
 		else
 		{
-			result = "false"
+			response = webResponse(200, false, "Invalid email.")  
+			res.send(response);
+			return;
 		}
-		response = webResponse(202, true, result)  
-		res.send(response)
+
 	} catch (err) {
     console.log(err);
   }
@@ -261,11 +265,7 @@ router.post('/getProfile', async(req,res) => {
 			response = webResponse(200, false, "User not found.")  
 			res.send(response);
 			return;
-
 		}
-
-
-
 		}catch(err){
 			response = webResponse(403, false, err)  
 			res.send(response)
