@@ -401,7 +401,7 @@ router.post('/forget/password', async(req,res) => {
     }
 })
 
-router.delete('/delete', async(req,res) => {
+router.post('/delete', async(req,res) => {
     try{
         const id = req.body.id
 		const status = req.body.status
