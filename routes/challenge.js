@@ -30,15 +30,20 @@ var job = new CronJob(
             const recentDateYMD =  strDate+ 'T00:00:00.000Z'
 
 
-            console.log('recentDateYMD', recentDateYMD, challenge.start, challenge.end)
+            let date_recent = new Date(recentDateYMD);
+            let date_start = new Date(challenge.start);
+            let date_end = new Date(challenge.end);
  
-            if(recentDateYMD == challenge.start){
-              
-               await Challenge.updateOne({_id: challenge._id}, {$set: {status: 'ongoing'}}, {new: true}); 
+            if(date_recent >= date_start){
+               
+               if(challenge.status === 'new') {
+                   console.log('newnewnew')
+                   await Challenge.updateOne({_id: challenge._id}, {$set: {status: 'ongoing'}}, {new: true}); 
+                }
             }
 
-            if(recentDateYMD > challenge.end){
-                console.log('challenge 222')
+            if(date_recent > date_end){
+                console.log('2nd2nd2nd2nd2nd')
                 await Challenge.updateOne({_id: challenge._id}, {$set: {status: 'completed'}}, {new: true}); 
              }
     
