@@ -37,13 +37,11 @@ var job = new CronJob(
             if(date_recent >= date_start){
                
                if(challenge.status === 'new') {
-                   console.log('newnewnew')
                    await Challenge.updateOne({_id: challenge._id}, {$set: {status: 'ongoing'}}, {new: true}); 
                 }
             }
 
             if(date_recent > date_end){
-                console.log('2nd2nd2nd2nd2nd')
                 await Challenge.updateOne({_id: challenge._id}, {$set: {status: 'completed'}}, {new: true}); 
              }
     
