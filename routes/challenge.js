@@ -304,9 +304,9 @@ router.post('/myChallenges', auth, async(req, res) => {
         let query = {}
 
         if(employeeDetails.userOrganizations.length !=0 ){
-			query = {orgType: {$ne: 'admin'}, rejects: {$in: [empId]}, $or: [{userId: String(employeeDetails.organizationId)}, {userId: String(empId)}]}
+			query = {orgType: {$ne: 'admin'}, $or: [{userId: String(employeeDetails.organizationId)}, {userId: String(empId)}]}
 		}else{
-			query = {orgType: {$ne: 'org'}, rejects: {$in: [empId]}}
+			query = {orgType: {$ne: 'org'}}
 		}
 
         const newChallenges =  await Challenge.aggregate([
