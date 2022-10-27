@@ -144,7 +144,7 @@ router.post("/module/list", auth, async(req, res) => {
  router.post('/save', async(req,res) => {
 
 	let doesExist = await Organization.findOne({email: req.body.email});
-	let nameExist = await Organization.find({organizationName: '/^'+req.body.email+'$/i'});
+	let nameExist = await Organization.find({organizationName: '/^'+req.body.organizationName+'$/i'});
 
 	console.log('nameExist', nameExist);
 
