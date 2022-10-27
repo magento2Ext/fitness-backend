@@ -217,7 +217,6 @@ router.post('/create', auth, async(req, res) => {
                  result = await Challenge.updateOne({_id: id}, {$push: {'participants': empId}, $pull: {'invites': empId}}, {new: true}); 
             }
 
-           
         }else{
              result = await Challenge.updateOne({_id: id}, {$pull: {'invites': empId}, $push: {'rejects': empId}}, {new: true}); 
         }
