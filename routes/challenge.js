@@ -1392,15 +1392,19 @@ router.post("/addWeight", auth, async(req, res) => {
             let participantsWeights = [];
             let allweightsLs = []
             participants.forEach( async (key) => {
+                const employeeDetails = await Employee.findOne({_id: key});
                  let weightList = await challengeWeight.find({employeeId: key, challengeId: id}).sort({date: -1});
                  let dict = {
                    userId: key,
-                   weights: weightList
+                   weights: weightList,
+                   firstName: employeeDetails.firstName,
+                   lastName: employeeDetails.lastName,
+                   picture: employeeDetails.picture,
                  }
                  allweightsLs.push(dict)
                  let recentWeight = weightList.length > 0 ? weightList[0] : {weight: 0};
             
-                 const employeeDetails = await Employee.findOne({_id: key});
+       
                  let activityDict =  {
                     firstName: employeeDetails.firstName,
                     lastName: employeeDetails.lastName,
@@ -1426,14 +1430,15 @@ router.post("/addWeight", auth, async(req, res) => {
                     const recentDateYMD =  strDate + 'T00:00:00.000Z';
  
                     if(challenge.status === "completed"){
-
-                        console.log('allweightsLs', allweightsLs)
-                       
+                    
                         let totalWeights = []
                         allweightsLs.forEach((key) => {
 
                             let dist = {
-                                userId: key.userId
+                                userId: key.userId,
+                                firstName: key.firstName,
+                                lastName: key.lastName,
+                                picture: key.picture,
                             }
                             
                             let i = 0;
