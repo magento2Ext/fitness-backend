@@ -146,10 +146,7 @@ router.post("/module/list", auth, async(req, res) => {
 	let doesExist = await Organization.findOne({email: req.body.email});
 	var regex = new RegExp(["^", req.body.organizationName, "$"].join(""), "i");
 	let nameExist = await Organization.find({organizationName: regex});
-
-	console.log('nameExist', nameExist);
-
-	return;
+ 
 
 	if(doesExist != null) {
 						resMessage = "emailErr";
@@ -157,6 +154,13 @@ router.post("/module/list", auth, async(req, res) => {
 						res.send(response)		
 						return;
      }
+
+	 if(nameExist.length !== 0 ) {
+		resMessage = "An organization already exists with same name, Please choose another";
+		response = webResponse(200, false, resMessage)  
+		res.send(response)		
+		return;
+}
 
 	let referCode = (Math.random() + 1).toString(36).substring(6);
 	const organization = new Organization({
