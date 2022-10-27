@@ -645,6 +645,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
  
             if(activitesList.length > 0){
                 activitesList.forEach( async (key) => {
+                    console.log('keykey', key)
                  let activityDone = await challengeMind.findOne({employeeId: empId, activityId: key._id, challengeId: id});
                  let activityDict =  {
                     "_id": key._id,
