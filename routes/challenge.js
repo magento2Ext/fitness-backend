@@ -654,7 +654,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
                     "attachement": key.attachement,
                     "completed": activityDone !== null ? true : false,
                     "date": activityDone !== null ? dateLib.format(activityDone.createdAt,'YYYY-MM-DD')  : "",
-                    "activityDate": key.createdAt ? dateLib.format(key.createdAt,'YYYY-MM-DD')  : "", 
+                    "activityDate": key.activityDate ? dateLib.format(key.activityDate,'YYYY-MM-DD')  : "", 
                 }
                 userActivities.push(activityDict)
                 })
