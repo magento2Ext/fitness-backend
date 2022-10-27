@@ -1418,6 +1418,8 @@ router.post("/addWeight", auth, async(req, res) => {
                         return parseFloat(a.weigtht) - parseFloat(b.weigtht);
                     });
 
+                    final.winners = [];
+
                     const recentDate = new Date();
                     const strDate = dateLib.format(recentDate,'YYYY-MM-DD')
                     const recentDateYMD =  strDate + 'T00:00:00.000Z';
@@ -1462,7 +1464,6 @@ router.post("/addWeight", auth, async(req, res) => {
                         totalWeights.forEach( (key) => {
 
                           
-
                             if(challenge.weightType === 'gain'){
 
                                 if(key.weight >= challenge.targetWeight){
