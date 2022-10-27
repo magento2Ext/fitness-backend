@@ -1414,10 +1414,12 @@ router.post("/addWeight", auth, async(req, res) => {
                 })
         
             setTimeout(() => {
-                   let final =  participantsWeights.sort(function(a, b) {
+                   let final = {}
+                   let _list =  participantsWeights.sort(function(a, b) {
                         return parseFloat(a.weigtht) - parseFloat(b.weigtht);
                     });
 
+                    final.list = _list
                     final.winners = [];
 
                     const recentDate = new Date();
@@ -1464,6 +1466,7 @@ router.post("/addWeight", auth, async(req, res) => {
                         totalWeights.forEach( (key) => {
 
                           
+
                             if(challenge.weightType === 'gain'){
 
                                 if(key.weight >= challenge.targetWeight){
