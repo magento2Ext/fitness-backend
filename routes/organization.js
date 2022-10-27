@@ -149,14 +149,14 @@ router.post("/module/list", auth, async(req, res) => {
  
 
 	if(doesExist != null) {
-						resMessage = "emailErr";
+						resMessage = "An organization already exists with same email, Please choose another email";
 						response = webResponse(200, false, resMessage)  
 						res.send(response)		
 						return;
      }
 
 	 if(nameExist.length !== 0 ) {
-		resMessage = "An organization already exists with same name, Please choose another";
+		resMessage = "An organization already exists with same name, Please choose another name";
 		response = webResponse(200, false, resMessage)  
 		res.send(response)		
 		return;
