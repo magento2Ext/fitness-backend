@@ -836,7 +836,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
                 "invitesObjects": invites,
                 "stepsData": await getStepData(),
                 "todayStepsDetails": todayStepsDetailsObj,
-                "allStepData": allStepData.reverse()
+                "allStepData": allStepData
             }
 
             setTimeout(() => {
