@@ -219,7 +219,7 @@ router.post('/create', auth, async(req, res) => {
 
            
         }else{
-             result = await Challenge.updateOne({_id: id}, {$pull: {'invites': empId}}, {new: true}); 
+             result = await Challenge.updateOne({_id: id}, {$pull: {'invites': empId}, $push: {'rejects': empId}}, {new: true}); 
         }
 
        
@@ -304,9 +304,9 @@ router.post('/myChallenges', auth, async(req, res) => {
         let query = {}
 
         if(employeeDetails.userOrganizations.length !=0 ){
-			query = {orgType: {$ne: 'admin'}, $or: [{userId: String(employeeDetails.organizationId)}, {userId: String(empId)}]}
+			query = {orgType: {$ne: 'admin'}, rejects: {$in: [empId]}, $or: [{userId: String(employeeDetails.organizationId)}, {userId: String(empId)}]}
 		}else{
-			query = {orgType: {$ne: 'org'}}
+			query = {orgType: {$ne: 'org'}, rejects: {$in: [empId]}}
 		}
 
         const newChallenges =  await Challenge.aggregate([
@@ -1465,8 +1465,7 @@ router.post("/addWeight", auth, async(req, res) => {
                         
                         totalWeights.forEach( (key) => {
 
-                          
-
+                        
                             if(challenge.weightType === 'gain'){
 
                                 if(key.weight >= challenge.targetWeight){

@@ -44,6 +44,10 @@ const challengeSchema = new mongoose.Schema({
         type: [],
         default: []
     },
+    rejects: {
+        type: [],
+        default: []
+    },
     start: {
         type: Date,
         required: true
