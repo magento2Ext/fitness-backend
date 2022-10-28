@@ -1473,6 +1473,8 @@ router.post("/addWeight", auth, async(req, res) => {
                         
                         totalWeights.forEach( async (key) => {
 
+                            console.log('key', key)
+
                             if(challenge.weightType === 'gain'){
 
                                 if(key.weight >= challenge.targetWeight){
