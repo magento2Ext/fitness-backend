@@ -1487,6 +1487,7 @@ router.post("/addWeight", auth, async(req, res) => {
                             }
 
                             if(challenge.weightType === 'healthy'){
+                                const employeeDetails = await Employee.findOne({_id: key.userId});
                                 let height = employeeDetails.height;
                                 let weight = key.weight * 0.45359237;
                                 let BMI  = (weight / ((height * height) / 10000)).toFixed(2);
