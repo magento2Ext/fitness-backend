@@ -1504,7 +1504,7 @@ router.post("/addWeight", auth, async(req, res) => {
     
                                 cont__++;
                                 if(cont__ === totalWeights.length){
-                                     res(hallenge.weightType === 'healthy' ? arraySort(winners,  ['diff'], {reverse: true}) : winners)
+                                     res(challenge.weightType === 'healthy' ? arraySort(winners,  ['diff'], {reverse: true}) : winners)
                                     }
 
                             })
