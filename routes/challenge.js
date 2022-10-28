@@ -1494,8 +1494,9 @@ router.post("/addWeight", auth, async(req, res) => {
                                 let weight = key.weight * 0.45359237;
                                 let BMI  = (weight / ((height * height) / 10000)).toFixed(2);
                                 BMIDiff = challenge.targetBMI - BMI;
+                                key.diff = BMIDiff
 
-                                winners.push({...key, diff: BMIDiff})
+                                winners.push(key)
                             }
 
                             cont__++;
