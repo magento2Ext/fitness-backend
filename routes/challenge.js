@@ -1432,80 +1432,91 @@ router.post("/addWeight", auth, async(req, res) => {
                     const recentDate = new Date();
                     const strDate = dateLib.format(recentDate,'YYYY-MM-DD')
                     const recentDateYMD =  strDate + 'T00:00:00.000Z';
- 
-                    if(challenge.status === "completed"){
-                    
-                        let totalWeights = []
-                        allweightsLs.forEach((key) => {
 
-                            let dist = {
-                                userId: key.userId,
-                                firstName: key.firstName,
-                                lastName: key.lastName,
-                                picture: key.picture,
-                            }
+
+                    async function getWinners(){
+
+                        let promise = new Promise( async (res, rej) => {
+
+                            if(allweightsLs.length === 0) res([])
+
+                            let totalWeights = []
+                            allweightsLs.forEach((key) => {
+    
+                                let dist = {
+                                    userId: key.userId,
+                                    firstName: key.firstName,
+                                    lastName: key.lastName,
+                                    picture: key.picture,
+                                }
+                                
+                                let i = 0;
+                                let D = 0
+                                if(key.weights.length !== 0){
+    
+                                    key.weights.forEach( (key_) => {
+                                       
+                                        if(key.weights[i + 1] !== undefined && key.weights[i + 1] !== null){
+                                            let diff = key.weights[i + 1].weight -  key_.weight
+                                            console.log(D, diff)
+                                            D = D + diff
+                                        }
+    
+                                        i++
+                                        if(key.weights.length === i) dist.weight = D
+    
+                                 })
+    
+                                }else{
+                                    dist.weight = 0
+                                }
+    
+                                totalWeights.push(dist)
+     
+                            let winners = [];
+                            let cont__ = 0;
                             
-                            let i = 0;
-                            let D = 0
-                            if(key.weights.length !== 0){
-
-                                key.weights.forEach( (key_) => {
-                                   
-                                    if(key.weights[i + 1] !== undefined && key.weights[i + 1] !== null){
-                                        let diff = key.weights[i + 1].weight -  key_.weight
-                                        console.log(D, diff)
-                                        D = D + diff
+                            totalWeights.forEach( async (key) => {
+    
+                                if(challenge.weightType === 'gain'){
+    
+                                    if(key.weight >= challenge.targetWeight){
+                                        winners.push(key)
                                     }
-
-                                    i++
-                                    if(key.weights.length === i) dist.weight = D
-
-                             })
-
-                            }else{
-                                dist.weight = 0
-                            }
-
-                            totalWeights.push(dist)
- 
-                        let winners = [];
-                        let cont__ = 0;
-                        
-                        totalWeights.forEach( async (key) => {
-
-                            if(challenge.weightType === 'gain'){
-
-                                if(key.weight >= challenge.targetWeight){
+                                }
+    
+                                if(challenge.weightType === 'loss'){
+                                    if(key.weight <= challenge.targetWeight){
+                                        winners.push(key)
+                                    }
+                                }
+    
+                                if(challenge.weightType === 'healthy'){
+                                    const employeeDetails = await Employee.findOne({_id: key.userId});
+                                    let height = employeeDetails.height;
+                                    let weight = key.weight * 0.45359237;
+                                    let BMI  = (weight / ((height * height) / 10000)).toFixed(2);
+                                    BMIDiff = challenge.targetBMI - BMI;
+                                    key.diff = BMIDiff
+    
                                     winners.push(key)
                                 }
-                            }
+    
+                                cont__++;
+                                if(cont__ === totalWeights.length) res(winners)
 
-                            if(challenge.weightType === 'loss'){
-                                if(key.weight <= challenge.targetWeight){
-                                    winners.push(key)
-                                }
-                            }
+                            })
+    
+                         });
 
-                            if(challenge.weightType === 'healthy'){
-                                const employeeDetails = await Employee.findOne({_id: key.userId});
-                                let height = employeeDetails.height;
-                                let weight = key.weight * 0.45359237;
-                                let BMI  = (weight / ((height * height) / 10000)).toFixed(2);
-                                BMIDiff = challenge.targetBMI - BMI;
-                                key.diff = BMIDiff
-
-                                winners.push(key)
-                            }
-
-                            cont__++;
-                            if(cont__ === totalWeights.length) {
-                                console.log('winnerswinners', winners)
-                                final.winners = winners;
-                            }
- 
                         })
 
-                     });
+                        return promise;
+
+                    }
+ 
+                    if(challenge.status === "completed"){
+                        final.winners = await getWinners();
                     }
                     
                     response = webResponse(202, true, final)  
