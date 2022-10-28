@@ -1065,9 +1065,9 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
             "targetBMI": challenge.targetBMI,
             "participantsObjects": participants,
             "invitesObjects": invites,
-            "BMI": await BMI_CAL(recentWeight.weight),
+            "BMI": recentWeight !== null ? await BMI_CAL(recentWeight.weight) : 0,
             "weightList": weeklyResult.reverse(),
-            "recentWeight": recentWeight.weight
+            "recentWeight": recentWeight !==null ? recentWeight.weight : null,
         }
  
         response = webResponse(202, true, challengeDetails)  
