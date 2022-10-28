@@ -492,7 +492,7 @@ router.delete('/delete', async(req,res) => {
 })
 
 
-router.delete('/deletePost', async(req,res) => {
+router.post('/deletePost', async(req,res) => {
     try{
 		
         const id = req.body.id
