@@ -886,6 +886,7 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
         async function BMI_CAL(WEIGHT){
                 let result = {};
                 let height = employeeDetails.height;
+                if(!employeeDetails.height) return 0;
                 let weight = WEIGHT * 0.45359237;
                 let BMI  = (weight / ((height * height) / 10000)).toFixed(2);
                 result.BMI = BMI;
