@@ -16,6 +16,7 @@ const Weight = require('../models/weight')
 const StepTracker = require('../models/step_tracker')
 const challengeStepTracker = require('../models/challengeStepTracker')
 const EmpStepTarget = require('../models/employee_step_target')
+const arraySort = require('array-sort')
 
 var job = new CronJob(
 	"1/2 * * * * *",
@@ -656,6 +657,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
                     "completed": activityDone !== null ? true : false,
                     "date": activityDone !== null ? dateLib.format(activityDone.createdAt,'YYYY-MM-DD')  : "",
                     "activityDate": key.activityDate ? dateLib.format(new Date(key.activityDate),'YYYY-MM-DD')  : "", 
+                    "realDate": key.activityDate ? new Date(key.activityDate) : "", 
                 }
                 userActivities.push(activityDict)
                 })
@@ -831,7 +833,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
                 "weightType": challenge.weightType,
                 "targetWeight": challenge.targetWeight,
                 "targetBMI": challenge.targetBMI,
-                "activities": userActivities,
+                "activities": arraySort(userActivities,  ['realDate'], {reverse: false}) ,
                 "participantsObjects": participants,
                 "invitesObjects": invites,
                 "stepsData": await getStepData(),
