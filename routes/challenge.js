@@ -1420,7 +1420,7 @@ router.post("/addWeight", auth, async(req, res) => {
                 participantsWeights.push(activityDict);
                 })
         
-            setTimeout(() => {
+            setTimeout(async () => {
                    let final = {}
                    let _list =  participantsWeights.sort(function(a, b) {
                         return parseFloat(a.weigtht) - parseFloat(b.weigtht);
