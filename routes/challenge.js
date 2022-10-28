@@ -1473,8 +1473,6 @@ router.post("/addWeight", auth, async(req, res) => {
                         
                         totalWeights.forEach( async (key) => {
 
-                            console.log('key', key)
-
                             if(challenge.weightType === 'gain'){
 
                                 if(key.weight >= challenge.targetWeight){
@@ -1495,6 +1493,8 @@ router.post("/addWeight", auth, async(req, res) => {
                                 let BMI  = (weight / ((height * height) / 10000)).toFixed(2);
                                 BMIDiff = challenge.targetBMI - BMI;
                                 key.diff = BMIDiff
+
+                                console.log('key', key.diff)
 
                                 winners.push(key)
                             }
