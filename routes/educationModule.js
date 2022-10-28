@@ -238,4 +238,64 @@ router.delete('/delete', async(req,res) => {
     }
 })
 
+
+router.post('/homePosts', auth, async(req,res) => {
+    try{
+
+		var empId = req.user.user_id;
+		const employeeDetails = await Employee.findById(empId);
+
+        let query = {};
+		if(employeeDetails.userOrganizations.length !=0 ){
+			query = {userType: 'org', auth_user_id: String(employeeDetails.organizationId)}
+		}else{
+			query = {userType: 'admin'}
+		}
+
+		var education = await EducationModule.find(query);
+		 
+		var educationArray = [];
+
+		if(education.length != 0){
+			let count = 0;
+			education.forEach( async (col) => {
+
+				let moduleName = await  ModuleAdded.findById(col.module_id);
+		 
+				newEdu = {
+					'id' :  col._id,
+					"title": col.title,
+					"description": col.description,
+					"placeholder_image": col.placeholder_image,
+					"video_link": col.video_link,
+					"module_name": moduleName != null ? moduleName.name : 'Mind',
+					"module_id": col.module_id,
+					"is_picture": col.is_picture,
+					"created_at": col.created_at,
+					"timeSinc":timeAgo(col.created_at) + "ago"
+				}
+	
+				educationArray.push(newEdu); 
+				count++;
+				if(count == education.length){
+	 
+					response = webResponse(201, true, educationArray)  
+					res.send(response)
+					return "";
+				}
+			})
+		}else{
+		
+			response = webResponse(201, true, educationArray)  
+			res.send(response)
+			return "";
+		}
+
+    }catch(err){  console.log(err)
+        response = webResponse(200, false, "Something went wrong, please try again.")  
+	    res.send(response)
+		return;
+    }
+})
+
  module.exports = router
