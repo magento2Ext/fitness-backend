@@ -640,7 +640,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
             })
 
 
-            const activitesList = await Activity.find({challengeId: id}).sort({'activityDate': -1});
+            const activitesList = await Activity.find({challengeId: id}).sort({'activityDate': 1});
             const userActivities = [];
  
             if(activitesList.length > 0){
