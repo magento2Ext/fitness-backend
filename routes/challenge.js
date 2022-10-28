@@ -1472,7 +1472,6 @@ router.post("/addWeight", auth, async(req, res) => {
                         
                         totalWeights.forEach( (key) => {
 
-                        
                             if(challenge.weightType === 'gain'){
 
                                 if(key.weight >= challenge.targetWeight){
@@ -1484,7 +1483,15 @@ router.post("/addWeight", auth, async(req, res) => {
                                 if(key.weight <= challenge.targetWeight){
                                     winners.push(key)
                                 }
-                                
+                            }
+
+                            if(challenge.weightType === 'healthy'){
+                                let height = employeeDetails.height;
+                                let weight = key.weight * 0.45359237;
+                                let BMI  = (weight / ((height * height) / 10000)).toFixed(2);
+                                BMIDiff = challenge.targetBMI - BMI;
+
+                                winners.push({...key.toObject(), diff: BMIDiff})
                             }
 
                             cont__++;
@@ -1495,7 +1502,6 @@ router.post("/addWeight", auth, async(req, res) => {
                      });
                     }
                     
-
                     response = webResponse(202, true, final)  
                     res.send(response)
             }, 200);
