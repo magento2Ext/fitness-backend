@@ -1494,13 +1494,14 @@ router.post("/addWeight", auth, async(req, res) => {
                                 BMIDiff = challenge.targetBMI - BMI;
                                 key.diff = BMIDiff
 
-                                console.log('key', key.diff)
-
                                 winners.push(key)
                             }
 
                             cont__++;
-                            if(cont__ === totalWeights.length) final.winners = winners;
+                            if(cont__ === totalWeights.length) {
+                                console.log('winnerswinners', winners)
+                                final.winners = winners;
+                            }
  
                         })
 
