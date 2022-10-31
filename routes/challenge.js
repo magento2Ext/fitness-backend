@@ -310,7 +310,7 @@ router.post('/joined_challenges', auth, async(req, res) => {
 			query = {orgType: {$ne: 'org'}, participants: {$in: [empId]}}
 		}
 
-        console.log('queryquery', query)
+        console.log('queryquery', employeeDetails)
 
 
         const challenges =  await Challenge.aggregate([
