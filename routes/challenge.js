@@ -299,6 +299,7 @@ router.post('/listAll', async(req, res) => {
 router.post('/joined_challenges', auth, async(req, res) => {
     try{ 
         
+       
         let empId = req.user.user_id;
         const employeeDetails = await Employee.findById(empId);
         let query = {}
@@ -308,6 +309,8 @@ router.post('/joined_challenges', auth, async(req, res) => {
 		}else{
 			query = {orgType: {$ne: 'org'}, participants: {$in: [empId]}}
 		}
+
+        console.log('queryquery', query)
 
 
         const challenges =  await Challenge.aggregate([
