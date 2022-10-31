@@ -304,6 +304,32 @@ router.post('/myChallenges', auth, async(req, res) => {
         let query = {}
 
         if(employeeDetails.userOrganizations.length !=0 ){
+			query = {orgType: {$ne: 'admin'}, participants: {$in: [empId]}}
+		}else{
+			query = {orgType: {$ne: 'org'}, participants: {$in: [empId]}}
+		}
+
+        const challenges =  await Challenge.find(query);
+
+        response = webResponse(202, true, challenges)  
+        res.send(response)
+
+       }catch(err){
+        console.log(err)
+        res.send(err)
+    };
+    
+});
+
+
+router.post('/myChallenges', auth, async(req, res) => {
+    try{ 
+        
+        var empId = req.user.user_id;
+        const employeeDetails = await Employee.findById(empId);
+        let query = {}
+
+        if(employeeDetails.userOrganizations.length !=0 ){
 			query = {orgType: {$ne: 'admin'}, rejects: {$nin: [empId]}, $or: [{userId: String(employeeDetails.organizationId)}, {userId: String(empId)}]}
 		}else{
 			query = {orgType: {$ne: 'org'}, rejects: {$nin: [empId]}}
