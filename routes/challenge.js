@@ -191,17 +191,20 @@ router.post('/create', auth, async(req, res) => {
         let {id, action} = req.body;
         let empId = req.user.user_id;
 
-        const challengeDetails = await Challenge.findOne({_id: id}); 
-
+        const challengeDetails = await Challenge.findOne({_id: id});
+        
         const recentDate = new Date();
 
         const strDate = dateLib.format(recentDate,'YYYY-MM-DD')
 
         const recentDateYMD =  strDate+ 'T00:00:00.000Z'
 
-       console.log(recentDateYMD, challengeDetails.start);
 
-        if(recentDateYMD >= challengeDetails.start){
+        let date_recent = new Date(recentDateYMD);
+        let date_end = new Date(challengeDetails.end);
+ 
+
+        if(date_recent >= date_end){
             response = webResponse(200, false, 'Challenge has been already started')  
             res.send(response);
             return;
