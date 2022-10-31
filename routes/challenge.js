@@ -310,6 +310,9 @@ router.post('/joined_challenges', auth, async(req, res) => {
 			query = {orgType: {$ne: 'org'}, participants: {$in: [empId]}}
 		}
 
+
+        console.log('query', empId, query)
+
         const challenges =  await Challenge.aggregate([
             {$match: query},
             {"$unwind": {path: "$participants", preserveNullAndEmptyArrays:true}},
@@ -377,7 +380,7 @@ router.post('/joined_challenges', auth, async(req, res) => {
               }
         ])
 
-        console.log('query', challenges)
+        
 
         response = webResponse(202, true, challenges)  
         res.send(response)
