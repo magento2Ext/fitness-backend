@@ -296,10 +296,10 @@ router.post('/listAll', async(req, res) => {
 });
 
 
-router.post('/myChallenges', auth, async(req, res) => {
+router.post('/joined_challenges', auth, async(req, res) => {
     try{ 
         
-        var empId = req.user.user_id;
+        let empId = req.user.user_id;
         const employeeDetails = await Employee.findById(empId);
         let query = {}
 
