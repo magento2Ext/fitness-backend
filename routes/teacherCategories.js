@@ -304,8 +304,8 @@ router.post('/mindPosts', auth, async (req,res) => {
 
 		let query  = {};
 
-		if(employee.userOrganizations.length != 0) query = {userId: employee.organizationId, postType: {$in : [postType]}}
-		else query = {userType: 'admin', postType: {$in : [postType]}}
+		if(employee.userOrganizations.length != 0) query = {userId: employee.organizationId, postType: {$in : postType}}
+		else query = {userType: 'admin', postType: {$in : postType}}
 
 		const videoPosts = await Audio.find(query);
 		const audioPosts = await Audio.find(query);
