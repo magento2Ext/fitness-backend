@@ -7,7 +7,7 @@ const sendFCM = require('./fcm');
 const CronJob = require('cron').CronJob;
 const errors = ['', '0', 0, null, undefined];
 const dateLib = require('date-and-time');
-
+const arraySort = require('array-sort')
 const Mind = require('../models/mind')
  
 router.post('/addMood', auth, async(req, res) => {
@@ -121,7 +121,8 @@ router.post('/addMood', auth, async(req, res) => {
                             mood: isMood !== null ? isMood.mood : "No data",
                             moodScore: isMood !== null ? isMood.moodScore : "0",
                             date: DMY,
-                            day: days[(new Date(newDate)).getDay()]
+                            day: days[(new Date(newDate)).getDay()],
+                            date_: new Date(newDate)
                         }
                         moodList.push(dict);
                         firstDay = new Date(firstDay)
@@ -135,7 +136,7 @@ router.post('/addMood', auth, async(req, res) => {
             }
 
 
-            let DATA = {weeklyActivity: await getWeeklyActivity(), monthlyActivity: await getMonthlyActivity(), allActivity: moodList}
+            let DATA = {weeklyActivity: await getWeeklyActivity(), monthlyActivity: await getMonthlyActivity(), allActivity: arraySort(moodList,  ['date_'], {reverse: false})}
             response = webResponse(202, true, DATA)  
             res.send(response);
 
