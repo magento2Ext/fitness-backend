@@ -136,7 +136,7 @@ router.post('/addMood', auth, async(req, res) => {
             }
 
 
-            let DATA = {weeklyActivity: await getWeeklyActivity(), monthlyActivity: await getMonthlyActivity(), allActivity: arraySort(moodList,  ['date'], {reverse: true})}
+            let DATA = {weeklyActivity: await getWeeklyActivity(), monthlyActivity: await getMonthlyActivity(), allActivity: arraySort(moodList,  ['createdAt'], {reverse: true})}
             response = webResponse(202, true, DATA)  
             res.send(response);
 
