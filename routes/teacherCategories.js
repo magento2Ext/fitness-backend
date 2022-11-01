@@ -292,4 +292,34 @@ router.post('/postByCat', auth, async (req,res) => {
     }
 })
 
+
+
+router.post('/mindPosts', auth, async (req,res) => {
+    try{
+ 
+		var empId = req.user.user_id;
+		const employee = await Employee.findById(empId);
+
+		const postType = ['mind_daily_videos', 'mind_music']
+
+		let query  = {};
+
+		if(employee.userOrganizations.length != 0) query = {userId: employee.organizationId, postType: {$in : [postType]}}
+		else query = {userType: 'admin', postType: {$in : [postType]}}
+
+		const videoPosts = await Audio.find(query);
+		const audioPosts = await Audio.find(query);
+
+		response = webResponse(201, true, {audioPosts: videoPosts, audioPosts: audioPosts})  
+		res.send(response)		
+		return;
+
+    }catch(err){
+		console.log(err)
+        response = webResponse(200, false, "Something went wrong, please try again")  
+	    res.send(response)
+		return;
+    }
+})
+
 module.exports = router
