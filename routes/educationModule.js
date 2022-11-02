@@ -43,7 +43,7 @@ require('../functions')
 				"module_id": col.module_id,
 				"is_picture": col.is_picture,
 				"created_at": col.created_at,
-				"timeSinc":timeAgo(col.created_at) + "ago"
+				"timeSinc":timeAgo(col.created_at) + ' '+ "ago"
 			}
 
 			educationArray.push(newEdu)
@@ -97,7 +97,7 @@ router.post('/educationList', auth, async(req,res) => {
 					"module_id": col.module_id,
 					"is_picture": col.is_picture,
 					"created_at": col.created_at,
-					"timeSinc":timeAgo(col.created_at) + "ago"
+					"timeSinc":timeAgo(col.created_at) + ' '+ "ago"
 				}
 	
 				educationArray.push(newEdu); 
@@ -164,7 +164,7 @@ router.post('/educationList', auth, async(req,res) => {
 				"module_id": educationDetailSaved.module_id,
 				"is_picture": educationDetailSaved.is_picture,
 				"created_at": educationDetailSaved.created_at,
-				"timeSinc":timeAgo(educationDetailSaved.created_at) + "ago"
+				"timeSinc":timeAgo(educationDetailSaved.created_at) + ' '+ "ago"
 			}
 			response = webResponse(202, true, dict)  
 			res.send(response)
@@ -185,7 +185,7 @@ router.post('/educationList', auth, async(req,res) => {
 			"module_id": educationDetailSaved.module_id,
 			"is_picture": educationDetailSaved.is_picture,
 			"created_at": educationDetailSaved.created_at,
-			"timeSinc":timeAgo(educationDetailSaved.created_at) + "ago"
+			"timeSinc":timeAgo(educationDetailSaved.created_at) + ' '+ "ago"
 		}
 
 		response = webResponse(202, true, dict)  
@@ -272,7 +272,7 @@ router.post('/homePosts', auth, async(req,res) => {
 					"module_id": col.module_id,
 					"is_picture": col.is_picture,
 					"created_at": col.created_at,
-					"timeSinc":timeAgo(col.created_at) + "ago"
+					"timeSinc":timeAgo(col.created_at) + ' '+ "ago"
 				}
 	
 				educationArray.push(newEdu); 
