@@ -106,7 +106,7 @@ router.post('/create', auth, async(req, res) => {
                             description:  key.description,
                             attachement:  key.attachment,
                             activityDate: activityDate,
-                            mimeType: mimeType
+                            mimeType:   mimeType
                        }
 
                     Activity.updateOne({_id: key.id}, {$set: activityData}, {new: true});
@@ -143,7 +143,7 @@ router.post('/create', auth, async(req, res) => {
                             description:  key.description,
                             attachement:  key.attachment,
                             activityDate: activityDate,
-                            mimeType: mimeType
+                            mimeType:  mimeType
                        }
                     let newActivity =  new Activity(activityData);
                     newActivity.save();
