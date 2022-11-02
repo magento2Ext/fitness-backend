@@ -62,6 +62,8 @@ router.post('/create', auth, async(req, res) => {
        let empId = req.user.user_id;
        const employee = await Employee.findById(empId);
        const admins = await Admin.find();
+
+       const _timeNow = new Date();
        
        let {id, userId, type, title, description, pic, start, end, orgType, winners, invites, dailyStepLimit, weightType, targetWeight, targetBMI, activities, mimeType} = req.body;
 
@@ -76,7 +78,8 @@ router.post('/create', auth, async(req, res) => {
                     orgType: orgType,
                     winners: winners,
                     invites: invites,
-                    employeeId: orgType == 'employee' ? empId : null
+                    employeeId: orgType == 'employee' ? empId : null,
+                    status: _timeNow >= new Date(start) ? 'ongoing' : 'new'
                }
    
        if(type === 'steps'){
