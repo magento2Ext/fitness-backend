@@ -25,7 +25,7 @@ const activitySchema = new mongoose.Schema({
     mimeType: {
         type: String,
         required: true,
-        default: null
+        default: 'image'
     },
     activityDate: {
         type: String,
