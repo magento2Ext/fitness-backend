@@ -576,6 +576,82 @@ router.put('/update/:id',async(req,res)=> {
 
 })
 
+
+
+router.post('/update', async(req,res)=> {
+	try{ 
+	   const organization = await Organization.findById(req.body.id) 
+	   
+	   const emailExist = await Organization.find({_id: {$eq: req.body.id}, email:  req.body.email}) 
+
+	   if(emailExist.length !== 0 ){
+		   response = webResponse(200, false, "This email is already in use.") 
+		   res.send(response)
+		   return "";
+	   }
+
+	   var regex = new RegExp(["^", req.body.organizationName, "$"].join(""), "i");
+	   let nameExist = await Organization.find({organizationName: regex});
+
+	   if(nameExist.length !== 0 ) {
+		   resMessage = "An organization already exists with same name, Please choose another name";
+		   response = webResponse(200, false, resMessage)  
+		   res.send(response)		
+		   return;
+   }
+
+	   organization.organizationName = req.body.organizationName
+	   organization.email = req.body.email,
+	//    organization.password = req.body.password,
+	   organization.zipCode = req.body.zipCode,
+	   organization.themecolor= req.body.themecolor,
+	   organization.modules = req.body.modules,
+	   organization.module_id = req.body.module_id
+	   organization.subModule_id = req.body.subModule_id
+	   organization.logo = req.body.logo
+	   organization.themecode = req.body.themecode
+
+	   const a1 = await organization.save()
+	   
+	   var modules = a1.modules; 
+	   var ids = modules.split(",")
+	   var ModuleList = await Module.find({ _id : { $in : ids } })
+	   
+	   var moduleNames = ''
+	   var i = 0;
+	   ModuleList.forEach(function(mod){
+		   if(i > 0) {
+			   moduleNames = moduleNames+ ',' + mod.name
+		   } else {
+			   moduleNames = moduleNames +mod.name
+		   }
+		   i++;
+	   })
+	   
+	   var orgDetail = {
+						   '_id': a1._id,
+						   "organizationName": a1.organizationName,
+						   "email": a1.email,
+						   "password": a1.password,
+						   "zipCode": a1.zipCode,
+						   "referCode": a1.referCode,
+						   "logo": a1.logo,
+						   "themecode": a1.themecode,
+						   "modules": moduleNames,
+						   "module_id": a1.module_id,
+						   "subModule_id": a1.subModule_id,
+						   "status": a1.status,
+					   }
+	   
+	   response = webResponse(202, true, orgDetail)  
+	   res.send(response)
+   }catch(err){ console.log(err)
+	   res.send('err')
+	   //res.json(err)
+   }
+
+})
+
 router.put('/update/theme', async(req,res)=> {
 	 try{ 
         const organization = await Organization.findById(req.params.id) 	 
