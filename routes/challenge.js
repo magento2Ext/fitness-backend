@@ -63,7 +63,7 @@ router.post('/create', auth, async(req, res) => {
        const employee = await Employee.findById(empId);
        const admins = await Admin.find();
        
-       let {id, userId, type, title, description, pic, start, end, orgType, winners, invites, dailyStepLimit, weightType, targetWeight, targetBMI, activities} = req.body;
+       let {id, userId, type, title, description, pic, start, end, orgType, winners, invites, dailyStepLimit, weightType, targetWeight, targetBMI, activities, mimeType} = req.body;
 
        let data = {
                     userId: orgType === 'employee' ? (employee.userOrganizations.length > 0 ? employee.organizationId : admins[0]._id) : userId,
@@ -102,7 +102,8 @@ router.post('/create', auth, async(req, res) => {
                             title:  key.title,
                             description:  key.description,
                             attachement:  key.attachment,
-                            activityDate: activityDate
+                            activityDate: activityDate,
+                            mimeType: mimeType
                        }
 
                     Activity.updateOne({_id: key.id}, {$set: activityData}, {new: true});
@@ -138,7 +139,8 @@ router.post('/create', auth, async(req, res) => {
                             title:  key.title,
                             description:  key.description,
                             attachement:  key.attachment,
-                            activityDate: activityDate
+                            activityDate: activityDate,
+                            mimeType: mimeType
                        }
                     let newActivity =  new Activity(activityData);
                     newActivity.save();
@@ -308,13 +310,10 @@ router.post('/joined_challenges', auth, async(req, res) => {
         let query = {}
 
         if(employeeDetails.userOrganizations.length !=0 ){
-			query = {orgType: {$ne: 'admin'}, participants: {$in: [empId]}}
+			query = {orgType: {$ne: 'admin'}, participants: {$in: [empId]}, status: 'ongoing'}
 		}else{
-			query = {orgType: {$ne: 'org'}, participants: {$in: [empId]}}
+			query = {orgType: {$ne: 'org'}, participants: {$in: [empId]}, status: 'ongoing'}
 		}
-
-
-        console.log('query', empId, query)
 
         const challenges =  await Challenge.aggregate([
             {$match: query},
@@ -754,6 +753,7 @@ router.post('/challengeDetail', auth, async(req, res) => {
                     "title": key.title,
                     "description": key.description,
                     "attachement": key.attachement,
+                    "mimeType": key.mimeType,
                     "completed": activityDone !== null ? true : false,
                     "date": activityDone !== null ? dateLib.format(activityDone.createdAt,'YYYY-MM-DD')  : "",
                     "activityDate": key.activityDate ? dateLib.format(new Date(key.activityDate),'YYYY-MM-DD')  : "", 

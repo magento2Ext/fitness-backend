@@ -22,6 +22,11 @@ const activitySchema = new mongoose.Schema({
         required: true,
         default: null
     },
+    mimeType: {
+        type: String,
+        required: true,
+        default: null
+    },
     activityDate: {
         type: String,
         required: true,
