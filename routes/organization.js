@@ -459,6 +459,7 @@ router.post('/delete', async(req,res) => {
 })
 
 
+
 router.post('/reset/password', async(req,res) => {
     try{
         const organization = await Organization.findOne({ email: req.body.email });		
@@ -503,7 +504,26 @@ router.put('/profile/update/:id', async(req,res) => {
 
 router.put('/update/:id',async(req,res)=> {
 	 try{ 
-        const organization = await Organization.findById(req.params.id) 	 
+        const organization = await Organization.findById(req.params.id) 
+		
+		const emailExist = await Organization.find({_id: {$eq: req.params.id}, email:  req.body.email}) 
+
+		if(emailExist.length !== 0 ){
+			response = webResponse(200, false, "This email is already in use.") 
+			res.send(response)
+			return "";
+		}
+
+		var regex = new RegExp(["^", req.body.organizationName, "$"].join(""), "i");
+		let nameExist = await Organization.find({organizationName: regex});
+
+		if(nameExist.length !== 0 ) {
+			resMessage = "An organization already exists with same name, Please choose another name";
+			response = webResponse(200, false, resMessage)  
+			res.send(response)		
+			return;
+	}
+
 		organization.organizationName = req.body.organizationName
         organization.email = req.body.email,
         organization.password = req.body.password,
