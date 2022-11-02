@@ -492,7 +492,44 @@ router.delete('/delete', async(req,res) => {
 })
 
 
-router.post('/deletePost', async(req,res) => {
+router.delete('/deletePost', async(req,res) => {
+    try{
+		
+        const id = req.body.id
+		// Validate user input
+		if(!(id)) {
+			jsonObj = []
+			var item = {
+				'key' : 'Post id',
+				'value' : 'required' 
+			}
+			jsonObj.push(item);
+			response = webResponse(406, false, jsonObj) 
+			res.send(response)
+			return "";
+		}
+		
+		
+		const TeacherDetail = await Audio.findById(id)
+		if(!TeacherDetail) {
+			response = webResponse(404, false, "Post not found") 
+			res.send(response)
+			return "";
+		}
+		// const _id = new ObjectID(req.body.id);
+
+		await Audio.deleteOne( {'_id': id})
+		response = webResponse(201, true, 'Post deleted')  
+		res.send(response)
+		return "";
+	}catch(err){ console.log(err)
+        response = webResponse(200, false, "Something went wrong, please try again.")  
+	    res.send(response)
+		return;
+    }
+})
+
+router.post('/deletePost_new', async(req,res) => {
     try{
 		
         const id = req.body.id

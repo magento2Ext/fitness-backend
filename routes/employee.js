@@ -550,6 +550,41 @@ router.delete('/delete', async(req,res) => {
     }
 })
 
+router.post('/emp_delete', async(req,res) => {
+    try{
+        const id = req.body.id
+		// Validate user input
+		if(!(id)) {
+			jsonObj = []
+			var item = {
+				'key' : 'Employee id',
+				'value' : 'required' 
+			}
+			jsonObj.push(item);
+			response = webResponse(406, false, jsonObj) 
+			res.send(response)
+			return "";
+		}
+		
+		const employee = await Employee.findById(req.body.id)
+		if(!employee) {
+			response = webResponse(404, false, "Employee not found") 
+			res.send(response)
+			return "";
+		}
+		
+		const _id = new ObjectID(req.body.id);
+		await Employee.updateOne( {'_id':_id}, {$set: {status: req.body.status ? 1 : 0}}, {new: true});
+		  
+		//employee.deleteOne(req.body.id)
+		response = webResponse(200, true, "Employee updated.") 
+		res.send(response)
+		return "";
+	}catch(err){
+        res.send('Error ' + err)
+    }
+})
+
 router.post('/profile', async(req,res) => {
     try{
         const token = req.get('Authorization');
