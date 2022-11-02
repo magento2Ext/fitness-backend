@@ -31,7 +31,7 @@ var upload = multer({
       cb(null, fullPath);
        },
 	    contentType: multerS3.AUTO_CONTENT_TYPE
-   }), limits: { fileSize: 52428800 } 
+   }), limits: { fileSize: 1073741824 } 
 })
 
 app.post('/upload', upload.single('picture'), function (req, res, next) { 
