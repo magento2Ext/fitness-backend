@@ -790,14 +790,6 @@ router.post('/update', async (req,res) => {
 			picture: req.body.picture,
 		}
 
-		if(req.body.requestType == 'removeFromOrg'){
-			data['organizationId'] = false;
-			data['isVerified'] = false;
-			data['is_exclusive'] = false;
-			data['userOrganizations'] = [];
-		}
-
-
 		setTimeout(async () => {
 			 Employee.updateOne({_id: req.body.id}, {$set: data}, {new: true}, async () => {
 				const emp = await Employee.findOne({_id: req.body.id});
