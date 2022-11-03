@@ -211,6 +211,7 @@ router.get('/list/:id/:type', async(req,res) => {
 
 router.post('/empList', async(req,res) => { 
     try{
+		console.log(req.body)
 		let data = [];
         if(req.body.type == 'admin'){
 			 data = await Employee.find();
