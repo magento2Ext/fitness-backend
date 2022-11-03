@@ -197,7 +197,7 @@ router.get('/list/:id/:type', async(req,res) => {
     try{
 		let data = [];
         if(req.params.type == 'admin'){
-			 data = await Employee.find();
+			 data = await Employee.find({status: 1});
 			 res.json(data);
 		}else{
 			 data = await Employee.find({userOrganizations: {$in: [req.params.id]}});
@@ -753,7 +753,6 @@ router.post('/update', async(req,res) => {
 				zipCode: req.body.zipCode,
 				is_exclusive: req.body.is_exclusive
 			}
- 
 			await Employee.updateOne({_id: req.body.id}, {$set: data}, {new: true}); 
 		}
 
