@@ -761,7 +761,7 @@ router.post('/verify',async(req,res)=> {
 })
 
 
-router.post('/update', async(req,res) => {
+router.post('/update', async (req,res) => {
 
 	 try{
 
@@ -799,7 +799,7 @@ router.post('/update', async(req,res) => {
 
 
 		setTimeout(async () => {
-			 Employee.updateOne({_id: req.body.id}, {$set: data}, {new: true}, () => {
+			 Employee.updateOne({_id: req.body.id}, {$set: data}, {new: true}, async () => {
 				const emp = await Employee.findOne({_id: req.body.id});
 				response = webResponse(202, true, emp);
 				res.send(response);
