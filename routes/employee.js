@@ -765,44 +765,48 @@ router.post('/update', async(req,res) => {
 
 	 try{
 
-		let data = {}
+		const employeeEmailExist = await Employee.findOne({ email: req.body.email.toLowerCase() });
+
+		if (employeeEmailExist && employeeEmailExist != null) {  
+			response = webResponse(200, false, 'Email already exist')  
+			res.send(response)
+			return;
+		}
+		
+		const employeeUsernameExist = await Employee.findOne({ userName: req.body.userName });
+
+		if (employeeUsernameExist && employeeUsernameExist != null) {  
+			response = webResponse(200, false, 'Username already exist');
+			res.json(response)
+			return;
+		}
+
+		let data = {
+			firstName: req.body.firstName,
+			lastName: req.body.lastName,
+			zipCode: req.body.zipCode,
+			email: req.body.zipCode,
+			userName: req.body.userName,
+			picture: req.body.picture,
+		}
+
 		if(req.body.requestType == 'removeFromOrg'){
 			data['organizationId'] = false;
 			data['isVerified'] = false;
 			data['is_exclusive'] = false;
 			data['userOrganizations'] = [];
-			await Employee.updateOne({_id: req.body.id}, {$set: data}, {new: true}); 
-		}else{
-			data = {
-				firstName: req.body.firstName,
-				lastName: req.body.lastName,
-				zipCode: req.body.zipCode,
-				is_exclusive: req.body.is_exclusive
-			}
-			await Employee.updateOne({_id: req.body.id}, {$set: data}, {new: true}); 
 		}
 
+
 		setTimeout(async () => {
-
-			const emp = await Employee.findOne({_id: req.body.id});
-			let dict = {
-				"_id": emp._id,
-				"firstName": emp.firstName,
-				"lastName": emp.lastName,
-				"email": emp.email,
-				"userName": emp.userName,
-				"is_exclusive": emp.is_exclusive,
-				"organizationId": emp.organizationId,
-				"picture": emp.picture
-			}
-
-			response = webResponse(202, true, dict);
-			res.send(response);
-			
-		}, 2000);
+			 Employee.updateOne({_id: req.body.id}, {$set: data}, {new: true}, () => {
+				const emp = await Employee.findOne({_id: req.body.id});
+				response = webResponse(202, true, emp);
+				res.send(response);
+			 }); 
+	
+		}, 500);
  
-
-
     }catch(err){
 		console.log('err', err)
         res.send(err)
