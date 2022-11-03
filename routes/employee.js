@@ -735,12 +735,11 @@ router.post('/verify',async(req,res)=> {
 })
 
 
-router.put('/update/:id', async(req,res) => {
+router.post('/update', async(req,res) => {
 
 	 try{
 
 		let data = {}
-
 		if(req.body.requestType == 'removeFromOrg'){
 			data['organizationId'] = false;
 			data['isVerified'] = false;
