@@ -539,7 +539,7 @@ router.delete('/delete', async(req,res) => {
 		}
 		
 		const _id = new ObjectID(req.body.id);
-		await Employee.updateOne({'_id':_id}, {$set: {status: req.body.status ? 1 : 0}}, {new: true});
+		await Employee.updateOne({'_id':_id}, {$set: {status: 0}}, {new: true});
 		  
 		//employee.deleteOne(req.body.id)
 		response = webResponse(200, true, "Employee updated") 
