@@ -209,6 +209,22 @@ router.get('/list/:id/:type', async(req,res) => {
     }
 })
 
+router.post('/empList/:id/:type', async(req,res) => { 
+    try{
+		let data = [];
+        if(req.params.type == 'admin'){
+			 data = await Employee.find();
+			 res.json(data);
+		}else{
+			 data = await Employee.find({userOrganizations: {$in: [req.body.id]}});
+			 res.json(data);
+		}
+		
+    }catch(err){
+        res.send('Error ' + err)
+    }
+})
+
 router.get('/orgRequests/:id', async(req,res) => { 
     try{
 
@@ -630,12 +646,21 @@ router.post('/login', async(req,res) => {
 		}
 
 	   const employee = await Employee.findOne({ email });
+	   
+	 
 
 	   if(employee == null){
 				response = webResponse(200, false, "Account not found.")  
 				res.send(response)
 				return;
 	   }
+
+	   if(employee.status == '0') {
+		response = webResponse(200, false, "Your account is disabled by Admin, Please contact support.")  
+		res.send(response)
+		return;
+       }   
+
 
 		if (await bcrypt.compare(password, employee.password)) {
 			 
