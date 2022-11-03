@@ -209,10 +209,10 @@ router.get('/list/:id/:type', async(req,res) => {
     }
 })
 
-router.post('/empList/:id/:type', async(req,res) => { 
+router.post('/empList', async(req,res) => { 
     try{
 		let data = [];
-        if(req.params.type == 'admin'){
+        if(req.body.type == 'admin'){
 			 data = await Employee.find();
 			 res.json(data);
 		}else{
