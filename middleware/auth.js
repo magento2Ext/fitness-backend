@@ -5,7 +5,7 @@ const Employee = require('../models/employee')
 const Organization = require('../models/organization')
 const Admin = require('../models/admin')
 
-const verifyToken = (req, res, next) => {
+const verifyToken = async (req, res, next) => {
   const token = req.body.token || req.query.token || req.headers["authorization"];
   console.log(token)
   if (!token) {
@@ -24,7 +24,7 @@ const verifyToken = (req, res, next) => {
 	if(type === 'org') table = Organization;
 	if(type === 'employee') table = Employee;
 
-	const USER = table.findById(empId);
+	const USER = await table.findById(empId);
 
 	if(!USER){
 			response = webResponse(404, false, "USER not found.")  
