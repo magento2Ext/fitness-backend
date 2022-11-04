@@ -1,3 +1,4 @@
+const { Timestamp } = require('bson')
 const mongoose = require('mongoose')
 
 
@@ -16,6 +17,6 @@ const organizationRequestsSchema = new mongoose.Schema({
         type: String,
         default: 0
     },
-})
+}, {timestamps: true})
   
-module.exports = mongoose.model('organizationRequests',organizationRequestsSchema)
+module.exports = mongoose.model('organizationRequests', organizationRequestsSchema)

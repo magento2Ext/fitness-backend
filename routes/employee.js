@@ -306,7 +306,8 @@ router.post('/orgRequests', async(req,res) => {
 					"organizationId": emp.organizationId,
 					"isVerified": e.status,
 					"picture": emp.picture,
-					"reqId": e._id
+					"reqId": e._id,
+					"date": e.createdAt
 				}
 				userArray.push(dict);
 			}
