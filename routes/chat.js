@@ -159,6 +159,7 @@ router.post('/list', auth, async(req,res) => {
 				"message": col.message,
 				"appTempId": col.appTempId,
 				"isMyMessage":isMyMessage,
+				"status" : col.employeeId.status
 			}
 
 			chatList.push(chatDetail);
