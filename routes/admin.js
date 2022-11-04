@@ -67,13 +67,12 @@ router.post('/login', async(req,res) => {
 		  );
 
 		  // save user token
-		  admin.token = token; 
-		  admin.role = 'admin'
+		  let userData = {...admin.toObject(), token: token, role: 'admin'}
 		  const result = {};
           result.access_token = token
 		  result.admin = admin
 
-		  result.userData = admin
+		  result.userData = userData
 		  response = webResponse(202, true, result)  
 	      res.send(response);
 		  return;

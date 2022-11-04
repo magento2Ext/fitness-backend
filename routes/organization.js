@@ -327,13 +327,13 @@ router.post('/login', async(req,res) => {
 		  );
 
 		  // save user token
-		  organization.token = token; 
-		  organization.role = 'org'
+
+		  let userData = {...organization.toObject(), token: token, role: 'org'}
 		  const result = {};
           result.access_token = token
 		  result.organization = organization
 		
-		  result.userData = organization
+		  result.userData = userData
 		  
 		  response = webResponse(202, true, result)  
 	      res.send(response)
