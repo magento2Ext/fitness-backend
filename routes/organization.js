@@ -331,6 +331,8 @@ router.post('/login', async(req,res) => {
 		  const result = {};
           result.access_token = token
 		  result.organization = organization
+
+		  result.userData = organization
 		  
 		  response = webResponse(202, true, result)  
 	      res.send(response)
@@ -576,9 +578,7 @@ router.put('/update/:id',async(req,res)=> {
 
 })
 
-
-
-router.post('/update', async(req,res)=> {
+router.post('/update', async(req, res)=> {
 	try{ 
 	   const organization = await Organization.findById(req.body.id) 
 	   

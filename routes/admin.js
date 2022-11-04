@@ -26,9 +26,7 @@ router.post('/login', async(req,res) => {
 	try { 
 		const email = req.body.email
 		const password = req.body.password
-		
-		// Validate user input
-		
+	
 		if (!(email && password)) { 
 			jsonObj = []
 			if(!(email)) {
@@ -73,7 +71,8 @@ router.post('/login', async(req,res) => {
 		  const result = {};
           result.access_token = token
 		  result.admin = admin
-		  
+
+		  result.userData = admin
 		  response = webResponse(202, true, result)  
 	      res.send(response);
 		  return;
