@@ -32,6 +32,8 @@ const verifyToken = (req, res, next) => {
 			return;
 	}
 
+	console.log('USER', USER)
+
 	if(USER.status == '0'){
 		console.log('Your account is disabled by Admin');
 		response = webResponse(404, false, "Your account is disabled by Admin, Please contact support.")  
