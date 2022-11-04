@@ -24,12 +24,20 @@ const verifyToken = (req, res, next) => {
 	if(type === 'org') table = Organization;
 	if(type === 'employee') table = Employee;
 
-	const USER = table.findById(empId)
+	const USER = table.findById(empId);
+
 	if(!USER){
 			response = webResponse(404, false, "USER not found.")  
 			res.send(response)
 			return;
 	}
+
+	if(USER.status == '0'){
+		response = webResponse(404, false, "Your account is disabled by Admin, Please contact support.")  
+		res.send(response)
+		return;
+}
+
   } catch (err) {
 	response = webResponse(401, false, "Invalid Token")  
 	res.send(response)

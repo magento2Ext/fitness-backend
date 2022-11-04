@@ -19,6 +19,11 @@ const adminSchema = new mongoose.Schema({
         required: true,
         default: null
     },
+    status: {
+        type: String,
+        required: true,
+        default: '1'
+    }
    
 })
 
