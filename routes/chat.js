@@ -291,6 +291,8 @@ router.post('/get_single_inboxes/list', auth, async(req,res) => {
 			   Employee.findOne({_id: other_person_id}, function(err, user){
 					 let date = new Date(key.dateTime);
 					 var dist = {
+					
+					   status: user.status,
 					   picture: user.picture,
 					   name : user.firstName[0].toUpperCase()+user.firstName.slice(1)+ ' '+user.lastName[0].toUpperCase()+user.lastName.slice(1),
 					   dateTime : String(date.getDate()).padStart(2, '0')+
