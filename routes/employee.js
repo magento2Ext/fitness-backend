@@ -307,7 +307,7 @@ router.post('/orgRequests', async(req,res) => {
 					"isVerified": e.status,
 					"picture": emp.picture,
 					"reqId": e._id,
-					"date": e.createdAt
+					"date":  dateLib.format(e.createdAt,'YYYY-MM-DD')
 				}
 				userArray.push(dict);
 			}
