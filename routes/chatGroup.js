@@ -17,7 +17,6 @@
  
     try{
 	
-
 		var empId = req.user.user_id;
 		const groupId = req.body.groupId
 		
@@ -55,7 +54,8 @@
 				"picture": col.picture,
 				"email": col.email,
 				"isInvited":requestedUsers.includes( col._id),
-				"isAdded": users.includes( col._id)
+				"isAdded": users.includes( col._id),
+				"status": col.status
 			}
 			employeeList.push(employee);
 		})
@@ -493,8 +493,6 @@ router.post('/getGroupMembers', auth, async(req,res) => {
 	try{
 
 		var empId = req.user.user_id;
-		// const employeeDetails = await Employee.findById(empId)
-
 		let members = await ChatGroup.findOne({_id: req.body.id});
 		if(members!=null){
 			let allMembers = members.users;
