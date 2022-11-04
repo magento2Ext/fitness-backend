@@ -33,10 +33,11 @@ const verifyToken = (req, res, next) => {
 	}
 
 	if(USER.status == '0'){
+		console.log('Your account is disabled by Admin');
 		response = webResponse(404, false, "Your account is disabled by Admin, Please contact support.")  
 		res.send(response)
 		return;
-}
+    }
 
   } catch (err) {
 	response = webResponse(401, false, "Invalid Token")  
