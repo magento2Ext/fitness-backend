@@ -19,6 +19,11 @@
 	
 		var empId = req.user.user_id;
 		const groupId = req.body.groupId
+
+		let cond = {};
+		if(groupId != null && groupId != undefined && groupId != 0){
+			cond = {status: 1}
+		}
 		
 		if(!(groupId)) {
 			jsonObj = []
@@ -36,9 +41,9 @@
 		
 		const groupDetails = await ChatGroup.findById(groupId)
 		if(employeeDetails.organizationId) {
-			var employees = await Employee.find({organizationId: employeeDetails.organizationId, _id: {$ne: empId}})
+			var employees = await Employee.find({organizationId: employeeDetails.organizationId, _id: {$ne: empId}, cond})
 		} else {
-			var employees = await Employee.find({organizationId: false, _id: {$ne: empId}})
+			var employees = await Employee.find({organizationId: false, _id: {$ne: empId}, cond})
 		}
 		var employeeList = [];
 		
