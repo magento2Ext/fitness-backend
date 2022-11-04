@@ -277,6 +277,59 @@ router.get('/orgRequests/:id', async(req,res) => {
 })
 
 
+//duplicate
+router.post('/orgRequests', async(req,res) => { 
+    try{
+
+		 let data = await organizationRequests.find({orgId: req.body.id, status: "0"});
+
+		 if(data.length != 0){
+
+			let userArray = [];
+			let count = 0;
+
+			data.forEach( async(e) => {
+
+			let emp = await Employee.findOne({_id: e.employeeId});
+
+			if(emp!=null){
+				let dict =     {
+					"_id": emp._id,
+					"firstName": emp.firstName,
+					"lastName": emp.lastName,
+					"email": emp.email,
+					"userName": emp.userName,
+					"zipCode": emp.zipCode,
+					"employeeType": emp.employeeType,
+					"is_exclusive": emp.is_exclusive,
+					"referCode":emp.referCode,
+					"organizationId": emp.organizationId,
+					"isVerified": e.status,
+					"picture": emp.picture,
+					"reqId": e._id
+				}
+				userArray.push(dict);
+			}
+
+			count++;
+			if(count === data.length){
+				res.json(userArray);
+			}
+			
+			})
+			
+
+		 }else{
+			res.json([]);
+		 }
+ 
+
+    }catch(err){
+        res.send('Error ' + err)
+    }
+})
+
+
 
 router.post('/forget/password', async(req,res) => {
     try{ 
