@@ -328,10 +328,11 @@ router.post('/login', async(req,res) => {
 
 		  // save user token
 		  organization.token = token; 
+		  organization.role = 'org'
 		  const result = {};
           result.access_token = token
 		  result.organization = organization
-
+		
 		  result.userData = organization
 		  
 		  response = webResponse(202, true, result)  

@@ -68,6 +68,7 @@ router.post('/login', async(req,res) => {
 
 		  // save user token
 		  admin.token = token; 
+		  admin.role = 'admin'
 		  const result = {};
           result.access_token = token
 		  result.admin = admin
