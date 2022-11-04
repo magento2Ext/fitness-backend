@@ -59,7 +59,7 @@ router.post('/login', async(req,res) => {
 		if (await bcrypt.compare(password, admin.password)) {
 		  // Create token
 		  const token = jwt.sign(
-			{ user_id: admin._id, email, panelType: 'admin' },
+			{ user_id: admin._id, email, type: 'admin' },
 			process.env.JWT_SECRET,
 			{
 			  expiresIn: "9999 years",
@@ -67,7 +67,7 @@ router.post('/login', async(req,res) => {
 		  );
 
 		  // save user token
-		  let userData = {...admin.toObject(), token: token, role: 'admin'}
+		  let userData = {...admin.toObject(), token: token, panelType: 'admin'}
 		  const result = {};
           result.access_token = token
 		  result.admin = admin
