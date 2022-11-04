@@ -1202,7 +1202,8 @@ router.post('/mindLeaderboard', auth, async(req, res) => {
                     lastName: employeeDetails.lastName,
                     picture: employeeDetails.picture,
                     userId: employeeDetails._id,
-                    totalActivities: activityDone.length
+                    totalActivities: activityDone.length,
+                    status: employeeDetails.status
                 }
 
                 participantsScores.push(activityDict)
@@ -1255,7 +1256,8 @@ router.post('/stepsLeaderboard', auth, async(req, res) => {
                     lastName: employeeDetails.lastName,
                     picture: employeeDetails.picture,
                     userId: employeeDetails._id,
-                    steps: stepsCount
+                    steps: stepsCount,
+                    status: employeeDetails.status
                 }
 
                 participantsScores.push(activityDict)
@@ -1507,6 +1509,7 @@ router.post("/addWeight", auth, async(req, res) => {
                    firstName: employeeDetails.firstName,
                    lastName: employeeDetails.lastName,
                    picture: employeeDetails.picture,
+                   status: employeeDetails.status
                  }
                  allweightsLs.push(dict)
                  let recentWeight = weightList.length > 0 ? weightList[0] : {weight: 0};
@@ -1518,6 +1521,7 @@ router.post("/addWeight", auth, async(req, res) => {
                     picture: employeeDetails.picture,
                     userId: employeeDetails._id,
                     weigtht: recentWeight.weight,
+                    status: employeeDetails.status,
                     date: recentWeight.weight!=0 ? dateLib.format(recentWeight.date,'YYYY-MM-DD') : '' 
                 }
                 participantsWeights.push(activityDict);
@@ -1551,6 +1555,7 @@ router.post("/addWeight", auth, async(req, res) => {
                                     firstName: key.firstName,
                                     lastName: key.lastName,
                                     picture: key.picture,
+                                    status: key.status
                                 }
                                 
                                 let i = 0;
