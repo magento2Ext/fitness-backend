@@ -67,7 +67,7 @@ router.post('/login', async(req,res) => {
 		  );
 
 		  // save user token
-		  let userData = {...admin.toObject(), token: token, panelType: 'admin'}
+		  let userData = {...admin.toObject(), token: token, panelType: 'admin', role: 1}
 		  const result = {};
           result.access_token = token
 		  result.admin = admin

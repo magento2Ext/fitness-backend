@@ -328,7 +328,7 @@ router.post('/login', async(req,res) => {
 
 		  // save user token
 
-		  let userData = {...organization.toObject(), token: token, panelType: 'org'}
+		  let userData = {...organization.toObject(), token: token, panelType: 'org', role: 0}
 		  const result = {};
           result.access_token = token
 		  result.organization = organization
