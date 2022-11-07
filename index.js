@@ -93,6 +93,9 @@ app.post("/testApi", async(req, res) => {
 const mind = require('./routes/mind')
 app.use('/mind', mind)
 
+const payment = require('./routes/paymentMethods')
+app.use('/payment', payment)
+
 app.post("/weight/save", auth, async(req, res) => { 
   try{ 
      	var empId = req.user.user_id;
