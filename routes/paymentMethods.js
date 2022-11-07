@@ -12,7 +12,7 @@ const errors = ['', '0', 0, null, undefined];
 
 const path = require("path");
 
-const stripe = require("stripe")(process.env.stripe_key);
+const stripe = require("stripe")(process.env.STRIPE_KEY);
 
 router.get('/stripeconnect', async(req,res) => {
     console.log(req.query);
