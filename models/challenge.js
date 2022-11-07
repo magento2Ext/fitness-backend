@@ -81,10 +81,6 @@ const challengeSchema = new mongoose.Schema({
     createdOn: {
         type: String,
         default: null
-    },
-    stripe_id: {
-        type: String,
-        default: null
     }
 })
 

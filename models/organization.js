@@ -58,8 +58,11 @@ const organizationSchema = new mongoose.Schema({
     status: {
         type: String,
         default: '1' 
+    },
+    stripe_id: {
+        type: String,
+        default: null
     }
-
 })
   
 module.exports = mongoose.model('Organization',organizationSchema)
