@@ -583,7 +583,7 @@ router.post('/update', async(req, res)=> {
 	try{ 
 	   const organization = await Organization.findById(req.body.id) 
 	   
-	   const emailExist = await Organization.find({_id: {$eq: req.body.id}, email:  req.body.email}) 
+	   const emailExist = await Organization.find({_id: {$ne: req.body.id}, email:  req.body.email}) 
 
 	   if(emailExist.length !== 0 ){
 		   response = webResponse(200, false, "This email is already in use.") 
