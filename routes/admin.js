@@ -5,7 +5,15 @@
  const md5 = require('md5');
  const bcrypt = require('bcryptjs');
  const jwt = require('jsonwebtoken');
+
+
  const Organization = require('../models/organization')
+ const Challenge = require('../models/challenge')
+ const Employee = require('../models/employee');
+ const Audio = require('../models/teacher_audio')
+ const EducationModule = require('../models/education')
+ const TeacherCats = require('../models/teacher_categories')
+
  require('../functions')
  
 router.put('/organization/update/:id', async(req,res) => {
@@ -272,5 +280,38 @@ router.post('/getProfile', async(req,res) => {
 		}
 		
 	})
+
+
+	router.post('/dashboardData', async (req,res) => {
+		try { 
+	
+			const OrganizationCount = await Organization.count();
+			const ChallengeCount = await Challenge.count();
+			const EmployeeCount = await  Employee.count();
+			const AudioCount = await Audio.count();
+			const EducationModuleCount = await EducationModule.count();
+			const TeacherCatsCount = await TeacherCats.count();
+
+			let data = {
+				OrganizationCount: OrganizationCount,
+				ChallengeCount: ChallengeCount,
+				EmployeeCount: EmployeeCount,
+				AudioCount : AudioCount,
+				EducationModuleCount: EducationModuleCount, 
+				TeacherCatsCount: TeacherCatsCount
+			}
+
+			res.send(data)
+			return;
+ 
+	
+ 
+			}catch(err){
+				response = webResponse(403, false, err)  
+				res.send(response)
+				return "";
+			}
+			
+		})
 
  module.exports = router
