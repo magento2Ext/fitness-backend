@@ -23,7 +23,7 @@ const Module = require('./models/module')
 	authDomain: process.env.AUTH_DOMAIN,
  });
 
-const whitelist = [process.env.REACT_APP_URL, 'http://localhost:3000', 'http://localhost:3001']
+const whitelist = [process.env.REACT_APP_URL, 'http://localhost:3000', 'http://localhost:3001', 'http://soulcialapp.s3-website-us-east-1.amazonaws.com']
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || whitelist.indexOf(origin) !== -1) {
