@@ -975,16 +975,7 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
 
     const employeeDetails = await Employee.findById(empId);
 
-    async function noData(){
-        let data = {}; 
-        data.weightList = [];
-        data.recentWeight = 'No Data';
-        if(challenge.weightType === "healthy"){
-            data.BMI = {}
-        }
-
-        return data;
-    }
+ 
 
         async function BMI_CAL(WEIGHT){
                 let result = {};
@@ -1130,6 +1121,114 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
         }
 
 
+
+        async function weeklyGraph(){
+
+            let promise = new Promise( async (resolve, reject) => {
+
+                if(weightList.length === 0){
+                     resolve([])
+                }else{
+                    
+                    var weightArray = [];		
+                    var i = 0;
+        
+                    weightList.forEach(async (col) => {
+                                   
+                        if(i == 0) {
+                            let BMI = await BMI_CAL(col.weight);
+                            weight = {
+                                'date' : dateLib.format(col.date,'YYYY-MM-DD'),
+                                'weight' : col.weight,
+                                'day' :  days[col.date.getDay()],
+                                'difference': "0",
+                                'weightLine':''
+                            }
+                            if(challenge.weightType === "healthy") weight.BMI = BMI.status
+                        } else{
+                            var difference = col.weight - weightList[i-1].weight;
+                            if(difference > 0) {
+                                var line = convertIntoTwoDecimal(difference)+" kilogram over weight."
+                            } else {
+                                var line = convertIntoTwoDecimal(difference)+" kilogram under weight."
+                            }
+                            let BMI = await BMI_CAL(col.weight);
+                            weight = {
+                                'date' :  dateLib.format(col.date,'YYYY-MM-DD'),
+                                'weight' : col.weight,
+                                'day' :  days[col.date.getDay()],
+                                'difference': convertIntoTwoDecimal(difference),
+                                'weightLine': line
+                            }
+                            if(challenge.weightType === "healthy") weight.BMI = BMI.status
+                        }
+                        
+                        weightArray.push(weight);
+                        i++;
+         
+                        
+                        if(i === weightList.length){
+                        
+                            let startDate = new Date(challenge.start);
+                            let endDate = new Date(challenge.end);
+                            let nowDate = new Date();
+                            let endingDate = nowDate >= endDate ? endDate : nowDate
+
+                            var weightFinalArray = [];
+                            let weight = {}
+                            for(i = startDate; i <= endingDate;  i.setDate(i.getDate() + 1)) {
+                                
+                                let found = 0; 
+                                for( let j = 0, len = weightArray.length; j < len; j++ ) { 
+                                    console.log(weightArray[j]['date'], dateLib.format(i, 'YYYY-MM-DD'))
+                                   var weightData = {};
+                                    if( weightArray[j]['date'] == dateLib.format(i, 'YYYY-MM-DD')) {
+                                        found = 1;
+                                        weightData = weightArray[j];
+                                        break;
+                                    } 
+                                }
+    
+                                if(found == 0) {
+                                    weight = {
+                                        'date' : dateLib.format(i,'YYYY-MM-DD'),
+                                        'weight' : "0",
+                                        'day' : days[i.getDay()],
+                                        'difference': "0",
+                                        'weightLine':''
+                                    }
+                                    if(challenge.weightType === "healthy") weight.BMI = null
+
+                                    weightFinalArray.push(weight);
+                                }   else{
+                                    weightFinalArray.push(weightData);
+                                }
+    
+            
+                                const endate_ = dateLib.format(endingDate,'YYYY-MM-DD')
+                                const endate__ =  endate_+ 'T00:00:00.000Z'
+    
+                                const i_ = dateLib.format(i,'YYYY-MM-DD')
+                                const i__ =  i_+ 'T00:00:00.000Z'
+    
+                                if(String(i__) == String(endate__)){
+                                    resolve(weightFinalArray)
+                                }
+  
+                            }
+                        }
+                    });
+
+                }
+                
+            })
+
+            return promise;
+        }
+
+
+
+
         let date1 = new Date(challenge.start);
         let date2 = new Date(challenge.end);
     
@@ -1150,6 +1249,8 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
         })
 
         let weeklyResult = await weightLIST();
+
+        let weeklyGraph_ = await weeklyGraph();
 
         let challengeDetails = {
             "_id": challenge._id,
@@ -1172,6 +1273,7 @@ router.post('/weightChallengeDetail', auth, async(req, res) => {
             "BMI": recentWeight !== null ? await BMI_CAL(recentWeight.weight) : 0,
             "weightList": weeklyResult.reverse(),
             "recentWeight": recentWeight !==null ? recentWeight.weight : null,
+            "weeklyGraph": weeklyGraph_
         }
  
         response = webResponse(202, true, challengeDetails)  
