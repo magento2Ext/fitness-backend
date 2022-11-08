@@ -1321,7 +1321,7 @@ router.post('/markActivity', auth, async(req, res) => {
         var empId = req.user.user_id;
 		let challenge = await Challenge.findOne({_id: challengeId});
         let date = new Date();
-        let userTodaySteps = await challengeStepTracker.findOne({ date: dateLib.format(date, 'YYYY-MM-DD'),  employeeId: empId});
+        let userTodaySteps = await challengeStepTracker.findOne({challengeId: challengeId,  date: dateLib.format(date, 'YYYY-MM-DD'),  employeeId: empId});
         let dailyLimit = challenge.dailyStepLimit;
 
         if(userTodaySteps !== null){

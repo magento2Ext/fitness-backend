@@ -300,7 +300,7 @@ router.post('/getProfile', async(req,res) => {
 				{count: MindCount, type: 'mind'},
 				{count: SoulCount, type: 'soul'},
 				{count: EducationModuleCount, type: 'education'},
-				{count: TeacherCatsCount, type: 'teacher'},
+				{count: TeacherCatsCount, type: 'cat'},
 			]
 		 
 
