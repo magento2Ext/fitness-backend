@@ -284,22 +284,25 @@ router.post('/getProfile', async(req,res) => {
 
 	router.post('/dashboardData', async (req,res) => {
 		try { 
-	
+	        const id = req.body.id;
 			const OrganizationCount = await Organization.count();
-			const ChallengeCount = await Challenge.count();
-			const EmployeeCount = await  Employee.count();
-			const AudioCount = await Audio.count();
-			const EducationModuleCount = await EducationModule.count();
-			const TeacherCatsCount = await TeacherCats.count();
+			const ChallengeCount = await Challenge.count({userId: id});
+			const EmployeeCount = await  Employee.count({organizationId: id, status: 1});
+			const MindCount = await Audio.count({userId: id, postType: {$in: ['mind_daily_videos', 'mind_music']}});
+			const SoulCount = await Audio.count({userId: id, postType: {$in: ['meditation', 'yoga', 'soul_daily_video']}});
+			const EducationModuleCount = await EducationModule.count({auth_user_id: id});
+			const TeacherCatsCount = await TeacherCats.count({userId: id});
 
-			let data = {
-				OrganizationCount: OrganizationCount,
-				ChallengeCount: ChallengeCount,
-				EmployeeCount: EmployeeCount,
-				AudioCount : AudioCount,
-				EducationModuleCount: EducationModuleCount, 
-				TeacherCatsCount: TeacherCatsCount
-			}
+			let data = [
+				{count: OrganizationCount, type: 'org'},
+				{count: ChallengeCount, type: 'challenge'},
+				{count: EmployeeCount, type: 'emp'},
+				{count: MindCount, type: 'mind'},
+				{count: SoulCount, type: 'soul'},
+				{count: EducationModuleCount, type: 'education'},
+				{count: TeacherCatsCount, type: 'teacher'},
+			]
+		 
 
 			res.send(data)
 			return;
