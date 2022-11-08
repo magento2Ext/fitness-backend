@@ -818,17 +818,17 @@ router.post('/update', async (req,res) => {
 
 	 try{
 
-		const employeeEmailExist = await Employee.findOne({ email: req.body.email.toLowerCase() });
+		const employeeEmailExist = await Employee.find({ email: req.body.email.toLowerCase(), _id: {$ne: req.body.id}});
 
-		if (employeeEmailExist && employeeEmailExist != null) {  
+		if (employeeEmailExist.length !== 0) {  
 			response = webResponse(200, false, 'Email already exist')  
 			res.send(response)
 			return;
 		}
 		
-		const employeeUsernameExist = await Employee.findOne({ userName: req.body.userName });
+		const employeeUsernameExist = await Employee.find({ userName: req.body.userName, _id: {$ne: req.body.id}});
 
-		if (employeeUsernameExist && employeeUsernameExist != null) {  
+		if (employeeUsernameExist.length !== 0) {  
 			response = webResponse(200, false, 'Username already exist');
 			res.json(response)
 			return;
